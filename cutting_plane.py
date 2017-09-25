@@ -2,7 +2,7 @@
 import math
 import numpy as np
 
-def cutting_plane_fea(assess, S, t, max_it=1000, tol=1e-8):
+def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
     '''
     Cutting-plane method for solving convex feasibility problem   
     input   
@@ -22,7 +22,8 @@ def cutting_plane_fea(assess, S, t, max_it=1000, tol=1e-8):
             flag = 1 
             break
         status, tau = S.update(g, h)
-        if status == 1: break
+        if status == 1: 
+            break
         if tau < tol:
             status = 2
             break
@@ -47,7 +48,8 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
     for iter in range(1, max_it):
         g, h, t1 = assess(S.xc, t)
         if t != t1: # best t obtained
-            flag, t = 1, t1
+            flag = 1
+            t = t1
             x_best = np.array(S.xc)
         status, tau = S.update(g, h)
         if status == 1: break
@@ -75,17 +77,17 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
     x_best = np.array(S.xc)
     status = 1 # new
     for iter in range(1, max_it):
+        g, h, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
         if status != 3:
-            g, h, t1, x, loop = assess(S.xc, t, 0)
             if loop == 1: # discrete sol'n
                 h += np.dot(g, x - S.xc)
         else: # can't cut in the previous iteration
-            g, h, t1, x, loop = assess(S.xc, t, 1)
             if loop == 0: # no more alternative cut
                 break  
             h += np.dot(g, x - S.xc)
         if t != t1: # best t obtained
-            flag, t = 1, t1
+            flag = 1
+            t = t1
             x_best = np.array(x)
         status, tau = S.update(g,h)
         if status == 1: break

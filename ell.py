@@ -18,7 +18,8 @@ class ell:
         tau = np.sqrt(tsq)
         alpha = beta/tau
         status, rho, sigma, delta = calc_ell(alpha)
-        if status != 0: return status, tau
+        if status != 0: 
+            return status, tau
         self.xc -= (rho/tau) * Pg
         self.P -= (sigma/tsq) * np.outer(Pg, Pg)
         self.P *= delta
@@ -34,11 +35,14 @@ class ell:
 
     def calc_dc(self, alpha):
         '''deep cut'''
-        if alpha == 0: return self.calc_cc()
+        if alpha == 0.0: 
+            return self.calc_cc()
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
-        if alpha > 1.: status = 1  # no sol'n
-        elif n*alpha < -1.: status = 3  # no effect
+        if alpha > 1.: 
+            status = 1  # no sol'n
+        elif n*alpha < -1.: 
+            status = 3  # no effect
         else:
             rho = (1.0+n*alpha)/(n+1)
             sigma = 2.0*rho/(1.0+alpha)
@@ -47,15 +51,18 @@ class ell:
 
     def calc_ll(self, alpha):
         '''parallel or deep cut'''
-        if np.isscalar(alpha): return self.calc_dc(alpha)
+        if np.isscalar(alpha): 
+            return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
         if a1 >= 1.0: return self.calc_dc(a0)
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
         aprod = a0 * a1
-        if a0 > a1: status = 1 # no sol'n
-        elif n*aprod < -1.0: status = 3  # no effect
+        if a0 > a1: 
+            status = 1 # no sol'n
+        elif n*aprod < -1.0: 
+            status = 3  # no effect
         else:
             asq = alpha * alpha
             asum = a0 + a1

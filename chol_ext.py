@@ -6,11 +6,10 @@ import numpy as np
 
 def chol_ext(A):
     '''
-    % Test
-    % If $A$ is positive definite, then $p$ is zero.
-    % If it is not, then $p$ is a positive integer,
-    % such that $v = R^{-1} e_p$ is a certificate vector 
-    % to make $v'*A[:p,:p]*v < 0$ 
+     If $A$ is positive definite, then $p$ is zero.
+     If it is not, then $p$ is a positive integer,
+     such that $v = R^{-1} e_p$ is a certificate vector 
+     to make $v'*A[:p,:p]*v < 0$ 
     '''
     p = 0
     n = len(A)

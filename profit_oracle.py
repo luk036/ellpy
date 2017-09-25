@@ -64,8 +64,10 @@ class profit_q_oracle(profit_oracle):
 
 	def __call__(self, y, t, retry):
 		x = np.round(np.exp(y))
-		if x[0] == 0.0: x[0] = 1.0
-		if x[1] == 0.0: x[1] = 1.0
+		if x[0] == 0.0: 
+			x[0] = 1.0
+		if x[1] == 0.0: 
+			x[1] = 1.0
 		yd = np.log(x)
 		g, fj, t = profit_oracle.__call__(self, yd, t)
 		return g, fj, t, yd, 1
