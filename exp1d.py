@@ -20,7 +20,7 @@ Sig = np.ones((n,n))
 for i in range(n):
     for j in range(i+1,n):
         d = s[j] - s[i]
-        Sig[i,j] = np.exp(-0.5*(np.dot(d,d))/(sdkern*sdkern)/2.0);
+        Sig[i,j] = np.exp(-0.5*(np.dot(d,d))/(sdkern*sdkern)/2.0)
         Sig[j,i] = Sig[i,j]
 
 A, _ = chol_ext(Sig)
