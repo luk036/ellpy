@@ -42,7 +42,7 @@ Y = np.cov(Ys, bias=True)
 
 print(Y)
 
-a_lsq = lsq_corr_fn(Y, s)
+a_lsq = lsq_corr_poly(Y, s)
 #Sig_mle = mle_corr_mtx(Y, s)
 
 print(a_lsq)
