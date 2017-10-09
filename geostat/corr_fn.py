@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-from scipy import linalg
 from cvxpy import *
 
 #function [sp, tau2, Sig]
@@ -10,10 +8,10 @@ def lsq_corr_poly(Y, s):
   Sig = Semidef(n)
   constraints = []
   for i in range(n):
-    constraints += [ Sig[i,i] == a[0] ]
+    constraints += [ Sig[i,i] == a[3] ]
     for j in range(i+1,n):
       d = s[j] - s[i]
-      constraints += [ Sig[i,j] == a[0] + d * (a[1] + d * (a[2] + d * a[3] ) ) ]
+      constraints += [ Sig[i,j] == a[3] + d * (a[2] + d * (a[1] + d * a[0] ) ) ]
 
   prob = Problem(Minimize(norm(Sig - Y, 'fro')), constraints)
   prob.solve(solver=CVXOPT)
