@@ -7,14 +7,19 @@ import numpy as np
 def lsq_corr_poly(Y, s):
   n = len(s)
   a = cvx.Variable(4)
-  Sig = cvx.Semidef(n)
-  constraints = []
+  D1 = np.zeros((n,n))
   for i in range(n):
-    constraints += [ Sig[i,i] == a[3] ]
+    D1[i,i] = 0.
     for j in range(i+1,n):
-      d = s[j] - s[i]
-      constraints += [ Sig[i,j] == a[3] + d * (a[2] + d * (a[1] + d * a[0] ) ) ]
-
+      h = np.array(s[j]) - np.array(s[i])
+      d = np.sqrt(np.dot(h,h))
+      D1[i,j] = d
+      D1[j,i] = d
+  D2 = np.multiply(D1, D1)
+  D3 = np.multiply(D2, D1)
+  D0 = np.ones((n,n))
+  Sig = D0*a[3] + D1*a[2] + D2*a[1] + D3*a[0]
+  constraints = [ Sig >> 0 ]
   prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, 'fro')), constraints)
   prob.solve(solver=cvx.CVXOPT)
   if prob.status != cvx.OPTIMAL:
@@ -26,7 +31,9 @@ def lsq_corr_poly(Y, s):
 def lsq_corr_bspline(Y,s):
   k = 2
   m = 4
-  t = np.linspace(0, (s[-1] - s[0])*1.2, m+k+1)
+  h = np.array(s[-1]) - np.array(s[0])
+  d = np.sqrt(np.dot(h,h))
+  t = np.linspace(0, d*1.2, m+k+1)
   spls = []
   for i in range(m):
     coeff = np.zeros(m)
@@ -34,16 +41,21 @@ def lsq_corr_bspline(Y,s):
     spls += [ BSpline(t, coeff, k) ]
 
   n = len(s)
-  Sig = cvx.Semidef(n)
-  constraints = []
   c = cvx.Variable(4)
+  D = np.zeros((n,n))
   for i in range(n):
-    for j in range(i,n):
-      d = s[j] - s[i]
-      splval = np.zeros(m)
-      for l in range(m):
-        splval[l] = spls[l](d)
-      constraints += [ Sig[i,j] == cvx.sum_entries(cvx.mul_elemwise(splval, c))]
+    for j in range(i+1,n):
+      h = np.array(s[j]) - np.array(s[i])
+      d = np.sqrt(np.dot(h,h))
+      D[i,j] = d
+      D[j,i] = d
+
+  # Sig = spls[0](D)*c[0] + spls[1](D)*c[1] + spls[2](D)*c[2] + spls[3](D)*c[3]
+  Sig = np.zeros((n,n))
+  for i in range(m):
+    Sig = Sig + spls[i](D)*c[i]
+  # constraints += [ Sig[i,j] == cvx.sum_entries(cvx.mul_elemwise(splval, c))]
+  constraints = [ Sig >> 0 ]
   for i in range(m-1):
     constraints += [ c[i] >= c[i+1] ]
   constraints += [ c[-1] >= 0.0 ]
