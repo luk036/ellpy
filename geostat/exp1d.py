@@ -10,7 +10,6 @@ from corr_fn import *
 
 # a fake dataset to make the bumps with
 n = 20   # number of points
-s_begin = 1.
 s_end = 10.
 sdkern = 0.16  # width of kernel
 var = 2.0     # standard derivation
@@ -18,7 +17,7 @@ tau = 0.00001    # standard derivation of white noise
 N = 300  # number of samples
 
 # create sites s
-s = np.linspace(s_begin, s_end, n)
+s = np.linspace(0, s_end, n)
 
 Sig = np.ones((n,n))
 for i in range(n):
@@ -39,10 +38,10 @@ for k in range(N):
 
 Y = np.cov(Ys, bias=True)
 
-pol = lsq_corr_poly(Y, s)
-spl = lsq_corr_bspline(Y, s)
+pol = lsq_corr_poly(Y, s, 5)
+spl = lsq_corr_bspline(Y, s, 5)
 
-xs = np.linspace(0, s_end - s_begin, 100)
+xs = np.linspace(0, s_end, 100)
 plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 plt.plot(xs, spl(xs), 'r', label='BSpline')
 plt.legend(loc='best')

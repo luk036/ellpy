@@ -13,18 +13,17 @@ from corr_fn import *
 nx = 10   # number of points
 ny = 8
 n = nx*ny
-s_begin = [1., 1.]
-s_end = [10., 8]
-sdkern = 8  # width of kernel
+s_end = [10., 8.]
+sdkern = 0.1  # width of kernel
 var = 2.0     # standard derivation
 tau = 0.00001    # standard derivation of white noise
 N = 100  # number of samples
 
 # create sites s
-sx = np.linspace(s_begin[0], s_end[0], nx)
-sy = np.linspace(s_begin[1], s_end[1], ny)
+sx = np.linspace(0, s_end[0], nx)
+sy = np.linspace(0, s_end[1], ny)
 xx, yy = np.meshgrid(sx, sy)
-s = zip(xx.flatten(), yy.flatten())
+s = np.array(zip(xx.flatten(), yy.flatten()))
 
 Sig = np.ones((n,n))
 for i in range(n):
@@ -54,9 +53,9 @@ lab.contourf(xx,yy,np.reshape( Ys[:,7],(ny, nx) ), cmap='Greens')
 plt.show()
 
 
-pol = lsq_corr_poly(Y, s)
-spl = lsq_corr_bspline(Y, s)
-h = np.array(s[-1]) - np.array(s[0])
+pol = lsq_corr_poly(Y, s, 7)
+spl = lsq_corr_bspline(Y, s, 7)
+h = s[-1] - s[0]
 d = np.sqrt(np.dot(h,h))
 xs = np.linspace(0, d, 100)
 plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
