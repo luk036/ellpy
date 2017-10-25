@@ -138,17 +138,25 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 
 if __name__=="__main__":
-    G = nx.cycle_graph(5, create_using = nx.DiGraph())
-    G[1][2]['weight'] = -7
-    source = 0
-    dist = {source: 0}
-    pred = {source: None}
+    from networkx.utils import generate_unique_node
 
-    v = find_neg_cycle(G, pred, dist, source)
+    G = nx.cycle_graph(5, create_using = nx.DiGraph())
+    G[1][2]['weight'] = -4
+    newnode = generate_unique_node()
+    G.add_edges_from([(newnode, n) for n in G])
+
+    dist = {newnode: 0}
+    pred = {newnode: None}
+    #source = 0
+    #dist = {source: 0}
+    #pred = {source: None}
+
+    v = find_neg_cycle(G, pred, dist, newnode)
     print v
     print sorted(pred.items())
     print sorted(dist.items())
 
+    source = 0
     dist = {source: 0}
     pred = {source: None}
     G = nx.path_graph(5, create_using = nx.DiGraph())
