@@ -9,7 +9,7 @@ class profit_oracle:
 		self.a = np.array([alpha, beta])
 
 	def __call__(self, y, t):
-		fj = y[0] - self.log_k; # constraint
+		fj = y[0] - self.log_k # constraint
 		if fj > 0.0:
 			g = np.array([1.0, 0.0]) 
 			return g, fj, t
@@ -37,7 +37,7 @@ class profit_rb_oracle:
 		self.a = np.array([alpha, beta])
 
 	def __call__(self, y, t):
-		fj = y[0] - self.log_k; # constraint
+		fj = y[0] - self.log_k # constraint
 		if fj > 0.0:
 			g = np.array([1.0, 0.0]) 
 			return g, fj, t
