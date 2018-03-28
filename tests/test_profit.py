@@ -6,14 +6,15 @@ from ..oracles.profit_oracle import *
 from ..cutting_plane import *
 from ..ell import *
 
+
 def test_profit():
     p, A, k = 20.0, 40.0, 30.5
     alpha, beta = 0.1, 0.4
     v1, v2 = 10.0, 35.0
     y0 = np.array([0.0, 0.0])  # initial x0
-    r = np.array([100.0, 100.0]) # initial ellipsoid (sphere)
+    r = np.array([100.0, 100.0])  # initial ellipsoid (sphere)
     fmt = '{:f} {} {} {}'
- 
+
     E = ell(r, y0)
     P = profit_oracle(p, A, alpha, beta, v1, v2, k)
     yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0.0, 200, 1e-4)
@@ -32,12 +33,10 @@ def test_profit():
     print(fmt.format(fb, iter, flag, status))
     assert flag == 1
     assert iter == 42
-    
+
     E = ell(r, y0)
     P = profit_q_oracle(p, A, alpha, beta, v1, v2, k)
     yb1, fb, iter, flag, status = cutting_plane_q(P, E, 0.0, 200, 1e-4)
     print(fmt.format(fb, iter, flag, status))
     assert flag == 1
     assert iter == 28
-
-

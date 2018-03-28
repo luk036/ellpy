@@ -2,6 +2,7 @@
 import numpy as np
 from .chol_ext import *
 
+
 class lmi_oracle:
     """
         Oracle for Linear Matrix Inequality constraint
@@ -9,6 +10,7 @@ class lmi_oracle:
         Or
             (B - F * x) must be a semidefinte matrix
     """
+
     def __init__(self, F, B):
         self.F = F
         self.F0 = B
@@ -21,13 +23,14 @@ class lmi_oracle:
         for i in range(n):
             A -= self.F[i] * x[i]
         R, p = chol_ext(A)
-        if p == 0: return g, fj, R, v
+        if p == 0:
+            return g, fj, R, v
         v = witness(R, p)
         fj = -np.dot(v, A[:p, :p].dot(v))
         for i in range(n):
             g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
         return g, fj, R, v
- 
+
     def chk_spd_t(self, x, t):
         A = np.array(self.F0)
         # ???
@@ -37,11 +40,11 @@ class lmi_oracle:
         return self.chk_mtx(A, x)
 
     def chk_spd(self, x):
-        A = np.array( self.F0 )
+        A = np.array(self.F0)
         return self.chk_mtx(A, x)
 
     def __call__(self, x, t):
         g, fj, _, _ = self.chk_spd_t(x, t)
-        if fj<0.0: t -= 1.0
+        if fj < 0.0:
+            t -= 1.0
         return g, fj, t
-

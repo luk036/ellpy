@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+
 class ell:
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
@@ -18,7 +19,7 @@ class ell:
         tau = np.sqrt(tsq)
         alpha = beta/tau
         status, rho, sigma, delta = calc_ell(alpha)
-        if status != 0: 
+        if status != 0:
             return status, tau
         self.xc -= (rho/tau) * Pg
         self.P -= (sigma/tsq) * np.outer(Pg, Pg)
@@ -35,13 +36,13 @@ class ell:
 
     def calc_dc(self, alpha):
         '''deep cut'''
-        if alpha == 0.0: 
+        if alpha == 0.0:
             return self.calc_cc()
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
-        if alpha > 1.: 
+        if alpha > 1.:
             status = 1  # no sol'n
-        elif n*alpha < -1.: 
+        elif n*alpha < -1.:
             status = 3  # no effect
         else:
             rho = (1.0+n*alpha)/(n+1)
@@ -51,7 +52,7 @@ class ell:
 
     def calc_ll(self, alpha):
         '''parallel or deep cut'''
-        if np.isscalar(alpha): 
+        if np.isscalar(alpha):
             return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
@@ -60,9 +61,9 @@ class ell:
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
         aprod = a0 * a1
-        if a0 > a1: 
-            status = 1 # no sol'n
-        elif n*aprod < -1.0: 
+        if a0 > a1:
+            status = 1  # no sol'n
+        elif n*aprod < -1.0:
             status = 3  # no effect
         else:
             asq = alpha * alpha
@@ -71,7 +72,7 @@ class ell:
             xi = np.sqrt(4.0*(1.0-asq[0])*(1.0-asq[1]) + n*n*asqdiff*asqdiff)
             sigma = (n + (2.0*(1.0 + aprod - xi/2.0)/(asum*asum)))/(n+1)
             rho = asum * sigma/2.0
-            delta = self.c1*(1.0 - (asq[0] + asq[1] - xi/n)/2.0)        
+            delta = self.c1*(1.0 - (asq[0] + asq[1] - xi/n)/2.0)
         return status, rho, sigma, delta
 
     def update(self, g, beta):
