@@ -5,7 +5,7 @@ from .chol_ext import *
 class lmi_oracle:
     def __init__(self, F, B):
         self.F = F
-        self.F0 = -B
+        self.F0 = B
 
     def chk_mtx(self, A, x):
         n = len(x)
@@ -13,13 +13,13 @@ class lmi_oracle:
         fj = -1.0
         v = 0.0
         for i in range(n):
-            A += self.F[i] * x[i]
+            A -= self.F[i] * x[i]
         R, p = chol_ext(A)
         if p == 0: return g, fj, R, v
         v = witness(R, p)
         fj = -np.dot(v, A[:p, :p].dot(v))
         for i in range(n):
-            g[i] = -np.dot(v, self.F[i][:p, :p].dot(v))
+            g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
         return g, fj, R, v
  
     def chk_spd_t(self, x, t):

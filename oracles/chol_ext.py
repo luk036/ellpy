@@ -38,14 +38,15 @@ def witness(R, p):
     return v
  
 if __name__ == "__main__":
-    l1 = [[-25., 15., -5.],
+    l1 = [[25., 15., -5.],
           [15., 18.,  0.],
           [-5.,  0., 11.]]
     m1 = np.array(l1)
     R, p = chol_ext(m1)
     pprint(R)
-    v = witness(R,p)
-    print(np.dot(v, m1[:p,:p].dot(v)))
+    if p > 0:
+        v = witness(R,p)
+        print(np.dot(v, m1[:p,:p].dot(v)))
 
     l2 = [[18., 22.,  54.,  42.],
           [22., -70.,  86.,  62.],
@@ -54,5 +55,6 @@ if __name__ == "__main__":
     m2 = np.array(l2)
     R, p = chol_ext(m2)
     pprint(R, width=120)
-    v = witness(R,p)
-    print(np.dot(v, m2[:p,:p].dot(v)))
+    if p > 0:
+        v = witness(R,p)
+        print(np.dot(v, m2[:p,:p].dot(v)))

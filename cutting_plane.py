@@ -45,6 +45,7 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
              iter          number of iterations performed
     '''
     flag = 0 # no sol'n
+    x_best = np.array(S.xc)
     for iter in range(1, max_it):
         g, h, t1 = assess(S.xc, t)
         if t != t1: # best t obtained

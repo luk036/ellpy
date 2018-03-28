@@ -27,11 +27,11 @@ class my_oracle:
 			return self.c, fj, t
 
 		g, fj, _, _ = self.lmi1.chk_spd(x)
-		if fj == -1:
+		if fj > 0.:
 			return g, fj, t
 
 		g, fj, _, _ = self.lmi2.chk_spd(x)
-		if fj == -1:
+		if fj > 0.:
 			return g, fj, t
 		return self.c, 0.0, f0
 
@@ -46,6 +46,5 @@ def test_lmi():
     print(fmt.format(fb, iter, flag, status))
     print(xb)
     assert flag == 1
+    assert iter == 115
 
-if __name__ == "__main__":
-	test_lmi
