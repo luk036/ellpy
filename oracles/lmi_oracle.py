@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from chol_ext import *
+from .chol_ext import *
 
 class lmi_oracle:
-    def __init__(F):
+    def __init__(self, F, B):
         self.F = F
+        self.F0 = -B
 
-	def chk_mtx(self, A, x):
+    def chk_mtx(self, A, x):
         n = len(x)
         g = np.zeros(n)
         fj = -1.0
@@ -22,17 +23,19 @@ class lmi_oracle:
         return g, fj, R, v
  
     def chk_spd_t(self, x, t):
-        A = np.array(self.F[-1])
-        m = len(A)
-        A(range(m), range(m)) += t
-        return chk_mtx(self, A, x)
+        A = np.array(self.F0)
+        # ???
+        # m = len(A)
+        # A(range(m), range(m)) += t
+        A += t
+        return self.chk_mtx(A, x)
 
     def chk_spd(self, x):
-        A = np.array( self.F[-1] )
-        return chk_mtx(self, A, x)
+        A = np.array( self.F0 )
+        return self.chk_mtx(A, x)
 
     def __call__(self, x, t):
-        g, fj, _, _ = chk_spd_t(self, x, t)
+        g, fj, _, _ = self.chk_spd_t(x, t)
         if fj<0.0: t -= 1.0
         return g, fj, t
 
