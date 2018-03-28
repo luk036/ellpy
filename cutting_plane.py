@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
-import numpy as np
+import numpy as np # Can move to below???
 
 def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
     '''
@@ -90,7 +90,8 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
             t = t1
             x_best = np.array(x)
         status, tau = S.update(g,h)
-        if status == 1: break
+        if status == 1:
+            break
         if tau < tol:
             status = 2
             break

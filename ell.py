@@ -5,12 +5,12 @@ class ell:
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
         n = len(x)
+        self.c1 = float(n*n)/(n*n-1.0)
+        self.xc = np.array(x)
         if np.isscalar(val):
-            self.P = val * np.identity(n)
+            self.P = val * np.eye(n)
         else:
             self.P = np.diag(val)
-        self.xc = np.array(x)
-        self.c1 = float(n*n)/(n*n-1.0)
 
     def update_core(self, calc_ell, g, beta):
         Pg = self.P.dot(g)
@@ -55,7 +55,8 @@ class ell:
             return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
-        if a1 >= 1.0: return self.calc_dc(a0)
+        if a1 >= 1.0:
+            return self.calc_dc(a0)
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
         aprod = a0 * a1
