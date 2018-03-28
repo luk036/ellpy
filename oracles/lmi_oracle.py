@@ -3,6 +3,12 @@ import numpy as np
 from .chol_ext import *
 
 class lmi_oracle:
+    """
+        Oracle for Linear Matrix Inequality constraint
+            F * x <= B
+        Or
+            (B - F * x) must be a semidefinte matrix
+    """
     def __init__(self, F, B):
         self.F = F
         self.F0 = B
