@@ -40,7 +40,7 @@ def witness(R, p):
     return v
 
 
-def testcase(l1):
+def print_case(l1):
     m1 = np.array(l1)
     R, p = chol_ext(m1)
     pprint(R)
@@ -53,10 +53,10 @@ if __name__ == "__main__":
     l1 = [[25., 15., -5.],
           [15., 18.,  0.],
           [-5.,  0., 11.]]
-    testcase(l1)
+    print_case(l1)
 
     l2 = [[18., 22.,  54.,  42.],
           [22., -70.,  86.,  62.],
           [54., 86., -174., 134.],
           [42., 62., 134., -106.]]
-    testcase(l2)
+    print_case(l2)
