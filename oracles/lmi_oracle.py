@@ -4,6 +4,7 @@ from .chol_ext import *
 
 
 class lmi_oracle:
+
     """
         Oracle for Linear Matrix Inequality constraint
             F * x <= B
@@ -45,6 +46,6 @@ class lmi_oracle:
 
     def __call__(self, x, t):
         g, fj, _, _ = self.chk_spd_t(x, t)
-        if fj < 0.0:
+        if fj < 0.:
             t -= 1.0
         return g, fj, t

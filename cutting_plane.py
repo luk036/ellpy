@@ -5,14 +5,14 @@ import numpy as np  # Can move to below???
 
 def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
     '''
-    Cutting-plane method for solving convex feasibility problem   
-    input   
+    Cutting-plane method for solving convex feasibility problem
+    input
              assess        perform assessment on x0
              S(xc)         Search Space containing x*
              t             best-so-far optimal sol'n
              max_it        maximum number of iterations
-             tol           error tolerance                  
-    output  
+             tol           error tolerance
+    output
              x             solution vector
              iter          number of iterations performed
     '''
@@ -33,14 +33,14 @@ def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
 
 def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
     '''
-    Cutting-plane method for solving convex optimization problem   
-    input   
+    Cutting-plane method for solving convex optimization problem
+    input
              assess        perform assessment on x0
              S(xc)         Search Space containing x*
              t             initial best-so-far value
              max_it        maximum number of iterations
-             tol           error tolerance                  
-    output  
+             tol           error tolerance
+    output
              x_best        solution vector
              t             best-so-far optimal value
              iter          number of iterations performed
@@ -64,14 +64,14 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
 
 def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
     '''
-    Cutting-plane method for solving convex discrete optimization problem   
-    input   
+    Cutting-plane method for solving convex discrete optimization problem
+    input
              oracle        perform assessment on x0
              S(xc)         Search space containing x*
              t             best-so-far optimal sol'n
              max_it        maximum number of iterations
-             tol           error tolerance                  
-    output  
+             tol           error tolerance
+    output
              x             solution vector
              iter          number of iterations performed
     '''

@@ -24,7 +24,7 @@ class my_oracle:
     def __call__(self, x, t):
         f0 = np.dot(self.c, x)
         fj = f0 - t
-        if fj > 0.0:
+        if fj > 0.:
             return self.c, fj, t
 
         g, fj, _, _ = self.lmi1.chk_spd(x)
@@ -34,7 +34,7 @@ class my_oracle:
         g, fj, _, _ = self.lmi2.chk_spd(x)
         if fj > 0.:
             return g, fj, t
-        return self.c, 0.0, f0
+        return self.c, 0. , f0
 
 
 def test_lmi():
@@ -43,7 +43,7 @@ def test_lmi():
 
     E = ell(10., x0)
     P = my_oracle()
-    xb, fb, iter, flag, status = cutting_plane_dc(P, E, 100.0, 200, 1e-4)
+    xb, fb, iter, flag, status = cutting_plane_dc(P, E, 100. , 200, 1e-4)
     print(fmt.format(fb, iter, flag, status))
     print(xb)
     assert flag == 1

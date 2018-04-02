@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from math import *
-from chol_ext import *
+from .chol_ext import *
 
 
 class rank1_oracle:
+
     def __init__(self, N, A):
         self.N = N
         self.i_diag = 0
@@ -12,14 +13,14 @@ class rank1_oracle:
         k = 0
         m = N
         for i in range(N):
-            self.iD(i) = k
+            self.iD[i] = k
             k = k + m
             m = m - 1
-        B = 2.0*np.ones((N, N))  # twice because of symmetric
-        B((range(N), range(N))) = 1.0  # but not the diagonals
+        B = 2.0 * np.ones((N, N))  # twice because of symmetric
+        B[(range(N), range(N))] = 1.0  # but not the diagonals
         self.inds = np.triu_indices_from(A)
-        self.w = B[inds]
-        self.c = self.w * A[inds]
+        self.w = B[self.inds]
+        self.c = self.w * A[self.inds]
 
     def assess(self, x0, t, restart):
         # Begin constraints checking
@@ -31,11 +32,11 @@ class rank1_oracle:
             v = self.c.dot(x)
             if v > 2:
                 g = self.c
-                f = np.array([v-2, v-1])
+                f = np.array([v - 2, v - 1])
                 return g, f, t, x, loop
             if v < 1:
                 g = -self.c
-                f = np.array([-v+1, -v+2])
+                f = np.array([-v + 1, -v + 2])
                 return g, f, t, x, loop
 
             # 5. max(diag(G)) <= t
@@ -67,29 +68,30 @@ class rank1_oracle:
                 # for i in range(n):
                 # g[i] = -v'*self.F{i}(1:p,1:p)*v
                 # end
-                g = -v2[inds[0]]*v2[inds[1]]
+                g = -v2[self.inds[0]] * v2[self.inds[1]]
                 g = self.w * g
                 return g, f, t, x, loop
             v, d, _ = np.linalg.svd(G)
             h = v[1] * np.sqrt(d(1, 1))
             #[v,d] = eigs(G,1)
-            #h = v * sqrt(d)
+            # h = v * sqrt(d)
             G = np.outer(h, h)
             x = G[self.inds]
-            s = 1./(self.c.dot(x))
-            x = s*x  # rescale to the closest point
-            G = toMat(self, x0, self.N)
+            s = 1. / (self.c.dot(x))
+            x = s * x  # rescale to the closest point
+            G = self.toMat(x0, self.N)
 
         # Begin selfective def
         v = np.diag(G)
         t, imax = np.max(v)  # update best so far t
         f = 0
-        #g = np.zeros(len(x))
+        # g = np.zeros(len(x))
         g = np.zeros(n)
         g[self.iD[imax]] = 1
         return g, f, t, x, loop
 
-    def G = toMat(self, x, N):
+    def toMat(self, x, N):
         G = np.zeros((N, N))
-        G[inds] = x
-        G[(inds[1], inds[0])] = x
+        G[self.inds] = x
+        G[(self.inds[1], self.inds[0])] = x
+        return G

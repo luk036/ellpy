@@ -5,7 +5,7 @@ from pprint import pprint
 from ell import *
 from cutting_plane import *
 import numpy as np
-import lsq_corr_oracle import *
+import ..lsq_corr_oracle import *
 
 def lsq_corr_fn(Y, s)
     '''

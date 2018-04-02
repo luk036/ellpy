@@ -15,7 +15,7 @@ def find_neg_cycle(G, pred, dist, source, weight='weight'):
     """Compute negative cycle in weighted graphs.
 
     The algorithm has a running time of O(mn) where n is the number of
-    nodes and m is the number of edges.  
+    nodes and m is the number of edges.
 
     Parameters
     ----------
@@ -60,7 +60,8 @@ def find_neg_cycle(G, pred, dist, source, weight='weight'):
 
     for u, v, attr in G.selfloop_edges(data=True):
         if attr.get(weight, 1) < 0:
-            raise nx.NetworkXUnbounded("Self loop negative cost cycle detected.")
+            raise nx.NetworkXUnbounded(
+                "Self loop negative cost cycle detected.")
 
     if len(G) == 1:
         return None
@@ -137,19 +138,19 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
     return None
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     from networkx.utils import generate_unique_node
 
-    G = nx.cycle_graph(5, create_using = nx.DiGraph())
+    G = nx.cycle_graph(5, create_using=nx.DiGraph())
     G[1][2]['weight'] = -4
     newnode = generate_unique_node()
     G.add_edges_from([(newnode, n) for n in G])
 
     dist = {newnode: 0}
     pred = {newnode: None}
-    #source = 0
-    #dist = {source: 0}
-    #pred = {source: None}
+    # source = 0
+    # dist = {source: 0}
+    # pred = {source: None}
 
     v = find_neg_cycle(G, pred, dist, newnode)
     print v
@@ -159,9 +160,8 @@ if __name__=="__main__":
     source = 0
     dist = {source: 0}
     pred = {source: None}
-    G = nx.path_graph(5, create_using = nx.DiGraph())
+    G = nx.path_graph(5, create_using=nx.DiGraph())
     v = find_neg_cycle(G, pred, dist, source)
     print v
     print sorted(pred.items())
     print sorted(dist.items())
-
