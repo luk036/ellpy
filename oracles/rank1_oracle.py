@@ -16,8 +16,8 @@ class rank1_oracle:
             self.iD[i] = k
             k = k + m
             m = m - 1
-        B = 2.0 * np.ones((N, N))  # twice because of symmetric
-        B[(range(N), range(N))] = 1.0  # but not the diagonals
+        B = 2. * np.ones((N, N))  # twice because of symmetric
+        B[(range(N), range(N))] = 1.  # but not the diagonals
         self.inds = np.triu_indices_from(A)
         self.w = B[self.inds]
         self.c = self.w * A[self.inds]

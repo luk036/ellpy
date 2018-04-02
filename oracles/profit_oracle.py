@@ -45,8 +45,8 @@ class profit_rb_oracle:
             g = np.array([1.0, 0.])
             return g, fj, t
         a_rb = np.array(self.a)
-        a_rb[0] += self.uie1 * (+1.0 if y[0] <= 0. else -1.0)
-        a_rb[1] += self.uie2 * (+1.0 if y[1] <= 0. else -1.0)
+        a_rb[0] += self.uie1 * (+1. if y[0] <= 0. else -1.)
+        a_rb[1] += self.uie2 * (+1. if y[1] <= 0. else -1.)
 
         log_Cobb = self.log_pA + np.dot(a_rb, y)
         x = np.exp(y)

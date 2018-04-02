@@ -26,14 +26,14 @@ def chol_ext(A):
                 else:
                     R[j, i] = np.sqrt(d)
             else:
-                R[j, i] = 1.0 / R[j, j] * d
+                R[j, i] = 1. / R[j, j] * d
     return R, p
 
 
 def witness(R, p):
     assert p > 0
     v = np.zeros(p)
-    v[-1] = 1.0 / R[-1, -1]
+    v[-1] = 1. / R[-1, -1]
     for i in range(p - 2, -1, -1):
         s = np.dot(R[i, i + 1:], v[i + 1:])
         v[i] = -s / R[i, i]

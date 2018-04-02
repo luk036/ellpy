@@ -12,7 +12,7 @@ from corr_fn import *
 n = 20   # number of points
 s_end = 10.
 sdkern = 0.16  # width of kernel
-var = 2.0     # standard derivation
+var = 2.     # standard derivation
 tau = 0.00001    # standard derivation of white noise
 N = 300  # number of samples
 

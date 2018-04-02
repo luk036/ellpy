@@ -15,7 +15,7 @@ ny = 8
 n = nx*ny
 s_end = [10., 8.]
 sdkern = 0.1  # width of kernel
-var = 2.0     # standard derivation
+var = 2.     # standard derivation
 tau = 0.00001    # standard derivation of white noise
 N = 100  # number of samples
 

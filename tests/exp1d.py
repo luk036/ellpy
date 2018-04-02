@@ -10,7 +10,7 @@ n = 4   # number of points
 s_begin = 1
 s_end = 10
 sdkern = 0.5  # width of kernel
-var = 2.0     # standard derivation
+var = 2.      # standard derivation
 N = 500       # number of samples
 
 dist = s_end - s_begin
@@ -20,7 +20,7 @@ Sig = np.ones((n, n))
 for i in range(n):
     for j in range(i + 1, n):
         d = s[j] - s[i]
-        Sig[i, j] = np.exp(-0.5 * (np.dot(d, d)) / (sdkern * sdkern) / 2.0)
+        Sig[i, j] = np.exp(-0.5 * (np.dot(d, d)) / (sdkern * sdkern) / 2.)
         Sig[j, i] = Sig[i, j]
 
 A, _ = chol_ext(Sig)
