@@ -2,12 +2,19 @@
 from __future__ import print_function
 
 import numpy as np
+import time
 from ..oracles.profit_oracle import *
 from ..cutting_plane import *
 from ..ell import *
 
 
-def test_profit():
+def benchmark_profit(duration=0.000001):
+    """benchmark profit
+    
+    Keyword Arguments:
+        duration {float} -- [run benchmark duration] (default: {0.000001})
+    """
+
     p, A, k = 20. , 40. , 30.5
     alpha, beta = 0.1, 0.4
     v1, v2 = 10. , 35.
@@ -18,7 +25,7 @@ def test_profit():
     E = ell(r, y0)
     P = profit_oracle(p, A, alpha, beta, v1, v2, k)
     yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    print(fmt.format(fb, iter, flag, status))
+    # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
     assert iter == 37
 
@@ -30,13 +37,19 @@ def test_profit():
     E = ell(r, y0)
     P = profit_rb_oracle(p, A, alpha, beta, v1, v2, k, ui, e1, e2, e3)
     yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    print(fmt.format(fb, iter, flag, status))
+    # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
     assert iter == 42
 
     E = ell(r, y0)
     P = profit_q_oracle(p, A, alpha, beta, v1, v2, k)
     yb1, fb, iter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
-    print(fmt.format(fb, iter, flag, status))
+    # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
     assert iter == 28
+    time.sleep(duration)
+    return iter
+
+def test_profit(benchmark):
+    result = benchmark(benchmark_profit)
+    assert result == 28
