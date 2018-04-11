@@ -126,11 +126,11 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
                 dist_v = dist_u + get_weight(e)
                 if dist_v < dist.get(v, inf):
                     if v not in in_q:
-                        q.append(v)
-                        in_q.add(v)
                         count_v = count.get(v, 0) + 1
                         if count_v == n:
                             return v
+                        q.append(v)
+                        in_q.add(v)
                         count[v] = count_v
                     dist[v] = dist_v
                     pred[v] = u
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     from networkx.utils import generate_unique_node
 
     G = nx.cycle_graph(5, create_using=nx.DiGraph())
-    G[1][2]['weight'] = -4
+    G[1][2]['weight'] = -5
     newnode = generate_unique_node()
     G.add_edges_from([(newnode, n) for n in G])
 
