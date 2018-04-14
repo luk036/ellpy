@@ -36,8 +36,9 @@ class profit_rb_oracle(profit_oracle):
         self.a = a
         p -= ui * e3
         k -= ui * e3
-        v += ui * e3
-        profit_oracle.__init__(self, p, A, a, v, k)
+        v_rb = np.array(v)
+        v_rb += ui * e3
+        profit_oracle.__init__(self, p, A, a, v_rb, k)
 
     def __call__(self, y, t):
         a_rb = np.array(self.a)

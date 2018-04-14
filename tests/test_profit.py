@@ -48,10 +48,10 @@ def benchmark_profit(duration=0.000001):
     yb1, fb, iter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
-    assert iter == 26
+    assert iter == 28
     time.sleep(duration)
     return iter
 
 def test_profit(benchmark):
     result = benchmark(benchmark_profit)
-    assert result == 26
+    assert result == 28
