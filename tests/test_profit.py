@@ -18,12 +18,14 @@ def benchmark_profit(duration=0.000001):
     p, A, k = 20. , 40. , 30.5
     alpha, beta = 0.1, 0.4
     v1, v2 = 10. , 35.
+    a = np.array([alpha, beta])
+    v = np.array([v1, v2])
     y0 = np.array([0. , 0.])  # initial x0
     r = np.array([100. , 100.])  # initial ellipsoid (sphere)
     fmt = '{:f} {} {} {}'
 
     E = ell(r, y0)
-    P = profit_oracle(p, A, alpha, beta, v1, v2, k)
+    P = profit_oracle(p, A, a, v, k)
     yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
@@ -35,21 +37,21 @@ def benchmark_profit(duration=0.000001):
     e3 = 1.0
 
     E = ell(r, y0)
-    P = profit_rb_oracle(p, A, alpha, beta, v1, v2, k, ui, e1, e2, e3)
+    P = profit_rb_oracle(p, A, a, v, k, ui, e1, e2, e3)
     yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
-    assert iter == 42
+    assert iter == 38
 
     E = ell(r, y0)
-    P = profit_q_oracle(p, A, alpha, beta, v1, v2, k)
+    P = profit_q_oracle(p, A, a, v, k)
     yb1, fb, iter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
     assert flag == 1
-    assert iter == 28
+    assert iter == 26
     time.sleep(duration)
     return iter
 
 def test_profit(benchmark):
     result = benchmark(benchmark_profit)
-    assert result == 28
+    assert result == 26
