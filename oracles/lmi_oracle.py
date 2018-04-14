@@ -32,20 +32,20 @@ class lmi_oracle:
             g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
         return g, fj, R, v
 
-    def chk_spd_t(self, x, t):
-        A = np.array(self.F0)
-        # ???
-        # m = len(A)
-        # A(range(m), range(m)) += t
-        A += t
-        return self.chk_mtx(A, x)
+    # def chk_spd_t(self, x, t):
+    #     A = np.array(self.F0)
+    #     # ???
+    #     # m = len(A)
+    #     # A(range(m), range(m)) += t
+    #     A += t
+    #     return self.chk_mtx(A, x)
 
     def chk_spd(self, x):
         A = np.array(self.F0)
         return self.chk_mtx(A, x)
 
-    def __call__(self, x, t):
-        g, fj, _, _ = self.chk_spd_t(x, t)
-        if fj < 0.:
-            t -= 1.0
-        return g, fj, t
+    # def __call__(self, x, t):
+    #     g, fj, _, _ = self.chk_spd_t(x, t)
+    #     if fj < 0.:
+    #         t -= 1.0
+    #     return g, fj, t
