@@ -81,9 +81,9 @@ def test_optscaling():
     t = cmax - cmin
     E = ell(5.*t, x0)
     P = optscaling_oracle(G)
-    xb, fb, iter, flag, status = cutting_plane_dc(P, E, 1.1*t, 2000, 1e-6)
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 1.1*t, 2000, 1e-6)
 
     fmt = '{:f} {} {} {}'
     print(np.exp(xb))
-    print(fmt.format(fb, iter, flag, status))
+    print(fmt.format(fb, niter, flag, status))
     assert flag == 1

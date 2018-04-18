@@ -12,16 +12,8 @@ from networkx.utils import generate_unique_node
 
 def set_default(G, weight, value):
     for (u, v) in G.edges:
-        if G[u][v].get(weight, None) == None:
+        if G[u][v].get(weight, None) is None:
             G[u][v][weight] = value
-
-
-# def create_test_case1():
-#     G = nx.cycle_graph(5, create_using=nx.DiGraph())
-#     G[1][2]['weight'] = -5
-#     newnode = generate_unique_node()
-#     G.add_edges_from([(newnode, n) for n in G])
-#     return G
 
 
 class negCycleFinder:
@@ -59,7 +51,7 @@ class negCycleFinder:
             while True:
                 visited[u] = v
                 u = self.pred[u]
-                if u == None:
+                if u is None:
                     break
                 if visited[u] != None:
                     if visited[u] == v:

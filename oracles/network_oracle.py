@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import networkx as nx
-from .neg_cycle import *
+from .neg_cycle import negCycleFinder
 import numpy as np
 
 
@@ -27,7 +27,7 @@ class network_oracle:
             G[u][v]['weight'] = self.h(G, (u, v), x, t)
 
         C = S.find_neg_cycle()
-        if C == None:
+        if C is None:
             return np.zeros(n), -1
 
         # fj = -sum(G[u][v]['weight'] for u, v in C)
