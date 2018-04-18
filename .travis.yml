@@ -5,6 +5,7 @@ python:
   - "3.6"
 
 install:
+  - pip install networkx
   - pip install codecov
   - pip install pytest pytest-cov pytest-benchmark
 
