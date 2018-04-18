@@ -5,7 +5,7 @@ import numpy as np
 import time
 from ..oracles.profit_oracle import *
 from ..cutting_plane import *
-from ..ell import *
+from ..ell import ell
 
 
 def benchmark_profit(duration=0.000001):
@@ -22,14 +22,15 @@ def benchmark_profit(duration=0.000001):
     v = np.array([v1, v2])
     y0 = np.array([0. , 0.])  # initial x0
     r = np.array([100. , 100.])  # initial ellipsoid (sphere)
-    fmt = '{:f} {} {} {}'
+    # fmt = '{:f} {} {} {}'
 
     E = ell(r, y0)
     P = profit_oracle(p, A, a, v, k)
-    yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
+    # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
+    _, _, niter, flag, _ = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     assert flag == 1
-    assert iter == 37
+    assert niter == 37
 
     ui = 1.0
     e1 = 0.003
@@ -38,19 +39,21 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_rb_oracle(p, A, a, v, k, ui, e1, e2, e3)
-    yb1, fb, iter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
+    # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
+    _, _, niter, flag, _ = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     assert flag == 1
-    assert iter == 38
+    assert niter == 38
 
     E = ell(r, y0)
     P = profit_q_oracle(p, A, a, v, k)
-    yb1, fb, iter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
+    # yb1, fb, niter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
+    _, _, niter, flag, _ = cutting_plane_q(P, E, 0. , 200, 1e-4)
     assert flag == 1
-    assert iter == 28
+    assert niter == 28
     time.sleep(duration)
-    return iter
+    return niter
 
 def test_profit(benchmark):
     result = benchmark(benchmark_profit)

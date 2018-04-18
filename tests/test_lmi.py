@@ -2,9 +2,9 @@
 from __future__ import print_function
 
 import numpy as np
-from ..oracles.lmi_oracle import *
-from ..cutting_plane import *
-from ..ell import *
+from ..oracles.lmi_oracle import lmi_oracle
+from ..cutting_plane import cutting_plane_dc
+from ..ell import ell
 
 
 class my_oracle:
@@ -43,8 +43,8 @@ def test_lmi():
 
     E = ell(10., x0)
     P = my_oracle()
-    xb, fb, iter, flag, status = cutting_plane_dc(P, E, 100. , 200, 1e-4)
-    print(fmt.format(fb, iter, flag, status))
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100. , 200, 1e-4)
+    print(fmt.format(fb, niter, flag, status))
     print(xb)
     assert flag == 1
-    assert iter == 115
+    assert niter == 115

@@ -16,12 +16,12 @@ def set_default(G, weight, value):
             G[u][v][weight] = value
 
 
-def create_test_case1():
-    G = nx.cycle_graph(5, create_using=nx.DiGraph())
-    G[1][2]['weight'] = -5
-    newnode = generate_unique_node()
-    G.add_edges_from([(newnode, n) for n in G])
-    return G
+# def create_test_case1():
+#     G = nx.cycle_graph(5, create_using=nx.DiGraph())
+#     G[1][2]['weight'] = -5
+#     newnode = generate_unique_node()
+#     G.add_edges_from([(newnode, n) for n in G])
+#     return G
 
 
 class negCycleFinder:

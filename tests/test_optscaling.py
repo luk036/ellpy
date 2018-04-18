@@ -4,9 +4,9 @@ from __future__ import print_function
 # import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
-from ..cutting_plane import *
-from ..oracles.optscaling_oracle import *
-from ..ell import *
+from ..cutting_plane import cutting_plane_dc
+from ..oracles.optscaling_oracle import optscaling_oracle
+from ..ell import ell
 
 
 def vdc(n, base=2):
