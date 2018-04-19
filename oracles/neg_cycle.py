@@ -126,7 +126,7 @@ class negCycleFinder:
         cycle = list()
         while True:
             u = self.pred[v]
-            cycle += {(u, v)}
+            cycle += [(u, v)]
             v = u
             if v == handle:
                 break
