@@ -11,7 +11,6 @@ class network_oracle:
         Or
             (B - F * x) must be a semidefinte matrix
     """
-
     def __init__(self, G, h, ph):
         self.G = G
         self.h = h
@@ -19,8 +18,13 @@ class network_oracle:
         self.S = negCycleFinder(G)
 
     def __call__(self, x, t):
+        def get_weight(G, e):
+            return self.h(G, e, x, t)
+
         G = self.G
         S = self.S
+        S.get_weight = get_weight
+
         n = len(x)
 
         for (u, v) in G.edges:

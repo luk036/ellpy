@@ -1,5 +1,5 @@
 [
-  "tests/test_lmi.py::test_lmi", 
-  "tests/test_optscaling.py::test_optscaling", 
+  "tests/test_lmi.py::test_lmi",
+  "tests/test_optscaling.py::test_optscaling",
   "tests/test_profit.py::test_profit"
 ]

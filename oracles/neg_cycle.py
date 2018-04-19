@@ -10,15 +10,14 @@ import networkx as nx
 from networkx.utils import generate_unique_node
 
 
-def set_default(G, weight, value):
-    for (u, v) in G.edges:
-        if G[u][v].get(weight, None) is None:
-            G[u][v][weight] = value
+def default_get_weight(G, e):
+    u, v = e
+    return G[u][v].get('weight', 1)
 
 
 class negCycleFinder:
 
-    def __init__(self, G):
+    def __init__(self, G, get_weight=default_get_weight):
         """Relaxation loop for Bellman–Ford algorithm
 
         Parameters
@@ -29,10 +28,11 @@ class negCycleFinder:
         self.G = G
         self.dist = {v: 0 for v in G}
         self.pred = {v: None for v in G}
+        self.get_weight = get_weight
         #self.dist = dist.copy()
         #self.pred = pred.copy()
 
-    def find_cycle(self, weight):
+    def find_cycle(self):
         """Find a cycle on policy graph
 
         Arguments:
@@ -55,12 +55,12 @@ class negCycleFinder:
                     break
                 if visited[u] != None:
                     if visited[u] == v:
-                        if self.is_negative(u, weight):
+                        if self.is_negative(u):
                             return u
                     break
         return None
 
-    def relax(self, weight):
+    def relax(self):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -76,7 +76,8 @@ class negCycleFinder:
         """
 
         changed = False
-        for (u, v, wt) in self.G.edges.data(weight):
+        for (u, v) in self.G.edges:
+            wt = self.get_weight(self.G, (u, v))
             d = self.dist[u] + wt
             if self.dist[v] > d:
                 self.dist[v] = d
@@ -84,7 +85,7 @@ class negCycleFinder:
                 changed = True
         return changed
 
-    def find_neg_cycle(self, weight='weight'):
+    def find_neg_cycle(self):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -101,19 +102,19 @@ class negCycleFinder:
         G = self.G
         self.dist = {v: 0. for v in G}
         self.pred = {v: None for v in G}
-        set_default(G, weight, 1)
-        c = self.neg_cycle_relax(weight)
+        # set_default(G, weight, 1)
+        c = self.neg_cycle_relax()
         return c
 
-    def neg_cycle_relax(self, weight='weight'):
+    def neg_cycle_relax(self):
         G = self.G
         #self.dist = {v: 0. for v in G}
         self.pred = {v: None for v in G}
 
         while True:
-            changed = self.relax(weight)
+            changed = self.relax()
             if changed:
-                v = self.find_cycle(weight)
+                v = self.find_cycle()
                 if v != None:
                     return self.cycle_list(v)
             else:
@@ -131,11 +132,12 @@ class negCycleFinder:
                 break
         return cycle
 
-    def is_negative(self, handle, weight):
+    def is_negative(self, handle):
         v = handle
         while True:
             u = self.pred[v]
-            if self.dist[v] > self.dist[u] + self.G[u][v][weight]:
+            wt = self.get_weight(self.G, (u, v))
+            if self.dist[v] > self.dist[u] + wt:
                 return True
             v = u
             if v == handle:
