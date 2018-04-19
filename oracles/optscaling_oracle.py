@@ -37,5 +37,5 @@ class optscaling_oracle(network_oracle):
         fj = s - t
         if fj < 0.:
             t = s
-            fj = 0.0
+            fj = 0.
         return np.array([1., -1.]), fj, t

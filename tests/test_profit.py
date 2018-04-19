@@ -32,10 +32,10 @@ def benchmark_profit(duration=0.000001):
     assert flag == 1
     assert niter == 37
 
-    ui = 1.0
+    ui = 1.
     e1 = 0.003
     e2 = 0.007
-    e3 = 1.0
+    e3 = 1.
 
     E = ell(r, y0)
     P = profit_rb_oracle(p, A, a, v, k, ui, e1, e2, e3)

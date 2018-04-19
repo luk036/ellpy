@@ -24,7 +24,7 @@ def lsq_corr_fn(Y, s)
     bx = np.zeros(nn+1)
     tol = 1e-4
     while u - l > tol:
-        t = (u + l)/2.0
+        t = (u + l)/2.
         E = ell(100., x0)
         x, bf, iter, flag, status = cutting_plane_fea(P, E, t, 1000, tol)
         if flag == 1:

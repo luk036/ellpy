@@ -3,6 +3,7 @@ import numpy as np
 
 
 class ell:
+    
 
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
@@ -15,6 +16,19 @@ class ell:
             self.P = np.diag(val)
 
     def update_core(self, calc_ell, g, beta):
+        """Update ellipsoid core function using the cut
+                g' * (x - xc) + beta <= 0
+        
+        Arguments:
+            calc_ell {[type]} -- [description]
+            g {array} -- cut
+            beta {array or scalar} -- [description]
+        
+        Returns:
+            status -- 0: success
+            tau -- "volumn" of ellipsoid
+        """
+
         Pg = self.P.dot(g)
         tsq = g.dot(Pg)
         tau = np.sqrt(tsq)
@@ -40,7 +54,7 @@ class ell:
         if alpha == 0.:
             return self.calc_cc()
         n = len(self.xc)
-        status, rho, sigma, delta = 0, 0. , 0. , 0.0
+        status, rho, sigma, delta = 0, 0. , 0. , 0.
         if alpha > 1.:
             status = 1  # no sol'n
         elif n * alpha < -1.:
@@ -60,7 +74,7 @@ class ell:
         if a1 >= 1.:
             return self.calc_dc(a0)
         n = len(self.xc)
-        status, rho, sigma, delta = 0, 0. , 0. , 0.0
+        status, rho, sigma, delta = 0, 0. , 0. , 0.
         aprod = a0 * a1
         if a0 > a1:
             status = 1  # no sol'n
@@ -74,7 +88,7 @@ class ell:
                 1. - asq[1]) + n * n * asqdiff * asqdiff)
             sigma = (
                 n + (2. * (1. + aprod - xi / 2.) / (asum * asum))) / (n + 1)
-            rho = asum * sigma / 2.0
+            rho = asum * sigma / 2.
             delta = self.c1 * (1. - (asq[0] + asq[1] - xi / n) / 2.)
         return status, rho, sigma, delta
 

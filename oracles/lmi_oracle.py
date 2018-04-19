@@ -19,8 +19,8 @@ class lmi_oracle:
     def chk_mtx(self, A, x):
         n = len(x)
         g = np.zeros(n)
-        fj = -1.0
-        v = 0.0
+        fj = -1.
+        v = 0.
         for i in range(n):
             A -= self.F[i] * x[i]
         R, p = chol_ext(A)
@@ -47,5 +47,5 @@ class lmi_oracle:
     # def __call__(self, x, t):
     #     g, fj, _, _ = self.chk_spd_t(x, t)
     #     if fj < 0.:
-    #         t -= 1.0
+    #         t -= 1.
     #     return g, fj, t

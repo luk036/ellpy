@@ -49,7 +49,7 @@ class rank1_oracle:
                 if v[k] > t:
                     f = v[k] - t
                     g = np.zeros(n)
-                    g[self.iD[k]] = 1.0
+                    g[self.iD[k]] = 1.
                     self.i_diag = k
                     return g, f, t, x, loop
 
