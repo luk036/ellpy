@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import numpy as np
-import cvxpy as cvx
-from cutting_plane import cutting_plane_dc
-from ell import ell
+#import cvxpy as cvx
+from ..cutting_plane import cutting_plane_dc
+from ..ell import ell
+from ..problem import Problem
 
 # ********************************************************************
 # Problem specs.
@@ -78,87 +82,25 @@ class my_oracle:
         return g, 0., t
 
 
-h0 = np.zeros(n)  # initial x0
-E = ell(10., h0)
-P = my_oracle()
-hb, fb, niter, flag, status = cutting_plane_dc(P, E, 10., 2000, 1e-8)
+def test_firfilter():
+    h0 = np.zeros(n)  # initial x0
+    E = ell(10., h0)
+    P = my_oracle()
+    #hb, fb, niter, flag, status = cutting_plane_dc(P, E, 10., 2000, 1e-8)
+    prob1 = Problem(E, P)
+    prob1.solve(100.)
 
-fmt = '{:f} {} {} {}'
-print(hb)
-print(fmt.format(fb, niter, flag, status))
+    print('Problem status:', prob1.status)
 
-print 'Problem status:', flag
-if flag != 1:
-    raise Exception('ELL Error')
-hv = np.asmatrix(hb).T
+    print("optimal value", prob1.optim_value)
+    assert prob1.status == 'optimal'
 
-# h is the (real) FIR coefficient vector, which we are solving for.
-h = cvx.Variable(n)
-# The objective is:
-#     minimize max(|A*h-Hdes|)
-# but modified into an equivelent form:
-#     minimize max( real(A*h-Hdes)^2 + imag(A*h-Hdes)^2 )
-# such that all computation is done in real quantities only.
-obj = cvx.Minimize(
-        cvx.max_entries(
-           cvx.square(A_R * h - Hdes_r)     # Real part.
-         + cvx.square(A_I * h - Hdes_i) ) ) # Imaginary part.
+    #fmt = '{:f} {} {} {}'
+    # print(prob1.optim_var)
+    #print(fmt.format(prob1.optim_vale, prob1.solver_stats.num_iters))
 
-# Solve problem.
-prob = cvx.Problem(obj)
-prob.solve()
-hv = h.value
+    #print 'Problem status:', flag
+    # if flag != 1:
+    #    raise Exception('ELL Error')
 
-# Check if problem was successfully solved.
-print 'Problem status:', prob.status
-if prob.status != cvx.OPTIMAL:
-    raise Exception('CVXPY Error')
-print "optimal value", prob.value
-
-
-import matplotlib.pyplot as plt
-
-# Show plot inline in ipython.
-# %matplotlib inline
-
-# Plot properties.
-# plt.rc('text', usetex=True)
-# plt.rc('font', family='serif')
-# font = {'family' : 'normal',
-#         'weight' : 'normal',
-#         'size'   : 16}
-# plt.rc('font', **font)
-
-# Plot the FIR impulse reponse.
-plt.figure(figsize=(6, 6))
-plt.stem(range(n), hv)
-plt.xlabel('n')
-plt.ylabel('h(n)')
-plt.title('FIR filter impulse response')
-plt.show()
-
-# Plot the frequency response.
-H = np.exp(-1j * np.kron(w, np.mat(np.arange(n)))) * hv
-plt.figure(figsize=(6, 6))
-# Magnitude
-plt.plot(np.array(w), 20 * np.log10(np.array(np.abs(H))),
-         label='optimized')
-plt.plot(np.array(w), 20 * np.log10(np.array(np.abs(Hdes))), '--',
-         label='desired')
-plt.xlabel(r'$\omega$')
-plt.ylabel(r'$|H(\omega)|$ in dB')
-plt.title('FIR filter freq. response magnitude')
-plt.show()
-
-plt.xlim(0, np.pi)
-plt.ylim(-30, 10)
-plt.legend(loc='lower right')
-# Phase
-plt.figure(figsize=(6, 6))
-plt.plot(np.array(w), np.angle(np.array(H)))
-plt.xlim(0, np.pi)
-plt.ylim(-np.pi, np.pi)
-plt.xlabel(r'$\omega$')
-plt.ylabel(r'$\angle H(\omega)$')
-plt.title('FIR filter freq. response angle')
-plt.show()
+    #hv = np.asmatrix(prob1.optim_var).T
