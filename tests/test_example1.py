@@ -31,11 +31,11 @@ def my_oracle(z, t):
 #if __name__ == "__main__":
 def test_example1():
     x0 = np.array([0., 0.])  # initial x0
-    fmt = '{:f} {} {} {}'
-
     E = ell(10., x0)
     P = my_oracle
     xb, fb, niter, flag, status = cutting_plane_dc(P, E, -100., 200, 1e-4)
+
+    fmt = '{:f} {} {} {}'
     print(fmt.format(fb, niter, flag, status))
     print(xb)
     assert flag == 1
