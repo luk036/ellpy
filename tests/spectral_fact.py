@@ -40,7 +40,7 @@ def spectral_fact(r):
     # find the Hilbert transform
     alphatmp = np.fft.fft(alpha)
     # alphatmp(floor(m/2)+1: m) = -alphatmp(floor(m/2)+1: m)
-    ind = m / 2 
+    ind = int(m / 2) # python3 need int() 
     alphatmp[ind: m] = -alphatmp[ind: m]
     alphatmp[0] = 0
     alphatmp[ind] = 0
