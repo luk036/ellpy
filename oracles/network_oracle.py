@@ -17,9 +17,9 @@ class network_oracle:
         self.ph = ph  # partial derivative of h w.r.t x
         self.S = negCycleFinder(G)
 
-    def __call__(self, x, t):
+    def __call__(self, x):
         def get_weight(G, e):
-            return self.h(G, e, x, t)
+            return self.h(G, e, x)
 
         G = self.G
         S = self.S
@@ -28,7 +28,7 @@ class network_oracle:
         n = len(x)
 
         for (u, v) in G.edges:
-            G[u][v]['weight'] = self.h(G, (u, v), x, t)
+            G[u][v]['weight'] = self.h(G, (u, v), x)
 
         C = S.find_neg_cycle()
         if C is None:
@@ -40,6 +40,6 @@ class network_oracle:
         g = np.zeros(n)
         for u, v in C:
             fj -= G[u][v]['weight']
-            g -= self.ph(G, (u, v), x, t)
+            g -= self.ph(G, (u, v), x)
 
         return g, fj

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from .chol_ext import *
+from .chol_ext import chol_ext, witness
 
 
 class lmi_oracle:
@@ -44,8 +44,10 @@ class lmi_oracle:
         A = np.array(self.F0)
         return self.chk_mtx(A, x)
 
+    def __call__(self, x):
+        g, fj, _, _ = self.chk_spd(x)
+        return g, fj
+
     # def __call__(self, x, t):
     #     g, fj, _, _ = self.chk_spd_t(x, t)
-    #     if fj < 0.:
-    #         t -= 1.
-    #     return g, fj, t
+    #     return g, fj
