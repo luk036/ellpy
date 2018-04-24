@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import numpy as np
-
+from itertools import chain
 
 class lowpass_oracle:
 
@@ -45,7 +45,7 @@ class lowpass_oracle:
         # 2. passband constraints
         n, m = self.Ap.shape
         i_Ap = self.i_Ap
-        for k in range(i_Ap, n) + range(i_Ap):
+        for k in chain(range(i_Ap, n), range(i_Ap)):
             # k += 1
             # if k == n:
             #     k = 0    # round robin
@@ -69,7 +69,7 @@ class lowpass_oracle:
         n = self.As.shape[0]
         w = np.zeros(n)
         i_As = self.i_As
-        for k in range(i_As, n) + range(i_As):
+        for k in chain(range(i_As, n), range(i_As)):
             # k += 1
             # if k == n:
             #     k = 0    # round robin
