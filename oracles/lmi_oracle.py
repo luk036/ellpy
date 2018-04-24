@@ -41,7 +41,7 @@ class lmi_oracle:
     #     return self.chk_mtx(A, x)
 
     def chk_spd(self, x):
-        A = np.array(self.F0)
+        A = self.F0.copy()
         return self.chk_mtx(A, x)
 
     def __call__(self, x):

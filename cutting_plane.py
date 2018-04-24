@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import numpy as np  # Can move to below???
+# import numpy as np  # Can move to below???
 
 
 # def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
@@ -45,13 +45,13 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
              niter         number of iterations performed
     '''
     flag = 0  # no sol'n
-    x_best = np.array(S.xc)
+    x_best = S.xc
     for niter in range(1, max_it):
         g, h, t1 = assess(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
             t = t1
-            x_best = np.array(S.xc)
+            x_best = S.xc
         status, tau = S.update(g, h)
         if status == 1:
             break
@@ -75,22 +75,22 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
              niter         number of iterations performed
     '''
     flag = 0  # no sol'n
-    # x_last = np.array(S.xc)
-    x_best = np.array(S.xc)
+    # x_last = S.xc
+    x_best = S.xc
     status = 1  # new
     for niter in range(1, max_it):
         g, h, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
         if status != 3:
             if loop == 1:  # discrete sol'n
-                h += np.dot(g, x - S.xc)
+                h += g.dot(x - S.xc)
         else:  # can't cut in the previous iteration
             if loop == 0:  # no more alternative cut
                 break
-            h += np.dot(g, x - S.xc)
+            h += g.dot(x - S.xc)
         if t != t1:  # best t obtained
             flag = 1
             t = t1
-            x_best = np.array(x)
+            x_best = x.copy()
         status, tau = S.update(g, h)
         if status == 1:
             break

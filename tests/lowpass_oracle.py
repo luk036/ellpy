@@ -44,48 +44,49 @@ class lowpass_oracle:
         # case 2,
         # 2. passband constraints
         n, m = self.Ap.shape
-        k = self.i_Ap
-        for _ in range(n):
-            k += 1
-            if k == n:
-                k = 0    # round robin
+        i_Ap = self.i_Ap
+        for k in range(i_Ap, n) + range(i_Ap):
+            # k += 1
+            # if k == n:
+            #     k = 0    # round robin
             v = self.Ap[k, :].dot(x)
             if v > self.Upsq:
                 #f = v - Upsq
                 g = self.Ap[k, :]
                 f = (v - self.Upsq, v - self.Lpsq)
-                self.i_Ap = k
+                self.i_Ap = k + 1
                 return g, f, Spsq
 
             if v < self.Lpsq:
                 #f = Lpsq - v
                 g = -self.Ap[k, :]
                 f = (-v + self.Lpsq, -v + self.Upsq)
-                self.i_Ap = k
+                self.i_Ap = k + 1
                 return g, f, Spsq
 
         # case 3,
         # 3. stopband constraint
         n = self.As.shape[0]
-        k = self.i_As
         w = np.zeros(n)
-        for _ in range(n):
-            k += 1
-            if k == n:
-                k = 0    # round robin
+        i_As = self.i_As
+        for k in range(i_As, n) + range(i_As):
+            # k += 1
+            # if k == n:
+            #     k = 0    # round robin
             w[k] = self.As[k, :].dot(x)
             if w[k] > Spsq:
                 #f = v - Spsq
                 g = self.As[k, :]
                 #f = (w[k] - Spsq, w[k])
                 f = w[k] - Spsq
-                self.i_As = k
+                self.i_As = k + 1
                 return g, f, Spsq
 
             if w[k] < 0:
                 #f = v - Spsq
                 g = -self.As[k, :]
                 f = (-w[k], -w[k] + Spsq)
+                self.i_As = k + 1
                 return g, f, Spsq
 
         # case 4,

@@ -1,14 +1,13 @@
 import time
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 #import cvxpy as cvx
-#from scipy.signal import remez, minimum_phase, freqz, group_delay
-from ..cutting_plane import cutting_plane_dc
-from ..ell import ell
-from .spectral_fact import spectral_fact
+from scipy.signal import remez, minimum_phase, freqz, group_delay
+from cutting_plane import cutting_plane_dc
+from ell import ell
+from tests.spectral_fact import spectral_fact
 # from problem import Problem
-from .lowpass_oracle import lowpass_oracle
-
+from tests.lowpass_oracle import lowpass_oracle
 
 # Modified from CVX code by Almir Mutapcic in 2006.
 # Adapted in 2010 for impulse response peak-minimization by convex iteration by Christine Law.
@@ -41,7 +40,7 @@ from .lowpass_oracle import lowpass_oracle
 # filter specs (for a low-pass filter)
 # *********************************************************************
 # number of FIR coefficients (including zeroth)
-N = 32
+N = 48
 wpass = 0.12*np.pi   # end of passband
 wstop = 0.20*np.pi   # start of stopband
 delta0_wpass = 0.125
@@ -87,7 +86,8 @@ Spsq = Sp**2
 # optimization
 # ********************************************************************
 
-def test_lowpass():
+## def test_lowpass():
+if __name__ == "__main__":
     # tic = time.time()
 
     r0 = np.zeros(N)  # initial x0
@@ -135,61 +135,33 @@ def test_lowpass():
 
     print('Min attenuation in the stopband is ', Ustop, ' dB.')
 
-    # freq = [0, 0.12, 0.2, 1.0]
-    # desired = [1, 0]
-    # h_linear = remez(151, freq, desired, Hz=2.)
-    # h_min_hom = minimum_phase(h_linear, method='homomorphic')
+    freq = [0, 0.12, 0.2, 1.0]
+    desired = [1, 0]
+    h_linear = remez(151, freq, desired, Hz=2.)
+    h_min_hom = minimum_phase(h_linear, method='homomorphic')
 
-    # fig, axs = plt.subplots(4, figsize=(4, 8))
-    # for h, style, color in zip((h_linear, h_min_hom, h_sp),
-    #                            ('-', '-', '--'), ('k', 'r', 'c')):
-    #     #if flag == 1:
-    #     w, H = freqz(h)
-    #     w, gd = group_delay((h, 1))
-    #     w /= np.pi
-    #     axs[0].plot(h, color=color, linestyle=style)
-    #     axs[1].plot(w, np.abs(H), color=color, linestyle=style)
-    #     axs[2].plot(w, 20 * np.log10(np.abs(H)), color=color, linestyle=style)
-    #     axs[3].plot(w, gd, color=color, linestyle=style)
+    fig, axs = plt.subplots(4, figsize=(4, 8))
+    for h, style, color in zip((h_linear, h_min_hom, h_sp),
+                               ('-', '-', '--'), ('k', 'r', 'c')):
+        #if flag == 1:
+        w, H = freqz(h)
+        w, gd = group_delay((h, 1))
+        w /= np.pi
+        axs[0].plot(h, color=color, linestyle=style)
+        axs[1].plot(w, np.abs(H), color=color, linestyle=style)
+        axs[2].plot(w, 20 * np.log10(np.abs(H)), color=color, linestyle=style)
+        axs[3].plot(w, gd, color=color, linestyle=style)
 
-    # for ax in axs:
-    #     ax.grid(True, color='0.5')
-    #     ax.fill_between(freq[1:3], *ax.get_ylim(), color='    #ffeeaa', zorder=1)
-    # axs[0].set(xlim=[0, len(h_linear) - 1], ylabel='Amplitude', xlabel='Samples')
-    # axs[1].legend(['Linear', 'Min-Hom', 'Our'], title='Phase')
-    # for ax, ylim in zip(axs[1:], ([0, 1.1], [-150, 10], [-60, 60])):
-    #     ax.set(xlim=[0, 1], ylim=ylim, xlabel='Frequency')
-    # axs[1].set(ylabel='Magnitude')
-    # axs[2].set(ylabel='Magnitude (dB)')
-    # axs[3].set(ylabel='Group delay')
-    # plt.tight_layout()
-    # plt.show()
+    for ax in axs:
+        ax.grid(True, color='0.5')
+        ax.fill_between(freq[1:3], *ax.get_ylim(), color='#ffeeaa', zorder=1)
+    axs[0].set(xlim=[0, len(h_linear) - 1], ylabel='Amplitude', xlabel='Samples')
+    axs[1].legend(['Linear', 'Min-Hom', 'Our'], title='Phase')
+    for ax, ylim in zip(axs[1:], ([0, 1.1], [-150, 10], [-60, 60])):
+        ax.set(xlim=[0, 1], ylim=ylim, xlabel='Frequency')
+    axs[1].set(ylabel='Magnitude')
+    axs[2].set(ylabel='Magnitude (dB)')
+    axs[3].set(ylabel='Group delay')
+    plt.tight_layout()
+    plt.show()
 
-    # H = [exp(-j*kron(w,[0:N-1]))]*h
-    # figure(2)
-    # subplot(121)
-    #     # magnitude
-    # plot(w,20*log10(abs(H)), ...
-    #    [0 wpass],[delta delta],'r--', ...
-    #    [0 wpass],[-delta -delta],'r--', ...
-    #    [wstop pi],[Ustop Ustop],'r--')
-    # xlabel('w')
-    # ylabel('mag H(w) in dB')
-    # axis([0 pi -50 5])
-    # title(sprintf('N=    #d, w_p(pi)=#3.2f, w_s(pi)=#3.2f, delta=#3.2f', N, wpass/pi, wstop/pi, delta))
-
-    # #compare impulse response designed by conventional method
-    # subplot(122)
-    # ## h_sp = spectral_fact(r)  #from CVX distribution, Examples subdirectory
-    # plot([0:N-1],h_sp','+r--')
-    # hold on
-    # plot([0:N-1],h(end:-1:1)','ob:')
-    # legend('conventional','optimal')
-    # xlabel('t'), ylabel('h(t)') grid
-    # title(sprintf('h_{max} conventional=    #3.4f, h_{max} optimal=#3.4f',max(abs(h_sp)),max(abs(h))))
-    # set(gcf,'Outerposition',[300 300 256*4 256*2])
-
-    # figure(1)
-    #     # FIR impulse response
-    # plot([0:N-1],h','ob:')
-    # xlabel('t'), ylabel('h(t)')

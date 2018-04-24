@@ -9,11 +9,17 @@ class ell:
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
         n = len(x)
         self.c1 = float(n * n) / (n * n - 1.)
-        self.xc = np.array(x)
+        self._xc = x.copy()
         if np.isscalar(val):
             self.P = val * np.eye(n)
         else:
             self.P = np.diag(val)
+
+
+    @property
+    def xc(self):
+        return self._xc
+
 
     def update_core(self, calc_ell, g, beta):
         """Update ellipsoid core function using the cut
@@ -36,14 +42,14 @@ class ell:
         status, rho, sigma, delta = calc_ell(alpha)
         if status != 0:
             return status, tau
-        self.xc -= (rho / tau) * Pg
+        self._xc -= (rho / tau) * Pg
         self.P -= (sigma / tsq) * np.outer(Pg, Pg)
         self.P *= delta
         return status, tau
 
     def calc_cc(self):
         '''central cut'''
-        n = len(self.xc)
+        n = len(self._xc)
         rho = 1. / (n + 1)
         sigma = 2. * rho
         delta = self.c1
@@ -53,7 +59,7 @@ class ell:
         '''deep cut'''
         if alpha == 0.:
             return self.calc_cc()
-        n = len(self.xc)
+        n = len(self._xc)
         status, rho, sigma, delta = 0, 0. , 0. , 0.
         if alpha > 1.:
             status = 1  # no sol'n
@@ -73,7 +79,7 @@ class ell:
         a0, a1 = alpha
         if a1 >= 1.:
             return self.calc_dc(a0)
-        n = len(self.xc)
+        n = len(self._xc)
         status, rho, sigma, delta = 0, 0. , 0. , 0.
         aprod = a0 * a1
         if a0 > a1:
