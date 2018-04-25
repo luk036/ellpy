@@ -2,32 +2,31 @@
 # import numpy as np  # Can move to below???
 
 
-# def cutting_plane_feas(assess, S, t, max_it=1000, tol=1e-8):
-#     '''
-#     Cutting-plane method for solving convex feasibility problem
-#     input
-#              assess        perform assessment on x0
-#              S(xc)         Search Space containing x*
-#              t             best-so-far optimal sol'n
-#              max_it        maximum number of iterations
-#              tol           error tolerance
-#     output
-#              x             solution vector
-#              niter         number of iterations performed
-#     '''
-#     flag = 0
-#     for niter in range(1, max_it):
-#         g, h, t1 = assess(S.xc, t)
-#         if t != t1:  # feasible sol'n obtained
-#             flag = 1
-#             break
-#         status, tau = S.update(g, h)
-#         if status == 1:
-#             break
-#         if tau < tol:
-#             status = 2
-#             break
-#     return S.xc, niter, flag, status
+def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
+    '''
+    Cutting-plane method for solving convex feasibility problem
+    input
+             assess        perform assessment on x0
+             S(xc)         Search Space containing x*
+             t             best-so-far optimal sol'n
+             max_it        maximum number of iterations
+             tol           error tolerance
+    output
+             x             solution vector
+             niter         number of iterations performed
+    '''
+    flag = 0
+    for niter in range(1, max_it):
+        g, h, flag = assess(S.xc)
+        if flag == 1:  # feasible sol'n obtained
+            break
+        status, tau = S.update(g, h)
+        if status != 0:
+            break
+        if tau < tol:
+            status = 2
+            break
+    return S.xc, niter, flag, status
 
 
 def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):

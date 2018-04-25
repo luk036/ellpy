@@ -1,5 +1,6 @@
 [
   "tests/test_example1.py::test_example1", 
+  "tests/test_example2.py::test_example2", 
   "tests/test_firfilter.py::test_firfilter", 
   "tests/test_lmi.py::test_lmi", 
   "tests/test_lowpass.py::test_lowpass", 
