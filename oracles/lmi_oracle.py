@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from .chol_ext import chol_ext, witness
+from .chol_ext import chol_ext
 
 
 class lmi_oracle:
@@ -18,19 +18,18 @@ class lmi_oracle:
 
     def chk_mtx(self, A, x):
         n = len(x)
-        g = np.zeros(n)
-        fj = -1.
-        v = 0.
         for i in range(n):
             A -= self.F[i] * x[i]
-        R, p = chol_ext(A)
-        if p == 0:
-            return g, fj, R, v
-        v = witness(R, p)
+        Q = chol_ext(A)
+        if Q.is_spd():
+            return None, None, 1
+        v = Q.witness()
+        p = len(v)
         fj = -np.dot(v, A[:p, :p].dot(v))
+        g = np.zeros(n)
         for i in range(n):
             g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
-        return g, fj, R, v
+        return g, fj, 0
 
     # def chk_spd_t(self, x, t):
     #     A = np.array(self.F0)
@@ -40,13 +39,10 @@ class lmi_oracle:
     #     A += t
     #     return self.chk_mtx(A, x)
 
-    def chk_spd(self, x):
+    def __call__(self, x):
         A = self.F0.copy()
         return self.chk_mtx(A, x)
 
-    def __call__(self, x):
-        g, fj, _, _ = self.chk_spd(x)
-        return g, fj
 
     # def __call__(self, x, t):
     #     g, fj, _, _ = self.chk_spd_t(x, t)

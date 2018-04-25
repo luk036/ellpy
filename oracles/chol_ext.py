@@ -5,39 +5,42 @@ from pprint import pprint
 import numpy as np
 
 
-def chol_ext(A):
-    '''
-     If $A$ is positive definite, then $p$ is zero.
-     If it is not, then $p$ is a positive integer,
-     such that $v = R^{-1} e_p$ is a certificate vector
-     to make $v'*A[:p,:p]*v < 0$
-    '''
-    p = 0
-    n = len(A)
-    R = np.zeros((n, n))
-    for i in range(n):
-        for j in range(i + 1):
-            d = A[j, i] - np.dot(R[:j, i], R[:j, j])
-            if i == j:
-                if d < 0.:
-                    p = i + 1
-                    R[j, i] = np.sqrt(-d)
-                    return R[:p, :p], p
-                else:
-                    R[j, i] = np.sqrt(d)
-            else:
+class chol_ext:
+
+    def __init__(self, A):
+        '''
+         If $A$ is positive definite, then $p$ is zero.
+         If it is not, then $p$ is a positive integer,
+         such that $v = R^{-1} e_p$ is a certificate vector
+         to make $v'*A[:p,:p]*v < 0$
+        '''
+        n = len(A)
+        self.p = 0
+        self.R = np.zeros((n, n))
+        R = self.R
+        for i in range(n):
+            for j in range(i):
+                d = A[j, i] - np.dot(R[:j, i], R[:j, j])
                 R[j, i] = 1. / R[j, j] * d
-    return R, p
+            d = A[i, i] - np.dot(R[:i, i], R[:i, i])
+            if d <= 0.: # strictly positive???
+                self.p = i + 1
+                R[i, i] = np.sqrt(-d)
+                break
+            R[i, i] = np.sqrt(d)
 
+    def is_spd(self):
+        return self.p == 0
 
-def witness(R, p):
-    assert p > 0
-    v = np.zeros(p)
-    v[-1] = 1. / R[-1, -1]
-    for i in range(p - 2, -1, -1):
-        s = np.dot(R[i, i + 1:], v[i + 1:])
-        v[i] = -s / R[i, i]
-    return v
+    def witness(self):
+        assert self.p > 0
+        p = self.p
+        v = np.zeros(p)
+        v[p-1] = 1. / self.R[p-1, p-1]
+        for i in range(p - 2, -1, -1):
+            s = np.dot(self.R[i, i+1:p], v[i+1:p])
+            v[i] = -s / self.R[i, i]
+        return v
 
 
 # def print_case(l1):

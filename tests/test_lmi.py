@@ -27,12 +27,12 @@ class my_oracle:
         if fj > 0.:
             return self.c, fj, t
 
-        g, fj, _, _ = self.lmi1.chk_spd(x)
-        if fj > 0.:
+        g, fj, flag = self.lmi1(x)
+        if flag == 0:
             return g, fj, t
 
-        g, fj, _, _ = self.lmi2.chk_spd(x)
-        if fj > 0.:
+        g, fj, flag = self.lmi2(x)
+        if flag == 0:
             return g, fj, t
         return self.c, 0. , f0
 
@@ -43,7 +43,7 @@ def test_lmi():
 
     E = ell(10., x0)
     P = my_oracle()
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100. , 200, 1e-4)
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100. , 2000, 1e-4)
     print(fmt.format(fb, niter, flag, status))
     print(xb)
     assert flag == 1
