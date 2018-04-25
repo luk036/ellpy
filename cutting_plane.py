@@ -16,6 +16,7 @@ def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
              niter         number of iterations performed
     '''
     flag = 0
+    status = 0
     for niter in range(1, max_it):
         g, h, flag = assess(S.xc)
         if flag == 1:  # feasible sol'n obtained

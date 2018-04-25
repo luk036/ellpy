@@ -18,14 +18,19 @@ class lmi_oracle:
 
     def chk_mtx(self, A, x):
         n = len(x)
-        for i in range(n):
-            A -= self.F[i] * x[i]
-        Q = chol_ext(A)
+
+        def getA(i, j):
+            for k in range(n):
+                A[i,j] -= self.F[k][i,j] * x[k]
+            return A[i,j]
+
+        Q = chol_ext(getA, A.shape[0])
         if Q.is_spd():
             return None, None, 1
         v = Q.witness()
         p = len(v)
-        fj = -np.dot(v, A[:p, :p].dot(v))
+        # fj = -np.dot(v, A[:p, :p].dot(v))
+        fj = 1.
         g = np.zeros(n)
         for i in range(n):
             g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
