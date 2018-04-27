@@ -7,7 +7,7 @@ import matplotlib.pylab as lab
 import numpy as np
 from scipy import linalg
 from scipy.interpolate import BSpline
-from corr_fn import *
+from corr_ell import lsq_corr_poly
 
 # a fake dataset to make the bumps with
 nx = 10   # number of points
@@ -42,23 +42,23 @@ for k in range(N):
 
 Y = np.cov(Ys, bias=True)
 
-plt.subplot(2,2,1)
-lab.contourf(xx,yy,np.reshape( Ys[:,1],(ny, nx) ), cmap='Greens')
-plt.subplot(2,2,2)
-lab.contourf(xx,yy,np.reshape( Ys[:,3],(ny, nx) ), cmap='Greens')
-plt.subplot(2,2,3)
-lab.contourf(xx,yy,np.reshape( Ys[:,5],(ny, nx) ), cmap='Greens')
-plt.subplot(2,2,4)
-lab.contourf(xx,yy,np.reshape( Ys[:,7],(ny, nx) ), cmap='Greens')
-plt.show()
+# plt.subplot(2,2,1)
+# lab.contourf(xx,yy,np.reshape( Ys[:,1],(ny, nx) ), cmap='Greens')
+# plt.subplot(2,2,2)
+# lab.contourf(xx,yy,np.reshape( Ys[:,3],(ny, nx) ), cmap='Greens')
+# plt.subplot(2,2,3)
+# lab.contourf(xx,yy,np.reshape( Ys[:,5],(ny, nx) ), cmap='Greens')
+# plt.subplot(2,2,4)
+# lab.contourf(xx,yy,np.reshape( Ys[:,7],(ny, nx) ), cmap='Greens')
+# plt.show()
 
 
 pol = lsq_corr_poly(Y, s, 7)
-spl = lsq_corr_bspline(Y, s, 7)
+# spl = lsq_corr_bspline(Y, s, 7)
 h = s[-1] - s[0]
 d = np.sqrt(np.dot(h,h))
 xs = np.linspace(0, d, 100)
 plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
-plt.plot(xs, spl(xs), 'r', label='BSpline')
-plt.legend(loc='best')
+# plt.plot(xs, spl(xs), 'r', label='BSpline')
+# plt.legend(loc='best')
 plt.show()

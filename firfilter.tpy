@@ -88,7 +88,7 @@ prob1.solve(100.)
 
 print 'Problem status:', prob1.status
 if prob1.status != 'optimal':
-    raise Exception('CVXPY Error')
+    raise Exception('ELL Error')
 print "optimal value", prob1.optim_value
 
 #fmt = '{:f} {} {} {}'

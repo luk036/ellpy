@@ -2,6 +2,24 @@
 # import numpy as np  # Can move to below???
 
 
+def bsearch(assess, I, max_it=1000, tol=1e-8):
+    # assume monotone
+    flag = 0
+    l, u = I
+    t = (l + u)/2
+    for niter in range(1, max_it):
+        if assess(t): # feasible sol'n obtained
+            flag = 1
+            u = t
+        else:
+            l = t
+        tau = (u - l)/2
+        t = l + tau
+        if tau < tol:
+            break
+    return u, niter, flag
+
+
 def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
     '''
     Cutting-plane method for solving convex feasibility problem

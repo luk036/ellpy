@@ -29,6 +29,7 @@ def lsq_corr_poly(Y, s, m):
     constraints = [Sig >> 0]
     prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, 'fro')), constraints)
     prob.solve(solver=cvx.CVXOPT)
+    # prob.solve()
     if prob.status != cvx.OPTIMAL:
         raise Exception('CVXPY Error')
     return np.poly1d(np.array(a.value).flatten())
@@ -70,6 +71,7 @@ def lsq_corr_bspline(Y, s, m):
 
     prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, 'fro')), constraints)
     prob.solve(solver=cvx.CVXOPT)
+    # prob.solve()
     if prob.status != cvx.OPTIMAL:
         raise Exception('CVXPY Error')
     return BSpline(t, np.array(c.value).flatten(), k)
