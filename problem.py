@@ -1,4 +1,4 @@
-from cutting_plane import cutting_plane_dc, cutting_plane_q
+from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q
 import numpy as np
 
 

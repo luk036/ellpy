@@ -37,7 +37,7 @@ class fitting_oracle:
         for k in range(nx):
             Fk = np.vstack([np.hstack([np.zeros((n,n)), Sig[k]]), np.hstack([Sig[k].T, np.zeros((n,n))])])
             F += [ Fk ]
-        self.F0 = np.vstack([np.hstack([np.eye(n), Y]), np.hstack([Y.T, np.eye(n)])])
+        self.F0 = np.vstack([np.hstack([np.zeros((n,n)), Y]), np.hstack([Y.T, np.zeros((n,n))])])
         self.P = lmi_oracle(F, self.F0)
         self.x_best = x
         self.max_it = max_it
@@ -47,7 +47,7 @@ class fitting_oracle:
         x = self.x_best.copy()
         E = ell(100, x)
         n = self.P.F0.shape[0]
-        self.P.B = np.eye(n) * t - self.F0 # <- update B
+        self.P.F0 = np.eye(n) * t + self.F0 # <- update B
         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
         if flag == 1:
             self.x_best = x.copy()
@@ -84,7 +84,7 @@ def lsq_corr_poly(Y, s, m):
     ## E = ell(100., a)
     P = fitting_oracle(Sig, Y, a)
     t = np.linalg.norm(Y, 'fro')
-    u, niter, flag = bsearch(P, [0., 2.*t*t])
+    u, niter, flag = bsearch(P, [0., 2.*t])
     a = P.x_best
     return np.poly1d(a)
 #  return prob.is_dcp()
