@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
- 
+
 from pprint import pprint
 import matplotlib.pyplot as plt
 import matplotlib.pylab as lab
@@ -17,28 +17,29 @@ s_end = [10., 8.]
 sdkern = 0.1  # width of kernel
 var = 2.     # standard derivation
 tau = 0.00001    # standard derivation of white noise
-N = 100  # number of samples
+N = 200  # number of samples
 
 # create sites s
 sx = np.linspace(0, s_end[0], nx)
 sy = np.linspace(0, s_end[1], ny)
 xx, yy = np.meshgrid(sx, sy)
-s = np.array(zip(xx.flatten(), yy.flatten()))
+# s = zip(xx.flatten(), yy.flatten())
+s = np.vstack([xx.flatten(), yy.flatten()]).T
 
-Sig = np.ones((n,n))
+Sig = np.ones((n, n))
 for i in range(n):
-  for j in range(i,n):
-    d = np.array(s[j]) - np.array(s[i])
-    Sig[i,j] = np.exp(-sdkern * np.dot(d,d) )
-    Sig[j,i] = Sig[i,j]
+    for j in range(i, n):
+        d = np.array(s[j]) - np.array(s[i])
+        Sig[i, j] = np.exp(-sdkern * np.dot(d, d))
+        Sig[j, i] = Sig[i, j]
 
 A = linalg.sqrtm(Sig)
-Ys = np.zeros((n,N))
+Ys = np.zeros((n, N))
 # ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
     y = A.dot(x) + tau*np.random.randn(n)
-    Ys[:,k] = y
+    Ys[:, k] = y
 
 Y = np.cov(Ys, bias=True)
 
@@ -56,7 +57,7 @@ Y = np.cov(Ys, bias=True)
 pol = lsq_corr_poly(Y, s, 7)
 # spl = lsq_corr_bspline(Y, s, 7)
 h = s[-1] - s[0]
-d = np.sqrt(np.dot(h,h))
+d = np.sqrt(np.dot(h, h))
 xs = np.linspace(0, d, 100)
 plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 # plt.plot(xs, spl(xs), 'r', label='BSpline')

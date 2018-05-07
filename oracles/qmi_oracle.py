@@ -24,9 +24,9 @@ class qmi_oracle:
         A = self.B.copy()
 
         def getA(i, j):
-            A[i,j] -= Fx[i,:].dot(Fx[j,:])
-            A[j,i] = A[i,j]
-            return A[i,j]
+            A[i, j] -= Fx[i, :].dot(Fx[j, :])
+            A[j, i] = A[i, j]
+            return A[i, j]
 
         Q = chol_ext(getA, A.shape[0])
         if Q.is_spd():

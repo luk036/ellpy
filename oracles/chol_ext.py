@@ -20,10 +20,10 @@ class chol_ext:
         R = self.R
         for i in range(n):
             for j in range(i):
-                d = getA(j, i) - np.dot(R[:j, i], R[:j, j])
+                d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
                 R[j, i] = 1. / R[j, j] * d
             d = getA(i, i) - np.dot(R[:i, i], R[:i, i])
-            if d <= 0.: # strictly positive???
+            if d <= 0.:  # strictly positive???
                 self.p = i + 1
                 R[i, i] = np.sqrt(-d)
                 break

@@ -4,10 +4,10 @@ import numpy as np
 def spectral_fact(r):
     """Spectral factorization using Kolmogorov 1939 approach.
       (code follows pp. 232-233, Signal Analysis, by A. Papoulis)
-     
+
       Computes the minimum-phase impulse response which satisfies
       given auto-correlation.
-     
+
       Input:
         r: top-half of the auto-correlation coefficients
            starts from 0th element to end of the auto-corelation
@@ -31,16 +31,16 @@ def spectral_fact(r):
     # w = 2*pi*[0:m-1]/m
     w = np.linspace(0, 2.*np.pi, m, endpoint=False)
     # R = [ones(m, 1) 2*cos(kron(w', [1:n-1]))]*r
-    Bn = np.outer(w, np.arange(1,n))
+    Bn = np.outer(w, np.arange(1, n))
     An = 2*np.cos(Bn)
     R = np.hstack((np.ones((m, 1)), An)).dot(r)
-    
+
     alpha = 0.5*np.log(np.abs(R))
 
     # find the Hilbert transform
     alphatmp = np.fft.fft(alpha)
     # alphatmp(floor(m/2)+1: m) = -alphatmp(floor(m/2)+1: m)
-    ind = int(m / 2) # python3 need int() 
+    ind = int(m / 2)  # python3 need int()
     alphatmp[ind: m] = -alphatmp[ind: m]
     alphatmp[0] = 0
     alphatmp[ind] = 0
@@ -58,7 +58,7 @@ def spectral_fact(r):
     return h
 
 
-if __name__ == "__main__":
-    r = np.random.rand(20)
-    h = spectral_fact(r)
-    print(h)
+# if __name__ == "__main__":
+#     r = np.random.rand(20)
+#     h = spectral_fact(r)
+#     print(h)

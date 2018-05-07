@@ -11,6 +11,7 @@ class network_oracle:
         Or
             (B - F * x) must be a semidefinte matrix
     """
+
     def __init__(self, G, h, ph):
         self.G = G
         self.h = h
