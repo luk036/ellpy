@@ -18,7 +18,7 @@ class poly_oracle:
 
     def __call__(self, t):
         x = self.x_best.copy()
-        E = ell(100., x)
+        E = ell(10., x)
         n = self.P.F0.shape[0]
         self.P.B = np.eye(n) * t  # update B
         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
@@ -69,7 +69,7 @@ class bspline_oracle:
 
     def __call__(self, t):
         x = self.x_best.copy()
-        E = ell(100., x)
+        E = ell(10., x)
         n = self.P.F0.shape[0]
         self.P.qmi.B = np.eye(n) * t  # update B
         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
@@ -121,7 +121,7 @@ def lsq_corr_poly(Y, s, m):
 
     P = poly_oracle(Sig, Y, a)
     normY = np.linalg.norm(Y, 'fro')
-    _, _, _ = bsearch(P, [0., 1.1*normY*normY])
+    _, _, _ = bsearch(P, [0., normY*normY])
     a = P.x_best
     return np.poly1d(a)
 #  return prob.is_dcp()
@@ -146,7 +146,7 @@ def lsq_corr_bspline(Y, s, m):
     c = np.zeros(m)
     P = bspline_oracle(Sig, Y, c)
     normY = np.linalg.norm(Y, 'fro')
-    _, _, _ = bsearch(P, [0., 1.1*normY*normY])
+    _, _, _ = bsearch(P, [0., normY*normY])
     c = P.x_best
 
     return BSpline(t, np.array(c), k)
