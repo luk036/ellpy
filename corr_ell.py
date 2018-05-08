@@ -121,7 +121,7 @@ def lsq_corr_poly(Y, s, m):
 
     P = poly_oracle(Sig, Y, a)
     normY = np.linalg.norm(Y, 'fro')
-    u, niter, flag = bsearch(P, [0., 1.1*normY*normY])
+    _, _, _ = bsearch(P, [0., 1.1*normY*normY])
     a = P.x_best
     return np.poly1d(a)
 #  return prob.is_dcp()
@@ -146,7 +146,7 @@ def lsq_corr_bspline(Y, s, m):
     c = np.zeros(m)
     P = bspline_oracle(Sig, Y, c)
     normY = np.linalg.norm(Y, 'fro')
-    u, niter, flag = bsearch(P, [0., 1.1*normY*normY])
+    _, _, _ = bsearch(P, [0., 1.1*normY*normY])
     c = P.x_best
 
     return BSpline(t, np.array(c), k)
