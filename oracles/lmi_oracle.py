@@ -34,5 +34,5 @@ class lmi_oracle:
         fj = 1.
         g = np.zeros(n)
         for i in range(n):
-            g[i] = np.dot(v, self.F[i][:p, :p].dot(v))
+            g[i] = v.dot(self.F[i][:p, :p].dot(v))
         return g, fj, 0

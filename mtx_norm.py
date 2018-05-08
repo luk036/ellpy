@@ -7,7 +7,7 @@ import matplotlib.pylab as lab
 import numpy as np
 from scipy import linalg
 from scipy.interpolate import BSpline
-from corr_ell import lsq_corr_poly
+from corr_ell import lsq_corr_poly, lsq_corr_bspline
 
 # a fake dataset to make the bumps with
 nx = 10   # number of points
@@ -18,6 +18,8 @@ sdkern = 0.1  # width of kernel
 var = 2.     # standard derivation
 tau = 0.00001    # standard derivation of white noise
 N = 200  # number of samples
+np.random.seed(5)
+
 
 # create sites s
 sx = np.linspace(0, s_end[0], nx)
@@ -35,6 +37,8 @@ for i in range(n):
 
 A = linalg.sqrtm(Sig)
 Ys = np.zeros((n, N))
+
+
 # ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
@@ -55,11 +59,11 @@ Y = np.cov(Ys, bias=True)
 
 
 pol = lsq_corr_poly(Y, s, 7)
-# spl = lsq_corr_bspline(Y, s, 7)
+spl = lsq_corr_bspline(Y, s, 7)
 h = s[-1] - s[0]
 d = np.sqrt(np.dot(h, h))
 xs = np.linspace(0, d, 100)
 plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
-# plt.plot(xs, spl(xs), 'r', label='BSpline')
-# plt.legend(loc='best')
+plt.plot(xs, spl(xs), 'r', label='BSpline')
+plt.legend(loc='best')
 plt.show()
