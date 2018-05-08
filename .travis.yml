@@ -11,7 +11,7 @@ install:
 
 # command to run tests
 script: 
-  - pytest --cov=./
+  - python -m pytest --cov=./
 
 after_success:
   - codecov
