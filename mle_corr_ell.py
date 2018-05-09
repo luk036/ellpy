@@ -4,28 +4,9 @@ from scipy.interpolate import BSpline
 import numpy as np
 from cutting_plane import cutting_plane_feas, bsearch
 from ell import ell
-from oracles.qmi_oracle import qmi_oracle
-# from oracles.lmi_oracle import lmi_oracle
+# from oracles.qmi_oracle import qmi_oracle
+from oracles.lmi_oracle import lmi_oracle
 
-
-class poly_oracle:
-    def __init__(self, F, F0, x, max_it=1000, tol=1e-8):
-        n = F0.shape[0]
-        self.P = qmi_oracle(F, F0, np.eye(n))
-        self.x_best = x
-        self.max_it = max_it
-        self.tol = tol
-
-    def __call__(self, t):
-        x = self.x_best.copy()
-        E = ell(10., x)
-        n = self.P.F0.shape[0]
-        self.P.B = np.eye(n) * t  # update B
-        x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
-        if flag == 1:
-            self.x_best = x.copy()
-            return True
-        return False
 
 
 class bsp_oracle:
@@ -59,52 +40,24 @@ class bsp_oracle:
         return self.qmi(x)
 
 
-class bspline_oracle:
-    def __init__(self, F, F0, x, max_it=1000, tol=1e-8):
-        n = F0.shape[0]
-        self.P = bsp_oracle(F, F0, np.eye(n))
-        self.x_best = x
-        self.max_it = max_it
-        self.tol = tol
+class poly_oracle:
+    def __init__(self, Sig, Y):
+        self.Y = Y
+        self.Sig = Sig
+        self.lmi1 = lmi_oracle(Sig, 2.*Y)
+        self.lmi2 = lmi_oracle(-Sig, np.zeros())
 
-    def __call__(self, t):
-        x = self.x_best.copy()
-        E = ell(10., x)
-        n = self.P.F0.shape[0]
-        self.P.qmi.B = np.eye(n) * t  # update B
-        x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
+    def __call__(self, x, t):
+        g, fj, flag = self.lmi1(x)
         if flag == 1:
-            self.x_best = x.copy()
-            return True
+            return g, fj, t
+
+        g, fj, flag = self.lmi2(x)
+        if flag == 1:
+            return g, fj, t
+
+
         return False
-
-# class poly_oracle:
-#     def __init__(self, Sig, Y, x, max_it=1000, tol=1e-8):
-#         n = Y.shape[0]
-#         nx = len(x)
-#         F = []
-#         Zeros = np.zeros((n, n))
-#         for k in range(nx):
-#             Fk = np.vstack([np.hstack([Zeros, Sig[k]]),
-#                             np.hstack([Sig[k].T, Zeros])])
-#             F += [Fk]
-#         self.F0 = np.vstack([np.hstack([Zeros, Y]),
-#                              np.hstack([Y.T, Zeros])])
-#         self.P = lmi_oracle(F, self.F0)
-#         self.x_best = x
-#         self.max_it = max_it
-#         self.tol = tol
-
-#     def __call__(self, t):
-#         x = self.x_best.copy()
-#         E = ell(100, x)
-#         n = self.P.F0.shape[0]
-#         self.P.F0 = np.eye(n) * t + self.F0  # <- update B
-#         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
-#         if flag == 1:
-#             self.x_best = x.copy()
-#             return True
-#         return False
 
 
 def mle_corr_poly(Y, s, m):

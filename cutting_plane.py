@@ -32,9 +32,10 @@ class bsearch_adaptor:
         return self.E.xc
 
     def __call__(self, t):
-        E = self.E
+        E = self.E.copy()
         self.P.update(t)
-        x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
+        x, _, flag, _ = cutting_plane_feas(self.P, E,
+                                           self.max_it, self.tol)
         if flag == 1:
             self.E.xc = x.copy()
             return True

@@ -3,35 +3,36 @@ import numpy as np
 from .chol_ext import chol_ext
 
 
-class lmi_oracle:
+class lmi2_oracle:
 
     """
         Oracle for Linear Matrix Inequality constraint
-            F * x <= B
-        Or
-            (B - F * x) must be a semidefinte matrix
+            0 <= F * x <= U
     """
 
-    def __init__(self, F, B):
+    def __init__(self, F, U):
         self.F = F
-        self.F0 = B
+        self.U = U
 
     def __call__(self, x):
-        A = self.F0.copy()
+        A = self.U.copy()
+        S = np.zeros(A.shape)
         n = len(x)
 
         def getA(i, j):
             for k in range(n):
-                A[i, j] -= self.F[k][i, j] * x[k]
+                S[i, j] = self.F[k][i, j] * x[k]
+                A[i, j] -= S[i, j]
             return A[i, j]
 
-        Q = chol_ext(getA, len(A))
+        Q = chol_ext(getA, A.shape[0])
         if Q.is_spd():
             return None, None, 1
         v = Q.witness()
         p = len(v)
         # fj = -np.dot(v, A[:p, :p].dot(v))
+        fj = 1.
         g = np.zeros(n)
         for i in range(n):
             g[i] = v.dot(self.F[i][:p, :p].dot(v))
-        return g, 1., 0
+        return g, fj, 0

@@ -12,7 +12,8 @@ def constr(G, e, x):
     # t is unused here
     if u < v:
         return x[0] - G[u][v]['cost']
-    return G[u][v]['cost'] - x[1]
+    else:
+        return G[u][v]['cost'] - x[1]
 
 
 def pconstr(G, e, x):
@@ -20,7 +21,8 @@ def pconstr(G, e, x):
     # t is unused here
     if u < v:
         return np.array([1., 0.])
-    return np.array([0., -1.])
+    else:
+        return np.array([0., -1.])
 
 
 class optscaling_oracle(network_oracle):
@@ -30,8 +32,8 @@ class optscaling_oracle(network_oracle):
         network_oracle.__init__(self, G, constr, pconstr)
 
     def __call__(self, x, t):
-        g, fj = network_oracle.__call__(self, x)
-        if fj > 0.:
+        g, fj, flag = network_oracle.__call__(self, x)
+        if flag != 1:
             return g, fj, t
         s = x[0] - x[1]
         fj = s - t

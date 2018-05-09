@@ -60,6 +60,7 @@ Y = np.cov(Ys, bias=True)
 
 pol = mle_corr_poly(Y, s, 5)
 spl = mle_corr_bspline(Y, s, 5)
+
 h = s[-1] - s[0]
 d = np.sqrt(np.dot(h, h))
 xs = np.linspace(0, d, 100)

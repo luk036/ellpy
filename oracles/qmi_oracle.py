@@ -34,7 +34,6 @@ class qmi_oracle:
                 for k in range(nx):
                     Fx[i] -= self.F[k][i] * x[k]
             A[i, j] -= Fx[i].dot(Fx[j])
-            # A[j, i] = A[i, j]
             return A[i, j]
 
         Q = chol_ext(getA, A.shape[0])
@@ -42,11 +41,8 @@ class qmi_oracle:
             return None, None, 1
         v = Q.witness()
         p = len(v)
-        # fj = -np.dot(v, A[:p, :p].dot(v))
-        fj = 1.
         g = np.zeros(nx)
-        # Av = (Fx[:p].T).dot(v)
         Av = v.dot(Fx[:p])
         for k in range(nx):
             g[k] = -2. * v.dot(self.F[k][:p]).dot(Av)
-        return g, fj, 0
+        return g, 1., 0

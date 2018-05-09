@@ -20,7 +20,12 @@ class ell:
     def xc(self):
         return self._xc
 
-
+    def copy(self):
+        E = ell(0, self.xc.copy())
+        E.P = self.P.copy()
+        E.c1 = self.c1
+        return E
+        
     def update_core(self, calc_ell, g, beta):
         """Update ellipsoid core function using the cut
                 g' * (x - xc) + beta <= 0

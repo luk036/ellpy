@@ -26,21 +26,19 @@ class network_oracle:
         S = self.S
         S.get_weight = get_weight
 
-        n = len(x)
-
-        for (u, v) in G.edges:
-            G[u][v]['weight'] = self.h(G, (u, v), x)
+        # for (u, v) in G.edges:
+        #     G[u][v]['weight'] = self.h(G, (u, v), x)
 
         C = S.find_neg_cycle()
         if C is None:
-            return np.zeros(n), -1
+            return None, None, 1
 
         # fj = -sum(G[u][v]['weight'] for u, v in C)
         # g = -sum(self.ph(G, (u, v), x, t) for u, v in C)
         fj = 0.
-        g = np.zeros(n)
+        g = np.zeros(len(x))
         for u, v in C:
-            fj -= G[u][v]['weight']
+            fj -= self.h(G, (u, v), x)
             g -= self.ph(G, (u, v), x)
 
-        return g, fj
+        return g, fj, 0
