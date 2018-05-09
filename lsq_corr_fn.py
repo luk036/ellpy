@@ -7,7 +7,7 @@ import matplotlib.pylab as lab
 import numpy as np
 from scipy import linalg
 from scipy.interpolate import BSpline
-from corr_ell import lsq_corr_poly, lsq_corr_bspline
+from lsq_corr_ell import lsq_corr_poly, lsq_corr_bspline
 
 # a fake dataset to make the bumps with
 nx = 10   # number of points
@@ -58,8 +58,8 @@ Y = np.cov(Ys, bias=True)
 # plt.show()
 
 
-pol = lsq_corr_poly(Y, s, 7)
-spl = lsq_corr_bspline(Y, s, 7)
+pol = lsq_corr_poly(Y, s, 5)
+spl = lsq_corr_bspline(Y, s, 5)
 h = s[-1] - s[0]
 d = np.sqrt(np.dot(h, h))
 xs = np.linspace(0, d, 100)

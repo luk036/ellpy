@@ -8,7 +8,7 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
     l, u = I
     t = (l + u)/2
     for niter in range(1, max_it):
-        if assess(t): # feasible sol'n obtained
+        if assess(t):  # feasible sol'n obtained
             flag = 1
             u = t
         else:
@@ -18,6 +18,27 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
         if tau < tol:
             break
     return u, niter, flag
+
+
+class bsearch_adaptor:
+    def __init__(self, P, E, max_it=1000, tol=1e-8):
+        self.P = P
+        self.E = E
+        self.max_it = max_it
+        self.tol = tol
+
+    @property
+    def x_best(self):
+        return self.E.xc
+
+    def __call__(self, t):
+        E = self.E
+        self.P.update(t)
+        x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
+        if flag == 1:
+            self.E.xc = x.copy()
+            return True
+        return False
 
 
 def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):

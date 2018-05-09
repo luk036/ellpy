@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-#import cvxpy as cvx
+from __future__ import print_function
+
+from pprint import pprint
 from scipy.interpolate import BSpline
 import numpy as np
 from cutting_plane import cutting_plane_feas, bsearch
@@ -8,10 +10,9 @@ from oracles.qmi_oracle import qmi_oracle
 # from oracles.lmi_oracle import lmi_oracle
 
 
-class poly_oracle:
+class mtx_norm_oracle:
     def __init__(self, F, F0, x, max_it=1000, tol=1e-8):
-        n = F0.shape[0]
-        self.P = qmi_oracle(F, F0, np.eye(n))
+        self.P = qmi_oracle(F, F0)
         self.x_best = x
         self.max_it = max_it
         self.tol = tol
@@ -19,8 +20,7 @@ class poly_oracle:
     def __call__(self, t):
         x = self.x_best.copy()
         E = ell(10., x)
-        n = self.P.F0.shape[0]
-        self.P.B = np.eye(n) * t  # update B
+        self.P.update(t)
         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
         if flag == 1:
             self.x_best = x.copy()
@@ -36,10 +36,12 @@ class bsp_oracle:
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
     """
 
-    def __init__(self, F, F0, B):
+    def __init__(self, F, F0):
         self.F0 = F0
-        self.B = B
-        self.qmi = qmi_oracle(F, F0, B)
+        self.qmi = qmi_oracle(F, F0)
+
+    def update(self, t):
+        self.qmi.update(t)
 
     def __call__(self, x):
         n = len(x)
@@ -61,8 +63,7 @@ class bsp_oracle:
 
 class bspline_oracle:
     def __init__(self, F, F0, x, max_it=1000, tol=1e-8):
-        n = F0.shape[0]
-        self.P = bsp_oracle(F, F0, np.eye(n))
+        self.P = bsp_oracle(F, F0)
         self.x_best = x
         self.max_it = max_it
         self.tol = tol
@@ -70,15 +71,14 @@ class bspline_oracle:
     def __call__(self, t):
         x = self.x_best.copy()
         E = ell(10., x)
-        n = self.P.F0.shape[0]
-        self.P.qmi.B = np.eye(n) * t  # update B
+        self.P.update(t)
         x, _, flag, _ = cutting_plane_feas(self.P, E, self.max_it, self.tol)
         if flag == 1:
             self.x_best = x.copy()
             return True
         return False
 
-# class poly_oracle:
+# class mtx_norm_oracle:
 #     def __init__(self, Sig, Y, x, max_it=1000, tol=1e-8):
 #         n = Y.shape[0]
 #         nx = len(x)
@@ -119,7 +119,7 @@ def lsq_corr_poly(Y, s, m):
         Sig += [D]
     Sig.reverse()
 
-    P = poly_oracle(Sig, Y, a)
+    P = mtx_norm_oracle(Sig, Y, a)
     normY = np.linalg.norm(Y, 'fro')
     _, _, _ = bsearch(P, [0., normY*normY])
     a = P.x_best
@@ -146,10 +146,12 @@ def lsq_corr_bspline(Y, s, m):
     c = np.zeros(m)
     P = bspline_oracle(Sig, Y, c)
     normY = np.linalg.norm(Y, 'fro')
-    _, _, _ = bsearch(P, [0., normY*normY])
+    _, niter, flag = bsearch(P, [0., normY*normY])
+    print(niter, flag)
+    
     c = P.x_best
 
-    return BSpline(t, np.array(c), k)
+    return BSpline(t, c, k)
 
 
 def construct_distance_matrix(s):

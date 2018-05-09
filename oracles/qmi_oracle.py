@@ -6,16 +6,20 @@ from .chol_ext import chol_ext
 class qmi_oracle:
     """
      Oracle for Quadratic Matrix Inequality
-        F(x).T * F(x) <= B
+        F(x).T * F(x) <= I*t
      where
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
     """
 
-    def __init__(self, F, F0, B):
+    def __init__(self, F, F0):
         self.F = F
         self.F0 = F0
-        self.B = B
+        self.B = None
         self.count = -1
+
+    def update(self, t):
+        n = len(self.F0)
+        self.B = np.eye(n) * t 
 
     def __call__(self, x):
         self.count = -1
