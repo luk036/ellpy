@@ -19,7 +19,7 @@ class qmi_oracle:
 
     def update(self, t):
         n = len(self.F0)
-        self.B = np.eye(n) * t 
+        self.B = np.eye(n) * t
 
     def __call__(self, x):
         self.count = -1
@@ -31,8 +31,10 @@ class qmi_oracle:
             assert i >= j
             if self.count < i:
                 self.count = i
-                for k in range(nx):
-                    Fx[i] -= self.F[k][i] * x[k]
+                # for k in range(nx):
+                #     Fx[i] -= self.F[k][i] * x[k]
+                Fx[i] -= sum(self.F[k][i] * x[k] for k in range(nx))
+
             A[i, j] -= Fx[i].dot(Fx[j])
             return A[i, j]
 
@@ -41,8 +43,9 @@ class qmi_oracle:
             return (None, None), 1
         v = Q.witness()
         p = len(v)
-        g = np.zeros(nx)
         Av = v.dot(Fx[:p])
-        for k in range(nx):
-            g[k] = -2. * v.dot(self.F[k][:p]).dot(Av)
+        # g = np.zeros(nx)
+        # for k in range(nx):
+        #     g[k] = -2. * v.dot(self.F[k][:p]).dot(Av)
+        g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av) for k in range(nx)])
         return (g, 1.), 0

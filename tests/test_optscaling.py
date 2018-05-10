@@ -87,3 +87,4 @@ def test_optscaling():
     print(np.exp(xb))
     print(fmt.format(fb, niter, flag, status))
     assert flag == 1
+    assert niter == 40

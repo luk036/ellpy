@@ -20,9 +20,10 @@ class lmi2_oracle:
         n = len(x)
 
         def getA(i, j):
-            for k in range(n):
-                S[i, j] = self.F[k][i, j] * x[k]
-                A[i, j] -= S[i, j]
+            # for k in range(n):
+            #     S[i, j] = self.F[k][i, j] * x[k]
+            S[i, j] = sum(self.F[k][i, j] * x[k] for k in range(n))
+            A[i, j] -= S[i, j]
             return A[i, j]
 
         Q = chol_ext(getA, A.shape[0])
@@ -31,8 +32,9 @@ class lmi2_oracle:
         v = Q.witness()
         p = len(v)
         # fj = -np.dot(v, A[:p, :p].dot(v))
-        fj = 1.
-        g = np.zeros(n)
-        for i in range(n):
-            g[i] = v.dot(self.F[i][:p, :p].dot(v))
-        return (g, fj), 0
+        # fj = 1.
+        # g = np.zeros(n)
+        # for i in range(n):
+        #     g[i] = v.dot(self.F[i][:p, :p].dot(v))
+        g = np.array([v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
+        return (g, 1.), 0
