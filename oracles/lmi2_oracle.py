@@ -27,7 +27,7 @@ class lmi2_oracle:
 
         Q = chol_ext(getA, A.shape[0])
         if Q.is_spd():
-            return None, None, 1
+            return (None, None), 1
         v = Q.witness()
         p = len(v)
         # fj = -np.dot(v, A[:p, :p].dot(v))
@@ -35,4 +35,4 @@ class lmi2_oracle:
         g = np.zeros(n)
         for i in range(n):
             g[i] = v.dot(self.F[i][:p, :p].dot(v))
-        return g, fj, 0
+        return (g, fj), 0

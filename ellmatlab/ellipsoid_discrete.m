@@ -20,14 +20,14 @@ status = 1; % new
 
 for iter = 1:max_it,
   if status == 3, % can't cut in the previous iteration
-    [g, h, t1, x, loop] = assess(x, t, 1);  % new
+    [cut, t1, x, loop] = assess(x, t, 1);  % new
 	if loop == 0, % no more alternative cut
 	  if flag == 0, x_best = x; end % output x anyway	  
 	  return
     end
 	h = h + g'*(x - E.xc);
   else
-    [g, h, t1, x, loop] = assess(E.xc, t, 0);
+    [cut, t1, x, loop] = assess(E.xc, t, 0);
     if loop == 1, % discrete sol'n
       h = h + g'*(x - E.xc);
 	end

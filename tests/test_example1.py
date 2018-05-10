@@ -8,9 +8,9 @@ from .test_example2 import my_oracle2
 
 
 def my_oracle(z, t):
-    g, h, flag = my_oracle2(z)
+    cut, flag = my_oracle2(z)
     if flag == 0:
-        return g, h, t
+        return cut, t
 
     x, y = z
 
@@ -20,7 +20,7 @@ def my_oracle(z, t):
     if fj < 0.:
         fj = 0.
         t = f0
-    return -1.*np.array([1., 1.]), fj, t
+    return (-1.*np.array([1., 1.]), fj), t
 
 
 # if __name__ == "__main__":

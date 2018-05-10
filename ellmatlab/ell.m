@@ -60,15 +60,15 @@ classdef ell < handle
             status = 0; % okay
         end        
         
-		function [status, tau] = update_dc(obj, g, beta)
-            [status, tau] = obj.update_core(@obj.calc_dc, g, beta);
+		function [status, tau] = update_dc(obj, cut)
+            [status, tau] = obj.update_core(@obj.calc_dc, cut);
         end
 
-        function [status, tau] = update(obj, g, beta)
-            [status, tau] = obj.update_core(@obj.calc_ll, g, beta);
+        function [status, tau] = update(obj, cut)
+            [status, tau] = obj.update_core(@obj.calc_ll, cut);
         end
 
-        function [status, tau] = update_core(obj, calc_ell, g, beta)
+        function [status, tau] = update_core(obj, calc_ell, cut)
             Pg = obj.P*g;  
             tsq = g'*Pg;
             tau = sqrt(tsq);

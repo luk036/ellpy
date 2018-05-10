@@ -14,7 +14,7 @@ class profit_oracle:
         fj = y[0] - self.log_k  # constraint
         if fj > 0.:
             g = np.array([1., 0.])
-            return g, fj, t
+            return (g, fj), t
         log_Cobb = self.log_pA + np.dot(self.a, y)
         x = np.exp(y)
         vx = np.dot(self.v, x)
@@ -25,7 +25,7 @@ class profit_oracle:
             t = te - vx
             fj = 0.
         g = (self.v * x) / te - self.a
-        return g, fj, t
+        return (g, fj), t
 
 
 class profit_rb_oracle(profit_oracle):
@@ -56,5 +56,5 @@ class profit_q_oracle(profit_oracle):
         x = np.round(np.exp(y))
         assert x[0] != 0. and x[1] != 0.
         yd = np.log(x)
-        g, fj, t = profit_oracle.__call__(self, yd, t)
-        return g, fj, t, yd, 1
+        cut, t = profit_oracle.__call__(self, yd, t)
+        return cut, t, yd, 1

@@ -25,16 +25,16 @@ class my_oracle:
         f0 = np.dot(self.c, x)
         fj = f0 - t
         if fj > 0.:
-            return self.c, fj, t
+            return (self.c, fj), t
 
-        g, fj, flag = self.lmi1(x)
+        cut, flag = self.lmi1(x)
         if flag == 0:
-            return g, fj, t
+            return cut, t
 
-        g, fj, flag = self.lmi2(x)
+        cut, flag = self.lmi2(x)
         if flag == 0:
-            return g, fj, t
-        return self.c, 0. , f0
+            return cut, t
+        return (self.c, 0.), f0
 
 
 def test_lmi():

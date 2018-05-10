@@ -12,12 +12,12 @@ def my_oracle(z, t):
     # constraint 1: x + y <= 3
     fj = x + y - 3
     if fj > 0:
-        return np.array([1., 1.]), fj, t
+        return (np.array([1., 1.]), fj), t
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
     if fj > 0:
-        return np.array([-1., 1.]), fj, t
+        return (np.array([-1., 1.]), fj), t
 
     # objective: maximize x + y
     f0 = x + y
@@ -25,7 +25,7 @@ def my_oracle(z, t):
     if fj < 0.:
         fj = 0.
         t = f0
-    return -1.*np.array([1., 1.]), fj, t
+    return (-1.*np.array([1., 1.]), fj), t
 
 
 if __name__ == "__main__":

@@ -33,7 +33,7 @@ classdef mtx_norm_oracle < handle
             [g, fj, R] = obj.C.chk_spd_t(x, t);
         end
 
-		function [g, fj, t] = assess(obj, x, t)
+		function [g, fj), t] = assess(obj, x, t)
             n = length(x);
             g = zeros(n,1);
             [g, fj, R] = obj.C.chk_spd_t(x, t);

@@ -13,9 +13,9 @@ class sdp_oracle:
         f0 = np.dot(self.c, x)
         fj = f0 - t
         if fj > 0.:
-            return self.c, fj, t
+            return (self.c, fj), t
 
         g, fj = self.lmi.chk_spd(x)
         if fj > 0.:
-            return g, fj, t
-        return self.c, 0., f0
+            return (g, fj), t
+        return (self.c, 0.), f0

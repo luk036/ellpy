@@ -10,7 +10,7 @@ classdef profit_oracle < handle
 			obj.a = [alpha beta]';
 		end
 		
-		function [g, fj, t] = assess(obj, y, t)
+		function [g, fj), t] = assess(obj, y, t)
 			fj = y(1) - obj.log_k; % constraint
 			if (fj > 0), g = [1 0]'; return; end
 			log_Cobb = obj.log_pA + obj.a'*y;

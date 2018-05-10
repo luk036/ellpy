@@ -32,12 +32,12 @@ class optscaling_oracle(network_oracle):
         network_oracle.__init__(self, G, constr, pconstr)
 
     def __call__(self, x, t):
-        g, fj, flag = network_oracle.__call__(self, x)
+        cut, flag = network_oracle.__call__(self, x)
         if flag != 1:
-            return g, fj, t
+            return cut, t
         s = x[0] - x[1]
         fj = s - t
         if fj < 0.:
             t = s
             fj = 0.
-        return np.array([1., -1.]), fj, t
+        return (np.array([1., -1.]), fj), t

@@ -55,7 +55,7 @@ classdef lsq_corr_2d_oracle < handle
             obj.C2 = lmi_oracle(F);
 		end
 
-		function [g, fj, t] = assess(obj, x, t)
+		function [g, fj), t] = assess(obj, x, t)
             f0 = x(1);
             fj = f0 - t;
             g = zeros(size(x));

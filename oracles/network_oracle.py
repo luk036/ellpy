@@ -31,7 +31,7 @@ class network_oracle:
 
         C = S.find_neg_cycle()
         if C is None:
-            return None, None, 1
+            return (None, None), 1
 
         # fj = -sum(G[u][v]['weight'] for u, v in C)
         # g = -sum(self.ph(G, (u, v), x, t) for u, v in C)
@@ -41,4 +41,4 @@ class network_oracle:
             fj -= self.h(G, (u, v), x)
             g -= self.ph(G, (u, v), x)
 
-        return g, fj, 0
+        return (g, fj), 0

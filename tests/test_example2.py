@@ -12,14 +12,14 @@ def my_oracle2(z):
     # constraint 1: x + y <= 3
     fj = x + y - 3
     if fj > 0:
-        return np.array([1., 1.]), fj, 0
+        return (np.array([1., 1.]), fj), 0
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
     if fj > 0:
-        return np.array([-1., 1.]), fj, 0
+        return (np.array([-1., 1.]), fj), 0
 
-    return None, None, 1
+    return (None, None), 1
 
 
 # if __name__ == "__main__":

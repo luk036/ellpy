@@ -67,7 +67,7 @@ class my_oracle:
             fj = t_r**2 + t_i**2
             if fj >= t:
                 g = 2. * (t_r * a_R + t_i*a_I).T
-                return g, fj - t, t
+                return (g, fj - t), t
             if fmax < fj:
                 fmax = fj
                 imax = i
@@ -79,7 +79,7 @@ class my_oracle:
         t_r = a_R.dot(h) - H_r
         t_i = a_I.dot(h) - H_i
         g = 2.*(t_r*a_R + t_i*a_I).T
-        return g, 0., t
+        return (g, 0.), t
 
 
 def test_firfilter():

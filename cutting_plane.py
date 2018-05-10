@@ -58,10 +58,10 @@ def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
     flag = 0
     status = 0
     for niter in range(1, max_it):
-        g, h, flag = assess(S.xc)
+        cut, flag = assess(S.xc)
         if flag == 1:  # feasible sol'n obtained
             break
-        status, tau = S.update(g, h)
+        status, tau = S.update(cut)
         if status != 0:
             break
         if tau < tol:
@@ -87,12 +87,12 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
     flag = 0  # no sol'n
     x_best = S.xc
     for niter in range(1, max_it):
-        g, h, t1 = assess(S.xc, t)
+        cut, t1 = assess(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
             t = t1
             x_best = S.xc
-        status, tau = S.update(g, h)
+        status, tau = S.update(cut)
         if status == 1:
             break
         if tau < tol:
@@ -119,7 +119,8 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
     x_best = S.xc
     status = 1  # new
     for niter in range(1, max_it):
-        g, h, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
+        cut, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
+        g, h = cut
         if status != 3:
             if loop == 1:  # discrete sol'n
                 h += g.dot(x - S.xc)
@@ -131,7 +132,7 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
             flag = 1
             t = t1
             x_best = x.copy()
-        status, tau = S.update(g, h)
+        status, tau = S.update((g, h))
         if status == 1:
             break
         if tau < tol:

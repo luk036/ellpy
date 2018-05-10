@@ -27,11 +27,11 @@ class bsp_oracle:
             if fj > 0.:
                 g[i] = -1.
                 g[i + 1] = 1.
-                return g, fj, 0
+                return (g, fj), 0
 
         # if x[-1] < 0.:
         #     g[-1] = -1.
-        #     return g, -x[-1], 0
+        #     return (g, -x[-1]), 0
 
         return self.qmi(x)
 

@@ -31,11 +31,11 @@ class bsp_oracle:
             if fj > 0.:
                 g[i] = -1.
                 g[i + 1] = 1.
-                return g, fj, 0
+                return (g, fj), 0
 
         # if x[-1] < 0.:
         #     g[-1] = -1.
-        #     return g, -x[-1], 0
+        #     return (g, -x[-1]), 0
 
         return self.qmi(x)
 
@@ -48,13 +48,13 @@ class poly_oracle:
         self.lmi2 = lmi_oracle(-Sig, np.zeros())
 
     def __call__(self, x, t):
-        g, fj, flag = self.lmi1(x)
+        cut, flag = self.lmi1(x)
         if flag == 1:
-            return g, fj, t
+            return cut, t
 
-        g, fj, flag = self.lmi2(x)
+        cut, flag = self.lmi2(x)
         if flag == 1:
-            return g, fj, t
+            return cut, t
 
 
         return False

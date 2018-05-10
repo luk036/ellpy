@@ -26,7 +26,7 @@ class ell:
         E.c1 = self.c1
         return E
         
-    def update_core(self, calc_ell, g, beta):
+    def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut
                 g' * (x - xc) + beta <= 0
         
@@ -39,7 +39,7 @@ class ell:
             status -- 0: success
             tau -- "volumn" of ellipsoid
         """
-
+        g, beta = cut
         Pg = self.P.dot(g)
         tsq = g.dot(Pg)
         tau = np.sqrt(tsq)
@@ -103,5 +103,5 @@ class ell:
             delta = self.c1 * (1. - (asq[0] + asq[1] - xi / n) / 2.)
         return status, rho, sigma, delta
 
-    def update(self, g, beta):
-        return self.update_core(self.calc_ll, g, beta)
+    def update(self, cut):
+        return self.update_core(self.calc_ll, cut)

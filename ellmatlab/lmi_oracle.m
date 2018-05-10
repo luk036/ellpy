@@ -42,7 +42,7 @@ classdef lmi_oracle < handle
             end
         end
 
-        function [g, fj, t] = assess(obj, x, t)
+        function [g, fj), t] = assess(obj, x, t)
             [g, fj] = chk_spd(obj, x);
             if fj<0, t = t-1; end; % to record x
         end

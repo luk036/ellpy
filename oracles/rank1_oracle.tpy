@@ -33,11 +33,11 @@ class rank1_oracle:
             if v > 2:
                 g = self.c
                 f = np.array([v - 2, v - 1])
-                return g, f, t, x, loop
+                return (g, f), t, x, loop
             if v < 1:
                 g = -self.c
                 f = np.array([-v + 1, -v + 2])
-                return g, f, t, x, loop
+                return (g, f), t, x, loop
 
             # 5. max(diag(G)) <= t
             v = np.diag(G)
@@ -51,7 +51,7 @@ class rank1_oracle:
                     g = np.zeros(n)
                     g[self.iD[k]] = 1.
                     self.i_diag = k
-                    return g, f, t, x, loop
+                    return (g, f), t, x, loop
 
             if loop == 1:
                 break
@@ -70,7 +70,7 @@ class rank1_oracle:
                 # end
                 g = -v2[self.inds[0]] * v2[self.inds[1]]
                 g = self.w * g
-                return g, f, t, x, loop
+                return (g, f), t, x, loop
             v, d, _ = np.linalg.svd(G)
             h = v[1] * np.sqrt(d(1, 1))
             #[v,d] = eigs(G,1)
@@ -88,7 +88,7 @@ class rank1_oracle:
         # g = np.zeros(len(x))
         g = np.zeros(n)
         g[self.iD[imax]] = 1
-        return g, f, t, x, loop
+        return (g, f), t, x, loop
 
     def toMat(self, x, N):
         G = np.zeros((N, N))

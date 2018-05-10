@@ -16,7 +16,7 @@ flag = 0; % no sol'n
 x_best = NaN;
 
 for iter = 1:max_it,
-    [g, h, t1] = assess(E.xc, t);
+    [cut, t1] = assess(E.xc, t);
     if (t ~= t1), % best t obtained
         flag = 1;
 	    t = t1;
