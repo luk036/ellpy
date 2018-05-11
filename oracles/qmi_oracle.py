@@ -22,8 +22,6 @@ class qmi_oracle:
         self.count = -1
 
     def update(self, t):
-        # n = len(self.F0)
-        # self.B = np.eye(n) * t
         self.t = t
 
     def __call__(self, x):

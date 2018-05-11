@@ -56,5 +56,5 @@ class profit_q_oracle(profit_oracle):
         x = np.round(np.exp(y))
         assert x[0] != 0. and x[1] != 0.
         yd = np.log(x)
-        cut, t = profit_oracle.__call__(self, yd, t)
-        return cut, t, yd, 1
+        (g, h), t = profit_oracle.__call__(self, yd, t)
+        return (g, h, yd), t, 1

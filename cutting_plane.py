@@ -37,7 +37,7 @@ class bsearch_adaptor:
         x, _, flag, _ = cutting_plane_feas(self.P, E,
                                            self.max_it, self.tol)
         if flag == 1:
-            self.E.xc = x.copy()
+            self.E._xc = x.copy()
             return True
         return False
 
@@ -119,19 +119,19 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
     x_best = S.xc
     status = 1  # new
     for niter in range(max_it):
-        cut, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
-        g, h = cut
+        cut, t1, loop = assess(S.xc, t, 0 if status != 3 else 1)
+        g, h, x0 = cut
         if status != 3:
             if loop == 1:  # discrete sol'n
-                h += g.dot(x - S.xc)
+                h += g.dot(x0 - S.xc)
         else:  # can't cut in the previous iteration
             if loop == 0:  # no more alternative cut
                 break
-            h += g.dot(x - S.xc)
+            h += g.dot(x0 - S.xc)
         if t != t1:  # best t obtained
             flag = 1
             t = t1
-            x_best = x.copy()
+            x_best = x0.copy()
         status, tau = S.update((g, h))
         if status == 1:
             break

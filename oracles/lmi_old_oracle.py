@@ -3,7 +3,7 @@ import numpy as np
 from .chol_ext import chol_ext
 
 
-class lmi_oracle:
+class lmi_old_oracle:
 
     """
         Oracle for Linear Matrix Inequality constraint
@@ -17,14 +17,19 @@ class lmi_oracle:
         self.F0 = B
         self.A = np.zeros(B.shape)
 
+
     def __call__(self, x):
         # A = self.F0.copy()
         n = len(x)
+        # def getA(i, j):
+        #     self.A[i, j] = self.F0[i, j]
+        #     self.A[i, j] -= sum(self.F[k][i, j] * x[k]
+        #                    for k in range(n))
+        #     return self.A[i, j]
+        self.A = self.F0.copy()
+        self.A -= sum(self.F[k] * x[k] for k in range(n))
 
         def getA(i, j):
-            self.A[i, j] = self.F0[i, j]
-            self.A[i, j] -= sum(self.F[k][i, j] * x[k]
-                                for k in range(n))
             return self.A[i, j]
 
         Q = chol_ext(getA, len(self.A))

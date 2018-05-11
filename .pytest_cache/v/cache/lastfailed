@@ -1,3 +1,4 @@
 {
+  "tests/test_lmi.py::test_lmi_old": true, 
   "tests/test_lmi.py::testcase": true
 }
