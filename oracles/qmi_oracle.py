@@ -14,38 +14,42 @@ class qmi_oracle:
     def __init__(self, F, F0):
         self.F = F
         self.F0 = F0
-        self.B = None
+        #self.B = None
+        self.Fx = np.zeros(F0.shape)
+        # A = self.B.copy()
+        self.A = np.zeros(F0.shape)
+        self.t = None
         self.count = -1
 
     def update(self, t):
-        n = len(self.F0)
-        self.B = np.eye(n) * t
+        # n = len(self.F0)
+        # self.B = np.eye(n) * t
+        self.t = t
 
     def __call__(self, x):
         self.count = -1
         nx = len(x)
-        A = self.B.copy()
-        Fx = self.F0.copy()
+        # Fx = self.F0.copy()
+        # A = np.zeros(self.F0.shape)
 
         def getA(i, j):
             assert i >= j
             if self.count < i:
                 self.count = i
-                # for k in range(nx):
-                #     Fx[i] -= self.F[k][i] * x[k]
-                Fx[i] -= sum(self.F[k][i] * x[k] for k in range(nx))
+                self.Fx[i] = self.F0[i]
+                self.Fx[i] -= sum(self.F[k][i] * x[k]
+                             for k in range(nx))
+            self.A[i, j] = -self.Fx[i].dot(self.Fx[j])
+            if i == j:
+                self.A[i, j] += self.t
+            return self.A[i, j]
 
-            A[i, j] -= Fx[i].dot(Fx[j])
-            return A[i, j]
-
-        Q = chol_ext(getA, A.shape[0])
+        Q = chol_ext(getA, len(self.A))
         if Q.is_spd():
             return (None, None), 1
         v = Q.witness()
         p = len(v)
-        Av = v.dot(Fx[:p])
-        # g = np.zeros(nx)
-        # for k in range(nx):
-        #     g[k] = -2. * v.dot(self.F[k][:p]).dot(Av)
-        g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av) for k in range(nx)])
+        Av = v.dot(self.Fx[:p])
+        g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
+                          for k in range(nx)])
         return (g, 1.), 0

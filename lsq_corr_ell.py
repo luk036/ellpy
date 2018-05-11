@@ -79,12 +79,12 @@ def lsq_corr_bspline(Y, s, m):
         Sig += [spls[i](D)]
     c = np.zeros(m)
     # P = bspline_oracle(Sig, Y, c)
+    normY = np.linalg.norm(Y, 'fro')
 
     Q = bsp_oracle(Sig, Y)
     E = ell(10., c)
     P = bsearch_adaptor(Q, E)
 
-    normY = np.linalg.norm(Y, 'fro')
     _, niter, flag = bsearch(P, [0., normY*normY])
 
     print(niter, flag)
