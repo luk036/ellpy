@@ -57,6 +57,10 @@ def benchmark_profit(duration=0.000001):
     return niter
 
 
-def test_profit(benchmark):
-    result = benchmark(benchmark_profit)
+# def test_profit(benchmark):
+#     result = benchmark(benchmark_profit)
+#     assert result == 28
+
+def test_profit():
+    result = benchmark_profit()
     assert result == 28

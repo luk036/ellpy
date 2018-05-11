@@ -3,7 +3,6 @@ import numpy as np
 
 
 class ell:
-    
 
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
@@ -14,7 +13,7 @@ class ell:
             self.P = val * np.eye(n)
         else:
             self.P = np.diag(val)
-
+        self.use_parallel = 1
 
     @property
     def xc(self):
@@ -25,16 +24,16 @@ class ell:
         E.P = self.P.copy()
         E.c1 = self.c1
         return E
-        
+
     def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut
                 g' * (x - xc) + beta <= 0
-        
+
         Arguments:
             calc_ell {[type]} -- [description]
             g {array} -- cut
             beta {array or scalar} -- [description]
-        
+
         Returns:
             status -- 0: success
             tau -- "volumn" of ellipsoid
@@ -65,7 +64,7 @@ class ell:
         if alpha == 0.:
             return self.calc_cc()
         n = len(self._xc)
-        status, rho, sigma, delta = 0, 0. , 0. , 0.
+        status, rho, sigma, delta = 0, 0., 0., 0.
         if alpha > 1.:
             status = 1  # no sol'n
         elif n * alpha < -1.:
@@ -82,10 +81,10 @@ class ell:
             return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
-        if a1 >= 1.:
+        if a1 >= 1. or self.use_parallel == 0:
             return self.calc_dc(a0)
         n = len(self._xc)
-        status, rho, sigma, delta = 0, 0. , 0. , 0.
+        status, rho, sigma, delta = 0, 0., 0., 0.
         aprod = a0 * a1
         if a0 > a1:
             status = 1  # no sol'n

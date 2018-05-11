@@ -30,17 +30,6 @@ class lowpass_oracle:
             f = -x[0]
             return (g, f), Spsq
 
-#     	u = x(m:-1:1)'
-#     	u(m) = 0.5*x(1)-0.00001
-#     	d = roots(u)
-#         md = abs(d)
-#         [mdmin, idx] = min(md)
-#     	if mdmin <= 1,
-#         g = -real([0.5, d(idx).^(1:m-1)]')
-#         f = 0.00001+g'*x
-#         return
-#         end
-
         # case 2,
         # 2. passband constraints
         n, m = self.Ap.shape

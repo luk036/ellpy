@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import time
 import numpy as np
 #import matplotlib.pyplot as plt
@@ -87,109 +90,28 @@ Spsq = Sp**2
 # optimization
 # ********************************************************************
 
-def test_lowpass():
-    # tic = time.time()
 
+def run_lowpass(use_parallel, duration=0.000001):
     r0 = np.zeros(N)  # initial x0
     r0[0] = 0
-
-    # Ae = diag(ones(N,1)) # initial ellipsoid (sphere)
     E = ell(4., r0)
+    E.use_parallel = use_parallel
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
     r, Spsq_new, num_iters, flag, status = cutting_plane_dc(
-        P, E, Spsq, 1000, 1e-4)
-
+        P, E, Spsq, 20000, 1e-4)
     assert flag == 1
-    # toc = time.time()
-
-    # print(num_iters)
-
-    # x = r
-    # m = length(x)
-    # u = x(m:-1:1)'
-    # u(m) = 0.5*x(1)
-    # d = roots(u)
-    # figure(3)
-    # plot(1./d,'x')
-    # axis('square')
-    # grid on
-    # hold on
-    # elplot([1 0 0 1], [0 0])
-
-    #E = ell(1,r0)
-    #P = FIR_oracle2(Ap, As, Anr, Lpsq, Upsq)
-    # [r, Spsq_new, iter, flag, status] ...
-    #  = ellipsoid_dc(@P.assess, E, Spsq, 100000, 1e-4)
-    # toc
-    # iter
+    time.sleep(duration)
+    return num_iters
 
 
-    # *********************************************************************
-    # plotting routines
-    # *********************************************************************
-    # frequency response of the designed filter, where j = sqrt(-1)
-    h_sp = spectral_fact(r)      # from CVX distribution, Examples subdirectory
-    h = h_sp
-    # compute the min attenuation in the stopband (convert to original vars)
-    Ustop = 20*np.log10(np.sqrt(Spsq_new))
+# def test_lowpass0(benchmark):
+#     result = benchmark(run_lowpass, 0)
+#     assert result == 13325
 
-    print('Min attenuation in the stopband is ', Ustop, ' dB.')
+# def test_lowpass1(benchmark):
+#     result = benchmark(run_lowpass, 1)
+#     assert result == 568
 
-    # freq = [0, 0.12, 0.2, 1.0]
-    # desired = [1, 0]
-    # h_linear = remez(151, freq, desired, Hz=2.)
-    # h_min_hom = minimum_phase(h_linear, method='homomorphic')
-
-    # fig, axs = plt.subplots(4, figsize=(4, 8))
-    # for h, style, color in zip((h_linear, h_min_hom, h_sp),
-    #                            ('-', '-', '--'), ('k', 'r', 'c')):
-    #     #if flag == 1:
-    #     w, H = freqz(h)
-    #     w, gd = group_delay((h, 1))
-    #     w /= np.pi
-    #     axs[0].plot(h, color=color, linestyle=style)
-    #     axs[1].plot(w, np.abs(H), color=color, linestyle=style)
-    #     axs[2].plot(w, 20 * np.log10(np.abs(H)), color=color, linestyle=style)
-    #     axs[3].plot(w, gd, color=color, linestyle=style)
-
-    # for ax in axs:
-    #     ax.grid(True, color='0.5')
-    #     ax.fill_between(freq[1:3], *ax.get_ylim(), color='    #ffeeaa', zorder=1)
-    # axs[0].set(xlim=[0, len(h_linear) - 1], ylabel='Amplitude', xlabel='Samples')
-    # axs[1].legend(['Linear', 'Min-Hom', 'Our'], title='Phase')
-    # for ax, ylim in zip(axs[1:], ([0, 1.1], [-150, 10], [-60, 60])):
-    #     ax.set(xlim=[0, 1], ylim=ylim, xlabel='Frequency')
-    # axs[1].set(ylabel='Magnitude')
-    # axs[2].set(ylabel='Magnitude (dB)')
-    # axs[3].set(ylabel='Group delay')
-    # plt.tight_layout()
-    # plt.show()
-
-    # H = [exp(-j*kron(w,[0:N-1]))]*h
-    # figure(2)
-    # subplot(121)
-    #     # magnitude
-    # plot(w,20*log10(abs(H)), ...
-    #    [0 wpass],[delta delta],'r--', ...
-    #    [0 wpass],[-delta -delta],'r--', ...
-    #    [wstop pi],[Ustop Ustop],'r--')
-    # xlabel('w')
-    # ylabel('mag H(w) in dB')
-    # axis([0 pi -50 5])
-    # title(sprintf('N=    #d, w_p(pi)=#3.2f, w_s(pi)=#3.2f, delta=#3.2f', N, wpass/pi, wstop/pi, delta))
-
-    # #compare impulse response designed by conventional method
-    # subplot(122)
-    # ## h_sp = spectral_fact(r)  #from CVX distribution, Examples subdirectory
-    # plot([0:N-1],h_sp','+r--')
-    # hold on
-    # plot([0:N-1],h(end:-1:1)','ob:')
-    # legend('conventional','optimal')
-    # xlabel('t'), ylabel('h(t)') grid
-    # title(sprintf('h_{max} conventional=    #3.4f, h_{max} optimal=#3.4f',max(abs(h_sp)),max(abs(h))))
-    # set(gcf,'Outerposition',[300 300 256*4 256*2])
-
-    # figure(1)
-    #     # FIR impulse response
-    # plot([0:N-1],h','ob:')
-    # xlabel('t'), ylabel('h(t)')
+def test_lowpass():
+    result = run_lowpass(1)
+    assert result == 568

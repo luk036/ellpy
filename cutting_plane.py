@@ -7,7 +7,7 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
     flag = 0
     l, u = I
     t = (l + u)/2
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         if assess(t):  # feasible sol'n obtained
             flag = 1
             u = t
@@ -17,7 +17,7 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
         t = l + tau
         if tau < tol:
             break
-    return u, niter, flag
+    return u, niter+1, flag
 
 
 class bsearch_adaptor:
@@ -57,7 +57,7 @@ def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
     '''
     flag = 0
     status = 0
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         cut, flag = assess(S.xc)
         if flag == 1:  # feasible sol'n obtained
             break
@@ -67,7 +67,7 @@ def cutting_plane_feas(assess, S, max_it=1000, tol=1e-8):
         if tau < tol:
             status = 2
             break
-    return S.xc, niter, flag, status
+    return S.xc, niter+1, flag, status
 
 
 def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
@@ -86,7 +86,7 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
     '''
     flag = 0  # no sol'n
     x_best = S.xc
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         cut, t1 = assess(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
@@ -98,7 +98,7 @@ def cutting_plane_dc(assess, S, t, max_it=1000, tol=1e-8):
         if tau < tol:
             status = 2
             break
-    return x_best, t, niter, flag, status
+    return x_best, t, niter+1, flag, status
 
 
 def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
@@ -118,7 +118,7 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
     # x_last = S.xc
     x_best = S.xc
     status = 1  # new
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         cut, t1, x, loop = assess(S.xc, t, 0 if status != 3 else 1)
         g, h = cut
         if status != 3:
@@ -138,4 +138,4 @@ def cutting_plane_q(assess, S, t, max_it=1000, tol=1e-8):
         if tau < tol:
             status = 2
             break
-    return x_best, t, niter, flag, status
+    return x_best, t, niter+1, flag, status
