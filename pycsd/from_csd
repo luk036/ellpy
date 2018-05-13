@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+"""
+   from csd
+"""
+
+import sys
+sys.path.append('./csd')
+
+import csd
+
+print csd.to_decimal( sys.argv[1] )
