@@ -29,7 +29,7 @@ class mle_bspline_oracle:
             if fj > 0.:
                 g[i] = -1.
                 g[i + 1] = 1.
-                return (g, fj), 0
+                return (g, fj), t
 
         return self.mle_poly(x, t)
 
@@ -42,11 +42,11 @@ class mle_poly_oracle:
         self.lmi = lmi_oracle(Sig, 2.*Y)
 
     def __call__(self, x, t):
-        cut, flag = self.lmi(x)
+        cut, flag = self.lmi0(x)
         if flag == 0:
             return cut, t
 
-        cut, flag = self.lmi0(x)
+        cut, flag = self.lmi(x)
         if flag == 0:
             return cut, t
 
@@ -98,7 +98,8 @@ def mle_corr_poly(Y, s, m):
     P = mle_poly_oracle(Sig, Y)
     E = ell(100., a)
     a, _, num_iters, flag, status = cutting_plane_dc(
-        P, E, float('inf'))
+        P, E, float('inf'), 5000)
+    print(num_iters, flag, status)
     return np.poly1d(a)
 #  return prob.is_dcp()
 
@@ -127,8 +128,8 @@ def mle_corr_bspline(Y, s, m):
     P = mle_bspline_oracle(Sig, Y)
     E = ell(100., c)
     c, _, num_iters, flag, status = cutting_plane_dc(
-        P, E, float('inf'))
-
+        P, E, float('inf'), 50000)
+    print(num_iters, flag, status)
     return BSpline(t, c, k)
 
 
