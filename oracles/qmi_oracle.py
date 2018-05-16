@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from .chol_ext import chol_ext
-
+#from .chol_ext import chol_ext
+import cholutil
 
 class qmi_oracle:
     """
@@ -20,6 +20,7 @@ class qmi_oracle:
         self.A = np.zeros(F0.shape)
         self.t = None
         self.count = -1
+        self.Q = cholutil.cholutil(len(F0))
 
     def update(self, t):
         self.t = t
@@ -42,10 +43,11 @@ class qmi_oracle:
                 self.A[i, j] += self.t
             return self.A[i, j]
 
-        Q = chol_ext(getA, len(self.A))
-        if Q.is_spd():
+        self.Q.factor(getA)
+
+        if self.Q.is_spd():
             return (None, None), 1
-        v = Q.witness()
+        v = self.Q.witness()
         p = len(v)
         Av = v.dot(self.Fx[:p])
         g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
