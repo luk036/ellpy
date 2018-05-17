@@ -2,6 +2,7 @@
 import numpy as np
 import math
 
+
 class ell:
 
     def __init__(self, val, x):
