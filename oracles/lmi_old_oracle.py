@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from .chol_ext import chol_ext
-
+# from .cholutil import cholutil
 
 class lmi_old_oracle:
 
@@ -16,6 +16,7 @@ class lmi_old_oracle:
         self.F = F
         self.F0 = B
         self.A = np.zeros(B.shape)
+        # self.Q = cholutil(len(B))
         self.Q = chol_ext(len(B))
         
     def __call__(self, x):
@@ -29,14 +30,15 @@ class lmi_old_oracle:
         self.A = self.F0.copy()
         self.A -= sum(self.F[k] * x[k] for k in range(n))
 
-        def getA(i, j):
-            return self.A[i, j]
+        # def getA(i, j):
+        #     return self.A[i, j]
 
-        self.Q.factor(getA)
+        self.Q.factorize(self.A)
         if self.Q.is_spd():
             return (None, None), 1
         v = self.Q.witness()
-        p = len(v)
-        g = np.array([v.dot(self.F[i][:p, :p].dot(v))
+        #p = len(v)
+        g = np.array([self.Q.sym_quad(v, self.F[i])
                       for i in range(n)])
         return (g, 1.), 0
+ 

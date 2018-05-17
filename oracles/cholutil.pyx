@@ -8,11 +8,6 @@ cimport cython
 from cpython cimport array
 import array
 
-"""
->>> sin(0)
-0.0
-"""
-
 cdef extern from "math.h":
     cpdef double sqrt(double x)
 
@@ -56,6 +51,39 @@ class cholutil:
         # self.R = R
         self.p = p
 
+    @cython.boundscheck(False) # turn off bounds-checking
+    @cython.wraparound(False)  # turn off negative index wrapping
+    def factorize(self, DTYPE_t[:, ::1] A):
+        '''
+         If $A$ is positive definite, then $p$ is zero.
+         If it is not, then $p$ is a positive integer,
+         such that $v = R^{-1} e_p$ is a certificate vector
+         to make $v'*A[:p,:p]*v < 0$
+        '''
+        # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((n, n))
+        # self.R = np.zeros((n, n))
+        cdef int n = len(self.R)
+        cdef DTYPE_t[:, ::1] R = self.R
+        cdef int p = 0
+        cdef int i, j, k
+        cdef DTYPE_t d
+        
+        for i in range(n):
+            for j in range(i+1):
+                d = A[i, j]
+                for k in range(j):
+                    d -= R[k, i] * R[k, j]
+                if i != j:
+                    R[j, i] = 1. / R[j, j] * d
+            if d <= 0.:  # strictly positive???
+                p = i + 1
+                R[i, i] = sqrt(-d)
+                break
+            R[i, i] = sqrt(d)
+
+        # self.R = R
+        self.p = p
+
     def is_spd(self):
         return self.p == 0
 
@@ -82,6 +110,22 @@ class cholutil:
             v[i] = -s / R[i, i]
         return res
 
+    @cython.boundscheck(False) # turn off bounds-checking
+    @cython.wraparound(False)  # turn off negative index wrapping
+    def sym_quad(self, DTYPE_t[::1] v, DTYPE_t[:, ::1] F):
+        # v = self.witness()
+        cdef int p = self.p
+        cdef int i, j
+        cdef DTYPE_t res = 0.
+        cdef DTYPE_t s
+
+        for i in range(p):
+            s = 0.
+            for j in range(p):
+                s += F[i, j] * v[j]
+            res += v[i] * s
+
+        return res
 
 # def print_case(l1):
 #     m1 = np.array(l1)

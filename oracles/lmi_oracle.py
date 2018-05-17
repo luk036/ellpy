@@ -32,7 +32,9 @@ class lmi_oracle:
         if self.Q.is_spd():
             return (None, None), 1
         v = self.Q.witness()
-        p = len(v)
-        g = np.array([v.dot(self.F[i][:p, :p].dot(v))
+        # p = len(v)
+        # g = np.array([v.dot(self.F[i][:p, :p].dot(v))
+        #               for i in range(n)])
+        g = np.array([self.Q.sym_quad(v, self.F[i])
                       for i in range(n)])
         return (g, 1.), 0

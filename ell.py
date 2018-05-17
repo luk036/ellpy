@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
+import math
 
 class ell:
 
@@ -14,6 +14,7 @@ class ell:
         else:
             self.P = np.diag(val)
         self.use_parallel = 1
+        self.delta = 1.
 
     @property
     def xc(self):
@@ -40,15 +41,16 @@ class ell:
         """
         g, beta = cut
         Pg = self.P.dot(g)
-        tsq = g.dot(Pg)
-        tau = np.sqrt(tsq)
+        tsq_ori = g.dot(Pg)
+        tau = np.sqrt(self.delta * tsq_ori)
         alpha = beta / tau
         status, rho, sigma, delta = calc_ell(alpha)
         if status != 0:
             return status, tau
-        self._xc -= (rho / tau) * Pg
-        self.P -= (sigma / tsq) * np.outer(Pg, Pg)
-        self.P *= delta
+        self._xc -= (self.delta * rho / tau) * Pg
+        self.P -= np.outer((sigma / tsq_ori) * Pg, Pg)
+        # self.P *= delta
+        self.delta *= delta
         return status, tau
 
     def calc_cc(self):
@@ -94,7 +96,7 @@ class ell:
             asq = alpha * alpha
             asum = a0 + a1
             asqdiff = asq[1] - asq[0]
-            xi = np.sqrt(4. * (1. - asq[0]) * (
+            xi = math.sqrt(4. * (1. - asq[0]) * (
                 1. - asq[1]) + n * n * asqdiff * asqdiff)
             sigma = (
                 n + (2. * (1. + aprod - xi / 2.) / (asum * asum))) / (n + 1)

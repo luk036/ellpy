@@ -3,14 +3,14 @@ from __future__ import print_function
 
 from pprint import pprint
 import numpy as np
-
+import math
 
 class chol_ext:
     def __init__(self, n):
         self.R = np.zeros((n, n))
         self.p = 0
 
-    def factor(self, getA):
+    def factorize(self, A):
         '''
          If $A$ is positive definite, then $p$ is zero.
          If it is not, then $p$ is a positive integer,
@@ -23,21 +23,45 @@ class chol_ext:
         R = self.R
         n = len(R)
         for i in range(n):
-            for j in range(i):
-                d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
-                R[j, i] = 1. / R[j, j] * d
-            d = getA(i, i) - np.dot(R[:i, i], R[:i, i])
+            for j in range(i+1):
+                d = A[i, j] - np.dot(R[:j, i], R[:j, j])
+                if i != j:
+                    R[j, i] = 1. / R[j, j] * d
             if d <= 0.:  # strictly positive???
                 self.p = i + 1
-                R[i, i] = np.sqrt(-d)
+                R[i, i] = math.sqrt(-d)
                 break
-            R[i, i] = np.sqrt(d)
+            R[i, i] = math.sqrt(d)
+
+    def factor(self, getA):
+        '''
+         (lazy evalution of A)
+         If $A$ is positive definite, then $p$ is zero.
+         If it is not, then $p$ is a positive integer,
+         such that $v = R^{-1} e_p$ is a certificate vector
+         to make $v'*A[:p,:p]*v < 0$
+        '''
+        # n = len(A)
+        # self.p = 0
+        self.p = 0
+        R = self.R
+        n = len(R)
+        for i in range(n):
+            for j in range(i+1):
+                d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
+                if i != j:
+                    R[j, i] = 1. / R[j, j] * d
+            if d <= 0.:  # strictly positive???
+                self.p = i + 1
+                R[i, i] = math.sqrt(-d)
+                break
+            R[i, i] = math.sqrt(d)
 
     def is_spd(self):
         return self.p == 0
 
     def witness(self):
-        assert self.p > 0
+        assert not self.is_spd()
         p = self.p
         v = np.zeros(p)
         v[p-1] = 1. / self.R[p-1, p-1]
@@ -45,6 +69,11 @@ class chol_ext:
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -s / self.R[i, i]
         return v
+
+    def sym_quad(self, v, F):
+        # v = self.witness()
+        p = self.p
+        return v.dot(F[:p, :p].dot(v))
 
 
 # def print_case(l1):
