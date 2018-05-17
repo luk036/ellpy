@@ -1,34 +1,23 @@
 # -*- coding: utf-8 -*-
-import networkx as nx
 from .neg_cycle import negCycleFinder
-import numpy as np
 
 
 class network_oracle:
-    """
-        Oracle for Linear Matrix Inequality constraint
-            F * x <= B
-        Or
-            (B - F * x) must be a semidefinte matrix
-    """
 
-    def __init__(self, G, h, ph):
+    def __init__(self, G, f, p):
         self.G = G
-        self.h = h
-        self.ph = ph  # partial derivative of h w.r.t x
+        self.f = f
+        self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
 
     def __call__(self, x):
         def get_weight(G, e):
-            return self.h(G, e, x)
+            return self.f(G, e, x)
 
-        G = self.G
-        S = self.S
-        S.get_weight = get_weight
-        C = S.find_neg_cycle()
-
+        self.S.get_weight = get_weight
+        C = self.S.find_neg_cycle()
         if C is None:
             return (None, None), 1
-        fj = -sum(self.h(G, e, x) for e in C)
-        g = -sum(self.ph(G, e, x) for e in C)
-        return (g, fj), 0
+        f = -sum(self.f(self.G, e, x) for e in C)
+        g = -sum(self.p(self.G, e, x) for e in C)
+        return (g, f), 0
