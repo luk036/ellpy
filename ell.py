@@ -11,11 +11,12 @@ class ell:
         self.c1 = float(n * n) / (n * n - 1.)
         self._xc = x.copy()
         if np.isscalar(val):
-            self.P = val * np.eye(n)
+            self.Q = np.eye(n)
+            self.kappa = val
         else:
-            self.P = np.diag(val)
+            self.Q = np.diag(val)
+            self.kappa = 1.
         self.use_parallel = 1
-        self.delta = 1.
 
     @property
     def xc(self):
@@ -23,8 +24,9 @@ class ell:
 
     def copy(self):
         E = ell(0, self.xc.copy())
-        E.P = self.P.copy()
+        E.Q = self.Q.copy()
         E.c1 = self.c1
+        E.kappa = self.kappa
         return E
 
     def update_core(self, calc_ell, cut):
@@ -41,17 +43,17 @@ class ell:
             tau -- "volumn" of ellipsoid
         """
         g, beta = cut
-        Pg = self.P.dot(g)
-        tsq_ori = g.dot(Pg)
-        tau = np.sqrt(self.delta * tsq_ori)
+        Qg = self.Q.dot(g)
+        tsq = g.dot(Qg)
+        tau = np.sqrt(self.kappa * tsq)
         alpha = beta / tau
         status, rho, sigma, delta = calc_ell(alpha)
         if status != 0:
             return status, tau
-        self._xc -= (self.delta * rho / tau) * Pg
-        self.P -= np.outer((sigma / tsq_ori) * Pg, Pg)
-        # self.P *= delta
-        self.delta *= delta
+        self._xc -= (self.kappa * rho / tau) * Qg
+        self.Q -= np.outer((sigma / tsq) * Qg, Qg)
+        # self.Q *= delta
+        self.kappa *= delta
         return status, tau
 
     def calc_cc(self):
