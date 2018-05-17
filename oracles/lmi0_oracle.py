@@ -13,7 +13,7 @@ class lmi0_oracle:
     def __init__(self, F):
         self.F = F
         self.A = np.zeros(F[0].shape)
-        self.Q = None
+        self.Q = chol_ext(len(self.A))
 
     def __call__(self, x):
         n = len(x)
@@ -23,7 +23,7 @@ class lmi0_oracle:
                                for k in range(n))
             return self.A[i, j]
 
-        self.Q = chol_ext(getA, len(self.A))
+        self.Q.factor(getA)
         if self.Q.is_spd():
             return (None, None), 1
         v = self.Q.witness()

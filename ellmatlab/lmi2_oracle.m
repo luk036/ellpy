@@ -12,7 +12,7 @@ classdef lmi2_oracle < handle
         % Return a parallel cut if constraints are not satisfied.
         % Otherwise return a triangular matrix R such that F(x) = R'*R 
 		function [g, f, R] = chk_spd(obj, x)
-			n = length(x);
+			n = length(x); 
 			Sig = obj.Fs{1}*x(1);
 			for i=2:n,
 				Sig = Sig + obj.Fs{i}*x(i);

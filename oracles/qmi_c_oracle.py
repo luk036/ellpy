@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from .chol_ext import chol_ext
-# import cholutil
+#from .chol_ext import chol_ext
+import cholutil
 
 class qmi_oracle:
     """
@@ -20,7 +20,7 @@ class qmi_oracle:
         self.A = np.zeros(F0.shape)
         self.t = None
         self.count = -1
-        self.Q = chol_ext(len(F0))
+        self.Q = cholutil.cholutil(len(F0))
 
     def update(self, t):
         self.t = t

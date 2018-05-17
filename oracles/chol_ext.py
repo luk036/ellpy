@@ -6,18 +6,22 @@ import numpy as np
 
 
 class chol_ext:
+    def __init__(self, n):
+        self.R = np.zeros((n, n))
+        self.p = 0
 
-    def __init__(self, getA, n):
+    def factor(self, getA):
         '''
          If $A$ is positive definite, then $p$ is zero.
          If it is not, then $p$ is a positive integer,
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
         '''
-        #n = len(A)
+        # n = len(A)
+        # self.p = 0
         self.p = 0
-        self.R = np.zeros((n, n))
         R = self.R
+        n = len(R)
         for i in range(n):
             for j in range(i):
                 d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
