@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-#from .chol_ext import chol_ext
-import cholutil
+# from .chol_ext import chol_ext
+from .cholutil import cholutil
 
-class qmi_oracle:
+class qmi_c_oracle:
     """
      Oracle for Quadratic Matrix Inequality
         F(x).T * F(x) <= I*t
@@ -20,7 +20,7 @@ class qmi_oracle:
         self.A = np.zeros(F0.shape)
         self.t = None
         self.count = -1
-        self.Q = cholutil.cholutil(len(F0))
+        self.Q = cholutil(len(F0))
 
     def update(self, t):
         self.t = t

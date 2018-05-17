@@ -44,7 +44,7 @@ class lmi2_oracle:
         if not self.Q.is_spd():
             v = self.Q.witness()
             p = len(v)
-            fj = np.dot(v, U[:p, :p].dot(v))
+            fj = -np.dot(v, self.U[:p, :p].dot(v))
             g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
             return (g, (1., fj)), 0
         
