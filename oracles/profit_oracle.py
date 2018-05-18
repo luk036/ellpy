@@ -35,12 +35,12 @@ class profit_rb_oracle:
         self.a = a
         p -= ui * e3
         k -= ui * e3
-        v_rb = np.array(v)
+        v_rb = v.copy()
         v_rb += ui * e3
         self.P = profit_oracle(p, A, a, v_rb, k)
 
     def __call__(self, y, t):
-        a_rb = np.array(self.a)
+        a_rb = self.a.copy()
         for i in range(2):
             a_rb[i] += self.uie[i] * (+1. if y[i] <= 0. else -1.)
         self.P.a = a_rb
