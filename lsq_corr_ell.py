@@ -55,7 +55,6 @@ def lsq_corr_poly(Y, s, m):
     normY = np.linalg.norm(Y, 'fro')
     _, niter, flag = bsearch(P, [0., normY*normY])
 
-
     print(niter, flag)
     a = P.x_best
     return np.poly1d(a)

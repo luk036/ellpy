@@ -22,7 +22,7 @@ class rank1_oracle:
         self.w = B[self.inds]
         self.c = self.w * A[self.inds]
 
-    def assess(self, x0, t, restart):
+    def evaluate(self, x0, t, restart):
         # Begin constraints checking
         G = self.toMat(x0, self.N)
         n = len(x0)

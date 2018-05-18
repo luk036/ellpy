@@ -10,7 +10,7 @@ classdef profit_oracle2 < handle
 			obj.a = [alpha beta 0]';
 		end
 		
-		function [g, fj), t] = assess(obj, y, t)
+		function [g, fj), t] = evaluate(obj, y, t)
 			fj = y(1) - obj.log_k; % constraint
 			if (fj > 0), g = [1 0 0]'; return; end
 			

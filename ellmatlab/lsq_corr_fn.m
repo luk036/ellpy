@@ -18,7 +18,7 @@ tol = 1e-4;
 while (u - l > tol),
     t = (u + l)/2;
     [x, bf, iter, flag, status] = ...
-	   ellipsoid_dc(@P.assess, E, t, 1000, tol);
+	   ellipsoid_dc(@P.evaluate, E, t, 1000, tol);
     if flag == 1,
         u = t;
         bx = x;

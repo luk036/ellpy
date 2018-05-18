@@ -45,7 +45,7 @@ def run_lmi(oracle, duration=0.000001):
 
     E = ell(10., x0)
     P = my_oracle(oracle)
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100. , 2000, 1e-4)
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100., 2000, 1e-4)
     print(fmt.format(fb, niter, flag, status))
     print(xb)
     assert flag == 1
@@ -53,14 +53,12 @@ def run_lmi(oracle, duration=0.000001):
     # assert niter == 115
     return niter
 
+
 def test_lmi_lazy(benchmark):
     result = benchmark(run_lmi, lmi_oracle)
     assert result == 115
 
+
 def test_lmi_old(benchmark):
     result = benchmark(run_lmi, lmi_old_oracle)
     assert result == 115
-
-
-
-

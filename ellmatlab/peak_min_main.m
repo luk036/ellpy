@@ -112,7 +112,7 @@ Vol = [];
 E = ell(1, x0);
 P = peak_min_oracle(N, Apc, Asc, Anrc, Lpsq, Upsq, Spsq, iL);
 [x, t_new, iter, flag, status] = ...
-		ellipsoid_discrete(@P.assess, E, Inf, N*10000, 1e-6);
+		ellipsoid_discrete(@P.evaluate, E, Inf, N*10000, 1e-6);
 toc
 
 figure(3);

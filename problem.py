@@ -138,7 +138,7 @@ class Problem:
             self._optim_value = fb
             self._optim_var = xb
         else:
-            if status == 3: # ???
+            if status == 3:  # ???
                 self._status = 'infeasible'
 
         solver_stats = SolverStats('deep-cut')

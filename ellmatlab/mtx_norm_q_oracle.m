@@ -48,7 +48,7 @@ classdef mtx_norm_q_oracle < handle
             end
         end
 
-		function [g, fj), t] = assess(obj, x, t)
+		function [g, fj), t] = evaluate(obj, x, t)
             n = length(x);
             g = zeros(n,1);
             [g, fj] = obj.chk_spd_t(x, t);

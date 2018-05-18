@@ -99,7 +99,7 @@ def test_firfilter():
     # print(prob1.optim_var)
     #print(fmt.format(prob1.optim_vale, prob1.solver_stats.num_iters))
 
-    #print 'Problem status:', flag
+    # print 'Problem status:', flag
     # if flag != 1:
     #    raise Exception('ELL Error')
 

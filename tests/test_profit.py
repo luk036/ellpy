@@ -44,7 +44,7 @@ def benchmark_profit(duration=0.000001):
     # print(fmt.format(fb, iter, flag, status))
     _, _, niter, flag, _ = cutting_plane_dc(P, E, 0., 200, 1e-4)
     assert flag == 1
-    assert niter == 38
+    assert niter == 42
 
     E = ell(r, y0)
     P = profit_q_oracle(p, A, a, v, k)

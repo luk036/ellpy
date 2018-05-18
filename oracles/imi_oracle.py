@@ -19,10 +19,8 @@ class imi_oracle:
     def __init__(self, F):
         self.F = F
         n = len(F[0])*2
-        self.A = np.zeros((n,n))
-        self.Q = None
-        # self.lmiSig = lmi0_oracle(F)
-        # self.lmiS = lmi0_oracle(F)
+        self.A = np.zeros((n, n))
+        self.Q = chol_ext(n)
 
     def __call__(self, x):
         n = len(x) // 2
@@ -39,26 +37,26 @@ class imi_oracle:
                 j2 = j-m
                 self.A[i, j] = sum(self.F[k][i2, j2] * x[k+n]
                                    for k in range(n))
-            self.A[j, i] = self.A[i, j] # for later use
+            self.A[j, i] = self.A[i, j]  # for later use
             return self.A[i, j]
 
-        self.Q = chol_ext(getA, len(self.A))
+        self.Q.factor(getA)
         if self.Q.is_spd():
             return (None, None), 1
         v = self.Q.witness()
         p = len(v)
         if p < m:
             g1 = np.array([-v.dot(self.F[i][:p, :p].dot(v))
-                          for i in range(n)])
+                           for i in range(n)])
             g = np.concatenate((g1, np.zeros(n)))
         else:
             v1 = v[:m]
             v2 = v[m:]
             g1 = np.array([-v1.dot(self.F[i].dot(v1))
-                          for i in range(n)])
+                           for i in range(n)])
             p2 = p - m
             g2 = np.array([-v2.dot(self.F[i][:p2, :p2].dot(v2))
-                               for i in range(n)])
+                           for i in range(n)])
             g = np.concatenate((g1, g2))
             g += -2.*v1[:p2].dot(v2)
 

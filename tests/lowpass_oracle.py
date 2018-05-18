@@ -4,6 +4,7 @@ from __future__ import print_function
 import numpy as np
 from itertools import chain
 
+
 class lowpass_oracle:
 
     def __init__(self, Ap, As, Anr, Lpsq, Upsq):
@@ -35,9 +36,6 @@ class lowpass_oracle:
         n, m = self.Ap.shape
         i_Ap = self.i_Ap
         for k in chain(range(i_Ap, n), range(i_Ap)):
-            # k += 1
-            # if k == n:
-            #     k = 0    # round robin
             v = self.Ap[k, :].dot(x)
             if v > self.Upsq:
                 #f = v - Upsq

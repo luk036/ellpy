@@ -1,5 +1,5 @@
 function [x_best, t1, iter, flag, status] ...
-    = ellipsoid_dc(assess, E, t, max_it, tol)
+    = ellipsoid_dc(evaluate, E, t, max_it, tol)
 % -- Ellipsoid method for solving convex optimization problem
 %
 % input   
@@ -16,7 +16,7 @@ flag = 0; % no sol'n
 x_best = NaN;
 
 for iter = 1:max_it,
-    [cut, t1] = assess(E.xc, t);
+    [cut, t1] = evaluate(E.xc, t);
     if (t ~= t1), % best t obtained
         flag = 1;
 	    t = t1;

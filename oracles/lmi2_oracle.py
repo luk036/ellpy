@@ -2,8 +2,8 @@
 import numpy as np
 from .chol_ext import chol_ext
 
-class lmi2_oracle:
 
+class lmi2_oracle:
     """
         Oracle for Linear Matrix Inequality constraint
             0 <= F * x <= U
@@ -15,7 +15,7 @@ class lmi2_oracle:
         self.A = np.zeros(U.shape)
         self.S = np.zeros(U.shape)
         self.Q = chol_ext(len(U))
-        
+
     def __call__(self, x):
         #A = self.U.copy()
         #S = np.zeros(A.shape)
@@ -39,7 +39,7 @@ class lmi2_oracle:
             #fj = np.dot(v, S[:p, :p].dot(v))
             g = np.array([v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
             return (g, (1., 0.)), 0
-        
+
         self.Q.factor(getS)
         if not self.Q.is_spd():
             v = self.Q.witness()
@@ -47,6 +47,5 @@ class lmi2_oracle:
             fj = -np.dot(v, self.U[:p, :p].dot(v))
             g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
             return (g, (1., fj)), 0
-        
-        return (None, None, 1)
 
+        return (None, None, 1)

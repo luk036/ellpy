@@ -59,7 +59,7 @@ classdef peak_min_oracle < handle
             obj.F = F;
         end
             
-        function [g, f, t, x, loop] = assess(obj, x0, t)
+        function [g, f, t, x, loop] = evaluate(obj, x0, t)
             G = toMat(obj, x0, obj.N);
             m = length(x0);
             x = x0;

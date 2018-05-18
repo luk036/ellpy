@@ -26,7 +26,7 @@ classdef FIR_oracle < handle
 			obj.count = 0;
         end             
 
-        function [g, f, Spsq] = assess(obj, x, Spsq)
+        function [g, f, Spsq] = evaluate(obj, x, Spsq)
 			% 1. nonnegative-real constraint			
 			m = length(x);
 			

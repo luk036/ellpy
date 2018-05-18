@@ -25,7 +25,7 @@ classdef mle_corr_oracle < handle
 			obj.C = lmi2_oracle(F, 2*Y);
 		end
 
-		function [g, f, t] = assess(obj, x, t)
+		function [g, f, t] = evaluate(obj, x, t)
             if x(end) < 0, % kappa > 0
                 f = -x(end); 
                 g = zeros(size(x)); 

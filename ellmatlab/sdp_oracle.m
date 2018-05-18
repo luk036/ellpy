@@ -8,7 +8,7 @@ classdef sdp_oracle < handle
 			obj.lmi = lmi_oracle(F);
         end
 
-		function [g, fj), t] = assess(obj, x, t)
+		function [g, fj), t] = evaluate(obj, x, t)
             f0 = obj.c'*x;
             fj = f0 - t;
             if fj > 0, g = obj.c; return; end	

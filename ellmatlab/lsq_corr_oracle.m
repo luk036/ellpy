@@ -30,7 +30,7 @@ classdef lsq_corr_oracle < handle
             obj.C2 = mtx_norm_q_oracle(Fs2);
 		end
 
-		function [g, fj), t] = assess(obj, x, t)
+		function [g, fj), t] = evaluate(obj, x, t)
             g = zeros(size(x));
             if x(end) < 0, % kappa > 0
                 fj = -x(end); 

@@ -41,7 +41,7 @@ classdef rank1_oracle < handle
             obj.F = F;            
         end
 
-        function [g, f, t, x, loop] = assess(obj, x0, t, restart)
+        function [g, f, t, x, loop] = evaluate(obj, x0, t, restart)
             % Begin constraints checking
             G = toMat(obj, x0, obj.N);
             n = length(x0);

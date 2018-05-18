@@ -28,7 +28,7 @@ class profit_oracle:
         return (g, fj), t
 
 
-class profit_rb_oracle(profit_oracle):
+class profit_rb_oracle:
 
     def __init__(self, p, A, a, v, k, ui, e1, e2, e3):
         self.uie = [ui * e1, ui * e2]
@@ -37,24 +37,24 @@ class profit_rb_oracle(profit_oracle):
         k -= ui * e3
         v_rb = np.array(v)
         v_rb += ui * e3
-        profit_oracle.__init__(self, p, A, a, v_rb, k)
+        self.P = profit_oracle(p, A, a, v_rb, k)
 
     def __call__(self, y, t):
         a_rb = np.array(self.a)
         for i in range(2):
             a_rb[i] += self.uie[i] * (+1. if y[i] <= 0. else -1.)
-        profit_oracle.a = a_rb
-        return profit_oracle.__call__(self, y, t)
+        self.P.a = a_rb
+        return self.P(y, t)
 
 
-class profit_q_oracle(profit_oracle):
+class profit_q_oracle:
 
     def __init__(self, p, A, a, v, k):
-        profit_oracle.__init__(self, p, A, a, v, k)
+        self.P = profit_oracle(p, A, a, v, k)
 
     def __call__(self, y, t, retry):
         x = np.round(np.exp(y))
         assert x[0] != 0. and x[1] != 0.
         yd = np.log(x)
-        (g, h), t = profit_oracle.__call__(self, yd, t)
+        (g, h), t = self.P(yd, t)
         return (g, h, yd), t, 1

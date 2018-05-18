@@ -16,7 +16,7 @@ classdef FIR_oracle2 < handle
             obj.Lpsq = Lpsq;
             obj.Upsq = Upsq;
         end             
-        function [g, f, Spsq] = assess(obj, x, Spsq)
+        function [g, f, Spsq] = evaluate(obj, x, Spsq)
 			% 2. passband constraints
             [n,~] = size(obj.Ap);
             for k=1:n,

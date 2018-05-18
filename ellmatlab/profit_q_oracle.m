@@ -13,7 +13,7 @@ classdef profit_q_oracle < handle
 			obj.mark = 0;
 		end
 		
-		function [g, fj), t, y, loop] = assess(obj, y, t, retry)
+		function [g, fj), t, y, loop] = evaluate(obj, y, t, retry)
 			if retry == 1,  % no cut in previous iteration
 			  if obj.retry_mode == 0, % the first time
 			    obj.mark = obj.count; % mark the current position

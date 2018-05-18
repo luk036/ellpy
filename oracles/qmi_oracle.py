@@ -3,9 +3,9 @@ import numpy as np
 from .chol_ext import chol_ext
 # import cholutil
 
+
 class qmi_oracle:
-    """
-     Oracle for Quadratic Matrix Inequality
+    """Oracle for Quadratic Matrix Inequality
         F(x).T * F(x) <= I*t
      where
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
@@ -37,7 +37,7 @@ class qmi_oracle:
                 self.count = i
                 self.Fx[i] = self.F0[i]
                 self.Fx[i] -= sum(self.F[k][i] * x[k]
-                             for k in range(nx))
+                                  for k in range(nx))
             self.A[i, j] = -self.Fx[i].dot(self.Fx[j])
             if i == j:
                 self.A[i, j] += self.t

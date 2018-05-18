@@ -18,7 +18,7 @@ Ae = diag([100, 100]); % initial ellipsoid (sphere)
 
 E = ell(Ae, y0);
 P = profit_oracle(p, A, alpha, beta, v1, v2, k);
-[yb1, fb, iter, flag, status] = ellipsoid_dc(@P.assess, E, 0, 200, 1e-4);
+[yb1, fb, iter, flag, status] = ellipsoid_dc(@P.evaluate, E, 0, 200, 1e-4);
 fb
 iter
 
@@ -29,13 +29,13 @@ e3 = 1;
 
 % E = ell(Ae, y0);
 % P = profit_rb_oracle(p, A, alpha, beta, v1, v2, k, ui, e1, e2, e3);
-% [yb1, fb, iter, flag, status] = ellipsoid_dc(@P.assess, E, 0, 200, 1e-4);
+% [yb1, fb, iter, flag, status] = ellipsoid_dc(@P.evaluate, E, 0, 200, 1e-4);
 % fb
 % iter
 
 E = ell(Ae, y0);
 P = profit_q_oracle(p, A, alpha, beta, v1, v2, k);
-[yb1, fb, iter, flag, status] = ellipsoid_discrete(@P.assess, E, 0, 200, 1e-4);
+[yb1, fb, iter, flag, status] = ellipsoid_discrete(@P.evaluate, E, 0, 200, 1e-4);
 fb
 x = exp(yb1)
 iter
@@ -44,6 +44,6 @@ iter
 % Ae = diag([100, 100, 1000]); % initial ellipsoid
 % E = ell(Ae, y0);
 % P = profit_oracle2(p, A, alpha, beta, v1, v2, k);
-% [yb, fb, iter, flag, status] = ellipsoid_dc(@P.assess, E, Inf, 200, 1e-4);
+% [yb, fb, iter, flag, status] = ellipsoid_dc(@P.evaluate, E, Inf, 200, 1e-4);
 % fb2 = exp(-fb)
 % iter

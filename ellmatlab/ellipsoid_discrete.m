@@ -1,4 +1,4 @@
-function [x_best, t1, iter, flag, status] = ellipsoid_discrete(assess, E, t, max_it, tol)
+function [x_best, t1, iter, flag, status] = ellipsoid_discrete(evaluate, E, t, max_it, tol)
 % -- Ellipsoid method for solving discrete convex problem
 %
 % input   
@@ -20,14 +20,14 @@ status = 1; % new
 
 for iter = 1:max_it,
   if status == 3, % can't cut in the previous iteration
-    [cut, t1, x, loop] = assess(x, t, 1);  % new
+    [cut, t1, x, loop] = evaluate(x, t, 1);  % new
 	if loop == 0, % no more alternative cut
 	  if flag == 0, x_best = x; end % output x anyway	  
 	  return
     end
 	h = h + g'*(x - E.xc);
   else
-    [cut, t1, x, loop] = assess(E.xc, t, 0);
+    [cut, t1, x, loop] = evaluate(E.xc, t, 0);
     if loop == 1, % discrete sol'n
       h = h + g'*(x - E.xc);
 	end
