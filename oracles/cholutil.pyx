@@ -17,6 +17,7 @@ ctypedef np.float_t DTYPE_t
 class cholutil:
     def __init__(self, int n):
         self.R = np.zeros((n, n))
+        self.p = 0
 
     @cython.boundscheck(False) # turn off bounds-checking
     @cython.wraparound(False)  # turn off negative index wrapping
