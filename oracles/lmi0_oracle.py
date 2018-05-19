@@ -24,7 +24,7 @@ class lmi0_oracle:
 
         self.Q.factor(getA)
         if self.Q.is_spd():
-            return (None, None), 1
+            return None, 1
         v = self.Q.witness()
         p = len(v)
         g = np.array([-v.dot(self.F[i][:p, :p].dot(v))

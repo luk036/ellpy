@@ -23,7 +23,7 @@ class lmi_old_oracle:
         self.A -= sum(self.F[k] * x[k] for k in range(n))
         self.Q.factorize(self.A)
         if self.Q.is_spd():
-            return (None, None), 1
+            return None, 1
         v = self.Q.witness()
         #p = len(v)
         g = np.array([self.Q.sym_quad(v, self.F[i])
