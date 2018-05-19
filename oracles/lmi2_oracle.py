@@ -38,7 +38,7 @@ class lmi2_oracle:
             p = len(v)
             #fj = np.dot(v, S[:p, :p].dot(v))
             g = np.array([v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
-            return (g, (1., 0.)), 0
+            return (g, (1., 0.)), False
 
         self.Q.factor(getS)
         if not self.Q.is_spd():
@@ -46,6 +46,6 @@ class lmi2_oracle:
             p = len(v)
             fj = -np.dot(v, self.U[:p, :p].dot(v))
             g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
-            return (g, (1., fj)), 0
+            return (g, (1., fj)), False
 
         return None, 1

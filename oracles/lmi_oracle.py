@@ -35,4 +35,4 @@ class lmi_oracle:
         #               for i in range(n)])
         g = np.array([self.Q.sym_quad(v, self.F[i])
                       for i in range(n)])
-        return (g, 1.), 0
+        return (g, 1.), False

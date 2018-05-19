@@ -27,11 +27,11 @@ class bsp_oracle:
             if fj > 0.:
                 g[i] = -1.
                 g[i + 1] = 1.
-                return (g, fj), 0
+                return (g, fj), False
 
         # if x[-1] < 0.:
         #     g[-1] = -1.
-        #     return (g, -x[-1]), 0
+        #     return (g, -x[-1]), False
 
         return self.qmi(x)
 
@@ -53,9 +53,9 @@ def lsq_corr_poly(Y, s, m):
     E = ell(10., a)
     P = bsearch_adaptor(Q, E)
     normY = np.linalg.norm(Y, 'fro')
-    _, niter, flag = bsearch(P, [0., normY*normY])
+    _, niter, feasible = bsearch(P, [0., normY*normY])
 
-    print(niter, flag)
+    print(niter, feasible)
     a = P.x_best
     return np.poly1d(a)
 #  return prob.is_dcp()
@@ -85,9 +85,9 @@ def lsq_corr_bspline(Y, s, m):
     E = ell(10., c)
     P = bsearch_adaptor(Q, E)
 
-    _, niter, flag = bsearch(P, [0., normY*normY])
+    _, niter, feasible = bsearch(P, [0., normY*normY])
 
-    print(niter, flag)
+    print(niter, feasible)
 
     c = P.x_best
 

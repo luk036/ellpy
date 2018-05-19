@@ -1,4 +1,4 @@
-function [x_best, t1, iter, flag, status] ...
+function [x_best, t1, iter, feasible, status] ...
     = ellipsoid_dc(evaluate, E, t, max_it, tol)
 % -- Ellipsoid method for solving convex optimization problem
 %
@@ -12,13 +12,13 @@ function [x_best, t1, iter, flag, status] ...
 % output  
 %         x             solution vector
 %         iter          number of iterations performed
-flag = 0; % no sol'n
+feasible = 0; % no sol'n
 x_best = NaN;
 
 for iter = 1:max_it,
     [cut, t1] = evaluate(E.xc, t);
     if (t ~= t1), % best t obtained
-        flag = 1;
+        feasible = 1;
 	    t = t1;
         x_best = E.xc;
     end  

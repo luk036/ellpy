@@ -29,7 +29,7 @@ Vol = [];
 %Ae = diag(10*N*N*ones(M,1)); % initial ellipsoid (sphere)
 E = ell(10*N*N, x0);
 P = rank1_oracle(N, A, iL);
-[x, t_new, iter, flag, status] = ellipsoid_discrete(@P.evaluate, E, Inf, M*1000, 1e-8);
+[x, t_new, iter, feasible, status] = ellipsoid_discrete(@P.evaluate, E, Inf, M*1000, 1e-8);
 toc
 
 plot(Vol);

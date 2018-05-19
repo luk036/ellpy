@@ -42,12 +42,12 @@ class mle_poly_oracle:
         self.lmi = lmi_oracle(Sig, 2.*Y)
 
     def __call__(self, x, t):
-        cut, flag = self.lmi0(x)
-        if flag == 0:
+        cut, feasible = self.lmi0(x)
+        if not feasible:
             return cut, t
 
-        cut, flag = self.lmi(x)
-        if flag == 0:
+        cut, feasible = self.lmi(x)
+        if not feasible:
             return cut, t
 
         R = self.lmi0.Q.R
@@ -98,9 +98,9 @@ def mle_corr_poly(Y, s, m):
     P = mle_poly_oracle(Sig, Y)
     E = ell(100., a)
     options = Options(5000, 1e-4)
-    a, _, num_iters, flag, status = cutting_plane_dc(
+    a, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), options)
-    print(num_iters, flag, status)
+    print(num_iters, feasible, status)
     return np.poly1d(a)
 #  return prob.is_dcp()
 
@@ -129,9 +129,9 @@ def mle_corr_bspline(Y, s, m):
     P = mle_bspline_oracle(Sig, Y)
     E = ell(100., c)
     options = Options(50000, 1e-4)
-    c, _, num_iters, flag, status = cutting_plane_dc(
+    c, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 50000)
-    print(num_iters, flag, status)
+    print(num_iters, feasible, status)
     return BSpline(t, c, k)
 
 

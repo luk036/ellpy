@@ -10,6 +10,6 @@ x0 = ones(nn+1,1); % initial x0
 %Ae = diag(100*ones(nn,1)); % initial ellipsoid (sphere)
 E = ell(100, x0);
 P = mle_corr_oracle(Y, s, nn);
-[x, bf, iter, flag] = ellipsoid_dc(@P.evaluate, E, Inf, 1000, 1e-4)
+[x, bf, iter, feasible] = ellipsoid_dc(@P.evaluate, E, Inf, 1000, 1e-4)
 kappa = x(end)
 a = x(1:end-1);

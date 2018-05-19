@@ -76,7 +76,7 @@ r0(1) = 0;
 % Ae = diag(ones(N,1)); % initial ellipsoid (sphere)
 E = ell(4,r0);
 P = FIR_oracle(Ap, As, Anr, Lpsq, Upsq);
-[r, Spsq_new, iter, flag, status] ...
+[r, Spsq_new, iter, feasible, status] ...
   = ellipsoid_dc(@P.evaluate, E, Spsq, 100000, 1e-4);
 toc
 iter
@@ -96,7 +96,7 @@ elplot([1 0; 0 1], [0 0]);
 
 %E = ell(1,r0);
 %P = FIR_oracle2(Ap, As, Anr, Lpsq, Upsq);
-%[r, Spsq_new, iter, flag, status] ...
+%[r, Spsq_new, iter, feasible, status] ...
 %  = ellipsoid_dc(@P.evaluate, E, Spsq, 100000, 1e-4);
 %toc
 %iter

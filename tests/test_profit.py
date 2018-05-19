@@ -27,11 +27,11 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_oracle(params, a, v)
-    # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, flag, status))
-    _, _, niter, flag, _ = \
+    # yb1, fb, niter, feasible, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
+    # print(fmt.format(fb, iter, feasible, status))
+    _, _, niter, feasible, _ = \
         cutting_plane_dc(P, E, 0.)
-    assert flag == 1
+    assert feasible
     assert niter == 37
 
     ui = 1.
@@ -41,18 +41,18 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_rb_oracle(params, a, v, (ui, e1, e2, e3))
-    # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, flag, status))
-    _, _, niter, flag, _ = cutting_plane_dc(P, E, 0.)
-    assert flag == 1
+    # yb1, fb, niter, feasible, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
+    # print(fmt.format(fb, iter, feasible, status))
+    _, _, niter, feasible, _ = cutting_plane_dc(P, E, 0.)
+    assert feasible
     assert niter == 42
 
     E = ell(r, y0)
     P = profit_q_oracle(params, a, v)
-    # yb1, fb, niter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, flag, status))
-    _, _, niter, flag, _ = cutting_plane_q(P, E, 0.)
-    assert flag == 1
+    # yb1, fb, niter, feasible, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
+    # print(fmt.format(fb, iter, feasible, status))
+    _, _, niter, feasible, _ = cutting_plane_q(P, E, 0.)
+    assert feasible
     assert niter == 28
     time.sleep(duration)
     return niter

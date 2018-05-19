@@ -34,8 +34,8 @@ if __name__ == "__main__":
 
     E = ell(10., x0)
     P = my_oracle
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, -100.)
-    print(fmt.format(fb, niter, flag, status))
+    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, -100.)
+    print(fmt.format(fb, niter, feasible, status))
     print(xb)
-    assert flag == 1
+    assert feasible
     #assert niter == 115

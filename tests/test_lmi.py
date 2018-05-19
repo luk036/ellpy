@@ -29,12 +29,12 @@ class my_oracle:
         if fj > 0.:
             return (self.c, fj), t
 
-        cut, flag = self.lmi1(x)
-        if flag == 0:
+        cut, feasible = self.lmi1(x)
+        if not feasible:
             return cut, t
 
-        cut, flag = self.lmi2(x)
-        if flag == 0:
+        cut, feasible = self.lmi2(x)
+        if not feasible:
             return cut, t
         return (self.c, 0.), f0
 
@@ -45,10 +45,10 @@ def run_lmi(oracle, duration=0.000001):
 
     E = ell(10., x0)
     P = my_oracle(oracle)
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100.)
-    print(fmt.format(fb, niter, flag, status))
+    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, 100.)
+    print(fmt.format(fb, niter, feasible, status))
     print(xb)
-    assert flag == 1
+    assert feasible
     time.sleep(duration)
     # assert niter == 115
     return niter

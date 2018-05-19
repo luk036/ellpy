@@ -17,9 +17,9 @@ bx = [];
 tol = 1e-4;
 while (u - l > tol),
     t = (u + l)/2;
-    [x, bf, iter, flag, status] = ...
+    [x, bf, iter, feasible, status] = ...
 	   ellipsoid_dc(@P.evaluate, E, t, 1000, tol);
-    if flag == 1,
+    if feasible,
         u = t;
         bx = x;
     else

@@ -26,8 +26,8 @@ class optscaling_oracle:
         self.network = network_oracle(G, constr, pconstr)
 
     def __call__(self, x, t):
-        cut, flag = self.network(x)
-        if flag != 1:
+        cut, feasible = self.network(x)
+        if not feasible:
             return cut, t
         s = x[0] - x[1]
         fj = s - t

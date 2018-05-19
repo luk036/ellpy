@@ -52,4 +52,4 @@ class qmi_oracle:
         Av = v.dot(self.Fx[:p])
         g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
                           for k in range(nx)])
-        return (g, 1.), 0
+        return (g, 1.), False

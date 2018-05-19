@@ -29,4 +29,4 @@ class lmi0_oracle:
         p = len(v)
         g = np.array([-v.dot(self.F[i][:p, :p].dot(v))
                       for i in range(n)])
-        return (g, 1.), 0
+        return (g, 1.), False

@@ -49,8 +49,8 @@ class mle_poly_oracle:
             self.c[i] = sum(Y[k].dot(Sig[i][k]) for k in range(n))
 
     def __call__(self, x, t):
-        cut, flag = self.imi(x)
-        if flag == 0:
+        cut, feasible = self.imi(x)
+        if not feasible:
             return cut, t
 
         m = len(self.Y)
@@ -103,9 +103,9 @@ def mle_corr_poly(Y, s, m):
     # a = P.x_best
     P = mle_poly_oracle(Sig, Y, m)
     E = ell(100., a)
-    a, _, num_iters, flag, status = cutting_plane_dc(
+    a, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 5000)
-    print(num_iters, flag, status)
+    print(num_iters, feasible, status)
     return np.poly1d(a[:m])
 #  return prob.is_dcp()
 
@@ -133,9 +133,9 @@ def mle_corr_bspline(Y, s, m):
     # _, _, _ = bsearch(P, [0., normY*normY])
     P = mle_bspline_oracle(Sig, Y, m)
     E = ell(100., c)
-    c, _, num_iters, flag, status = cutting_plane_dc(
+    c, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 50000)
-    print(num_iters, flag, status)
+    print(num_iters, feasible, status)
     return BSpline(t, c[:m], k)
 
 

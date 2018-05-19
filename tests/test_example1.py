@@ -8,8 +8,8 @@ from .test_example2 import my_oracle2
 
 
 def my_oracle(z, t):
-    cut, flag = my_oracle2(z)
-    if flag == 0:
+    cut, feasible = my_oracle2(z)
+    if not feasible:
         return cut, t
 
     x, y = z
@@ -28,10 +28,10 @@ def test_example1():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, -100.)
-    assert flag == 1
+    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, -100.)
+    assert feasible
 
     fmt = '{:f} {} {} {}'
-    print(fmt.format(fb, niter, flag, status))
+    print(fmt.format(fb, niter, feasible, status))
     print(xb)
     #assert niter == 115

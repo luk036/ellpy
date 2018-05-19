@@ -58,4 +58,4 @@ class imi_oracle:
             g = np.concatenate((g1, g2))
             g += -2.*v1[:p2].dot(v2)
 
-        return (g, 1.), 0
+        return (g, 1.), False

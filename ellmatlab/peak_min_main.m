@@ -111,14 +111,14 @@ x0 = G0(iL);
 Vol = [];
 E = ell(1, x0);
 P = peak_min_oracle(N, Apc, Asc, Anrc, Lpsq, Upsq, Spsq, iL);
-[x, t_new, iter, flag, status] = ...
+[x, t_new, iter, feasible, status] = ...
 		ellipsoid_discrete(@P.evaluate, E, Inf, N*10000, 1e-6);
 toc
 
 figure(3);
 plot(Vol);
 
-%if flag == 0, return; end;
+%if not feasible, return; end;
 
 G = zeros(N,N);
 G(iL) = x;

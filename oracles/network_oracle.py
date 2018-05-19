@@ -20,4 +20,4 @@ class network_oracle:
             return None, 1
         f = -sum(self.f(self.G, e, x) for e in C)
         g = -sum(self.p(self.G, e, x) for e in C)
-        return (g, f), 0
+        return (g, f), False

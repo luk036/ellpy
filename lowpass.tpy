@@ -96,10 +96,10 @@ if __name__ == "__main__":
     # Ae = diag(ones(N,1)) # initial ellipsoid (sphere)
     E = ell(4., r0)
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
-    r, Spsq_new, num_iters, flag, status = cutting_plane_dc(
+    r, Spsq_new, num_iters, feasible, status = cutting_plane_dc(
         P, E, Spsq)
 
-    assert flag == 1
+    assert feasible
     # toc = time.time()
 
     # print(num_iters)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     #E = ell(1,r0)
     #P = FIR_oracle2(Ap, As, Anr, Lpsq, Upsq)
-    # [r, Spsq_new, iter, flag, status] ...
+    # [r, Spsq_new, iter, feasible, status] ...
     #  = ellipsoid_dc(@P.evaluate, E, Spsq, 100000, 1e-4)
     # toc
     # iter
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(4, figsize=(4, 8))
     for h, style, color in zip((h_linear, h_min_hom, h_sp),
                                ('-', '-', '--'), ('k', 'r', 'c')):
-        #if flag == 1:
+        #if feasible:
         w, H = freqz(h)
         w, gd = group_delay((h, 1))
         w /= np.pi

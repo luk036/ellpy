@@ -9,12 +9,12 @@ class Options:
 
 def bsearch(evaluate, I, options=Options()):
     # assume monotone
-    flag = 0
+    feasible = False
     l, u = I
     t = l + (u - l)/2
     for niter in range(options.max_it):
         if evaluate(t):  # feasible sol'n obtained
-            flag = 1
+            feasible = True
             u = t
         else:
             l = t
@@ -22,7 +22,7 @@ def bsearch(evaluate, I, options=Options()):
         t = l + tau
         if tau < options.tol:
             break
-    return u, niter+1, flag
+    return u, niter+1, feasible
 
 
 class bsearch_adaptor:
@@ -38,9 +38,9 @@ class bsearch_adaptor:
     def __call__(self, t):
         E = self.E.copy()
         self.P.update(t)
-        x, _, flag, _ = cutting_plane_feas(
+        x, _, feasible, _ = cutting_plane_feas(
             self.P, E, self.options)
-        if flag == 1:
+        if feasible:
             self.E._xc = x.copy()
             return True
         return False
@@ -59,11 +59,11 @@ def cutting_plane_feas(evaluate, S, options=Options()):
              x             solution vector
              niter         number of iterations performed
     '''
-    flag = 0
+    feasible = False
     status = 0
     for niter in range(options.max_it):
-        cut, flag = evaluate(S.xc)
-        if flag == 1:  # feasible sol'n obtained
+        cut, feasible = evaluate(S.xc)
+        if feasible:  # feasible sol'n obtained
             break
         status, tau = S.update(cut)
         if status != 0:
@@ -71,7 +71,7 @@ def cutting_plane_feas(evaluate, S, options=Options()):
         if tau < options.tol:
             status = 2
             break
-    return S.xc, niter+1, flag, status
+    return S.xc, niter+1, feasible, status
 
 
 def cutting_plane_dc(evaluate, S, t, options=Options()):
@@ -88,12 +88,12 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
              t             best-so-far optimal value
              niter         number of iterations performed
     '''
-    flag = 0  # no sol'n
+    feasible = False  # no sol'n
     x_best = S.xc
     for niter in range(options.max_it):
         cut, t1 = evaluate(S.xc, t)
         if t != t1:  # best t obtained
-            flag = 1
+            feasible = True
             t = t1
             x_best = S.xc
         status, tau = S.update(cut)
@@ -102,7 +102,7 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
         if tau < options.tol:
             status = 2
             break
-    return x_best, t, niter+1, flag, status
+    return x_best, t, niter+1, feasible, status
 
 
 def cutting_plane_q(evaluate, S, t, options=Options()):
@@ -118,7 +118,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
              x             solution vector
              niter         number of iterations performed
     '''
-    flag = 0  # no sol'n
+    feasible = False  # no sol'n
     # x_last = S.xc
     x_best = S.xc
     status = 1  # new
@@ -134,7 +134,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
                 break
             h += g.dot(x0 - S.xc)
         if t != t1:  # best t obtained
-            flag = 1
+            feasible = True
             t = t1
             x_best = x0.copy()
         status, tau = S.update((g, h))
@@ -143,4 +143,4 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
         if tau < options.tol:
             status = 2
             break
-    return x_best, t, niter+1, flag, status
+    return x_best, t, niter+1, feasible, status

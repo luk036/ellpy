@@ -1,4 +1,4 @@
-function [x_best, t1, iter, flag, status] = ellipsoid_discrete(evaluate, E, t, max_it, tol)
+function [x_best, t1, iter, feasible, status] = ellipsoid_discrete(evaluate, E, t, max_it, tol)
 % -- Ellipsoid method for solving discrete convex problem
 %
 % input   
@@ -11,7 +11,7 @@ function [x_best, t1, iter, flag, status] = ellipsoid_discrete(evaluate, E, t, m
 % output  
 %         x             solution vector
 %         iter          number of iterations performed
-flag = 0; % no sol'n
+feasible = 0; % no sol'n
 x_last = E.xc;
 x_best = NaN;
 global Vol
@@ -22,7 +22,7 @@ for iter = 1:max_it,
   if status == 3, % can't cut in the previous iteration
     [cut, t1, x, loop] = evaluate(x, t, 1);  % new
 	if loop == 0, % no more alternative cut
-	  if flag == 0, x_best = x; end % output x anyway	  
+	  if not feasible, x_best = x; end % output x anyway	  
 	  return
     end
 	h = h + g'*(x - E.xc);
@@ -34,7 +34,7 @@ for iter = 1:max_it,
   end
 
   if (t ~= t1), % best t obtained
-    flag = 1;
+    feasible = 1;
 	t = t1;
     x_best = x;
   end  
@@ -48,7 +48,7 @@ for iter = 1:max_it,
   % elseif status == 3, % retry 20 times
       % count = count - 1;
 	    % if count == 0,
-          % if flag == 0, x_best = x; end;	  
+          % if not feasible, x_best = x; end;	  
 	        % return; 
 	    % end;
 	    % continue;
