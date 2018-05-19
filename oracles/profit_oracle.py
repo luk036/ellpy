@@ -4,7 +4,8 @@ import numpy as np
 
 class profit_oracle:
 
-    def __init__(self, p, A, a, v, k):
+    def __init__(self, params, a, v):
+        p, A, k = params
         self.log_pA = np.log(p * A)
         self.log_k = np.log(k)
         self.v = v
@@ -30,14 +31,16 @@ class profit_oracle:
 
 class profit_rb_oracle:
 
-    def __init__(self, p, A, a, v, k, ui, e1, e2, e3):
+    def __init__(self, params, a, v, vparams):
+        ui, e1, e2, e3 = vparams
         self.uie = [ui * e1, ui * e2]
         self.a = a
+        p, A, k = params
         p -= ui * e3
         k -= ui * e3
         v_rb = v.copy()
         v_rb += ui * e3
-        self.P = profit_oracle(p, A, a, v_rb, k)
+        self.P = profit_oracle((p, A, k), a, v_rb)
 
     def __call__(self, y, t):
         a_rb = self.a.copy()
@@ -49,8 +52,8 @@ class profit_rb_oracle:
 
 class profit_q_oracle:
 
-    def __init__(self, p, A, a, v, k):
-        self.P = profit_oracle(p, A, a, v, k)
+    def __init__(self, params, a, v):
+        self.P = profit_oracle(params, a, v)
 
     def __call__(self, y, t, retry):
         x = np.round(np.exp(y))

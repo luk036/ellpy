@@ -3,7 +3,7 @@ classdef profit_oracle2 < handle
 		log_k, v, a, log_pA
 	end
 	methods
-		function obj = profit_oracle2(p, A, alpha, beta, v1, v2, k)
+		function obj = profit_oracle2(p, A, k, alpha, beta, v1, v2)
 			obj.log_pA = log(p*A);
 			obj.log_k = log(k);
 			obj.v = [v1 v2 1]';

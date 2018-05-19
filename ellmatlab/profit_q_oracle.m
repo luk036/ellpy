@@ -3,7 +3,7 @@ classdef profit_q_oracle < handle
 		log_k, v, a, log_pA, retry_mode, count, mark
 	end
 	methods
-		function obj = profit_q_oracle(p, A, alpha, beta, v1, v2, k)
+		function obj = profit_q_oracle(p, A, k, alpha, beta, v1, v2)
 			obj.log_pA = log(p*A);
 			obj.log_k = log(k);
 			obj.v = [v1 v2]';

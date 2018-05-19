@@ -11,7 +11,7 @@ def bsearch(evaluate, I, options=Options()):
     # assume monotone
     flag = 0
     l, u = I
-    t = (l + u)/2
+    t = l + (u - l)/2
     for niter in range(options.max_it):
         if evaluate(t):  # feasible sol'n obtained
             flag = 1

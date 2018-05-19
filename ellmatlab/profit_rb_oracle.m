@@ -4,7 +4,7 @@ classdef profit_rb_oracle < handle
 		ui, e1, e2, e3
 	end
 	methods
-		function obj = profit_rb_oracle(p, A, alpha, beta, v1, v2, k, ui, e1, e2, e3)
+		function obj = profit_rb_oracle(p, A, k, alpha, beta, v1, v2, ui, e1, e2, e3)
 			obj.ui = ui;
 			obj.e1 = e1;
 			obj.e2 = e2;
