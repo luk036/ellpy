@@ -49,9 +49,10 @@ class ell:
         #     return 4, 0.
         tau = np.sqrt(self.kappa * tsq)
         alpha = beta / tau
-        status, rho, sigma, delta = calc_ell(alpha)
+        status, params = calc_ell(alpha)
         if status != 0:
             return status, tau
+        rho, sigma, delta = params
         self._xc -= (self.kappa * rho / tau) * Qg
         self.Q -= (sigma / tsq) * np.outer(Qg, Qg)
         # self.Q *= delta
@@ -64,23 +65,23 @@ class ell:
         rho = 1. / (n + 1)
         sigma = 2. * rho
         delta = self.c1
-        return 0, rho, sigma, delta
+        return 0, (rho, sigma, delta)
 
     def calc_dc(self, alpha):
         '''deep cut'''
         if alpha == 0.:
             return self.calc_cc()
         n = len(self._xc)
-        status, rho, sigma, delta = 0, 0., 0., 0.
+        # status, rho, sigma, delta = 0, 0., 0., 0.
         if alpha > 1.:
-            status = 1  # no sol'n
+            return 1, None  # no sol'n
         elif n * alpha < -1.:
-            status = 3  # no effect
+            return 3, None  # no effect
         else:
             rho = (1. + n * alpha) / (n + 1)
             sigma = 2. * rho / (1. + alpha)
             delta = self.c1 * (1. - alpha * alpha)
-        return status, rho, sigma, delta
+        return 0, (rho, sigma, delta)
 
     def calc_ll(self, alpha):
         '''parallel or deep cut'''
@@ -91,23 +92,24 @@ class ell:
         if a1 >= 1. or self.use_parallel == 0:
             return self.calc_dc(a0)
         n = len(self._xc)
-        status, rho, sigma, delta = 0, 0., 0., 0.
+        # status, rho, sigma, delta = 0, 0., 0., 0.
         aprod = a0 * a1
         if a0 > a1:
-            status = 1  # no sol'n
+            return 1, None  # no sol'n
         elif n * aprod < -1.:
-            status = 3  # no effect
+            return 3, None  # no effect
         else:
             asq = alpha * alpha
             asum = a0 + a1
-            asqdiff = asq[1] - asq[0]
-            xi = math.sqrt(4. * (1. - asq[0]) * (
-                1. - asq[1]) + n * n * asqdiff * asqdiff)
-            sigma = (
-                n + (2. * (1. + aprod - xi / 2.) / (asum * asum))) / (n + 1)
+            asq0, asq1 = asq
+            asqdiff = asq1 - asq0
+            xi = math.sqrt(4. * (1. - asq0) * (
+                1. - asq1) + (n * asqdiff)**2)
+            sigma = (n + (2. * (1. + aprod - xi / 2.) 
+                / (asum * asum))) / (n + 1)
             rho = asum * sigma / 2.
-            delta = self.c1 * (1. - (asq[0] + asq[1] - xi / n) / 2.)
-        return status, rho, sigma, delta
+            delta = self.c1 * (1. - (asq0 + asq1 - xi / n) / 2.)
+        return 0, (rho, sigma, delta)
 
     def update(self, cut):
         return self.update_core(self.calc_ll, cut)
