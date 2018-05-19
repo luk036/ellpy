@@ -26,22 +26,22 @@ def bsearch(evaluate, I, options=Options()):
 
 
 class bsearch_adaptor:
-    def __init__(self, P, E, options=Options()):
+    def __init__(self, P, S, options=Options()):
         self.P = P
-        self.E = E
+        self.S = S
         self.options = options
 
     @property
     def x_best(self):
-        return self.E.xc
+        return self.S.xc
 
     def __call__(self, t):
-        E = self.E.copy()
+        S = self.S.copy()
         self.P.update(t)
         x, _, feasible, _ = cutting_plane_feas(
-            self.P, E, self.options)
+            self.P, S, self.options)
         if feasible:
-            self.E._xc = x.copy()
+            self.S._xc = x.copy()
             return True
         return False
 

@@ -58,13 +58,13 @@ Y = np.cov(Ys, bias=True)
 # plt.show()
 
 
-spl = lsq_corr_bspline(Y, s, 5)
-pol = lsq_corr_poly(Y, s, 5)
+spl = lsq_corr_bspline(Y, s, 4)
+pol = lsq_corr_poly(Y, s, 4)
 
 h = s[-1] - s[0]
 d = np.sqrt(np.dot(h, h))
 xs = np.linspace(0, d, 100)
-plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 plt.plot(xs, spl(xs), 'r', label='BSpline')
+plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 plt.legend(loc='best')
 plt.show()

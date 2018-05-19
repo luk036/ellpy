@@ -45,13 +45,15 @@ class ell:
         g, beta = cut
         Qg = self.Q.dot(g)
         tsq = g.dot(Qg)
+        # if tsq <= 0.:
+        #     return 4, 0.
         tau = np.sqrt(self.kappa * tsq)
         alpha = beta / tau
         status, rho, sigma, delta = calc_ell(alpha)
         if status != 0:
             return status, tau
         self._xc -= (self.kappa * rho / tau) * Qg
-        self.Q -= np.outer((sigma / tsq) * Qg, Qg)
+        self.Q -= (sigma / tsq) * np.outer(Qg, Qg)
         # self.Q *= delta
         self.kappa *= delta
         return status, tau
