@@ -7,9 +7,7 @@ from lmi0_oracle import lmi0_oracle
 
 
 class imi_oracle:
-
-    """
-        Oracle for Linear Matrix Inequality constraint
+    """Oracle for Linear Matrix Inequality constraint
             Sig * x[:n] >= 0
             S * x[n:] >= 0
             [Sig, I

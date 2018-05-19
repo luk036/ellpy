@@ -86,7 +86,7 @@ def test_firfilter():
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
     P = my_oracle()
-    #hb, fb, niter, flag, status = cutting_plane_dc(P, E, 10., 2000, 1e-8)
+    #hb, fb, niter, flag, status = cutting_plane_dc(P, E, 10., (2000, 1e-8))
     prob1 = Problem(E, P)
     prob1.solve(100.)
 

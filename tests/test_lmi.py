@@ -45,7 +45,7 @@ def run_lmi(oracle, duration=0.000001):
 
     E = ell(10., x0)
     P = my_oracle(oracle)
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100., 2000, 1e-4)
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, 100.)
     print(fmt.format(fb, niter, flag, status))
     print(xb)
     assert flag == 1

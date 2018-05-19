@@ -97,8 +97,9 @@ def mle_corr_poly(Y, s, m):
     # a = P.x_best
     P = mle_poly_oracle(Sig, Y)
     E = ell(100., a)
+    options = Options(5000, 1e-4)
     a, _, num_iters, flag, status = cutting_plane_dc(
-        P, E, float('inf'), 5000)
+        P, E, float('inf'), options)
     print(num_iters, flag, status)
     return np.poly1d(a)
 #  return prob.is_dcp()
@@ -127,6 +128,7 @@ def mle_corr_bspline(Y, s, m):
     # _, _, _ = bsearch(P, [0., normY*normY])
     P = mle_bspline_oracle(Sig, Y)
     E = ell(100., c)
+    options = Options(50000, 1e-4)
     c, _, num_iters, flag, status = cutting_plane_dc(
         P, E, float('inf'), 50000)
     print(num_iters, flag, status)

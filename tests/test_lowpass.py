@@ -6,7 +6,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import cvxpy as cvx
 #from scipy.signal import remez, minimum_phase, freqz, group_delay
-from ..cutting_plane import cutting_plane_dc
+from ..cutting_plane import cutting_plane_dc, Options
 from ..ell import ell
 from .spectral_fact import spectral_fact
 # from problem import Problem
@@ -97,8 +97,11 @@ def run_lowpass(use_parallel, duration=0.000001):
     E = ell(4., r0)
     E.use_parallel = use_parallel
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
+    options = Options()
+    options.max_it = 20000
+    options.tol = 1e-4
     r, Spsq_new, num_iters, flag, status = cutting_plane_dc(
-        P, E, Spsq, 20000, 1e-4)
+        P, E, Spsq, options)
     assert flag == 1
     time.sleep(duration)
     return num_iters

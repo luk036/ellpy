@@ -29,7 +29,7 @@ def benchmark_profit(duration=0.000001):
     # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
     _, _, niter, flag, _ = \
-        cutting_plane_dc(P, E, 0., 200, 1e-4)
+        cutting_plane_dc(P, E, 0.)
     assert flag == 1
     assert niter == 37
 
@@ -42,7 +42,7 @@ def benchmark_profit(duration=0.000001):
     P = profit_rb_oracle(p, A, a, v, k, ui, e1, e2, e3)
     # yb1, fb, niter, flag, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
-    _, _, niter, flag, _ = cutting_plane_dc(P, E, 0., 200, 1e-4)
+    _, _, niter, flag, _ = cutting_plane_dc(P, E, 0.)
     assert flag == 1
     assert niter == 42
 
@@ -50,7 +50,7 @@ def benchmark_profit(duration=0.000001):
     P = profit_q_oracle(p, A, a, v, k)
     # yb1, fb, niter, flag, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
     # print(fmt.format(fb, iter, flag, status))
-    _, _, niter, flag, _ = cutting_plane_q(P, E, 0., 200, 1e-4)
+    _, _, niter, flag, _ = cutting_plane_q(P, E, 0.)
     assert flag == 1
     assert niter == 28
     time.sleep(duration)

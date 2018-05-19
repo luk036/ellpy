@@ -95,7 +95,7 @@ r0[0] = 0
 E = ell(4., r0)
 P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
 r, Spsq_new, num_iters, flag, status = cutting_plane_dc(
-    P, E, Spsq, 1000, 1e-4)
+    P, E, Spsq)
 toc = time.time()
 print(num_iters)
 

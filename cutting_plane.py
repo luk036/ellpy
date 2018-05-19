@@ -2,12 +2,17 @@
 # import numpy as np  # Can move to below???
 
 
-def bsearch(evaluate, I, max_it=1000, tol=1e-8):
+class Options:
+    max_it = 2000
+    tol = 1e-4
+
+
+def bsearch(evaluate, I, options=Options()):
     # assume monotone
     flag = 0
     l, u = I
     t = (l + u)/2
-    for niter in range(max_it):
+    for niter in range(options.max_it):
         if evaluate(t):  # feasible sol'n obtained
             flag = 1
             u = t
@@ -15,17 +20,16 @@ def bsearch(evaluate, I, max_it=1000, tol=1e-8):
             l = t
         tau = (u - l)/2
         t = l + tau
-        if tau < tol:
+        if tau < options.tol:
             break
     return u, niter+1, flag
 
 
 class bsearch_adaptor:
-    def __init__(self, P, E, max_it=1000, tol=1e-8):
+    def __init__(self, P, E, options=Options()):
         self.P = P
         self.E = E
-        self.max_it = max_it
-        self.tol = tol
+        self.options = options
 
     @property
     def x_best(self):
@@ -34,15 +38,15 @@ class bsearch_adaptor:
     def __call__(self, t):
         E = self.E.copy()
         self.P.update(t)
-        x, _, flag, _ = cutting_plane_feas(self.P, E,
-                                           self.max_it, self.tol)
+        x, _, flag, _ = cutting_plane_feas(
+            self.P, E, self.options)
         if flag == 1:
             self.E._xc = x.copy()
             return True
         return False
 
 
-def cutting_plane_feas(evaluate, S, max_it=1000, tol=1e-8):
+def cutting_plane_feas(evaluate, S, options=Options()):
     '''
     Cutting-plane method for solving convex feasibility problem
     input
@@ -57,20 +61,20 @@ def cutting_plane_feas(evaluate, S, max_it=1000, tol=1e-8):
     '''
     flag = 0
     status = 0
-    for niter in range(max_it):
+    for niter in range(options.max_it):
         cut, flag = evaluate(S.xc)
         if flag == 1:  # feasible sol'n obtained
             break
         status, tau = S.update(cut)
         if status != 0:
             break
-        if tau < tol:
+        if tau < options.tol:
             status = 2
             break
     return S.xc, niter+1, flag, status
 
 
-def cutting_plane_dc(evaluate, S, t, max_it=1000, tol=1e-8):
+def cutting_plane_dc(evaluate, S, t, options=Options()):
     '''
     Cutting-plane method for solving convex optimization problem
     input
@@ -86,7 +90,7 @@ def cutting_plane_dc(evaluate, S, t, max_it=1000, tol=1e-8):
     '''
     flag = 0  # no sol'n
     x_best = S.xc
-    for niter in range(max_it):
+    for niter in range(options.max_it):
         cut, t1 = evaluate(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
@@ -95,13 +99,13 @@ def cutting_plane_dc(evaluate, S, t, max_it=1000, tol=1e-8):
         status, tau = S.update(cut)
         if status == 1:
             break
-        if tau < tol:
+        if tau < options.tol:
             status = 2
             break
     return x_best, t, niter+1, flag, status
 
 
-def cutting_plane_q(evaluate, S, t, max_it=1000, tol=1e-8):
+def cutting_plane_q(evaluate, S, t, options=Options()):
     '''
     Cutting-plane method for solving convex discrete optimization problem
     input
@@ -118,8 +122,9 @@ def cutting_plane_q(evaluate, S, t, max_it=1000, tol=1e-8):
     # x_last = S.xc
     x_best = S.xc
     status = 1  # new
-    for niter in range(max_it):
-        cut, t1, loop = evaluate(S.xc, t, 0 if status != 3 else 1)
+    for niter in range(options.max_it):
+        cut, t1, loop = evaluate(
+            S.xc, t, 0 if status != 3 else 1)
         g, h, x0 = cut
         if status != 3:
             if loop == 1:  # discrete sol'n
@@ -135,7 +140,7 @@ def cutting_plane_q(evaluate, S, t, max_it=1000, tol=1e-8):
         status, tau = S.update((g, h))
         if status == 1:
             break
-        if tau < tol:
+        if tau < options.tol:
             status = 2
             break
     return x_best, t, niter+1, flag, status

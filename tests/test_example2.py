@@ -27,7 +27,7 @@ def test_example2():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle2
-    xb, niter, flag, status = cutting_plane_feas(P, E, 200, 1e-4)
+    xb, niter, flag, status = cutting_plane_feas(P, E)
     assert flag == 1
     print(niter, flag, status)
     print(xb)

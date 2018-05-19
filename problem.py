@@ -1,11 +1,5 @@
-from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q
+from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q, Options
 import numpy as np
-
-
-class Options:
-    def __init__(self):
-        self.max_iters = 1000
-        self.tol = 1e-8
 
 
 class Problem:
@@ -128,7 +122,7 @@ class Problem:
             why the problem could not be solved.
         """
         xb, fb, num_iters, flag, status = cutting_plane_dc(
-            self.oracle, self.S, t, self.options.max_iters, self.options.tol)
+            self.oracle, self.S, t, self.options)
 
         if flag == 1:
             if status == 2:

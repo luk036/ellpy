@@ -28,7 +28,7 @@ def test_example1():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle
-    xb, fb, niter, flag, status = cutting_plane_dc(P, E, -100., 200, 1e-4)
+    xb, fb, niter, flag, status = cutting_plane_dc(P, E, -100.)
     assert flag == 1
 
     fmt = '{:f} {} {} {}'
