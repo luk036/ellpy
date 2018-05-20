@@ -105,11 +105,57 @@ class ell:
             asqdiff = asq1 - asq0
             xi = math.sqrt(4. * (1. - asq0) * (
                 1. - asq1) + (n * asqdiff)**2)
-            sigma = (n + (2. * (1. + aprod - xi / 2.) 
-                / (asum * asum))) / (n + 1)
+            sigma = (n + (2. * (1. + aprod - xi / 2.)
+                          / (asum * asum))) / (n + 1)
             rho = asum * sigma / 2.
             delta = self.c1 * (1. - (asq0 + asq1 - xi / n) / 2.)
         return 0, (rho, sigma, delta)
 
     def update(self, cut):
         return self.update_core(self.calc_ll, cut)
+
+
+class ell1d:
+
+    def __init__(self, I):
+        l, u = I
+        self.r = (u - l)/2
+        self._xc = l + self.r
+
+    @property
+    def xc(self):
+        return self._xc
+
+    def copy(self):
+        E = ell1d([self._xc - self.r,
+                   self._xc + self.r])
+        return E
+
+    def update(self, cut):
+        """Update ellipsoid core function using the cut
+                g' * (x - xc) + beta <= 0
+
+        Arguments:
+            g {floay} -- cut
+            beta {array or scalar} -- [description]
+
+        Returns:
+            status -- 0: success
+            tau -- "volumn" of ellipsoid
+        """
+        g, beta = cut
+        tau = abs(self.r * g)
+        if beta > tau:
+            return 1, tau  # no sol'n
+        elif beta < -tau:
+            return 3, tau  # no effect
+        bound = self._xc - beta / g
+        if g > 0.:
+            u = bound
+            l = self._xc - self.r
+        else:
+            l = bound
+            u = self._xc + self.r
+        self.r = (u - l)/2
+        self._xc = l + self.r
+        return 0, tau

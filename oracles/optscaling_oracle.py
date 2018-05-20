@@ -6,7 +6,7 @@ import numpy as np
 
 def constr(G, e, x):
     u, v = e
-    if u < v:
+    if u <= v:
         return x[0] - G[u][v]['cost']
     else:
         return G[u][v]['cost'] - x[1]
@@ -14,7 +14,7 @@ def constr(G, e, x):
 
 def pconstr(G, e, x):
     u, v = e
-    if u < v:
+    if u <= v:
         return np.array([1., 0.])
     else:
         return np.array([0., -1.])
@@ -23,9 +23,17 @@ def pconstr(G, e, x):
 class optscaling_oracle:
 
     def __init__(self, G):
+        self.G = G
         self.network = network_oracle(G, constr, pconstr)
 
     def __call__(self, x, t):
+        for (u, v) in self.G.edges():
+            if u != v:
+                continue
+            fj = x - self.G[u][v]['cost']
+            if fj > 0.:
+                return (1., fj), t
+
         cut, feasible = self.network(x)
         if not feasible:
             return cut, t

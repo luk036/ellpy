@@ -2,7 +2,6 @@
 from __future__ import print_function
 
 # import matplotlib.pyplot as plt
-import time
 import numpy as np
 import networkx as nx
 from cutting_plane import cutting_plane_dc, bsearch, bsearch_adaptor
@@ -48,8 +47,8 @@ def formGraph(T, pos, eta, seed=None):
     return G
 
 
-N = 75
-M = 20
+N = 155
+M = 40
 T = N+M
 xbase = 2
 ybase = 3
@@ -73,7 +72,8 @@ cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))
 
 # if __name__ == "__main__":
-def run_optscaling(duration=0.000001):
+# def test_optscaling():
+if __name__ == "__main__":
     # mid = (cmax + cmin)/2.
     x0 = np.array([cmax, cmin])
     t = cmax - cmin
@@ -85,28 +85,18 @@ def run_optscaling(duration=0.000001):
     print(np.exp(xb))
     print(fmt.format(np.exp(fb), niter, feasible, status))
     assert feasible
-    return niter
 
-def run_optscaling2(duration=0.000001):
+# def test_optscaling2():
     # mid = (cmax + cmin)/2.
+    x0 = cmin
     t = cmax - cmin
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
     # xb, fb, niter, feasible, status = cutting_plane_dc(P, I, 1.1*t)
     P = bsearch_adaptor(Q, I)
     fb, niter, feasible = bsearch(P, [0., 1.001*t])
-    time.sleep(duration)
-    fmt = '{:f} {} {}'
+
+    fmt = '{:f} {} {} {}'
     # print(np.exp(xb))
-    print(fmt.format(np.exp(fb), niter, feasible))
+    print(fmt.format(np.exp(fb), niter, feasible, status))
     assert feasible
-    return niter
-
-
-def test_optscaling(benchmark):
-    result = benchmark(run_optscaling)
-    assert result == 26
-
-def test_optscaling2(benchmark):
-    result = benchmark(run_optscaling2)
-    assert result == 13
