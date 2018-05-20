@@ -30,11 +30,4 @@ class optscaling3_oracle:
         self.network3.update(t)
 
     def __call__(self, x):
-        for (u, v) in self.G.edges():
-            if u != v:
-                continue
-            fj = x - self.G[u][v]['cost']
-            if fj > 0.:
-                return (1., fj), False
-
         return self.network3(x)

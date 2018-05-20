@@ -27,13 +27,6 @@ class optscaling_oracle:
         self.network = network_oracle(G, constr, pconstr)
 
     def __call__(self, x, t):
-        for (u, v) in self.G.edges():
-            if u != v:
-                continue
-            fj = x - self.G[u][v]['cost']
-            if fj > 0.:
-                return (1., fj), t
-
         cut, feasible = self.network(x)
         if not feasible:
             return cut, t

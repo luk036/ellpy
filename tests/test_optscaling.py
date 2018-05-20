@@ -60,12 +60,10 @@ G = formGraph(T, pos, 1.6, seed=5)
 # Add a sink, connect all spareTSV to it.
 ## pos = pos + [(1.5,.5)]
 for u, v in G.edges():
-    if u == v:
-        G[u][v]['cost'] = 1.
-    else:
-        h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
-        G[u][v]['cost'] = np.sqrt(np.dot(h, h))
-        #G[u][v]['cost'] = h[0] + h[1]
+    h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
+    G[u][v]['cost'] = np.sqrt(np.dot(h, h))
+    #G[u][v]['cost'] = h[0] + h[1]
+
 for u, v in G.edges():
     G[u][v]['cost'] = np.log(abs(G[u][v]['cost']))
 
