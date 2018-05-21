@@ -108,11 +108,11 @@ def run_lowpass(use_parallel, duration=0.000001):
 
 
 # def test_lowpass0(benchmark):
-#     result = benchmark(run_lowpass, 0)
+#     result = benchmark(run_lowpass, False)
 #     assert result == 13325
 
 # def test_lowpass1(benchmark):
-#     result = benchmark(run_lowpass, 1)
+#     result = benchmark(run_lowpass, True)
 #     assert result == 568
 
 def test_lowpass():

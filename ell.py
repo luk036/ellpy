@@ -7,6 +7,7 @@ class ell:
 
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
+        self.use_parallel = True
         n = len(x)
         self.c1 = float(n * n) / (n * n - 1.)
         self._xc = x.copy()
@@ -16,7 +17,6 @@ class ell:
         else:
             self.Q = np.diag(val)
             self.kappa = 1.
-        self.use_parallel = 1
 
     @property
     def xc(self):
@@ -27,6 +27,7 @@ class ell:
         E.Q = self.Q.copy()
         E.c1 = self.c1
         E.kappa = self.kappa
+        E.use_parallel = self.use_parallel
         return E
 
     def update_core(self, calc_ell, cut):
@@ -89,7 +90,7 @@ class ell:
             return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
-        if a1 >= 1. or self.use_parallel == 0:
+        if a1 >= 1. or not self.use_parallel:
             return self.calc_dc(a0)
         n = len(self._xc)
         # status, rho, sigma, delta = 0, 0., 0., 0.
@@ -145,9 +146,16 @@ class ell1d:
         """
         g, beta = cut
         tau = abs(self.r * g)
+        if beta == 0.:
+            self.r /= 2
+            if g > 0.:
+                self._xc -= self.r
+            else:
+                self._xc += self.r
+            return 0, tau
         if beta > tau:
             return 1, tau  # no sol'n
-        elif beta < -tau:
+        if beta < -tau:
             return 3, tau  # no effect
         bound = self._xc - beta / g
         if g > 0.:
