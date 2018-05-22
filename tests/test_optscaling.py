@@ -5,10 +5,10 @@ from __future__ import print_function
 import time
 import numpy as np
 import networkx as nx
-from cutting_plane import cutting_plane_dc, bsearch, bsearch_adaptor
-from oracles.optscaling_oracle import optscaling_oracle
-from oracles.optscaling3_oracle import optscaling3_oracle
-from ell import ell, ell1d
+from ..cutting_plane import cutting_plane_dc, bsearch, bsearch_adaptor
+from ..oracles.optscaling_oracle import optscaling_oracle
+from ..oracles.optscaling3_oracle import optscaling3_oracle
+from ..ell import ell, ell1d
 
 
 def vdc(n, base=2):

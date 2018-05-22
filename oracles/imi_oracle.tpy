@@ -22,17 +22,17 @@ class imi_oracle:
 
     def __call__(self, x):
         n = len(x) // 2
-        m = len(self.A) // 2
+        N = len(self.A) // 2
 
         def getA(i, j):
-            if i < m:
+            if i < N:
                 self.A[i, j] = sum(self.F[k][i, j] * x[k]
                                    for k in range(n))
-            elif j < m:
-                self.A[i, j] = 1. if i-m == j else 0.
+            elif j < N:
+                self.A[i, j] = 1. if i-N == j else 0.
             else:
-                i2 = i-m
-                j2 = j-m
+                i2 = i-N
+                j2 = j-N
                 self.A[i, j] = sum(self.F[k][i2, j2] * x[k+n]
                                    for k in range(n))
             self.A[j, i] = self.A[i, j]  # for later use
@@ -43,16 +43,16 @@ class imi_oracle:
             return None, 1
         v = self.Q.witness()
         p = len(v)
-        if p < m:
+        if p < N:
             g1 = np.array([-v.dot(self.F[i][:p, :p].dot(v))
                            for i in range(n)])
             g = np.concatenate((g1, np.zeros(n)))
         else:
-            v1 = v[:m]
-            v2 = v[m:]
+            v1 = v[:N]
+            v2 = v[N:]
             g1 = np.array([-v1.dot(self.F[i].dot(v1))
                            for i in range(n)])
-            p2 = p - m
+            p2 = p - N
             g2 = np.array([-v2.dot(self.F[i][:p2, :p2].dot(v2))
                            for i in range(n)])
             g = np.concatenate((g1, g2))

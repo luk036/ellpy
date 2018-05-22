@@ -20,8 +20,8 @@ class mle_bspline_oracle:
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
     """
 
-    def __init__(self, Sig, Y, m):
-        self.mle_poly = mle_poly_oracle(Sig, Y, m)
+    def __init__(self, Sig, Y, n):
+        self.mle_poly = mle_poly_oracle(Sig, Y, n)
 
     def __call__(self, x, t):
         # n = len(x)
@@ -38,29 +38,29 @@ class mle_bspline_oracle:
 
 
 class mle_poly_oracle:
-    def __init__(self, Sig, Y, m):
+    def __init__(self, Sig, Y, n):
         self.Y = Y
         self.Sig = Sig
         self.imi = imi_oracle(Sig)
         # self.lmi = lmi_oracle(Sig, 2.*Y)
-        n = len(self.Y)
-        self.c = np.zeros(m)
-        for i in range(m):
-            self.c[i] = sum(Y[k].dot(Sig[i][k]) for k in range(n))
+        N = len(self.Y)
+        self.c = np.zeros(n)
+        for i in range(n):
+            self.c[i] = sum(Y[k].dot(Sig[i][k]) for k in range(N))
 
     def __call__(self, x, t):
         cut, feasible = self.imi(x)
         if not feasible:
             return cut, t
 
-        m = len(self.Y)
-        R = self.imi.Q.R[:m,:m]
+        N = len(self.Y)
+        R = self.imi.Q.R[:N,:N]
         # S = invR.dot(invR.T)
         diag = np.diag(R)
         f1 = 2.*np.sum(np.log(diag))
-        S = self.imi.A[m:,m:]
+        S = self.imi.A[N:,N:]
         # SY = S.dot(self.Y)
-        f1 += sum(S[k].dot(self.Y[k]) for k in range(m))
+        f1 += sum(S[k].dot(self.Y[k]) for k in range(N))
         # f1 += np.trace(SY)
 
         f = f1 - t
@@ -76,75 +76,74 @@ class mle_poly_oracle:
         g1 = np.zeros(n)
         for i in range(n):
             # SFsi = S.dot(self.Sig[i])
-            g1[i] = sum(invSig[k].dot(self.Sig[i][k]) for k in range(m))
+            g1[i] = sum(invSig[k].dot(self.Sig[i][k]) for k in range(N))
 
         g = np.concatenate((g1, self.c))
 
         return (g, f), t
 
 
-def mle_corr_poly(Y, s, m):
+def mle_corr_poly(Y, s, n):
     _ = np.linalg.cholesky(Y) # test if Y is SPD.
 
-    n = len(s)
+    N = len(s)
     D1 = construct_distance_matrix(s)
 
-    D = np.ones((n, n))
+    D = np.ones((N, N))
     Sig = [D]
-    for _ in range(m - 1):
+    for _ in range(n - 1):
         D = np.multiply(D, D1)
         Sig += [D]
     Sig.reverse()
     # normY = np.linalg.norm(Y, 'fro')
-    a = np.ones(2*m)
+    a = np.ones(2*n)
 
     # P = poly_oracle(Sig, Y, a)
     # _, _, _ = bsearch(P, [0., normY*normY])
     # a = P.x_best
-    P = mle_poly_oracle(Sig, Y, m)
+    P = mle_poly_oracle(Sig, Y, n)
     E = ell(100., a)
     a, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 5000)
     print(num_iters, feasible, status)
-    return np.poly1d(a[:m])
+    return np.poly1d(a[:n])
 #  return prob.is_dcp()
 
 
-def mle_corr_bspline(Y, s, m):
+def mle_corr_bspline(Y, s, n):
     k = 2  # quadratic bspline
     h = s[-1] - s[0]
     d = np.sqrt(np.dot(h, h))
-    t = np.linspace(0, d * 1.2, m + k + 1)
+    t = np.linspace(0, d * 1.2, n + k + 1)
     spls = []
-    for i in range(m):
-        coeff = np.zeros(m)
+    for i in range(n):
+        coeff = np.zeros(n)
         coeff[i] = 1
         spls += [BSpline(t, coeff, k)]
 
     D = construct_distance_matrix(s)
 
     Sig = []
-    for i in range(m):
+    for i in range(n):
         Sig += [spls[i](D)]
 
     # normY = np.linalg.norm(Y, 'fro')
-    c = np.ones(2*m)
+    c = np.ones(2*n)
     # P = bspline_oracle(Sig, Y, c)
     # _, _, _ = bsearch(P, [0., normY*normY])
-    P = mle_bspline_oracle(Sig, Y, m)
+    P = mle_bspline_oracle(Sig, Y, n)
     E = ell(100., c)
     c, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 50000)
     print(num_iters, feasible, status)
-    return BSpline(t, c[:m], k)
+    return BSpline(t, c[:n], k)
 
 
 def construct_distance_matrix(s):
-    n = len(s)
-    # c = cvx.Variable(m)
-    D = np.zeros((n, n))
+    N = len(s)
+    D = np.zeros((N, N))
     for i in range(n):
-        for j in range(i + 1, n):
+        for j in range(i + 1, N):
             h = s[j] - s[i]
             d = np.sqrt(np.dot(h, h))
             D[i, j] = d

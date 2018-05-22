@@ -15,8 +15,8 @@ DTYPE = np.float
 ctypedef np.float_t DTYPE_t
 
 class cholutil:
-    def __init__(self, int n):
-        self.R = np.zeros((n, n))
+    def __init__(self, int N):
+        self.R = np.zeros((N, N))
         self.p = 0
 
     @cython.boundscheck(False) # turn off bounds-checking
@@ -28,15 +28,15 @@ class cholutil:
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
         '''
-        # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((n, n))
-        # self.R = np.zeros((n, n))
-        cdef int n = len(self.R)
+        # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((N, N))
+        # self.R = np.zeros((N, N))
+        cdef int N = len(self.R)
         cdef DTYPE_t[:, ::1] R = self.R
         cdef int p = 0
         cdef int i, j, k
         cdef DTYPE_t d
         
-        for i in range(n):
+        for i in range(N):
             for j in range(i+1):
                 d = getA(i, j)
                 for k in range(j):
@@ -61,15 +61,15 @@ class cholutil:
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
         '''
-        # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((n, n))
-        # self.R = np.zeros((n, n))
-        cdef int n = len(self.R)
+        # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((N, N))
+        # self.R = np.zeros((N, N))
+        cdef int N = len(self.R)
         cdef DTYPE_t[:, ::1] R = self.R
         cdef int p = 0
         cdef int i, j, k
         cdef DTYPE_t d
         
-        for i in range(n):
+        for i in range(N):
             for j in range(i+1):
                 d = A[i, j]
                 for k in range(j):

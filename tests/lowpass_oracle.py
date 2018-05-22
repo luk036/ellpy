@@ -22,20 +22,20 @@ class lowpass_oracle:
 
     def __call__(self, x, Spsq):
         # 1. nonnegative-real constraint
-        m = len(x)
+        n = len(x)
 
         # case 1,
         if x[0] < 0.:
-            g = np.zeros(m)
+            g = np.zeros(n)
             g[0] = -1.
             f = -x[0]
             return (g, f), Spsq
 
         # case 2,
         # 2. passband constraints
-        n, m = self.Ap.shape
+        N, n = self.Ap.shape
         i_Ap = self.i_Ap
-        for k in chain(range(i_Ap, n), range(i_Ap)):
+        for k in chain(range(i_Ap, N), range(i_Ap)):
             v = self.Ap[k, :].dot(x)
             if v > self.Upsq:
                 #f = v - Upsq
@@ -53,12 +53,12 @@ class lowpass_oracle:
 
         # case 3,
         # 3. stopband constraint
-        n = self.As.shape[0]
-        w = np.zeros(n)
+        N = self.As.shape[0]
+        w = np.zeros(N)
         i_As = self.i_As
-        for k in chain(range(i_As, n), range(i_As)):
+        for k in chain(range(i_As, N), range(i_As)):
             # k += 1
-            # if k == n:
+            # if k == N:
             #     k = 0    # round robin
             w[k] = self.As[k, :].dot(x)
             if w[k] > Spsq:
@@ -78,8 +78,8 @@ class lowpass_oracle:
 
         # case 4,
         # 1. nonnegative-real constraint
-        n = self.Anr.shape[0]
-        for k in range(n):
+        N = self.Anr.shape[0]
+        for k in range(N):
             v = self.Anr[k, :].dot(x)
             if v < 0:
                 f = -v
