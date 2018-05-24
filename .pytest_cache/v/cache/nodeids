@@ -8,6 +8,7 @@
   "pycsd/test/test_csd_integers.py::tests__integers::test__02_to_csd", 
   "pycsd/test/test_to_and_fro_10bits.py::tests__to_and_fro_10bits::test__01_to_integer", 
   "pycsd/test/test_to_and_fro_10bits.py::tests__to_and_fro_10bits::test__02_to_csd", 
+  "tests/test_corr_fn.py::test_corr_fn", 
   "tests/test_example1.py::test_example1", 
   "tests/test_example2.py::test_example2", 
   "tests/test_firfilter.py::test_firfilter", 
@@ -15,5 +16,6 @@
   "tests/test_lmi.py::test_lmi_old", 
   "tests/test_lowpass.py::test_lowpass", 
   "tests/test_optscaling.py::test_optscaling", 
+  "tests/test_optscaling.py::test_optscaling2", 
   "tests/test_profit.py::test_profit"
 ]

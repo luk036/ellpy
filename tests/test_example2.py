@@ -19,7 +19,7 @@ def my_oracle2(z):
     if fj > 0:
         return (np.array([-1., 1.]), fj), False
 
-    return None, 1
+    return None, True
 
 
 # if __name__ == "__main__":

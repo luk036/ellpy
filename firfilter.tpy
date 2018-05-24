@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import numpy as np
-import cvxpy as cvx
+# import cvxpy as cvx
 from cutting_plane import cutting_plane_dc
 from ell import ell
 from problem import Problem
@@ -8,7 +11,7 @@ from problem import Problem
 # Problem specs.
 # ********************************************************************
 # Number of FIR coefficients (including the zeroth one).
-n = 20
+n = 10
 
 # Rule-of-thumb frequency discretization (Cheney's Approx. Theory book).
 m = 15*n
@@ -86,10 +89,10 @@ P = my_oracle()
 prob1 = Problem(E, P)
 prob1.solve(100.)
 
-print 'Problem status:', prob1.status
+print('Problem status:', prob1.status)
 if prob1.status != 'optimal':
     raise Exception('ELL Error')
-print "optimal value", prob1.optim_value
+print("optimal value", prob1.optim_value)
 
 #fmt = '{:f} {} {} {}'
 #print(prob1.optim_var)
@@ -160,7 +163,7 @@ plt.show()
 
 plt.xlim(0, np.pi)
 plt.ylim(-30, 10)
-plt.legend(loc='lower right')
+# plt.legend(loc='lower right')
 # Phase
 plt.figure(figsize=(6, 6))
 plt.plot(np.array(w), np.angle(np.array(H)))
