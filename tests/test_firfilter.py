@@ -63,16 +63,8 @@ class my_oracle:
                 return (g, fj - t), t
             if fmax < fj:
                 fmax = fj
-                imax = i
-        t = fmax
-        a_R = A_R[imax, :]
-        a_I = A_I[imax, :]
-        H_r = Hdes_r[imax]
-        H_i = Hdes_i[imax]
-        t_r = a_R.dot(h) - H_r
-        t_i = a_I.dot(h) - H_i
-        g = 2.*(t_r*a_R + t_i*a_I)
-        return (g, 0.), t
+                gmax = 2. * (t_r * a_R + t_i*a_I)
+        return (gmax, 0.), fmax
 
 
 def test_firfilter():
@@ -89,11 +81,10 @@ def test_firfilter():
     print("optimal value", prob1.optim_value)
     assert prob1.status == 'optimal'
     #fmt = '{:f} {} {} {}'
-    #print(prob1.optim_var)
+    # print(prob1.optim_var)
     #print(fmt.format(prob1.optim_vale, prob1.solver_stats.num_iters))
 
-    #print 'Problem status:', flag
-    #if flag != 1:
+    # print 'Problem status:', flag
+    # if flag != 1:
     #    raise Exception('ELL Error')
     hv = prob1.optim_var
-
