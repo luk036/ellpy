@@ -59,25 +59,29 @@ w = np.linspace(0, np.pi, m)  # omega
 # A is the matrix used to compute the power spectrum
 # A(w,:) = [1 2*cos(w) 2*cos(2*w) ... 2*cos(N*w)]
 An = 2*np.cos(np.outer(w, np.arange(1, N)))
-A = np.hstack((np.ones((m, 1)), An))
+A = np.concatenate((np.ones((m, 1)), An), axis=1)
 
 # passband 0 <= w <= w_pass
-ind_p = np.nonzero(w <= wpass)[0]    # passband
+ind_p = np.where(w <= wpass)[0]    # passband
 Lp = 10**(-delta/20)
 Up = 10**(+delta/20)
 Ap = A[ind_p, :]
 
 # stopband (w_stop <= w)
-ind_s = np.nonzero(wstop <= w)[0]   # stopband
+ind_s = np.where(wstop <= w)[0]   # stopband
 Sp = 10**(delta2/20)
 As = A[ind_s, :]
 
 # remove redundant contraints
 # ind_nr = setdiff(1:m,ind_p)   # fullband less passband
 # ind_nr = setdiff(ind_nr, ind_s) # luk: for making parallel cut
-ind_nr = np.setdiff1d(np.arange(m), ind_p)
-ind_nr = np.setdiff1d(ind_nr, ind_s)
-Anr = A[ind_nr, :]
+# ind_nr = np.setdiff1d(np.arange(m), ind_p)
+# ind_nr = np.setdiff1d(ind_nr, ind_s)
+# Anr = A[ind_nr, :]
+ind_beg = ind_p[-1]
+ind_end = ind_s[0]
+Anr = A[range(ind_beg+1, ind_end), :]
+
 
 Lpsq = Lp**2
 Upsq = Up**2
@@ -86,7 +90,7 @@ Spsq = Sp**2
 # optimization
 # ********************************************************************
 
-## def test_lowpass():
+# def test_lowpass():
 if __name__ == "__main__":
     # tic = time.time()
 
@@ -123,7 +127,6 @@ if __name__ == "__main__":
     # toc
     # iter
 
-
     # *********************************************************************
     # plotting routines
     # *********************************************************************
@@ -143,7 +146,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(4, figsize=(4, 8))
     for h, style, color in zip((h_linear, h_min_hom, h_sp),
                                ('-', '-', '--'), ('k', 'r', 'c')):
-        #if feasible:
+        # if feasible:
         w, H = freqz(h)
         w, gd = group_delay((h, 1))
         w /= np.pi
@@ -155,7 +158,8 @@ if __name__ == "__main__":
     for ax in axs:
         ax.grid(True, color='0.5')
         ax.fill_between(freq[1:3], *ax.get_ylim(), color='#ffeeaa', zorder=1)
-    axs[0].set(xlim=[0, len(h_linear) - 1], ylabel='Amplitude', xlabel='Samples')
+    axs[0].set(xlim=[0, len(h_linear) - 1],
+               ylabel='Amplitude', xlabel='Samples')
     axs[1].legend(['Linear', 'Min-Hom', 'Our'], title='Phase')
     for ax, ylim in zip(axs[1:], ([0, 1.1], [-150, 10], [-60, 60])):
         ax.set(xlim=[0, 1], ylim=ylim, xlabel='Frequency')
@@ -164,4 +168,3 @@ if __name__ == "__main__":
     axs[3].set(ylabel='Group delay')
     plt.tight_layout()
     plt.show()
-

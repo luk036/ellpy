@@ -63,16 +63,16 @@ w = np.linspace(0, np.pi, m)  # omega
 # A is the matrix used to compute the power spectrum
 # A(w,:) = [1 2*cos(w) 2*cos(2*w) ... 2*cos(N*w)]
 An = 2*np.cos(np.outer(w, np.arange(1, N)))
-A = np.hstack((np.ones((m, 1)), An))
+A = np.concatenate((np.ones((m, 1)), An),axis=1)
 
 # passband 0 <= w <= w_pass
-ind_p = np.nonzero(w <= wpass)[0]    # passband
+ind_p = np.where(w <= wpass)[0]    # passband
 Lp = 10**(-delta/20)
 Up = 10**(+delta/20)
 Ap = A[ind_p, :]
 
 # stopband (w_stop <= w)
-ind_s = np.nonzero(wstop <= w)[0]   # stopband
+ind_s = np.where(wstop <= w)[0]   # stopband
 Sp = 10**(delta2/20)
 As = A[ind_s, :]
 
@@ -116,5 +116,5 @@ def run_lowpass(use_parallel, duration=0.000001):
 #     assert result == 568
 
 def test_lowpass():
-    result = run_lowpass(1)
-    assert result <= 573
+    result = run_lowpass(True)
+    assert result <= 415

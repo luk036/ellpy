@@ -55,41 +55,50 @@ class lowpass_oracle:
         # 3. stopband constraint
         N = self.As.shape[0]
         w = np.zeros(N)
+        fmax = float("-inf")
+        imax = -1
         i_As = self.i_As
         for k in chain(range(i_As, N), range(i_As)):
             # k += 1
             # if k == N:
             #     k = 0    # round robin
-            w[k] = self.As[k, :].dot(x)
-            if w[k] > Spsq:
+            v = self.As[k, :].dot(x)
+            if v > Spsq:
                 #f = v - Spsq
                 g = self.As[k, :]
-                #f = (w[k] - Spsq, w[k])
-                f = w[k] - Spsq
+                #f = (v - Spsq, v)
+                f = (v - Spsq, v)
                 self.i_As = k + 1
                 return (g, f), Spsq
 
-            if w[k] < 0:
+            if v < 0:
                 #f = v - Spsq
                 g = -self.As[k, :]
-                f = (-w[k], -w[k] + Spsq)
+                f = (-v, -v + Spsq)
                 self.i_As = k + 1
                 return (g, f), Spsq
+
+            if v > fmax:
+                fmax = v
+                imax = k
 
         # case 4,
         # 1. nonnegative-real constraint
         N = self.Anr.shape[0]
-        for k in range(N):
+        # for k in range(N):
+        i_Anr = self.i_Anr
+        for k in chain(range(i_Anr, N), range(i_Anr)):
             v = self.Anr[k, :].dot(x)
             if v < 0:
                 f = -v
                 g = -self.Anr[k, :]
-                #self.i_Anr = k
+                self.i_Anr = k
                 return (g, f), Spsq
 
         # Begin objective function
-        Spsq, imax = w.max(), w.argmax()  # update best so far Spsq
-        f = (0., w[imax])
+        # Spsq, imax = w.max(), w.argmax()  # update best so far Spsq
+        Spsq = fmax
+        f = (0., fmax)
         #f = 0
         g = self.As[imax, :]
         return (g, f), Spsq
