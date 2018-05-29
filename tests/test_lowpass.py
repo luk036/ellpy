@@ -100,7 +100,7 @@ def run_lowpass(use_parallel, duration=0.000001):
     options = Options()
     options.max_it = 20000
     options.tol = 1e-4
-    r, Spsq_new, num_iters, feasible, status = cutting_plane_dc(
+    _, _, num_iters, feasible, _ = cutting_plane_dc(
         P, E, Spsq, options)
     assert feasible
     time.sleep(duration)

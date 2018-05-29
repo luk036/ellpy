@@ -87,4 +87,4 @@ def test_firfilter():
     # print 'Problem status:', flag
     # if flag != 1:
     #    raise Exception('ELL Error')
-    hv = prob1.optim_var
+    _ = prob1.optim_var

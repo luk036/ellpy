@@ -54,7 +54,7 @@ class lowpass_oracle:
         # case 3,
         # 3. stopband constraint
         N = self.As.shape[0]
-        w = np.zeros(N)
+        # w = np.zeros(N)
         fmax = float("-inf")
         imax = -1
         i_As = self.i_As

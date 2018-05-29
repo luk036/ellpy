@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import numpy as np
 import time
-from ..oracles.profit_oracle import *
+from ..oracles.profit_oracle import profit_oracle, profit_q_oracle, profit_rb_oracle
 from ..cutting_plane import cutting_plane_dc, cutting_plane_q
 from ..ell import ell
 

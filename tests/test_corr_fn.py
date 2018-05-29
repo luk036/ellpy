@@ -8,7 +8,6 @@ import numpy as np
 from scipy import linalg
 from scipy.interpolate import BSpline
 # from lsq_corr_ell import lsq_corr_poly, lsq_corr_bspline
-from scipy.interpolate import BSpline
 from ..cutting_plane import cutting_plane_feas, bsearch, bsearch_adaptor
 from ..ell import ell
 from ..oracles.qmi_oracle import qmi_oracle

@@ -22,12 +22,7 @@ class cholutil:
     @cython.boundscheck(False) # turn off bounds-checking
     @cython.wraparound(False)  # turn off negative index wrapping
     def factor(self, getA):
-        '''
-         If $A$ is positive definite, then $p$ is zero.
-         If it is not, then $p$ is a positive integer,
-         such that $v = R^{-1} e_p$ is a certificate vector
-         to make $v'*A[:p,:p]*v < 0$
-        '''
+        '''lazy evaluation of A'''
         # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = np.zeros((N, N))
         # self.R = np.zeros((N, N))
         cdef int N = len(self.R)

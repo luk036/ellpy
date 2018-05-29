@@ -80,7 +80,7 @@ def run_optscaling(duration=0.000001):
     E = ell(1.5*t, x0)
     P = optscaling_oracle(G)
     xb, fb, niter, feasible, status = cutting_plane_dc(P, E, 1.001*t)
-
+    time.sleep(duration)
     fmt = '{:f} {} {} {}'
     print(np.exp(xb))
     print(fmt.format(np.exp(fb), niter, feasible, status))

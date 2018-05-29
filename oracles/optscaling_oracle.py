@@ -8,16 +8,14 @@ def constr(G, e, x):
     u, v = e
     if u <= v:
         return x[0] - G[u][v]['cost']
-    else:
-        return G[u][v]['cost'] - x[1]
+    return G[u][v]['cost'] - x[1]
 
 
 def pconstr(G, e, x):
     u, v = e
     if u <= v:
         return np.array([1., 0.])
-    else:
-        return np.array([0., -1.])
+    return np.array([0., -1.])
 
 
 class optscaling_oracle:

@@ -92,10 +92,11 @@ class Problem:
         cls.REGISTERED_SOLVE_METHODS[name] = func
 
     def _solve(self,
-               t,
-               solver=None,
-               warm_start=False,
-               verbose=False, **kwargs):
+               t
+               # solver=None,
+               # warm_start=False,
+               # verbose=False, **kwargs
+               ):
         """Solves a DCP compliant optimization problem.
 
         Saves the values of primal and dual variables in the variable

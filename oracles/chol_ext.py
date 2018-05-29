@@ -35,13 +35,7 @@ class chol_ext:
             R[i, i] = math.sqrt(d)
 
     def factor(self, getA):
-        '''
-         (lazy evalution of A)
-         If $A$ is positive definite, then $p$ is zero.
-         If it is not, then $p$ is a positive integer,
-         such that $v = R^{-1} e_p$ is a certificate vector
-         to make $v'*A[:p,:p]*v < 0$
-        '''
+        '''(lazy evalution of A)'''
         # N = len(A)
         # self.p = 0
         self.p = 0
