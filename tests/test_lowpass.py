@@ -63,7 +63,7 @@ w = np.linspace(0, np.pi, m)  # omega
 # A is the matrix used to compute the power spectrum
 # A(w,:) = [1 2*cos(w) 2*cos(2*w) ... 2*cos(N*w)]
 An = 2*np.cos(np.outer(w, np.arange(1, N)))
-A = np.concatenate((np.ones((m, 1)), An),axis=1)
+A = np.concatenate((np.ones((m, 1)), An), axis=1)
 
 # passband 0 <= w <= w_pass
 ind_p = np.where(w <= wpass)[0]    # passband

@@ -61,6 +61,7 @@ Y = np.cov(Ys, bias=True)
 # lab.contourf(xx,yy,np.reshape( Ys[:,7],(ny, nx) ), cmap='Greens')
 # plt.show()
 
+
 class bsp_oracle:
     def __init__(self, F, F0):
         self.F0 = F0
@@ -174,4 +175,3 @@ def test_corr_fn():
 # plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 # plt.legend(loc='best')
 # plt.show()
-

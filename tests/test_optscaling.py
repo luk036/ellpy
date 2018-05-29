@@ -71,6 +71,8 @@ cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))
 
 # if __name__ == "__main__":
+
+
 def run_optscaling(duration=0.000001):
     # mid = (cmax + cmin)/2.
     x0 = np.array([cmax, cmin])
@@ -84,6 +86,7 @@ def run_optscaling(duration=0.000001):
     print(fmt.format(np.exp(fb), niter, feasible, status))
     assert feasible
     return niter
+
 
 def run_optscaling2(duration=0.000001):
     # mid = (cmax + cmin)/2.
@@ -104,6 +107,7 @@ def run_optscaling2(duration=0.000001):
 def test_optscaling(benchmark):
     result = benchmark(run_optscaling)
     assert result == 26
+
 
 def test_optscaling2(benchmark):
     result = benchmark(run_optscaling2)
