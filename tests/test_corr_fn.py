@@ -95,7 +95,7 @@ def lsq_corr_poly(Y, s, m):
     D = np.ones((n, n))
     Sig = [D]
     for _ in range(m - 1):
-        D = np.multiply(D, D1)
+        D *= D1
         Sig += [D]
     Sig.reverse()
 
