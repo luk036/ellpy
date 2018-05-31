@@ -50,7 +50,6 @@ def run_lmi(oracle, duration=0.000001):
     print(xb)
     assert feasible
     time.sleep(duration)
-    # assert niter == 115
     return niter
 
 

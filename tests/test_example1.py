@@ -23,7 +23,6 @@ def my_oracle(z, t):
     return (-1.*np.array([1., 1.]), fj), t
 
 
-# if __name__ == "__main__":
 def test_example1():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
@@ -34,4 +33,3 @@ def test_example1():
     fmt = '{:f} {} {} {}'
     print(fmt.format(fb, niter, feasible, status))
     print(xb)
-    #assert niter == 115

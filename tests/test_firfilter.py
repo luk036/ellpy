@@ -71,7 +71,6 @@ def test_firfilter():
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
     P = my_oracle()
-    #hb, fb, niter, feasible, status = cutting_plane_dc(P, E, 10.)
     prob1 = Problem(E, P)
     prob1.solve(100.)
 
@@ -80,11 +79,3 @@ def test_firfilter():
         raise Exception('ELL Error')
     print("optimal value", prob1.optim_value)
     assert prob1.status == 'optimal'
-    #fmt = '{:f} {} {} {}'
-    # print(prob1.optim_var)
-    #print(fmt.format(prob1.optim_vale, prob1.solver_stats.num_iters))
-
-    # print 'Problem status:', flag
-    # if flag != 1:
-    #    raise Exception('ELL Error')
-    _ = prob1.optim_var

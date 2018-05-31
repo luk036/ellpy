@@ -61,7 +61,6 @@ class ell:
         rho, sigma, delta = params
         self._xc -= (self.kappa * rho / tau) * Qg
         self.Q -= (sigma / tsq) * np.outer(Qg, Qg)
-        # self.Q *= delta
         self.kappa *= delta
         return status, tau
 
@@ -75,10 +74,9 @@ class ell:
 
     def calc_dc(self, alpha):
         '''deep cut'''
-        # if alpha == 0.:
-        #     return self.calc_cc()
+        if alpha == 0.:
+            return self.calc_cc()
         n = len(self._xc)
-        # status, rho, sigma, delta = 0, 0., 0., 0.
         status = 0
         params = None
         if alpha > 1.:
@@ -124,7 +122,6 @@ class ell:
         if a1 >= 1. or not self.use_parallel:
             return self.calc_dc(a0)
         n = len(self._xc)
-        # status, rho, sigma, delta = 0, 0., 0., 0.
         status = 0
         params = None
 

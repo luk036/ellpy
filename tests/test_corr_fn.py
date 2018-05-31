@@ -2,12 +2,9 @@
 from __future__ import print_function
 
 from pprint import pprint
-# import matplotlib.pyplot as plt
-# import matplotlib.pylab as lab
 import numpy as np
 from scipy import linalg
 from scipy.interpolate import BSpline
-# from lsq_corr_ell import lsq_corr_poly, lsq_corr_bspline
 from ..cutting_plane import cutting_plane_feas, bsearch, bsearch_adaptor
 from ..ell import ell
 from ..oracles.qmi_oracle import qmi_oracle
@@ -28,7 +25,6 @@ np.random.seed(5)
 sx = np.linspace(0, s_end[0], nx)
 sy = np.linspace(0, s_end[1], ny)
 xx, yy = np.meshgrid(sx, sy)
-# s = zip(xx.flatten(), yy.flatten())
 s = np.vstack([xx.flatten(), yy.flatten()]).T
 
 Sig = np.ones((n, n))
@@ -41,24 +37,12 @@ for i in range(n):
 A = np.linalg.cholesky(Sig)
 Ys = np.zeros((n, N))
 
-
-# ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
     y = A.dot(x) + tau*np.random.randn(n)
     Ys[:, k] = y
 
 Y = np.cov(Ys, bias=True)
-
-# plt.subplot(2,2,1)
-# lab.contourf(xx,yy,np.reshape( Ys[:,1],(ny, nx) ), cmap='Greens')
-# plt.subplot(2,2,2)
-# lab.contourf(xx,yy,np.reshape( Ys[:,3],(ny, nx) ), cmap='Greens')
-# plt.subplot(2,2,3)
-# lab.contourf(xx,yy,np.reshape( Ys[:,5],(ny, nx) ), cmap='Greens')
-# plt.subplot(2,2,4)
-# lab.contourf(xx,yy,np.reshape( Ys[:,7],(ny, nx) ), cmap='Greens')
-# plt.show()
 
 
 class bsp_oracle:
@@ -99,7 +83,6 @@ def lsq_corr_poly(Y, s, m):
         Sig += [D]
     Sig.reverse()
 
-    # P = mtx_norm_oracle(Sig, Y, a)
     Q = qmi_oracle(Sig, Y)
     E = ell(10., a)
     P = bsearch_adaptor(Q, E)
@@ -112,7 +95,6 @@ def lsq_corr_poly(Y, s, m):
 
     a = P.x_best
     return np.poly1d(a)
-#  return prob.is_dcp()
 
 
 def lsq_corr_bspline(Y, s, m):
@@ -132,7 +114,6 @@ def lsq_corr_bspline(Y, s, m):
     for i in range(m):
         Sig += [spls[i](D)]
     c = np.zeros(m)
-    # P = bspline_oracle(Sig, Y, c)
     normY = np.linalg.norm(Y, 'fro')
 
     Q = bsp_oracle(Sig, Y)
@@ -152,7 +133,6 @@ def lsq_corr_bspline(Y, s, m):
 
 def construct_distance_matrix(s):
     n = len(s)
-    # c = cvx.Variable(m)
     D = np.zeros((n, n))
     for i in range(n):
         for j in range(i + 1, n):
@@ -166,11 +146,3 @@ def construct_distance_matrix(s):
 def test_corr_fn():
     lsq_corr_bspline(Y, s, 4)
     lsq_corr_poly(Y, s, 4)
-
-# h = s[-1] - s[0]
-# d = np.sqrt(np.dot(h, h))
-# xs = np.linspace(0, d, 100)
-# plt.plot(xs, spl(xs), 'r', label='BSpline')
-# plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
-# plt.legend(loc='best')
-# plt.show()

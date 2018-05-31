@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-# import matplotlib.pyplot as plt
 import time
 import numpy as np
 import networkx as nx
@@ -58,11 +57,9 @@ y = [i for i in vdcorput(T, ybase)]
 pos = zip(x, y)
 G = formGraph(T, pos, 1.6, seed=5)
 # Add a sink, connect all spareTSV to it.
-## pos = pos + [(1.5,.5)]
 for u, v in G.edges():
     h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
     G[u][v]['cost'] = np.sqrt(np.dot(h, h))
-    #G[u][v]['cost'] = h[0] + h[1]
 
 for u, v in G.edges():
     G[u][v]['cost'] = np.log(abs(G[u][v]['cost']))
@@ -70,11 +67,8 @@ for u, v in G.edges():
 cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))
 
-# if __name__ == "__main__":
-
 
 def run_optscaling(duration=0.000001):
-    # mid = (cmax + cmin)/2.
     x0 = np.array([cmax, cmin])
     t = cmax - cmin
     E = ell(1.5*t, x0)
@@ -89,17 +83,12 @@ def run_optscaling(duration=0.000001):
 
 
 def run_optscaling2(duration=0.000001):
-    # mid = (cmax + cmin)/2.
     t = cmax - cmin
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
-    # xb, fb, niter, feasible, status = cutting_plane_dc(P, I, 1.1*t)
     P = bsearch_adaptor(Q, I)
     fb, niter, feasible = bsearch(P, [0., 1.001*t])
     time.sleep(duration)
-    fmt = '{:f} {} {}'
-    # print(np.exp(xb))
-    print(fmt.format(np.exp(fb), niter, feasible))
     assert feasible
     return niter
 

@@ -22,7 +22,6 @@ def my_oracle2(z):
     return None, True
 
 
-# if __name__ == "__main__":
 def test_example2():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)

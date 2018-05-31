@@ -23,12 +23,9 @@ def benchmark_profit(duration=0.000001):
     v = np.array([v1, v2])
     y0 = np.array([0., 0.])  # initial x0
     r = np.array([100., 100.])  # initial ellipsoid (sphere)
-    # fmt = '{:f} {} {} {}'
 
     E = ell(r, y0)
     P = profit_oracle(params, a, v)
-    # yb1, fb, niter, feasible, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, feasible, status))
     _, _, niter, feasible, _ = \
         cutting_plane_dc(P, E, 0.)
     assert feasible
@@ -41,26 +38,18 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_rb_oracle(params, a, v, (ui, e1, e2, e3))
-    # yb1, fb, niter, feasible, status = cutting_plane_dc(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, feasible, status))
     _, _, niter, feasible, _ = cutting_plane_dc(P, E, 0.)
     assert feasible
     assert niter == 42
 
     E = ell(r, y0)
     P = profit_q_oracle(params, a, v)
-    # yb1, fb, niter, feasible, status = cutting_plane_q(P, E, 0. , 200, 1e-4)
-    # print(fmt.format(fb, iter, feasible, status))
     _, _, niter, feasible, _ = cutting_plane_q(P, E, 0.)
     assert feasible
     assert niter == 28
     time.sleep(duration)
     return niter
 
-
-# def test_profit(benchmark):
-#     result = benchmark(benchmark_profit)
-#     assert result == 28
 
 def test_profit():
     result = benchmark_profit()

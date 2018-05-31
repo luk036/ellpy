@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# import numpy as np  # Can move to below???
 
 
 class Options:
