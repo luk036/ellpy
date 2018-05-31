@@ -8,16 +8,14 @@ def constr3(G, e, x, t):
     u, v = e
     if u <= v:
         return x + t - G[u][v]['cost']
-    else:
-        return G[u][v]['cost'] - x
+    return G[u][v]['cost'] - x
 
 
 def pconstr3(G, e, x, t):
     u, v = e
     if u <= v:
         return 1.
-    else:
-        return -1.
+    return -1.
 
 
 class optscaling3_oracle:
