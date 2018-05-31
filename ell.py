@@ -75,19 +75,45 @@ class ell:
 
     def calc_dc(self, alpha):
         '''deep cut'''
-        if alpha == 0.:
-            return self.calc_cc()
+        # if alpha == 0.:
+        #     return self.calc_cc()
         n = len(self._xc)
         # status, rho, sigma, delta = 0, 0., 0., 0.
+        status = 0
+        params = None
         if alpha > 1.:
-            return 1, None  # no sol'n
+            status = 1  # no sol'n
         elif n * alpha < -1.:
-            return 3, None  # no effect
+            status = 3  # no effect
         else:
             rho = (1. + n * alpha) / (n + 1)
             sigma = 2. * rho / (1. + alpha)
             delta = self.c1 * (1. - alpha * alpha)
-        return 0, (rho, sigma, delta)
+            params = (rho, sigma, delta)
+        return status, params
+
+    def calc_ll_cc(self, a1, n):
+        """Situation when feasible cut."""
+        asq1 = a1**2
+        xi = math.sqrt((n*asq1)**2 - 4.0*asq1 + 4.0)
+        sigma = (n + (2. - xi)/asq1)/(n + 1)
+        rho = a1*sigma/2.
+        delta = self.c1*(1 - (asq1 - xi/n)/2.)
+        params = (rho, sigma, delta)
+        return params
+
+    def calc_ll_general(self, a0, a1, n):
+        asum = a0 + a1
+        asq0, asq1 = a0*a0, a1*a1
+        asqdiff = asq1 - asq0
+        xi = math.sqrt(4. * (1. - asq0) * (
+            1. - asq1) + (n*asqdiff)**2)
+        sigma = (n + (2. * (1. + a0*a1 - xi/2.)
+                      / (asum**2) )) / (n + 1)
+        rho = asum * sigma / 2.
+        delta = self.c1 * (1. - (asq0 + asq1 - xi/n) / 2.)
+        params = (rho, sigma, delta)
+        return params
 
     def calc_ll(self, alpha):
         '''parallel or deep cut'''
@@ -99,23 +125,18 @@ class ell:
             return self.calc_dc(a0)
         n = len(self._xc)
         # status, rho, sigma, delta = 0, 0., 0., 0.
-        aprod = a0 * a1
+        status = 0
+        params = None
+
         if a0 > a1:
-            return 1, None  # no sol'n
-        elif n * aprod < -1.:
-            return 3, None  # no effect
+            status = 1  # no sol'n
+        elif n*a0*a1 < -1.:
+            status = 3  # no effect
+        elif a0 == 0:
+            params = self.calc_ll_cc(a1, n)
         else:
-            asq = alpha * alpha
-            asum = a0 + a1
-            asq0, asq1 = asq
-            asqdiff = asq1 - asq0
-            xi = math.sqrt(4. * (1. - asq0) * (
-                1. - asq1) + (n * asqdiff)**2)
-            sigma = (n + (2. * (1. + aprod - xi / 2.)
-                          / (asum * asum))) / (n + 1)
-            rho = asum * sigma / 2.
-            delta = self.c1 * (1. - (asq0 + asq1 - xi / n) / 2.)
-        return 0, (rho, sigma, delta)
+            params = self.calc_ll_general(a0, a1, n)
+        return status, params
 
     def update(self, cut):
         return self.update_core(self.calc_ll, cut)
@@ -162,6 +183,7 @@ class ell1d:
             return 1, tau  # no sol'n
         if beta < -tau:
             return 3, tau  # no effect
+
         bound = self._xc - beta / g
         if g > 0.:
             u = bound
