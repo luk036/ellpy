@@ -51,8 +51,9 @@ class ell:
         tau = np.sqrt(self.kappa * tsq)
         if tau < 0.00000001:
             return 2, tau
+        status = 0
         if beta == 0:
-            status, params = self.calc_cc()
+            params = self.calc_cc()
         else:
             alpha = beta / tau
             status, params = calc_ell(alpha)
@@ -70,12 +71,12 @@ class ell:
         rho = 1. / (n + 1)
         sigma = 2. * rho
         delta = self.c1
-        return 0, (rho, sigma, delta)
+        return rho, sigma, delta
 
     def calc_dc(self, alpha):
         '''deep cut'''
         if alpha == 0.:
-            return self.calc_cc()
+            return 0, self.calc_cc()
         n = len(self._xc)
         status = 0
         params = None
@@ -93,7 +94,7 @@ class ell:
     def calc_ll_cc(self, a1, n):
         """Situation when feasible cut."""
         asq1 = a1**2
-        xi = math.sqrt((n*asq1)**2 - 4.0*asq1 + 4.0)
+        xi = math.sqrt((n*asq1)**2 - 4.*asq1 + 4.)
         sigma = (n + (2. - xi)/asq1)/(n + 1)
         rho = a1*sigma/2.
         delta = self.c1*(1 - (asq1 - xi/n)/2.)
