@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import networkx as nx
 from .network3_oracle import network3_oracle
-import numpy as np
 
 
 def constr3(G, e, x, t):

@@ -1,5 +1,4 @@
-from cutting_plane import cutting_plane_dc, cutting_plane_q, Options
-import numpy as np
+from cutting_plane import cutting_plane_dc, Options
 
 
 class Problem:

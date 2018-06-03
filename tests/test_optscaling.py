@@ -87,7 +87,7 @@ def run_optscaling2(duration=0.000001):
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
     P = bsearch_adaptor(Q, I)
-    fb, niter, feasible = bsearch(P, [0., 1.001*t])
+    _, niter, feasible = bsearch(P, [0., 1.001*t])
     time.sleep(duration)
     assert feasible
     return niter

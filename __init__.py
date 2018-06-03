@@ -14,4 +14,4 @@ from ellpy.ell import ell
 from ellpy.problem import Problem
 # from ellpy.lsq_corr_ell import lsq_corr_poly, lsq_corr_bspline
 
-__all__ = ["cutting_plane", "ell", "problem", "corr_ell"]
+__all__ = ["cutting_plane", "ell", "problem"]

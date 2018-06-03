@@ -2,8 +2,6 @@
 """
 Negative cycle detection for weighed graphs.
 """
-import networkx as nx
-
 
 def default_get_weight(G, e):
     u, v = e
@@ -22,7 +20,7 @@ class negCycleFinder:
         """Find a cycle on policy graph
 
         Arguments:
-            G {NetworkX graph} 
+            G {NetworkX graph}
             pred {dictionary} -- policy graph
 
         Returns:

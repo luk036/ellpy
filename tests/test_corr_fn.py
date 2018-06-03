@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
-from pprint import pprint
 import numpy as np
-from scipy import linalg
 from scipy.interpolate import BSpline
-from ..cutting_plane import cutting_plane_feas, bsearch, bsearch_adaptor
+from ..cutting_plane import bsearch, bsearch_adaptor
 from ..ell import ell
 from ..oracles.qmi_oracle import qmi_oracle
 

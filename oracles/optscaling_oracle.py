@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import networkx as nx
 from .network_oracle import network_oracle
 import numpy as np
 

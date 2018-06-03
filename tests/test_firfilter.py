@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import numpy as np
 # import cvxpy as cvx
-from cutting_plane import cutting_plane_dc
 from ell import ell
 from problem import Problem
 

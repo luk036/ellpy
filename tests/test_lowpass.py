@@ -8,7 +8,7 @@ import numpy as np
 #from scipy.signal import remez, minimum_phase, freqz, group_delay
 from ..cutting_plane import cutting_plane_dc, Options
 from ..ell import ell
-from .spectral_fact import spectral_fact
+# from .spectral_fact import spectral_fact
 # from problem import Problem
 from .lowpass_oracle import lowpass_oracle
 
