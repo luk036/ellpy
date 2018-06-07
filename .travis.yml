@@ -1,20 +1,86 @@
+# After changing this file, check it on:
+#   http://lint.travis-ci.org/
+#
+sudo: false
+
 language: python
 
-python:
-  - "2.7"
-  - "3.6"
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+matrix:
+  include:
+    - os: linux
+      python: 2.7
+      env:
+      - OPTIONAL_DEPS=1
+      - BUILD_DOCS=0
+      - DEPLOY_DOCS=0
+    - os: linux
+      python: 2.7
+      env:
+      - OPTIONAL_DEPS=1
+      - MINIMUM_REQUIREMENTS=1
+      - REPORT_COVERAGE=1
+    - os: linux
+      python: 2.7
+      env:
+      - OPTIONAL_DEPS=1
+      - PIP_FLAGS="--pre"
+    - os: linux
+      python: 3.6
+      env: OPTIONAL_DEPS=1
+    - os: linux
+      python: 3.6
+      env:
+      - OPTIONAL_DEPS=1
+      - MINIMUM_REQUIREMENTS=1
+    - os: osx
+      osx_image: xcode7.3
+      language: generic
+      env:
+      - TRAVIS_PYTHON_VERSION=3.6.0
+      - OPTIONAL_DEPS=1
+      - OSX_PKG_ENV=miniconda
+    - os: osx
+      language: generic
+      env: TRAVIS_PYTHON_VERSION=3.6
+    - python: 2.7
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+
+before_install:
+  # prepare the system to install prerequisites or dependencies
+  - source tools/travis/before_install.sh
+  - uname -a
+  - printenv
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      source tools/travis/osx_install.sh;
+    else
+      source tools/travis/linux_install.sh;
+    fi
 
 install:
-  - pip install networkx scipy
-  - pip install codecov
-  - pip install pytest pytest-cov pytest-benchmark
+  # install required packages
+  - pip install --upgrade pip
+  - pip install --retries 3 ${PIP_FLAGS} -r requirements.txt
+  - if [[ "${OPTIONAL_DEPS}" == 1 ]]; then
+      pip install --retries 3 ${PIP_FLAGS} -r requirements/extras.txt;
+    fi
+  - printenv PWD
+  # install pgpy
+  - pip install .
+  # show what's installed
+  - python --version
+  - pip list
 
-# command to run tests
 script:
-  - python -m pytest --cov=./
+  - pytest --cov=./
 
 after_success:
-  - codecov
+  - codecov;
 
 notifications:
   email: false
