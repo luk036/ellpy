@@ -191,7 +191,7 @@ EllPy is a Python package for the creation, manipulation, and
 study of the structure, dynamics, and functions of projective geometry.
 
 """
-# license = 'BSD'
+license = 'BSD'
 authors = {'luk036': ('Wai-Shing Luk', 'luk036@gmail.com')}
 maintainer = "EllPy Developers"
 maintainer_email = "ellpy-discuss@googlegroups.com"
