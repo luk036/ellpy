@@ -1,7 +1,6 @@
 #! /usr/bin/env python
-""" 
+"""
  Unittests for the CSD module
- 
 """
 
 import csd

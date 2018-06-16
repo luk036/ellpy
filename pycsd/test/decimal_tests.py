@@ -1,7 +1,6 @@
 #! /usr/bin/env python
-""" 
+"""
  Unittests for the CSD module
- 
 """
 
 import sys
@@ -10,7 +9,7 @@ import csd
 # print dir(csd)
 import unittest
 
-good_values_dict = { 32.5 : '+0000.+' } 
+good_values_dict = { 32.5 : '+0000.+' }
 class test__integer_conversion( unittest.TestCase ):
 
     def testToCSD(self):

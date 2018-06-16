@@ -7,7 +7,7 @@ You can install ellpy with
 
 python setup.py install
 """
-from glob import glob
+# from glob import glob
 import os
 import sys
 if os.path.exists('MANIFEST'):

@@ -29,7 +29,7 @@ def is_proper_csd(csd_num):
 def cycle_bits( i ) :
 
     global indent_
-    
+
     indent_ += 2
     
     for ch in ( '0', '-', '+' ):

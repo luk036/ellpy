@@ -30,7 +30,7 @@ def to_csd( num, places=0, debug=False ):
         n = 0
     else :
         n = ceil( log( fabs(num) * 3.0 / 2.0 , 2 ) )
-        
+
     csd_digits = []
 
     if debug: print( "to %d.%d format" % ( n, places ))
@@ -53,7 +53,7 @@ def to_csd( num, places=0, debug=False ):
         # convert the number
         if previous_non_zero:
             csd_digits.extend( ['0'] )
-            prev_non_zero = False
+            # prev_non_zero = False
             
         elif remainder > limit :
             csd_digits.extend( ['+'] )
@@ -102,17 +102,17 @@ def to_decimal( csd_str, debug=False ):
     msb_power = len(m)-1
     
     num = 0.0
-    for ii in range( len(csd_str) ):
+    for ii, c in enumerate( csd_str ):
 
         power_of_two = 2.0**(msb_power-ii)
         
-        if csd_str[ii] == '+' :
+        if c == '+' :
             num += power_of_two
-        elif csd_str[ii] == '-' :
+        elif c == '-' :
             num -= power_of_two
 
         if debug:
             print( '  "%s" (%d.%d); 2**%d = %d; Num=%f' % (
-                csd_str[ii], len(m), len(n), msb_power-ii, power_of_two, num))
+                c, len(m), len(n), msb_power-ii, power_of_two, num))
 
     return num

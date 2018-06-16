@@ -1,7 +1,6 @@
 #! /usr/bin/env python
-""" 
+"""
  Unittests for the CSD module
- 
 """
 
 import csd
@@ -24,7 +23,7 @@ class tests__decimals( unittest.TestCase ):
         """ Check the conversion from CSD with a binary point to decimal. """
 
         for key in good_values_dict.keys():
-            csd_str = good_values_dict[key] 
+            csd_str = good_values_dict[key]
             value = csd.to_decimal(csd_str)
             self.assertEqual(value, key )
 

@@ -26,7 +26,7 @@ then
     # Decrypt the deploy-key with the Travis-CI key
     openssl aes-256-cbc -K $encrypted_64abb7a9cf51_key -iv $encrypted_64abb7a9cf51_iv -in tools/travis/deploy-key.enc -out deploy-key -d
     chmod 600 deploy-key
-    eval `ssh-agent -s`
+    eval $(ssh-agent -s)
     ssh-add deploy-key
 
     # Push the latest docs to the networkx/documentation repo (gh-pages branch)

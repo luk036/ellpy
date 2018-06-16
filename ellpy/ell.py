@@ -49,8 +49,8 @@ class ell:
         if tsq <= 0.:
             return 4, 0.
         tau = np.sqrt(self.kappa * tsq)
-        if tau < 0.00000001:
-            return 2, tau
+        # if tau < 0.00000001:
+        #     return 2, tau
         status = 0
         if beta == 0:
             params = self.calc_cc()
