@@ -100,4 +100,4 @@ def test_optscaling(benchmark):
 
 def test_optscaling2(benchmark):
     result = benchmark(run_optscaling2)
-    assert result == 13
+    assert result == 27

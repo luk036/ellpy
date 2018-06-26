@@ -87,7 +87,7 @@ def lsq_corr_poly(Y, s, m):
 
     print(niter, feasible)
     assert feasible
-    assert niter == 27
+    assert niter == 40
 
     a = P.x_best
     return np.poly1d(a)
@@ -120,7 +120,7 @@ def lsq_corr_bspline(Y, s, m):
 
     print(niter, feasible)
     assert feasible
-    assert niter == 27
+    assert niter == 40
 
     c = P.x_best
 

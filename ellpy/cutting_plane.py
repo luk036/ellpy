@@ -3,7 +3,7 @@
 
 class Options:
     max_it = 2000
-    tol = 1e-4
+    tol = 1e-8
 
 
 def bsearch(evaluate, I, options=Options()):
@@ -64,10 +64,10 @@ def cutting_plane_feas(evaluate, S, options=Options()):
         cut, feasible = evaluate(S.xc)
         if feasible:  # feasible sol'n obtained
             break
-        status, tau = S.update(cut)
+        status, tsq = S.update(cut)
         if status != 0:
             break
-        if tau < options.tol:
+        if tsq < options.tol:
             status = 2
             break
     return S.xc, niter+1, feasible, status
@@ -95,10 +95,10 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
             feasible = True
             t = t1
             x_best = S.xc
-        status, tau = S.update(cut)
+        status, tsq = S.update(cut)
         if status == 1:
             break
-        if tau < options.tol:
+        if tsq < options.tol:
             status = 2
             break
     return x_best, t, niter+1, feasible, status
@@ -136,10 +136,10 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
             feasible = True
             t = t1
             x_best = x0.copy()
-        status, tau = S.update((g, h))
+        status, tsq = S.update((g, h))
         if status == 1:
             break
-        if tau < options.tol:
+        if tsq < options.tol:
             status = 2
             break
     return x_best, t, niter+1, feasible, status

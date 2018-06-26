@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Negative cycle detection for weighed graphs.
+1. Support Lazy evalution
 """
 
 def default_get_weight(G, e):
