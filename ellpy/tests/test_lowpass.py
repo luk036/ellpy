@@ -99,7 +99,7 @@ def run_lowpass(use_parallel, duration=0.000001):
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
     options = Options()
     options.max_it = 20000
-    options.tol = 1e-4
+    options.tol = 1e-8
     _, _, num_iters, feasible, _ = cutting_plane_dc(
         P, E, Spsq, options)
     assert feasible
@@ -109,7 +109,7 @@ def run_lowpass(use_parallel, duration=0.000001):
 
 # def test_lowpass0(benchmark):
 #     result = benchmark(run_lowpass, False)
-#     assert result == 13325
+#     assert result == 13442
 
 # def test_lowpass1(benchmark):
 #     result = benchmark(run_lowpass, True)
@@ -117,4 +117,4 @@ def run_lowpass(use_parallel, duration=0.000001):
 
 def test_lowpass():
     result = run_lowpass(True)
-    assert result <= 415
+    assert result <= 1359
