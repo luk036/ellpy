@@ -119,8 +119,9 @@ class ell:
 
     def calc_cc(self, tsq):
         '''central cut'''
-        sigma = 2. / (self._n + 1)
-        rho = sigma * math.sqrt(tsq) / 2
+        np1 = self._n + 1
+        sigma = 2. / np1
+        rho = math.sqrt(tsq) / np1
         delta = self.c1
         return rho, sigma, delta
 
