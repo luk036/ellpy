@@ -9,7 +9,7 @@ class ell:
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
         self._n = n = len(x)
-        self.c1 = float(n * n) / (n * n - 1)
+        self.c1 = float(n*n) / (n*n - 1)
         self._xc = x.copy()
         if np.isscalar(val):
             self.Q = np.eye(n)
@@ -60,10 +60,6 @@ class ell:
         tsq = self.kappa * omega
         if tsq <= 0.:
             return 4, 0.
-        # tau = np.sqrt(self.kappa * tsq)
-        # if tau < 0.00000001:
-        #     return 2, tau
-        # alpha = beta / tau
         status, params = calc_ell(beta, tsq)
         if status != 0:
             return status, tsq
@@ -71,7 +67,6 @@ class ell:
         self._xc -= (rho / omega) * Qg
         self.Q -= (sigma / omega) * np.outer(Qg, Qg)
         self.kappa *= delta
-        # print(np.linalg.det(self.Q), self.kappa)
         return status, tsq
 
     def calc_ll(self, beta, tsq):
@@ -79,36 +74,36 @@ class ell:
         if np.isscalar(beta):
             return self.calc_dc(beta, tsq)
 
-        h0 = beta[0]
+        b0 = beta[0]
         if len(beta) < 2:
-            return self.calc_dc(h0, tsq)
-        return self.calc_ll_core(h0, beta[1], tsq)
+            return self.calc_dc(b0, tsq)
+        return self.calc_ll_core(b0, beta[1], tsq)
 
-    def calc_ll_core(self, h0, h1, tsq):
-        t1 = tsq - h1*h1
+    def calc_ll_core(self, b0, b1, tsq):
+        t1 = tsq - b1*b1
         if t1 < 0. or not self.use_parallel:
-            return self.calc_dc(h0, tsq)
+            return self.calc_dc(b0, tsq)
 
-        l = h1 - h0
+        l = b1 - b0
         if l < 0:
             return 1, None  # no sol'n
 
         n = self._n
-        p = h0*h1
+        p = b0*b1
         if n*p < -tsq:
             return 3, None  # no effect
 
         params = None
 
         # parallel cut
-        if h0 == 0:
-            params = self.calc_ll_cc(h1, t1, tsq)
+        if b0 == 0:
+            params = self.calc_ll_cc(b1, t1, tsq)
         else:
-            t0 = tsq - h0*h0
-            h = (h0 + h1)/2
-            xi = math.sqrt(t0*t1 + (n*h*l)**2)
-            sigma = (n + (tsq - p - xi)/(2*h*h)) / (n + 1)
-            rho = sigma * h
+            t0 = tsq - b0*b0
+            bav = (b0 + b1)/2
+            xi = math.sqrt(t0*t1 + (n*bav*l)**2)
+            sigma = (n + (tsq - p - xi)/(2*bav*bav)) / (n + 1)
+            rho = sigma * bav
             delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
             params = rho, sigma, delta
 
@@ -125,34 +120,34 @@ class ell:
         delta = self.c1
         return rho, sigma, delta
 
-    def calc_dc(self, h0, tsq):
+    def calc_dc(self, b0, tsq):
         '''deep cut'''
-        if h0 == 0.:
+        if b0 == 0.:
             return 0, self.calc_cc(tsq)
 
-        t0 = tsq - h0*h0
+        t0 = tsq - b0*b0
         if t0 < 0.:
             return 1, None    # no sol'n
 
         n = self._n
         tau = math.sqrt(tsq)
-        gamma = tau + n * h0
+        gamma = tau + n * b0
         if gamma < 0.:
             return 3, None  # no effect
 
         rho = gamma / (n + 1)
-        sigma = 2. * rho / (tau + h0)
+        sigma = 2. * rho / (tau + b0)
         delta = self.c1 * t0/tsq
         params = (rho, sigma, delta)
         return 0, params
 
-    def calc_ll_cc(self, h1, t1, tsq):
+    def calc_ll_cc(self, b1, t1, tsq):
         """Situation when feasible cut."""
         n = self._n
         hsq1 = tsq - t1
         xi = math.sqrt(tsq*t1 + (n*hsq1/2)**2)
         sigma = (n + 2*(tsq - xi) / hsq1) / (n + 1)
-        rho = sigma * h1 / 2
+        rho = sigma * b1 / 2
         delta = self.c1 * (tsq - hsq1/2 - xi/n) / tsq
         return rho, sigma, delta
 

@@ -117,5 +117,5 @@ def run_lowpass(use_parallel, duration=0.000001):
 
 def test_lowpass():
     result = run_lowpass(True)
-    assert result >= 1359
+    assert result >= 742
     assert result <= 1378
