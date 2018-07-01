@@ -4,6 +4,7 @@ Negative cycle detection for weighed graphs.
 1. Support Lazy evalution
 """
 
+
 def default_get_weight(G, e):
     u, v = e
     return G[u][v].get('weight', 1)

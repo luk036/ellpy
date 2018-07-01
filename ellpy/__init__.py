@@ -22,4 +22,3 @@ from ellpy.problem import Problem
 import ellpy.oracles
 from ellpy.oracles import *
 # from ellpy.lsq_corr_ell import lsq_corr_poly, lsq_corr_bspline
-
