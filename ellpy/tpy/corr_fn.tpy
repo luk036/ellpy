@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
+from pprint import pprint
+import matplotlib.pyplot as plt
+import matplotlib.pylab as lab
 import numpy as np
 from scipy.interpolate import BSpline
-from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
-from ellpy.ell import ell
-from ellpy.oracles.qmi_oracle import qmi_oracle
+
+from cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
+from ell import ell
+from oracles.qmi_c_oracle import qmi_c_oracle
 
 # a fake dataset to make the bumps with
 nx = 10   # number of points
@@ -44,7 +50,7 @@ Y = np.cov(Ys, bias=True)
 class poly_oracle2:
     def __init__(self, F, F0):
         self.F0 = F0
-        self.qmi = qmi_oracle(F, F0)
+        self.qmi = qmi_c_oracle(F, F0)
 
     def update(self, t):
         self.qmi.update(t)
@@ -92,7 +98,7 @@ def lsq_corr_poly2(Y, s, m):
 
     print(num_iters, feasible)
     assert feasible
-    assert num_iters == 638
+    # assert num_iters == 175
 
     a = x_best[:-1]
     print(a)
@@ -111,7 +117,7 @@ def lsq_corr_poly(Y, s, m):
         Sig += [D]
     Sig.reverse()
 
-    Q = qmi_oracle(Sig, Y)
+    Q = qmi_c_oracle(Sig, Y)
     E = ell(64., a)
     P = bsearch_adaptor(Q, E)
     normY = np.linalg.norm(Y, 'fro')
@@ -129,7 +135,7 @@ def lsq_corr_poly(Y, s, m):
 class bsp_oracle:
     def __init__(self, F, F0):
         self.F0 = F0
-        self.qmi = qmi_oracle(F, F0)
+        self.qmi = qmi_c_oracle(F, F0)
 
     def update(self, t):
         self.qmi.update(t)
@@ -189,7 +195,7 @@ def lsq_corr_bspline(Y, s, m):
 class bsp_oracle2:
     def __init__(self, F, F0):
         self.F0 = F0
-        self.qmi = qmi_oracle(F, F0)
+        self.qmi = qmi_c_oracle(F, F0)
 
     def update(self, t):
         self.qmi.update(t)
@@ -255,7 +261,7 @@ def lsq_corr_bspline2(Y, s, m):
 
     print(num_iters, feasible)
     assert feasible
-    assert num_iters == 98
+    # assert num_iters == 40
 
     c = x_best[:-1]
 
@@ -274,6 +280,19 @@ def construct_distance_matrix(s):
     return D
 
 
-def test_corr_fn():
-    lsq_corr_bspline2(Y, s, 4)
-    lsq_corr_poly2(Y, s, 4)
+# def test_corr_fn():
+if __name__ == "__main__":
+    # spl = lsq_corr_bspline(Y, s, 4)
+    spl2 = lsq_corr_bspline2(Y, s, 4)
+    # pol = lsq_corr_poly(Y, s, 4)
+    pol2 = lsq_corr_poly2(Y, s, 4)
+
+    h = s[-1] - s[0]
+    d = np.sqrt(np.dot(h, h))
+    xs = np.linspace(0, d, 100)
+    # plt.plot(xs, spl(xs), 'r', label='BSpline bsearch')
+    plt.plot(xs, spl2(xs), 'g', label='BSpline ndim+1')
+    # plt.plot(xs, np.polyval(pol, xs), 'r', label='Polynomial')
+    plt.plot(xs, np.polyval(pol2, xs), 'r', label='Poly ndim+1')
+    plt.legend(loc='best')
+    plt.show()
