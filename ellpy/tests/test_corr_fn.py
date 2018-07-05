@@ -92,7 +92,7 @@ def lsq_corr_poly2(Y, s, m):
 
     print(num_iters, feasible)
     assert feasible
-    assert num_iters == 638
+    assert num_iters >= 638 and num_iters <= 657
 
     a = x_best[:-1]
     print(a)
