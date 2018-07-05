@@ -53,7 +53,7 @@ class lowpass_oracle:
         # 3. stopband constraint
         N = self.As.shape[0]
         fmax = float("-inf")
-        imax = -1
+        imax = 0
         i_As = self.i_As
         for k in chain(range(i_As, N), range(i_As)):
             v = self.As[k, :].dot(x)
