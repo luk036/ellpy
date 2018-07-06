@@ -41,13 +41,9 @@ for k in range(N):
 Y = np.cov(Ys, bias=True)
 
 
-class poly_oracle2:
+class basis_oracle2:
     def __init__(self, F, F0):
-        self.F0 = F0
         self.qmi = qmi_oracle(F, F0)
-
-    def update(self, t):
-        self.qmi.update(t)
 
     def __call__(self, x, t):
         n = len(x)
@@ -70,65 +66,99 @@ class poly_oracle2:
         return (g, 0.), tc
 
 
-def lsq_corr_poly2(Y, s, m):
-    n = len(s)
-    D1 = construct_distance_matrix(s)
-
-    D = np.ones((n, n))
-    Sig = [D]
-    for _ in range(m - 1):
-        D = np.multiply(D, D1)
-        Sig += [D]
-    Sig.reverse()
-
-    P = poly_oracle2(Sig, Y)
+def lsq_corr_core2(Y, m, P):
     normY = np.linalg.norm(Y, 'fro')
     val = 256*np.ones(m + 1)
     normY2 = 32*normY*normY
     val[-1] = normY2*normY2
     x = np.zeros(m + 1)
+    x[-1] = normY2/2
     E = ell(val, x)
     x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
-
     print(num_iters, feasible)
     assert feasible
-    assert num_iters >= 635 and num_iters <= 657
-
-    a = x_best[:-1]
-    print(a)
-    return np.poly1d(a)
+    return num_iters, x_best
 
 
-def lsq_corr_poly(Y, s, m):
+def lsq_corr_poly2(Y, s, m):
     n = len(s)
-    a = np.zeros(m)
-    D1 = construct_distance_matrix(s)
 
+    D1 = construct_distance_matrix(s)
     D = np.ones((n, n))
     Sig = [D]
     for _ in range(m - 1):
         D = np.multiply(D, D1)
         Sig += [D]
     Sig.reverse()
+    P = basis_oracle2(Sig, Y)
 
-    Q = qmi_oracle(Sig, Y)
-    E = ell(64., a)
-    P = bsearch_adaptor(Q, E)
-    normY = np.linalg.norm(Y, 'fro')
-    _, niter, feasible = bsearch(P, [0., normY*normY])
-
-    print(niter, feasible)
-    assert feasible
-    assert niter == 40
-
-    a = P.x_best
+    num_iters, x_best = lsq_corr_core2(Y, m, P)
+    
+    assert num_iters >= 635 and num_iters <= 657
+    a = x_best[:-1]
     print(a)
+    return np.poly1d(a)
+
+
+class bsp_oracle2:
+    def __init__(self, F, F0):
+        self.basis = basis_oracle2(F, F0)
+
+    def __call__(self, x, t):
+        # monotonic decreasing constraint
+        n = len(x)
+        g = np.zeros(n)
+        for i in range(n - 2):
+            fj = x[i + 1] - x[i]
+            if fj > 0.:
+                g[i] = -1.
+                g[i + 1] = 1.
+                return (g, fj), False
+
+        return self.basis(x, t)
+
+
+def lsq_corr_bspline2(Y, s, m):
+    k = 2  # quadratic bspline
+    h = s[-1] - s[0]
+    d = np.sqrt(np.dot(h, h))
+    t = np.linspace(0, d * 1.2, m + k + 1)
+    spls = []
+    for i in range(m):
+        coeff = np.zeros(m)
+        coeff[i] = 1
+        spls += [BSpline(t, coeff, k)]
+    D = construct_distance_matrix(s)
+    Sig = []
+    for i in range(m):
+        Sig += [spls[i](D)]
+
+    P = bsp_oracle2(Sig, Y)
+    num_iters, x_best = lsq_corr_core2(Y, m, P)
+    assert num_iters == 98
+
+    c = x_best[:-1]
+    return BSpline(t, c, k)
+
+
+def lsq_corr_poly(Y, s, m):
+    n = len(s)
+    D1 = construct_distance_matrix(s)
+    D = np.ones((n, n))
+    Sig = [D]
+    for _ in range(m - 1):
+        D = np.multiply(D, D1)
+        Sig += [D]
+    Sig.reverse()
+    Q = qmi_oracle(Sig, Y)
+
+    niter, a = lsq_corr_core(m, Y, Q)
+    assert niter == 40
     return np.poly1d(a)
 
 
 class bsp_oracle:
     def __init__(self, F, F0):
-        self.F0 = F0
         self.qmi = qmi_oracle(F, F0)
 
     def update(self, t):
@@ -144,11 +174,6 @@ class bsp_oracle:
                 g[i] = -1.
                 g[i + 1] = 1.
                 return (g, fj), False
-
-        # if x[-1] < 0.:
-        #     g[-1] = -1.
-        #     return (g, -x[-1]), False
-
         return self.qmi(x)
 
 
@@ -162,104 +187,28 @@ def lsq_corr_bspline(Y, s, m):
         coeff = np.zeros(m)
         coeff[i] = 1
         spls += [BSpline(t, coeff, k)]
-
     D = construct_distance_matrix(s)
-
     Sig = []
     for i in range(m):
         Sig += [spls[i](D)]
+    Q = bsp_oracle(Sig, Y)
+
+    niter, c = lsq_corr_core(m, Y, Q)
+
+    assert niter == 40
+    return BSpline(t, c, k)
+
+
+def lsq_corr_core(m, Y, Q):
     c = np.zeros(m)
     normY = np.linalg.norm(Y, 'fro')
-
-    Q = bsp_oracle(Sig, Y)
     E = ell(64., c)
     P = bsearch_adaptor(Q, E)
-
     _, niter, feasible = bsearch(P, [0., normY*normY])
-
     print(niter, feasible)
     assert feasible
-    assert niter == 40
-
     c = P.x_best
-
-    return BSpline(t, c, k)
-
-
-class bsp_oracle2:
-    def __init__(self, F, F0):
-        self.F0 = F0
-        self.qmi = qmi_oracle(F, F0)
-
-    def update(self, t):
-        self.qmi.update(t)
-
-    def __call__(self, x, t):
-        n = len(x)
-        g = np.zeros(n)
-
-        for i in range(n - 2):
-            fj = x[i + 1] - x[i]
-            if fj > 0.:
-                g[i] = -1.
-                g[i + 1] = 1.
-                return (g, fj), False
-
-        # if x[-1] < 0.:
-        #     g[-1] = -1.
-        #     return (g, -x[-1]), False
-
-        g[-1] = 1
-        tc = x[-1]
-        fj = tc - t
-        if fj > 0.:
-            return (g, fj), t
-
-        self.qmi.update(tc)
-        cut, feasible = self.qmi(x[:-1])
-        if not feasible:
-            g1, fj = cut
-            g[:-1] = g1
-            v = self.qmi.Q.witness()
-            g[-1] = -v.dot(v)
-            return (g, fj), t
-
-        return (g, 0.), tc
-
-
-def lsq_corr_bspline2(Y, s, m):
-    k = 2  # quadratic bspline
-    h = s[-1] - s[0]
-    d = np.sqrt(np.dot(h, h))
-    t = np.linspace(0, d * 1.2, m + k + 1)
-    spls = []
-    for i in range(m):
-        coeff = np.zeros(m)
-        coeff[i] = 1
-        spls += [BSpline(t, coeff, k)]
-
-    D = construct_distance_matrix(s)
-
-    Sig = []
-    for i in range(m):
-        Sig += [spls[i](D)]
-
-    P = bsp_oracle2(Sig, Y)
-    normY = np.linalg.norm(Y, 'fro')
-    val = 256*np.ones(m + 1)
-    normY2 = 32*normY*normY
-    val[-1] = normY2*normY2
-    x = np.zeros(m + 1)
-    E = ell(val, x)
-    x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
-
-    print(num_iters, feasible)
-    assert feasible
-    assert num_iters == 98
-
-    c = x_best[:-1]
-
-    return BSpline(t, c, k)
+    return niter, c
 
 
 def construct_distance_matrix(s):
