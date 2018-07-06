@@ -77,7 +77,7 @@ def lsq_corr_core2(Y, m, P):
     x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
     print(num_iters, feasible)
     assert feasible
-    return num_iters, x_best
+    return num_iters, x_best[:-1]
 
 
 def lsq_corr_poly2(Y, s, m):
@@ -92,11 +92,8 @@ def lsq_corr_poly2(Y, s, m):
     Sig.reverse()
     P = basis_oracle2(Sig, Y)
 
-    num_iters, x_best = lsq_corr_core2(Y, m, P)
-    
+    num_iters, a = lsq_corr_core2(Y, m, P)
     assert num_iters >= 635 and num_iters <= 657
-    a = x_best[:-1]
-    print(a)
     return np.poly1d(a)
 
 
@@ -134,10 +131,8 @@ def lsq_corr_bspline2(Y, s, m):
         Sig += [spls[i](D)]
 
     P = bsp_oracle2(Sig, Y)
-    num_iters, x_best = lsq_corr_core2(Y, m, P)
+    num_iters, c = lsq_corr_core2(Y, m, P)
     assert num_iters == 98
-
-    c = x_best[:-1]
     return BSpline(t, c, k)
 
 

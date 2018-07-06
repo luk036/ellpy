@@ -82,7 +82,7 @@ def run_optscaling(duration=0.000001):
     return niter
 
 
-def run_optscaling2(duration=0.000001):
+def run_optscaling3(duration=0.000001):
     t = cmax - cmin
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
@@ -93,11 +93,11 @@ def run_optscaling2(duration=0.000001):
     return niter
 
 
-def test_optscaling(benchmark):
+def test_two_variables(benchmark):
     result = benchmark(run_optscaling)
     assert result == 26
 
 
-def test_optscaling2(benchmark):
-    result = benchmark(run_optscaling2)
+def test_binary_search(benchmark):
+    result = benchmark(run_optscaling3)
     assert result == 27
