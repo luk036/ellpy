@@ -41,6 +41,18 @@ for k in range(N):
 Y = np.cov(Ys, bias=True)
 
 
+def construct_distance_matrix(s):
+    n = len(s)
+    D = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i + 1, n):
+            h = s[j] - s[i]
+            d = np.sqrt(np.dot(h, h))
+            D[i, j] = d
+            D[j, i] = d
+    return D
+
+
 class basis_oracle2:
     def __init__(self, F, F0):
         self.qmi = qmi_oracle(F, F0)
@@ -68,8 +80,8 @@ class basis_oracle2:
 
 def lsq_corr_core2(Y, m, P):
     normY = np.linalg.norm(Y, 'fro')
-    val = 256*np.ones(m + 1)
     normY2 = 32*normY*normY
+    val = 256*np.ones(m + 1)
     val[-1] = normY2*normY2
     x = np.zeros(m + 1)
     x[-1] = normY2/2
@@ -116,6 +128,14 @@ class bsp_oracle2:
 
 
 def lsq_corr_bspline2(Y, s, m):
+    Sig, t, k = generate_bspline_info(s, m)
+    P = bsp_oracle2(Sig, Y)
+    num_iters, c = lsq_corr_core2(Y, m, P)
+    assert num_iters == 98
+    return BSpline(t, c, k)
+
+
+def generate_bspline_info(s, m):
     k = 2  # quadratic bspline
     h = s[-1] - s[0]
     d = np.sqrt(np.dot(h, h))
@@ -129,11 +149,7 @@ def lsq_corr_bspline2(Y, s, m):
     Sig = []
     for i in range(m):
         Sig += [spls[i](D)]
-
-    P = bsp_oracle2(Sig, Y)
-    num_iters, c = lsq_corr_core2(Y, m, P)
-    assert num_iters == 98
-    return BSpline(t, c, k)
+    return Sig, t, k
 
 
 def lsq_corr_poly(Y, s, m):
@@ -173,23 +189,9 @@ class bsp_oracle:
 
 
 def lsq_corr_bspline(Y, s, m):
-    k = 2  # quadratic bspline
-    h = s[-1] - s[0]
-    d = np.sqrt(np.dot(h, h))
-    t = np.linspace(0, d * 1.2, m + k + 1)
-    spls = []
-    for i in range(m):
-        coeff = np.zeros(m)
-        coeff[i] = 1
-        spls += [BSpline(t, coeff, k)]
-    D = construct_distance_matrix(s)
-    Sig = []
-    for i in range(m):
-        Sig += [spls[i](D)]
+    Sig, t, k = generate_bspline_info(s, m)
     Q = bsp_oracle(Sig, Y)
-
     niter, c = lsq_corr_core(m, Y, Q)
-
     assert niter == 40
     return BSpline(t, c, k)
 
@@ -201,21 +203,9 @@ def lsq_corr_core(m, Y, Q):
     P = bsearch_adaptor(Q, E)
     _, niter, feasible = bsearch(P, [0., normY*normY])
     print(niter, feasible)
-    assert feasible
+    assert feasible 
     c = P.x_best
     return niter, c
-
-
-def construct_distance_matrix(s):
-    n = len(s)
-    D = np.zeros((n, n))
-    for i in range(n):
-        for j in range(i + 1, n):
-            h = s[j] - s[i]
-            d = np.sqrt(np.dot(h, h))
-            D[i, j] = d
-            D[j, i] = d
-    return D
 
 
 def test_corr_fn():

@@ -48,4 +48,4 @@ class lmi2_oracle:
             g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
             return (g, (1., fj)), False
 
-        return None, 1
+        return None, True
