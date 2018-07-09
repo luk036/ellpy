@@ -105,7 +105,7 @@ def lsq_corr_poly2(Y, s, m):
     P = basis_oracle2(Sig, Y)
 
     num_iters, a = lsq_corr_core2(Y, m, P)
-    assert num_iters >= 635 and num_iters <= 657
+    assert num_iters >= 631 and num_iters <= 657
     return np.poly1d(a)
 
 
