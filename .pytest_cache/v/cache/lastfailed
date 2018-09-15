@@ -1,4 +1,3 @@
 {
-  "ellpy/tests/test_lowpass.py::test_lowpass": true, 
   "tests/test_lmi.py::testcase": true
 }

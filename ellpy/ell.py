@@ -81,6 +81,7 @@ class ell:
 
     def calc_ll_core(self, b0, b1, tsq):
         t1 = tsq - b1*b1
+
         if t1 < 0. or not self.use_parallel:
             return self.calc_dc(b0, tsq)
 
@@ -88,25 +89,22 @@ class ell:
         if l < 0:
             return 1, None  # no sol'n
 
+        if b0 == 0:
+            return self.calc_ll_cc(b1, t1, tsq)
+
         n = self._n
         p = b0*b1
         if n*p < -tsq:
             return 3, None  # no effect
 
-        params = None
-
         # parallel cut
-        if b0 == 0:
-            params = self.calc_ll_cc(b1, t1, tsq)
-        else:
-            t0 = tsq - b0*b0
-            bav = (b0 + b1)/2
-            xi = math.sqrt(t0*t1 + (n*bav*l)**2)
-            sigma = (n + (tsq - p - xi)/(2*bav*bav)) / (n + 1)
-            rho = sigma * bav
-            delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
-            params = rho, sigma, delta
-
+        t0 = tsq - b0*b0
+        bav = (b0 + b1)/2
+        xi = math.sqrt(t0*t1 + (n*bav*l)**2)
+        sigma = (n + (tsq - p - xi)/(2*bav*bav)) / (n + 1)
+        rho = sigma * bav
+        delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
+        params = (rho, sigma, delta)
         return 0, params
 
     def update(self, cut):
@@ -118,12 +116,13 @@ class ell:
         sigma = 2. / np1
         rho = math.sqrt(tsq) / np1
         delta = self.c1
-        return rho, sigma, delta
+        params = (rho, sigma, delta)
+        return 0, params
 
     def calc_dc(self, b0, tsq):
         '''deep cut'''
         if b0 == 0.:
-            return 0, self.calc_cc(tsq)
+            return self.calc_cc(tsq)
 
         t0 = tsq - b0*b0
         if t0 < 0.:
@@ -149,7 +148,8 @@ class ell:
         sigma = (n + 2*(tsq - xi) / hsq1) / (n + 1)
         rho = sigma * b1 / 2
         delta = self.c1 * (tsq - hsq1/2 - xi/n) / tsq
-        return rho, sigma, delta
+        params = (rho, sigma, delta)
+        return 0, params
 
 
 class ell1d:
