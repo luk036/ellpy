@@ -41,6 +41,9 @@ class ell:
     def use_parallel(self, b):
         self._use_parallel = b
 
+    def update(self, cut):
+        return self.update_core(self.calc_ll, cut)
+
     def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut
                 g' * (x - xc) + beta <= 0
@@ -73,83 +76,66 @@ class ell:
         '''parallel or deep cut'''
         if np.isscalar(beta):
             return self.calc_dc(beta, tsq)
-
-        b0 = beta[0]
         if len(beta) < 2:
-            return self.calc_dc(b0, tsq)
-        return self.calc_ll_core(b0, beta[1], tsq)
+            return self.calc_dc(beta[0], tsq)
+        return self.calc_ll_core(beta[0], beta[1], tsq)
 
     def calc_ll_core(self, b0, b1, tsq):
-        t1 = tsq - b1*b1
-
-        if t1 < 0. or not self.use_parallel:
-            return self.calc_dc(b0, tsq)
-
-        l = b1 - b0
-        if l < 0:
+        if b1 < b0:
             return 1, None  # no sol'n
-
-        if b0 == 0:
-            return self.calc_ll_cc(b1, t1, tsq)
-
         n = self._n
-        p = b0*b1
-        if n*p < -tsq:
+        b0b1 = b0*b1
+        if n*b0b1 < -tsq:
             return 3, None  # no effect
+        b1sq = b1**2
+        if b1sq > tsq or not self.use_parallel:
+            return self.calc_dc(b0, tsq)
+        if b0 == 0:
+            return self.calc_ll_cc(b1, b1sq, tsq)
 
         # parallel cut
-        t0 = tsq - b0*b0
+        t0 = tsq - b0**2
+        t1 = tsq - b1sq
         bav = (b0 + b1)/2
-        xi = math.sqrt(t0*t1 + (n*bav*l)**2)
-        sigma = (n + (tsq - p - xi)/(2*bav*bav)) / (n + 1)
+        xi = math.sqrt( t0*t1 + (n*bav*(b1 - b0))**2 )
+        sigma = (n + (tsq - b0b1 - xi)/(2 * bav**2)) / (n + 1)
         rho = sigma * bav
         delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
-        params = (rho, sigma, delta)
-        return 0, params
+        return 0, (rho, sigma, delta)
 
-    def update(self, cut):
-        return self.update_core(self.calc_ll, cut)
-
-    def calc_cc(self, tsq):
-        '''central cut'''
-        np1 = self._n + 1
-        sigma = 2. / np1
-        rho = math.sqrt(tsq) / np1
-        delta = self.c1
-        params = (rho, sigma, delta)
-        return 0, params
-
-    def calc_dc(self, b0, tsq):
-        '''deep cut'''
-        if b0 == 0.:
-            return self.calc_cc(tsq)
-
-        t0 = tsq - b0*b0
-        if t0 < 0.:
-            return 1, None    # no sol'n
-
+    def calc_ll_cc(self, b1, b1sq, tsq):
+        """Situation when feasible cut."""
         n = self._n
+        xi = math.sqrt( tsq*(tsq - b1sq) + (n*b1sq/2)**2 )
+        sigma = (n + 2*(tsq - xi) / b1sq)/(n + 1)
+        rho = sigma*b1/2
+        delta = self.c1*(tsq - b1sq/2 - xi/n)/tsq
+        return 0, (rho, sigma, delta)
+
+    def calc_dc(self, beta, tsq):
+        '''deep cut'''
         tau = math.sqrt(tsq)
-        gamma = tau + n * b0
+        if beta > tau:
+            return 1, None    # no sol'n
+        if beta == 0.:
+            return self.calc_cc(tau)
+        n = self._n
+        gamma = tau + n*beta
         if gamma < 0.:
             return 3, None  # no effect
 
-        rho = gamma / (n + 1)
-        sigma = 2. * rho / (tau + b0)
-        delta = self.c1 * t0/tsq
-        params = (rho, sigma, delta)
-        return 0, params
+        rho = gamma/(n + 1)
+        sigma = 2.*rho/(tau + beta)
+        delta = self.c1*(tsq - beta**2)/tsq
+        return 0, (rho, sigma, delta)
 
-    def calc_ll_cc(self, b1, t1, tsq):
-        """Situation when feasible cut."""
-        n = self._n
-        hsq1 = tsq - t1
-        xi = math.sqrt(tsq*t1 + (n*hsq1/2)**2)
-        sigma = (n + 2*(tsq - xi) / hsq1) / (n + 1)
-        rho = sigma * b1 / 2
-        delta = self.c1 * (tsq - hsq1/2 - xi/n) / tsq
-        params = (rho, sigma, delta)
-        return 0, params
+    def calc_cc(self, tau):
+        '''central cut'''
+        np1 = self._n + 1
+        sigma = 2. / np1
+        rho = tau / np1
+        delta = self.c1
+        return 0, (rho, sigma, delta)
 
 
 class ell1d:
