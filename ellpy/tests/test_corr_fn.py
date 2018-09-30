@@ -203,7 +203,7 @@ def lsq_corr_core(m, Y, Q):
     P = bsearch_adaptor(Q, E)
     _, niter, feasible = bsearch(P, [0., normY*normY])
     print(niter, feasible)
-    assert feasible 
+    assert feasible
     c = P.x_best
     return niter, c
 

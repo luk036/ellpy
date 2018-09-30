@@ -86,7 +86,8 @@ class cholutil:
     @cython.boundscheck(False) # turn off bounds-checking
     @cython.wraparound(False)  # turn off negative index wrapping
     def witness(self):
-        assert self.p > 0
+        if self.p <= 0:
+            raise AssertionError()
 
         cdef int i, k
         cdef DTYPE_t s

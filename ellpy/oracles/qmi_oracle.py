@@ -32,7 +32,8 @@ class qmi_oracle:
         # A = np.zeros(self.F0.shape)
 
         def getA(i, j):
-            assert i >= j
+            if i < j:
+                raise AssertionError()
             if self.count < i:
                 self.count = i
                 self.Fx[i] = self.F0[i]

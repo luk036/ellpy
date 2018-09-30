@@ -57,7 +57,8 @@ class profit_q_oracle:
 
     def __call__(self, y, t, retry):
         x = np.round(np.exp(y))
-        assert x[0] != 0. and x[1] != 0.
+        if x[0] == 0 or x[1] == 0:
+            raise AssertionError()
         yd = np.log(x)
         (g, h), t = self.P(yd, t)
         return (g, h, yd), t, 1

@@ -11,7 +11,6 @@ good_values_dict = {0.0: '0000000000', 1.0: '000000000+', 2.0: '00000000+0', 3.0
 
 class tests__to_and_fro_10bits( unittest.TestCase ):
 
-
     def test__01_to_integer(self):
         """ Check conversion from CSD to integer """
 
@@ -19,7 +18,6 @@ class tests__to_and_fro_10bits( unittest.TestCase ):
             csd_str = good_values_dict[key]
             value = csd.to_decimal(csd_str)
             self.assertEqual(value, key )
-
 
     def test__02_to_csd(self):
         """ Check that integers are converted to CSD properly. """
@@ -29,13 +27,10 @@ class tests__to_and_fro_10bits( unittest.TestCase ):
 
             while( len(csd_str) < 10 ):
                 csd_str = "0" + csd_str
-                
+
             self.assertEqual(csd_str, good_values_dict[key] )
 
-            
 
-
-        
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(tests__to_and_fro_10bits))

@@ -7,8 +7,8 @@ class chol_ext:
     def __init__(self, N):
         self.R = np.ones((N, N))
         self.p = 0
-        # self.d = np.zeros(N)
         self.v = np.zeros(N)
+        self.d = np.zeros(N)
 
     def factorize2(self, A):
         '''
@@ -101,7 +101,8 @@ class chol_ext:
         '''
         (square-root-free version)
         '''
-        assert not self.is_spd()
+        if self.is_spd():
+            raise AssertionError()
         p = self.p
         v = np.zeros(p)
         v[p-1] = 1. / math.sqrt(-self.d[p-1])
@@ -110,7 +111,8 @@ class chol_ext:
         return v
 
     def witness(self):
-        assert not self.is_spd()
+        if self.is_spd():
+            raise AssertionError()
         p = self.p
         v = np.zeros(p)
         v[p-1] = 1. / self.R[p-1, p-1]
