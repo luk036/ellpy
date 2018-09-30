@@ -91,11 +91,11 @@ Spsq = Sp**2
 # ********************************************************************
 
 
-def run_lowpass(use_parallel, duration=0.000001):
+def run_lowpass(use_parallel_cut, duration=0.000001):
     r0 = np.zeros(N)  # initial x0
     r0[0] = 0
     E = ell(4., r0)
-    E.use_parallel = use_parallel
+    E.use_parallel_cut = use_parallel_cut
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
     options = Options()
     options.max_it = 20000

@@ -4,7 +4,7 @@ import math
 
 
 class ell:
-    _use_parallel = True
+    _use_parallel_cut = True
 
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
@@ -22,7 +22,7 @@ class ell:
         E = ell(self.kappa, self.xc)
         E.Q = self.Q.copy()
         E.c1 = self.c1
-        E._use_parallel = self._use_parallel
+        E._use_parallel_cut = self._use_parallel_cut
         return E
 
     @property
@@ -34,12 +34,12 @@ class ell:
         self._xc = x
 
     @property
-    def use_parallel(self):
-        return self._use_parallel
+    def use_parallel_cut(self):
+        return self._use_parallel_cut
 
-    @use_parallel.setter
-    def use_parallel(self, b):
-        self._use_parallel = b
+    @use_parallel_cut.setter
+    def use_parallel_cut(self, b):
+        self._use_parallel_cut = b
 
     def update(self, cut):
         return self.update_core(self.calc_ll, cut)
@@ -88,7 +88,7 @@ class ell:
         if n*b0b1 < -tsq:
             return 3, None  # no effect
         b1sq = b1**2
-        if b1sq > tsq or not self.use_parallel:
+        if b1sq > tsq or not self.use_parallel_cut:
             return self.calc_dc(b0, tsq)
         if b0 == 0:
             return self.calc_ll_cc(b1, b1sq, tsq)
