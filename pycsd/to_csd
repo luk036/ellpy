@@ -3,9 +3,10 @@
    to csd
 """
 
+from __future__ import print_function
 import sys
 sys.path.append('./csd')
 
 import csd
 
-print csd.to_csd( float( sys.argv[1]) )
+print (csd.to_csd( float( sys.argv[1]) ))
