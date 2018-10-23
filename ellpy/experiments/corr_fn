@@ -1,0 +1,64 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+import numpy as np
+from scipy.interpolate import BSpline
+from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2, lsq_corr_poly2
+from corr_fn_cvx import lsq_corr_bspline, lsq_corr_poly
+
+# a fake dataset to make the bumps with
+nx = 20 # number of points
+ny = 16
+n = nx*ny
+s_end = [10., 8.]
+sdkern = 0.3  # width of kernel
+var = 2.     # standard derivation
+tau = 0.00001    # standard derivation of white noise
+N = 300  # number of samples
+np.random.seed(5)
+
+
+# create sites s
+sx = np.linspace(0, s_end[0], nx)
+sy = np.linspace(0, s_end[1], ny)
+xx, yy = np.meshgrid(sx, sy)
+s = np.vstack([xx.flatten(), yy.flatten()]).T
+
+Sig = np.ones((n, n))
+for i in range(n):
+    for j in range(i, n):
+        d = np.array(s[j]) - np.array(s[i])
+        Sig[i, j] = np.exp(-sdkern * np.sqrt(np.dot(d, d)))
+        Sig[j, i] = Sig[i, j]
+
+A = np.linalg.cholesky(Sig)
+Ys = np.zeros((n, N))
+
+for k in range(N):
+    x = var * np.random.randn(n)
+    y = A.dot(x) + tau*np.random.randn(n)
+    Ys[:, k] = y
+
+Y = np.cov(Ys, bias=True)
+
+
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    import matplotlib.pylab as lab
+    print('start...') 
+    spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
+    print(num_iters)
+    splcvx = lsq_corr_bspline(Y, s, 5)
+    # pol, num_iters, _ = lsq_corr_poly2(Y, s, 5)
+    # print(num_iters)
+    # polcvx  = lsq_corr_poly(Y, s, 5)
+
+    h = s[-1] - s[0]
+    d = np.sqrt(np.dot(h, h))
+    xs = np.linspace(0, d, 100)
+    plt.plot(xs, spl(xs), 'g', label='BSpline')
+    plt.plot(xs, splcvx(xs), 'b', label='BSpline CVX')
+    # plt.plot(xs, np.polyval(pol, xs), 'r', label='Polynomial')
+    # plt.plot(xs, np.polyval(polcvx, xs), 'r', label='Polynomial CVX')
+    plt.legend(loc='best')
+    plt.show()
+

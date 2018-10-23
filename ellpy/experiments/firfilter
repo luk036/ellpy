@@ -1,17 +1,18 @@
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
 import numpy as np
 # import cvxpy as cvx
-from cutting_plane import cutting_plane_dc
-from ell import ell
-from problem import Problem
+from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.ell import ell
+from ellpy.problem import Problem
 
 # ********************************************************************
 # Problem specs.
 # ********************************************************************
 # Number of FIR coefficients (including the zeroth one).
-n = 10
+n = 20
 
 # Rule-of-thumb frequency discretization (Cheney's Approx. Theory book).
 m = 15*n
@@ -72,7 +73,7 @@ class my_oracle:
 
 
 h0 = np.zeros(n)  # initial x0
-E = ell(10., h0)
+E = ell(20., h0)
 P = my_oracle()
 #hb, fb, niter, feasible, status = cutting_plane_dc(P, E, 10.)
 prob1 = Problem(E, P)

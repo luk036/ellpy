@@ -4,16 +4,16 @@ from __future__ import print_function
 from pprint import pprint
 from scipy.interpolate import BSpline
 import numpy as np
-from cutting_plane import cutting_plane_feas, bsearch, bsearch_adaptor
-from ell import ell
-from oracles.qmi_c_oracle import qmi_c_oracle
+from ellpy.cutting_plane import cutting_plane_feas, bsearch, bsearch_adaptor
+from ellpy.ell import ell
+from ellpy.oracles.qmi_oracle import qmi_oracle
 # from oracles.lmi_oracle import lmi_oracle
 
 
 class bsp_oracle:
     def __init__(self, F, F0):
         self.F0 = F0
-        self.qmi = qmi_c_oracle(F, F0)
+        self.qmi = qmi_oracle(F, F0)
 
     def update(self, t):
         self.qmi.update(t)
@@ -49,7 +49,7 @@ def lsq_corr_poly(Y, s, m):
     Sig.reverse()
 
     # P = mtx_norm_oracle(Sig, Y, a)
-    Q = qmi_c_oracle(Sig, Y)
+    Q = qmi_oracle(Sig, Y)
     E = ell(10., a)
     P = bsearch_adaptor(Q, E)
     normY = np.linalg.norm(Y, 'fro')

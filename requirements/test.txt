@@ -3,3 +3,5 @@ pytest-cov>=2.5.0
 pytest-benchmark>=3.0.0
 coverage>=4.4.1
 codecov>=2.0.9
+cvxpy>=1.0
+cvxopt>=1.0
