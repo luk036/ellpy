@@ -5,6 +5,41 @@ from ellpy.oracles.qmi_oracle import qmi_oracle
 from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
 
+def create_2d_isotropic(nx = 10, ny = 8):
+    n = nx*ny
+    s_end = [10., 8.]
+    sdkern = 0.3  # width of kernel
+    var = 2.     # standard derivation
+    tau = 0.00001    # standard derivation of white noise
+    N = 300  # number of samples
+    np.random.seed(5)
+
+
+    # create sites s
+    sx = np.linspace(0, s_end[0], nx)
+    sy = np.linspace(0, s_end[1], ny)
+    xx, yy = np.meshgrid(sx, sy)
+    s = np.vstack([xx.flatten(), yy.flatten()]).T
+
+    Sig = np.ones((n, n))
+    for i in range(n):
+        for j in range(i, n):
+            d = np.array(s[j]) - np.array(s[i])
+            Sig[i, j] = np.exp(-sdkern * np.sqrt(np.dot(d, d)))
+            Sig[j, i] = Sig[i, j]
+
+    A = np.linalg.cholesky(Sig)
+    Ys = np.zeros((n, N))
+
+    for k in range(N):
+        x = var * np.random.randn(n)
+        y = A.dot(x) + tau*np.random.randn(n)
+        Ys[:, k] = y
+
+    Y = np.cov(Ys, bias=True)
+    return Y, s
+
+
 def construct_distance_matrix(s):
     n = len(s)
     D = np.zeros((n, n))

@@ -41,8 +41,10 @@ A = np.exp(-1j * A_theta)
 # problem must be formatted into a real-valued representation.
 
 # Split Hdes into a real part, and an imaginary part.
-Hdes_r = np.cos(Hdes_theta)
-Hdes_i = -np.sin(Hdes_theta)
+# Hdes_r = np.cos(Hdes_theta)
+# Hdes_i = -np.sin(Hdes_theta)
+Hdes_r = np.real(Hdes)
+Hdes_i = np.imag(Hdes)
 
 # Split A into a real part, and an imaginary part.
 A_R = np.cos(A_theta)
@@ -73,7 +75,7 @@ class my_oracle:
 
 
 h0 = np.zeros(n)  # initial x0
-E = ell(20., h0)
+E = ell(40., h0)
 P = my_oracle()
 #hb, fb, niter, feasible, status = cutting_plane_dc(P, E, 10.)
 prob1 = Problem(E, P)
@@ -149,11 +151,11 @@ plt.plot(w, 20 * np.log10(np.abs(Hdes)), '--',
 plt.xlabel(r'$\omega$')
 plt.ylabel(r'$|H(\omega)|$ in dB')
 plt.title('FIR filter freq. response magnitude')
-plt.show()
-
 plt.xlim(0, np.pi)
 plt.ylim(-30, 10)
-# plt.legend(loc='lower right')
+plt.legend(loc='lower right')
+plt.show()
+
 # Phase
 plt.figure(figsize=(6, 6))
 plt.plot(w, np.angle(H))
