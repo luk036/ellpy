@@ -133,7 +133,8 @@ if __name__ == "__main__":
     # plotting routines
     # *********************************************************************
     # frequency response of the designed filter, where j = sqrt(-1)
-    h_sp = spectral_fact(r)      # from CVX distribution, Examples subdirectory
+    h_sp = spectral_fact(r)  # from CVX distribution, Examples subdirectory
+                    # I'm not sure how accurate this function performs!!!
     h = h_sp
     # compute the min attenuation in the stopband (convert to original vars)
     Ustop = 20*np.log10(np.sqrt(Spsq_new))

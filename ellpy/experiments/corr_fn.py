@@ -3,13 +3,14 @@
 import numpy as np
 from scipy.interpolate import BSpline
 from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2, lsq_corr_poly2
+# from mle_corr_oracle import mle_corr_bspline, mle_corr_poly
 from ellpy.tests.lsq_corr_oracle import create_2d_isotropic
 from corr_fn_cvx import lsq_corr_bspline, lsq_corr_poly
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import matplotlib.pylab as lab
-    Y, s = create_2d_isotropic(20, 16)
+    Y, s = create_2d_isotropic(10, 8)
     print('start ell...') 
     spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
     print(num_iters)

@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.interpolate import BSpline
 from ellpy.oracles.qmi_oracle import qmi_oracle
+from ellpy.oracles.lmi0_oracle import lmi0_oracle
 from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
 
@@ -11,7 +12,7 @@ def create_2d_isotropic(nx = 10, ny = 8):
     sdkern = 0.3  # width of kernel
     var = 2.     # standard derivation
     tau = 0.00001    # standard derivation of white noise
-    N = 300  # number of samples
+    N = 3000  # number of samples
     np.random.seed(5)
 
 
@@ -55,6 +56,7 @@ def construct_distance_matrix(s):
 class basis_oracle2:
     def __init__(self, F, F0):
         self.qmi = qmi_oracle(F, F0)
+        self.lmi0 = lmi0_oracle(F)
 
     def __call__(self, x, t):
         n = len(x)
@@ -63,6 +65,13 @@ class basis_oracle2:
         tc = x[-1]
         fj = tc - t
         if fj > 0.:
+            return (g, fj), t
+
+        cut, feasible = self.lmi0(x[:-1])
+        if not feasible:
+            g1, fj = cut
+            g[:-1] = g1
+            g[-1] = 0.
             return (g, fj), t
 
         self.qmi.update(tc)
@@ -82,7 +91,7 @@ def lsq_corr_core2(Y, m, P):
     normY2 = 32*normY*normY
     val = 256*np.ones(m + 1)
     val[-1] = normY2*normY2
-    x = np.zeros(m + 1)
+    x = np.ones(m + 1) # cannot all zeros
     x[-1] = normY2/2
     E = ell(val, x)
     x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
@@ -191,7 +200,7 @@ def lsq_corr_bspline(Y, s, m):
 
 
 def lsq_corr_core(m, Y, Q):
-    c = np.zeros(m)
+    c = np.ones(m) # cannot all zeros
     normY = np.linalg.norm(Y, 'fro')
     E = ell(64., c)
     P = bsearch_adaptor(Q, E)
