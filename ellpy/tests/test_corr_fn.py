@@ -10,4 +10,4 @@ def test_corr_fn():
     _, num_iters, _ = lsq_corr_bspline2(Y, s, 4)
     assert num_iters == 123
     _, num_iters, _ = lsq_corr_poly2(Y, s, 4)
-    assert num_iters >= 631 and num_iters <= 657
+    assert num_iters >= 629 and num_iters <= 657
