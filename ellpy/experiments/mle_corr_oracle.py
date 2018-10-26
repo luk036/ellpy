@@ -2,11 +2,12 @@
 #import cvxpy as cvx
 from scipy.interpolate import BSpline
 import numpy as np
-from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell
 # from oracles.qmi_oracle import qmi_oracle
 from ellpy.oracles.lmi_oracle import lmi_oracle
 from ellpy.oracles.lmi0_oracle import lmi0_oracle
+from lmi3_oracle import lmi3_oracle
 from ellpy.tests.lsq_corr_oracle import construct_distance_matrix, generate_bspline_info
 
 
@@ -16,19 +17,24 @@ class mle_poly_oracle:
         self.Sig = Sig
         self.lmi0 = lmi0_oracle(Sig)
         self.lmi = lmi_oracle(Sig, 2.*Y)
+        # self.lmi3 = lmi3_oracle(Sig, Y)
 
     def __call__(self, x, t):
+        cut, feasible = self.lmi(x)
+        if not feasible:
+            return cut, t
+
+        # cut, feasible = self.lmi3(x)
+        # if not feasible:
+        #     return cut, t
+
         cut, feasible = self.lmi0(x)
         if not feasible:
             return cut, t
 
-        # cut, feasible = self.lmi(x)
-        # if not feasible:
-        #     return cut, t
-
         R = self.lmi0.Q.R
         invR = np.linalg.inv(R)
-        S = invR.dot(invR.T)
+        S = (invR).dot(invR.T)
         SY = S.dot(self.Y)
         diag = np.diag(R)
         # f = log(det(Sig)) + trace(inv(Sig)*Y)
@@ -48,16 +54,21 @@ class mle_poly_oracle:
             SFsi = S.dot(self.Sig[i])
             # g[i] = sum(S[k].dot(self.Sig[k]) for k in range(m))
             g[i] = np.trace(SFsi)
-            g[i] -= sum(SY[k, :].dot(SFsi[:, k]) for k in range(m))
+            g[i] -= sum(SFsi[k, :].dot(SY[:, k]) for k in range(m))
 
         return (g, f), t
 
 
 def mle_corr_core(Y, m, P):
-    x = np.zeros(m)
-    x[0] = 2.
+    x = np.ones(m)
+    x[0] = 10.
     E = ell(50., x)
-    x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, float('inf'))
+    options = Options()
+    options.max_it = 2000
+    options.tol = 1e-8
+
+    x_best, _, num_iters, feasible, status = cutting_plane_dc(P, E, float('inf'), options)
+    print(num_iters, feasible, status)
     return x_best, num_iters, feasible
 
 
