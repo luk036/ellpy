@@ -87,6 +87,7 @@ class lowpass_oracle:
 
         # Begin objective function
         Spsq = fmax
-        f = (0., fmax)
+        # f = (0., fmax)
+        f = 0.
         g = self.As[imax, :]
         return (g, f), Spsq

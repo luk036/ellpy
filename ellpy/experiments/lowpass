@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 #import cvxpy as cvx
 from scipy.signal import remez, minimum_phase, freqz, group_delay
-from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell
 from ellpy.tests.spectral_fact import spectral_fact
 # from problem import Problem
@@ -101,10 +101,14 @@ if __name__ == "__main__":
 
     # Ae = diag(ones(N,1)) # initial ellipsoid (sphere)
     E = ell(40., r0)
+    # E.use_parallel_cut = False
     P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
+    options = Options()
+    options.max_it = 50000
+    # options.tol = 1e-11
     r, Spsq_new, num_iters, feasible, status = cutting_plane_dc(
-        P, E, Spsq)
-
+        P, E, Spsq, options)
+    print(num_iters, feasible, status)
     assert feasible
     # toc = time.time()
 

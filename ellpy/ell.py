@@ -70,6 +70,9 @@ class ell:
         self._xc -= (rho / omega) * Qg
         self.Q -= (sigma / omega) * np.outer(Qg, Qg)
         self.kappa *= delta
+        if self.kappa > 1e100 or self.kappa < 1e-100:
+            self.Q *= self.kappa
+            self.kappa = 1.
         return status, tsq
 
     def calc_ll(self, beta, tsq):
@@ -81,35 +84,36 @@ class ell:
         return self.calc_ll_core(beta[0], beta[1], tsq)
 
     def calc_ll_core(self, b0, b1, tsq):
+        b1sq = b1**2
+        if b1sq > tsq or not self.use_parallel_cut:
+            return self.calc_dc(b0, tsq)
         if b1 < b0:
             return 1, None  # no sol'n
+        if b0 == 0:
+            return self.calc_ll_cc(b1, b1sq, tsq)
         n = self._n
         b0b1 = b0*b1
         if n*b0b1 < -tsq:
             return 3, None  # no effect
-        b1sq = b1**2
-        if b1sq > tsq or not self.use_parallel_cut:
-            return self.calc_dc(b0, tsq)
-        if b0 == 0:
-            return self.calc_ll_cc(b1, b1sq, tsq)
 
         # parallel cut
-        t0 = tsq - b0**2
+        b0sq = b0**2
+        t0 = tsq - b0sq
         t1 = tsq - b1sq
-        bav = (b0 + b1)/2
-        xi = math.sqrt( t0*t1 + (n*bav*(b1 - b0))**2 )
-        sigma = (n + (tsq - b0b1 - xi)/(2 * bav**2)) / (n + 1)
+        bav = (b0 + b1)/2.
+        xi = math.sqrt( 4*t0*t1 + (n*(b1sq - b0sq))**2 )
+        sigma = (n + (tsq - b0b1 - xi/2)/(2. * bav**2)) / (n + 1.)
         rho = sigma * bav
-        delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
+        delta = self.c1 * (t0 + t1 + xi/n) / (2*tsq)
         return 0, (rho, sigma, delta)
 
     def calc_ll_cc(self, b1, b1sq, tsq):
         """Situation when feasible cut."""
         n = self._n
-        xi = math.sqrt( tsq*(tsq - b1sq) + (n*b1sq/2)**2 )
-        sigma = (n + 2*(tsq - xi) / b1sq)/(n + 1)
-        rho = sigma*b1/2
-        delta = self.c1*(tsq - b1sq/2 - xi/n)/tsq
+        xi = math.sqrt( 4.*tsq*(tsq - b1sq) + (n*b1sq)**2 )
+        sigma = (n + (2.*tsq - xi) / b1sq)/(n + 1.)
+        rho = sigma*b1/2.
+        delta = self.c1*(tsq - (b1sq + xi/n)/2.)/tsq
         return 0, (rho, sigma, delta)
 
     def calc_dc(self, beta, tsq):
