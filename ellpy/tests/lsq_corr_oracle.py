@@ -6,15 +6,14 @@ from ellpy.oracles.lmi0_oracle import lmi0_oracle
 from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
 
-def create_2d_isotropic(nx = 10, ny = 8):
+
+def create_2d_isotropic(nx=10, ny=8, N=3000):
     n = nx*ny
     s_end = [10., 8.]
     sdkern = 0.3  # width of kernel
     var = 2.     # standard derivation
     tau = 0.00001    # standard derivation of white noise
-    N = 3000  # number of samples
     np.random.seed(5)
-
 
     # create sites s
     sx = np.linspace(0, s_end[0], nx)
@@ -91,7 +90,7 @@ def lsq_corr_core2(Y, m, P):
     normY2 = 32*normY*normY
     val = 256*np.ones(m + 1)
     val[-1] = normY2*normY2
-    x = np.ones(m + 1) # cannot all zeros
+    x = np.ones(m + 1)  # cannot all zeros
     x[-1] = normY2/2
     E = ell(val, x)
     x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
@@ -110,7 +109,7 @@ def lsq_corr_poly2(Y, s, m):
     Sig.reverse()
     P = basis_oracle2(Sig, Y)
     a, num_iters, feasible = lsq_corr_core2(Y, m, P)
-    return np.poly1d(a), num_iters, feasible 
+    return np.poly1d(a), num_iters, feasible
 
 
 class bsp_oracle2:
@@ -200,7 +199,7 @@ def lsq_corr_bspline(Y, s, m):
 
 
 def lsq_corr_core(m, Y, Q):
-    c = np.ones(m) # cannot all zeros
+    c = np.ones(m)  # cannot all zeros
     normY = np.linalg.norm(Y, 'fro')
     E = ell(64., c)
     P = bsearch_adaptor(Q, E)

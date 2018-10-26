@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ellpy.oracles.chol_ext import chol_ext
+from .chol_ext import chol_ext
 
 
 class lmi3_oracle:

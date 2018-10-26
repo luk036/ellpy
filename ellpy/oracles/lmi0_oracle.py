@@ -20,6 +20,8 @@ class lmi0_oracle:
         def getA(i, j):
             self.A[i, j] = sum(self.F[k][i, j] * x[k]
                                for k in range(n))
+            if i != j:
+                self.A[j,i] = self.A[i,j]
             return self.A[i, j]
 
         self.Q.factor(getA)

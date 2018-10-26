@@ -29,22 +29,23 @@ class lmi2_oracle:
             # for k in range(n):
             #     S[i, j] = self.F[k][i, j] * x[k]
             self.A[i, j] = self.U[i, j]
-            self.A[i, j] -= getS(i, j)
+            self.A[i, j] -= sum(self.F[k][i, j] * x[k] for k in range(n))
             return self.A[i, j]
 
         self.Q.factor(getA)
         if not self.Q.is_spd():
             v = self.Q.witness()
             p = len(v)
+            fj = 1. + np.dot(v, self.U[:p, :p].dot(v))
             #fj = np.dot(v, S[:p, :p].dot(v))
             g = np.array([v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
-            return (g, (1., 0.)), False
+            return (g, (1., fj)), False
 
         self.Q.factor(getS)
         if not self.Q.is_spd():
             v = self.Q.witness()
             p = len(v)
-            fj = -np.dot(v, self.U[:p, :p].dot(v))
+            fj = 1. + np.dot(v, self.U[:p, :p].dot(v))
             g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
             return (g, (1., fj)), False
 

@@ -5,7 +5,7 @@ import math
 
 class chol_ext:
     def __init__(self, N):
-        self.R = np.ones((N, N))
+        self.R = np.zeros((N, N))
         self.p = 0
         self.v = np.zeros(N)
         self.d = np.zeros(N)
