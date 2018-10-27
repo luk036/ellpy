@@ -70,7 +70,7 @@ class ell:
         self._xc -= (rho / omega) * Qg
         self.Q -= (sigma / omega) * np.outer(Qg, Qg)
         self.kappa *= delta
-        if self.kappa > 1e100 or self.kappa < 1e-100:
+        if self.kappa > 1e100 or self.kappa < 1e-100: # unlikely
             self.Q *= self.kappa
             self.kappa = 1.
         return status, tsq
@@ -87,13 +87,13 @@ class ell:
         b1sq = b1**2
         if b1sq > tsq or not self.use_parallel_cut:
             return self.calc_dc(b0, tsq)
-        if b1 < b0:
+        if b1 < b0: # unlikely
             return 1, None  # no sol'n
         if b0 == 0:
             return self.calc_ll_cc(b1, b1sq, tsq)
         n = self._n
         b0b1 = b0*b1
-        if n*b0b1 < -tsq:
+        if n*b0b1 < -tsq: # unlikely
             return 3, None  # no effect
 
         # parallel cut
@@ -113,7 +113,7 @@ class ell:
         xi = math.sqrt( 4.*tsq*(tsq - b1sq) + (n*b1sq)**2 )
         sigma = (n + (2.*tsq - xi) / b1sq)/(n + 1.)
         rho = sigma*b1/2.
-        delta = self.c1*(tsq - (b1sq + xi/n)/2.)/tsq
+        delta = self.c1*(tsq - (b1sq - xi/n)/2.)/tsq
         return 0, (rho, sigma, delta)
 
     def calc_dc(self, beta, tsq):
