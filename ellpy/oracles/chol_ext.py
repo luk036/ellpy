@@ -121,8 +121,8 @@ class chol_ext:
             v[i] = -s / self.R[i, i]
         return v
 
-    def sym_quad(self, v, F):
-        # v = self.witness()
+    def sym_quad(self, F):
+        v = self.witness()
         p = self.p
         return v.dot(F[:p, :p].dot(v))
 

@@ -34,19 +34,19 @@ class lmi2_oracle:
 
         self.Q.factor(getA)
         if not self.Q.is_spd():
-            v = self.Q.witness()
-            p = len(v)
-            fj = 1. + np.dot(v, self.U[:p, :p].dot(v))
+            # v = self.Q.witness()
+            # p = len(v)
+            fj = 1. + self.Q.sym_quad(self.U)
             #fj = np.dot(v, S[:p, :p].dot(v))
-            g = np.array([v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
+            g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])
             return (g, (1., fj)), False
 
         self.Q.factor(getS)
         if not self.Q.is_spd():
-            v = self.Q.witness()
-            p = len(v)
-            fj = 1. + np.dot(v, self.U[:p, :p].dot(v))
-            g = np.array([-v.dot(self.F[i][:p, :p].dot(v)) for i in range(n)])
+            # v = self.Q.witness()
+            # p = len(v)
+            fj = 1. + self.Q.sym_quad(self.U)
+            g = np.array([-self.Q.sym_quad(self.F[i]) for i in range(n)])
             return (g, (1., fj)), False
 
         return None, True
