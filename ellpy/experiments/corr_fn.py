@@ -1,22 +1,22 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-from scipy.interpolate import BSpline
+# from scipy.interpolate import BSpline
 from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2, lsq_corr_poly2
 from ellpy.tests.mle_corr_oracle import mle_corr_bspline, mle_corr_poly
 from ellpy.tests.lsq_corr_oracle import create_2d_isotropic
-from corr_fn_cvx import lsq_corr_bspline, lsq_corr_poly
+from corr_fn_cvx import lsq_corr_bspline
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    import matplotlib.pylab as lab
-    Y, s = create_2d_isotropic(10, 8, 3000)
+    # import matplotlib.pylab as lab
+    Y, s = create_2d_isotropic(5, 4, 3000)
     print('start ell...') 
     # spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
-    spl, num_iters, _ = lsq_corr_poly2(Y, s, 6)
+    spl, num_iters, _ = mle_corr_bspline(Y, s, 5)
     print(num_iters)
     print('start cvx...') 
-    splcvx = lsq_corr_bspline(Y, s, 6)
+    splcvx = lsq_corr_bspline(Y, s, 5)
     # pol, num_iters, _ = lsq_corr_poly2(Y, s, 5)
     # print(num_iters)
     # polcvx  = lsq_corr_poly(Y, s, 5)

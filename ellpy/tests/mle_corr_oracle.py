@@ -5,9 +5,9 @@ import numpy as np
 from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell
 # from oracles.qmi_oracle import qmi_oracle
-from ellpy.oracles.lmi2_oracle import lmi2_oracle
+# from ellpy.oracles.lmi2_oracle import lmi2_oracle
 from ellpy.oracles.lmi0_oracle import lmi0_oracle
-from ellpy.oracles.lmi3_oracle import lmi3_oracle
+from ellpy.oracles.lmi_oracle import lmi_oracle
 from ellpy.tests.lsq_corr_oracle import construct_distance_matrix, generate_bspline_info
 
 
@@ -16,11 +16,11 @@ class mle_poly_oracle:
         self.Y = Y
         self.Sig = Sig
         self.lmi0 = lmi0_oracle(Sig)
-        # self.lmi = lmi_oracle(Sig, 2.*Y)
-        self.lmi2 = lmi2_oracle(Sig, 2.*Y)
+        self.lmi = lmi_oracle(Sig, 2.*Y)
+        # self.lmi2 = lmi2_oracle(Sig, 2.*Y)
 
     def __call__(self, x, t):
-        cut, feasible = self.lmi2(x)
+        cut, feasible = self.lmi(x)
         if not feasible:
             return cut, t
 
@@ -58,7 +58,7 @@ class mle_poly_oracle:
 
 def mle_corr_core(Y, m, P):
     x = np.zeros(m)
-    x[0] = 10.
+    x[0] = 1.
     E = ell(50., x)
     # E.use_parallel_cut = False
     options = Options()
