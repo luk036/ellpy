@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2, lsq_corr_poly2
 from ellpy.tests.lsq_corr_oracle import create_2d_isotropic
-from scipy.interpolate import BSpline
 
 
 def test_corr_fn():

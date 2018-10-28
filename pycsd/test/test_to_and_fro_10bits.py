@@ -35,7 +35,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(tests__to_and_fro_10bits))
     return suite
-        
+
 if __name__ == '__main__':
     unittest.main()
 

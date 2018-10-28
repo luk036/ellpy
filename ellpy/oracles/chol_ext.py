@@ -10,28 +10,28 @@ class chol_ext:
         self.v = np.zeros(N)
         self.d = np.zeros(N)
 
-    def factorize2(self, A):
-        '''
-        (square-root-free version)
-         If $A$ is positive definite, then $p$ is zero.
-         If it is not, then $p$ is a positive integer,
-         such that $v = R^{-1} e_p$ is a certificate vector
-         to make $v'*A[:p,:p]*v < 0$
-        '''
-        # N = len(A)
-        # self.p = 0
-        self.p = 0
-        R = self.R
-        d = self.d
-        N = len(R)
-        for i in range(N):
-            for j in range(i+1):
-                d[i] = A[i, j] - np.dot(d[:j], R[:j, i] * R[:j, j])
-                if i != j:
-                    R[j, i] = d[i] / d[j]
-            if d[i] <= 0.:  # strictly positive???
-                self.p = i + 1
-                break
+    # def factorize2(self, A):
+    #     '''
+    #     (square-root-free version)
+    #      If $A$ is positive definite, then $p$ is zero.
+    #      If it is not, then $p$ is a positive integer,
+    #      such that $v = R^{-1} e_p$ is a certificate vector
+    #      to make $v'*A[:p,:p]*v < 0$
+    #     '''
+    #     # N = len(A)
+    #     # self.p = 0
+    #     self.p = 0
+    #     R = self.R
+    #     d = self.d
+    #     N = len(R)
+    #     for i in range(N):
+    #         for j in range(i+1):
+    #             d[i] = A[i, j] - np.dot(d[:j], R[:j, i] * R[:j, j])
+    #             if i != j:
+    #                 R[j, i] = d[i] / d[j]
+    #         if d[i] <= 0.:  # strictly positive???
+    #             self.p = i + 1
+    #             break
 
     def factorize(self, A):
         '''
@@ -57,24 +57,24 @@ class chol_ext:
             R[i, i] = math.sqrt(d)
 
 
-    def factor2(self, getA):
-        '''(lazy evalution of A)
-           (square-root-free version)
-        '''
-        # N = len(A)
-        # self.p = 0
-        self.p = 0
-        R = self.R
-        d = self.d
-        N = len(R)
-        for i in range(N):
-            for j in range(i+1):
-                d[i] = getA(i, j) - np.dot(d[:j], R[:j, i]*R[:j, j])
-                if i != j:
-                    R[j, i] = d[i] / d[j]
-            if d[i] <= 0.:  # strictly positive???
-                self.p = i + 1
-                break
+    # def factor2(self, getA):
+    #     '''(lazy evalution of A)
+    #        (square-root-free version)
+    #     '''
+    #     # N = len(A)
+    #     # self.p = 0
+    #     self.p = 0
+    #     R = self.R
+    #     d = self.d
+    #     N = len(R)
+    #     for i in range(N):
+    #         for j in range(i+1):
+    #             d[i] = getA(i, j) - np.dot(d[:j], R[:j, i]*R[:j, j])
+    #             if i != j:
+    #                 R[j, i] = d[i] / d[j]
+    #         if d[i] <= 0.:  # strictly positive???
+    #             self.p = i + 1
+    #             break
 
     def factor(self, getA):
         '''(lazy evalution of A)'''
@@ -97,18 +97,18 @@ class chol_ext:
     def is_spd(self):
         return self.p == 0
 
-    def witness2(self):
-        '''
-        (square-root-free version)
-        '''
-        if self.is_spd():
-            raise AssertionError()
-        p = self.p
-        v = np.zeros(p)
-        v[p-1] = 1. / math.sqrt(-self.d[p-1])
-        for i in range(p - 2, -1, -1):
-            v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
-        return v
+    # def witness2(self):
+    #     '''
+    #     (square-root-free version)
+    #     '''
+    #     if self.is_spd():
+    #         raise AssertionError()
+    #     p = self.p
+    #     v = np.zeros(p)
+    #     v[p-1] = 1. / math.sqrt(-self.d[p-1])
+    #     for i in range(p - 2, -1, -1):
+    #         v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
+    #     return v
 
     def witness(self):
         if self.is_spd():

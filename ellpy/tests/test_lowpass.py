@@ -97,9 +97,8 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     options.tol = 1e-8
     _, _, num_iters, feasible, _ = cutting_plane_dc(
         P, E, Spsq, options)
-    assert feasible
     time.sleep(duration)
-    return num_iters
+    return num_iters, feasible
 
 
 # def test_lowpass0(benchmark):
@@ -111,6 +110,7 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
 #     assert result == 568
 
 def test_lowpass():
-    result = run_lowpass(True)
-    assert result >= 420
-    assert result <= 1378
+    result, feasible = run_lowpass(True)
+    assert feasible
+    assert result > 400
+    assert result < 450
