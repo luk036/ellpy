@@ -25,7 +25,7 @@ class lowpass_oracle:
         n = len(x)
 
         # case 1,
-        if x[0] < 0.:
+        if x[0] < 0:
             g = np.zeros(n)
             g[0] = -1.
             f = -x[0]

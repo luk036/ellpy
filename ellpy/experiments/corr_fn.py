@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 # from scipy.interpolate import BSpline
-from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2
+# from ellpy.tests.lsq_corr_oracle import lsq_corr_bspline2
 from ellpy.tests.mle_corr_oracle import mle_corr_bspline
 from ellpy.tests.lsq_corr_oracle import create_2d_isotropic
 from corr_fn_cvx import lsq_corr_bspline

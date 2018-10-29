@@ -13,7 +13,7 @@ class profit_oracle:
 
     def __call__(self, y, t):
         fj = y[0] - self.log_k  # constraint
-        if fj > 0.:
+        if fj > 0:
             g = np.array([1., 0.])
             return (g, fj), t
         log_Cobb = self.log_pA + np.dot(self.a, y)
@@ -21,7 +21,7 @@ class profit_oracle:
         vx = np.dot(self.v, x)
         te = t + vx
         fj = np.log(te) - log_Cobb
-        if fj < 0.:
+        if fj < 0:
             te = np.exp(log_Cobb)
             t = te - vx
             fj = 0.
@@ -45,7 +45,7 @@ class profit_rb_oracle:
     def __call__(self, y, t):
         a_rb = self.a.copy()
         for i in range(2):
-            a_rb[i] += self.uie[i] * (+1. if y[i] <= 0. else -1.)
+            a_rb[i] += self.uie[i] * (+1. if y[i] <= 0 else -1.)
         self.P.a = a_rb
         return self.P(y, t)
 

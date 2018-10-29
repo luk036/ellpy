@@ -29,7 +29,7 @@ class mle_bspline_oracle:
 
         # for i in range(n - 1):
         #     fj = x[i + 1] - x[i]
-        #     if fj > 0.:
+        #     if fj > 0:
         #         g[i] = -1.
         #         g[i + 1] = 1.
         #         return (g, fj), t

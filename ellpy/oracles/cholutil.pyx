@@ -38,7 +38,7 @@ class cholutil:
                     d -= R[k, i] * R[k, j]
                 if i != j:
                     R[j, i] = 1. / R[j, j] * d
-            if d <= 0.:  # strictly positive???
+            if d <= 0:  # strictly positive???
                 p = i + 1
                 R[i, i] = sqrt(-d)
                 break
@@ -71,7 +71,7 @@ class cholutil:
                     d -= R[k, i] * R[k, j]
                 if i != j:
                     R[j, i] = 1. / R[j, j] * d
-            if d <= 0.:  # strictly positive???
+            if d <= 0:  # strictly positive???
                 p = i + 1
                 R[i, i] = sqrt(-d)
                 break

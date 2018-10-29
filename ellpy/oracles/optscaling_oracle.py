@@ -29,7 +29,7 @@ class optscaling_oracle:
             return cut, t
         s = x[0] - x[1]
         fj = s - t
-        if fj < 0.:
+        if fj < 0:
             t = s
             fj = 0.
         return (np.array([1., -1.]), fj), t

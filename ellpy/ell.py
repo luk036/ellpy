@@ -61,7 +61,7 @@ class ell:
         Qg = self.Q.dot(g)
         omega = g.dot(Qg)
         tsq = self.kappa * omega
-        if tsq <= 0.:
+        if tsq <= 0:
             return 4, 0.
         status, params = calc_ell(beta, tsq)
         if status != 0:
@@ -70,7 +70,7 @@ class ell:
         self._xc -= (rho / omega) * Qg
         self.Q -= (sigma / omega) * np.outer(Qg, Qg)
         self.kappa *= delta
-        if self.kappa > 1e100 or self.kappa < 1e-100: # unlikely
+        if self.kappa > 1e100 or self.kappa < 1e-100:  # unlikely
             self.Q *= self.kappa
             self.kappa = 1.
         return status, tsq
@@ -87,13 +87,13 @@ class ell:
         b1sq = b1**2
         if b1sq > tsq or not self.use_parallel_cut:
             return self.calc_dc(b0, tsq)
-        if b1 < b0: # unlikely
+        if b1 < b0:  # unlikely
             return 1, None  # no sol'n
         if b0 == 0:
             return self.calc_ll_cc(b1, b1sq, tsq)
         n = self._n
         b0b1 = b0*b1
-        if n*b0b1 < -tsq: # unlikely
+        if n*b0b1 < -tsq:  # unlikely
             return 3, None  # no effect
 
         # parallel cut
@@ -101,7 +101,7 @@ class ell:
         t0 = tsq - b0sq
         t1 = tsq - b1sq
         bav = (b0 + b1)/2.
-        xi = math.sqrt( 4*t0*t1 + (n*(b1sq - b0sq))**2 )
+        xi = math.sqrt(4*t0*t1 + (n*(b1sq - b0sq))**2)
         sigma = (n + (tsq - b0b1 - xi/2)/(2. * bav**2)) / (n + 1.)
         rho = sigma * bav
         delta = self.c1 * (t0 + t1 + xi/n) / (2*tsq)
@@ -110,7 +110,7 @@ class ell:
     def calc_ll_cc(self, b1, b1sq, tsq):
         """Situation when feasible cut."""
         n = self._n
-        xi = math.sqrt( 4.*tsq*(tsq - b1sq) + (n*b1sq)**2 )
+        xi = math.sqrt(4.*tsq*(tsq - b1sq) + (n*b1sq)**2)
         sigma = (n + (2.*tsq - xi) / b1sq)/(n + 1.)
         rho = sigma*b1/2.
         delta = self.c1*(tsq - (b1sq - xi/n)/2.)/tsq
@@ -125,7 +125,7 @@ class ell:
             return self.calc_cc(tau)
         n = self._n
         gamma = tau + n*beta
-        if gamma < 0.:
+        if gamma < 0:
             return 3, None  # no effect
 
         rho = gamma/(n + 1)
@@ -179,23 +179,16 @@ class ell1d:
         tsq = tau**2
         if beta == 0.:
             self.r /= 2
-            if g > 0.:
-                self._xc -= self.r
-            else:
-                self._xc += self.r
+            self._xc += -self.r if g > 0 else self.r
             return 0, tsq
         if beta > tau:
             return 1, tsq  # no sol'n
-        if beta < -tau:
+        if beta < -tau:  # unlikely
             return 3, tsq  # no effect
 
         bound = self._xc - beta / g
-        if g > 0.:
-            u = bound
-            l = self._xc - self.r
-        else:
-            l = bound
-            u = self._xc + self.r
+        u = bound if g > 0 else self._xc + self.r
+        l = self._xc - self.r if g > 0 else bound
         self.r = (u - l)/2
         self._xc = l + self.r
         return 0, tsq

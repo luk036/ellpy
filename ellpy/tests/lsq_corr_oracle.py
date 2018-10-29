@@ -63,7 +63,7 @@ class basis_oracle2:
         g[-1] = 1
         tc = x[-1]
         fj = tc - t
-        if fj > 0.:
+        if fj > 0:
             return (g, fj), t
 
         cut, feasible = self.lmi0(x[:-1])
@@ -122,7 +122,7 @@ class bsp_oracle2:
         g = np.zeros(n)
         for i in range(n - 2):
             fj = x[i + 1] - x[i]
-            if fj > 0.:
+            if fj > 0:
                 g[i] = -1.
                 g[i + 1] = 1.
                 return (g, fj), False
@@ -183,7 +183,7 @@ class bsp_oracle:
 
         for i in range(n - 1):
             fj = x[i + 1] - x[i]
-            if fj > 0.:
+            if fj > 0:
                 g[i] = -1.
                 g[i + 1] = 1.
                 return (g, fj), False

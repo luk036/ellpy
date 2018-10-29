@@ -61,7 +61,7 @@ class poly_oracle2:
         g[-1] = 1
         tc = x[-1]
         fj = tc - t
-        if fj > 0.:
+        if fj > 0:
             return (g, fj), t
 
         self.qmi.update(tc)
@@ -146,12 +146,12 @@ class bsp_oracle:
 
         for i in range(n - 1):
             fj = x[i + 1] - x[i]
-            if fj > 0.:
+            if fj > 0:
                 g[i] = -1.
                 g[i + 1] = 1.
                 return (g, fj), False
 
-        # if x[-1] < 0.:
+        # if x[-1] 
         #     g[-1] = -1.
         #     return (g, -x[-1]), False
 
@@ -206,19 +206,19 @@ class bsp_oracle2:
 
         for i in range(n - 2):
             fj = x[i + 1] - x[i]
-            if fj > 0.:
+            if fj > 0:
                 g[i] = -1.
                 g[i + 1] = 1.
                 return (g, fj), False
 
-        # if x[-1] < 0.:
+        # if x[-1] 
         #     g[-1] = -1.
         #     return (g, -x[-1]), False
 
         g[-1] = 1
         tc = x[-1]
         fj = tc - t
-        if fj > 0.:
+        if fj > 0:
             return (g, fj), t
 
         self.qmi.update(tc)

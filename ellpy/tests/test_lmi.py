@@ -26,7 +26,7 @@ class my_oracle:
     def __call__(self, x, t):
         f0 = np.dot(self.c, x)
         fj = f0 - t
-        if fj > 0.:
+        if fj > 0:
             return (self.c, fj), t
 
         cut, feasible = self.lmi1(x)

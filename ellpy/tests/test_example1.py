@@ -17,7 +17,7 @@ def my_oracle(z, t):
     # objective: maximize x + y
     f0 = x + y
     fj = t - f0
-    if fj < 0.:
+    if fj < 0:
         fj = 0.
         t = f0
     return (-1.*np.array([1., 1.]), fj), t

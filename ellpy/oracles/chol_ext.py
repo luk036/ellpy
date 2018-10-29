@@ -29,7 +29,7 @@ class chol_ext:
     #             d[i] = A[i, j] - np.dot(d[:j], R[:j, i] * R[:j, j])
     #             if i != j:
     #                 R[j, i] = d[i] / d[j]
-    #         if d[i] <= 0.:  # strictly positive???
+    #         if d[i] <= 0:  # strictly positive???
     #             self.p = i + 1
     #             break
 
@@ -50,7 +50,7 @@ class chol_ext:
                 d = A[i, j] - np.dot(R[:j, i], R[:j, j])
                 if i != j:
                     R[j, i] = d / R[j, j]
-            if d <= 0.:  # strictly positive???
+            if d <= 0:  # strictly positive???
                 self.p = i + 1
                 R[i, i] = math.sqrt(-d)
                 break
@@ -72,7 +72,7 @@ class chol_ext:
     #             d[i] = getA(i, j) - np.dot(d[:j], R[:j, i]*R[:j, j])
     #             if i != j:
     #                 R[j, i] = d[i] / d[j]
-    #         if d[i] <= 0.:  # strictly positive???
+    #         if d[i] <= 0:  # strictly positive???
     #             self.p = i + 1
     #             break
 
@@ -88,7 +88,7 @@ class chol_ext:
                 d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
                 if i != j:
                     R[j, i] = d / R[j, j]
-            if d <= 0.:  # strictly positive???
+            if d <= 0:  # strictly positive???
                 self.p = i + 1
                 R[i, i] = math.sqrt(-d)
                 break
