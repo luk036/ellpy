@@ -51,6 +51,6 @@ class qmi_oracle:
         v = self.Q.witness()
         p = len(v)
         Av = v.dot(self.Fx[:p])
-        g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
+        g = -2*np.array([v.dot(self.F[k][:p]).dot(Av)
                           for k in range(nx)])
         return (g, 1.), False

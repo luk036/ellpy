@@ -32,7 +32,7 @@ def spectral_fact(r):
 
     # compute 1/2*ln(R(w))
     # w = 2*pi*[0:m-1]/m
-    w = np.linspace(0, 2.*np.pi, m, endpoint=False)
+    w = np.linspace(0, 2*np.pi, m, endpoint=False)
     # R = [ones(m, 1) 2*cos(kron(w', [1:n-1]))]*r
     Bn = np.outer(w, np.arange(1, n))
     An = 2*np.cos(Bn)

@@ -56,6 +56,6 @@ class imi_oracle:
             g2 = np.array([-v2.dot(self.F[i][:p2, :p2].dot(v2))
                            for i in range(n)])
             g = np.concatenate((g1, g2))
-            g += -2.*v1[:p2].dot(v2)
+            g += -2*v1[:p2].dot(v2)
 
         return (g, 1.), False

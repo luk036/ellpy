@@ -16,8 +16,8 @@ class mle_poly_oracle:
         self.Y = Y
         self.Sig = Sig
         self.lmi0 = lmi0_oracle(Sig)
-        self.lmi = lmi_oracle(Sig, 2.*Y)
-        # self.lmi2 = lmi2_oracle(Sig, 2.*Y)
+        self.lmi = lmi_oracle(Sig, 2*Y)
+        # self.lmi2 = lmi2_oracle(Sig, 2*Y)
 
     def __call__(self, x, t):
         cut, feasible = self.lmi(x)
@@ -35,7 +35,7 @@ class mle_poly_oracle:
         SY = S.dot(self.Y)
         diag = np.diag(R)
         # f = log(det(Sig)) + trace(inv(Sig)*Y)
-        f1 = 2.*np.sum(np.log(diag))
+        f1 = 2*np.sum(np.log(diag))
         # f1 += sum(S[k].dot(self.Y[k]) for k in range(m))
         f1 += np.trace(SY)
 

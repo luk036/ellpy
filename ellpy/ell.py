@@ -102,7 +102,7 @@ class ell:
         t1 = tsq - b1sq
         bav = (b0 + b1)/2.
         xi = math.sqrt(4*t0*t1 + (n*(b1sq - b0sq))**2)
-        sigma = (n + (tsq - b0b1 - xi/2)/(2. * bav**2)) / (n + 1.)
+        sigma = (n + (tsq - b0b1 - xi/2)/(2 * bav**2)) / (n + 1)
         rho = sigma * bav
         delta = self.c1 * (t0 + t1 + xi/n) / (2*tsq)
         return 0, (rho, sigma, delta)
@@ -111,7 +111,7 @@ class ell:
         """Situation when feasible cut."""
         n = self._n
         xi = math.sqrt(4.*tsq*(tsq - b1sq) + (n*b1sq)**2)
-        sigma = (n + (2.*tsq - xi) / b1sq)/(n + 1.)
+        sigma = (n + (2*tsq - xi) / b1sq)/(n + 1)
         rho = sigma*b1/2.
         delta = self.c1*(tsq - (b1sq - xi/n)/2.)/tsq
         return 0, (rho, sigma, delta)
@@ -121,7 +121,7 @@ class ell:
         tau = math.sqrt(tsq)
         if beta > tau:
             return 1, None    # no sol'n
-        if beta == 0.:
+        if beta == 0:
             return self.calc_cc(tau)
         n = self._n
         gamma = tau + n*beta
@@ -129,7 +129,7 @@ class ell:
             return 3, None  # no effect
 
         rho = gamma/(n + 1)
-        sigma = 2.*rho/(tau + beta)
+        sigma = 2*rho/(tau + beta)
         delta = self.c1*(tsq - beta**2)/tsq
         return 0, (rho, sigma, delta)
 
@@ -177,7 +177,7 @@ class ell1d:
         g, beta = cut
         tau = abs(self.r * g)
         tsq = tau**2
-        if beta == 0.:
+        if beta == 0:
             self.r /= 2
             self._xc += -self.r if g > 0 else self.r
             return 0, tsq

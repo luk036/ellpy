@@ -42,7 +42,7 @@ class mle_poly_oracle:
         self.Y = Y
         self.Sig = Sig
         self.imi = imi_oracle(Sig)
-        # self.lmi = lmi_oracle(Sig, 2.*Y)
+        # self.lmi = lmi_oracle(Sig, 2*Y)
         N = len(self.Y)
         self.c = np.zeros(n)
         for i in range(n):
@@ -57,7 +57,7 @@ class mle_poly_oracle:
         R = self.imi.Q.R[:N,:N]
         # S = invR.dot(invR.T)
         diag = np.diag(R)
-        f1 = 2.*np.sum(np.log(diag))
+        f1 = 2*np.sum(np.log(diag))
         S = self.imi.A[N:,N:]
         # SY = S.dot(self.Y)
         f1 += sum(S[k].dot(self.Y[k]) for k in range(N))
