@@ -1,3 +1,4 @@
 {
+  "ellpy/tests/test_corr_fn.py::test_corr_fn": true,
   "tests/test_lmi.py::testcase": true
 }

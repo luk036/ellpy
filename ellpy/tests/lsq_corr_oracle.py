@@ -52,7 +52,7 @@ def construct_distance_matrix(s):
     return D
 
 
-class basis_oracle2:
+class lsq_oracle:
     def __init__(self, F, F0):
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
@@ -60,11 +60,6 @@ class basis_oracle2:
     def __call__(self, x, t):
         n = len(x)
         g = np.zeros(n)
-        g[-1] = 1
-        tc = x[-1]
-        fj = tc - t
-        if fj > 0:
-            return (g, fj), t
 
         cut, feasible = self.lmi0(x[:-1])
         if not feasible:
@@ -73,7 +68,7 @@ class basis_oracle2:
             g[-1] = 0.
             return (g, fj), t
 
-        self.qmi.update(tc)
+        self.qmi.update(x[-1])
         cut, feasible = self.qmi(x[:-1])
         if not feasible:
             g1, fj = cut
@@ -82,6 +77,11 @@ class basis_oracle2:
             g[-1] = -v.dot(v)
             return (g, fj), t
 
+        g[-1] = 1
+        tc = x[-1]
+        fj = tc - t
+        if fj > 0:
+            return (g, fj), t
         return (g, 0.), tc
 
 
@@ -98,8 +98,11 @@ def lsq_corr_core2(Y, m, P):
 
 
 def lsq_corr_poly2(Y, s, m):
-    n = len(s)
+    return corr_poly(Y, s, m, lsq_oracle, lsq_corr_core2)
 
+
+def corr_poly(Y, s, m, oracle, corr_core):
+    n = len(s)
     D1 = construct_distance_matrix(s)
     D = np.ones((n, n))
     Sig = [D]
@@ -107,33 +110,50 @@ def lsq_corr_poly2(Y, s, m):
         D = np.multiply(D, D1)
         Sig += [D]
     Sig.reverse()
-    P = basis_oracle2(Sig, Y)
-    a, num_iters, feasible = lsq_corr_core2(Y, m, P)
+    P = oracle(Sig, Y)
+    a, num_iters, feasible = corr_core(Y, m, P)
     return np.poly1d(a), num_iters, feasible
 
 
-class bsp_oracle2:
-    def __init__(self, F, F0):
-        self.basis = basis_oracle2(F, F0)
+def mono_oracle(x):
+    # monotonic decreasing constraint
+    n = len(x)
+    g = np.zeros(n)
+    for i in range(n - 1):
+        fj = x[i + 1] - x[i]
+        if fj > 0:
+            g[i] = -1.
+            g[i + 1] = 1.
+            return (g, fj), False
+    return None, True
+
+
+class mono_decreasing_oracle2:
+    def __init__(self, basis):
+        self.basis = basis
 
     def __call__(self, x, t):
         # monotonic decreasing constraint
         n = len(x)
         g = np.zeros(n)
-        for i in range(n - 2):
-            fj = x[i + 1] - x[i]
-            if fj > 0:
-                g[i] = -1.
-                g[i + 1] = 1.
-                return (g, fj), False
-
+        cut, feasible = mono_oracle(x[:-1])
+        if not feasible:
+            g1, fj = cut
+            g[:-1] = g1
+            g[-1] = 0.
+            return (g, fj), t
         return self.basis(x, t)
 
 
 def lsq_corr_bspline2(Y, s, m):
+    return corr_bspline(Y, s, m, lsq_oracle, lsq_corr_core2)
+
+
+def corr_bspline(Y, s, m, oracle, corr_core):
     Sig, t, k = generate_bspline_info(s, m)
-    P = bsp_oracle2(Sig, Y)
-    c, num_iters, feasible = lsq_corr_core2(Y, m, P)
+    Pb = oracle(Sig, Y)
+    P = mono_decreasing_oracle2(Pb)
+    c, num_iters, feasible = corr_core(Y, m, P)
     return BSpline(t, c, k), num_iters, feasible
 
 
@@ -178,15 +198,9 @@ class bsp_oracle:
         self.qmi.update(t)
 
     def __call__(self, x):
-        n = len(x)
-        g = np.zeros(n)
-
-        for i in range(n - 1):
-            fj = x[i + 1] - x[i]
-            if fj > 0:
-                g[i] = -1.
-                g[i + 1] = 1.
-                return (g, fj), False
+        cut, feasible = mono_oracle(x)
+        if not feasible:
+            return cut, False
         return self.qmi(x)
 
 

@@ -95,7 +95,8 @@ class chol_ext:
             R[i, i] = math.sqrt(d)
 
     def is_spd(self):
-        return self.p == 0
+        p = self.p
+        return p == 0 or self.R[p-1, p-1] == 0
 
     # def witness2(self):
     #     '''

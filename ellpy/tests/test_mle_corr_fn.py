@@ -5,7 +5,7 @@ from ellpy.tests.lsq_corr_oracle import create_2d_isotropic
 # from scipy.interpolate import BSpline
 
 
-def test_corr_fn():
+def test_mle_corr_fn():
     Y, s = create_2d_isotropic(5, 4, 3000)
     _, num_iters, feasible = mle_corr_bspline(Y, s, 4)
     assert feasible
