@@ -6,7 +6,7 @@ from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell
 from ellpy.oracles.lmi0_oracle import lmi0_oracle
 from ellpy.oracles.lmi_oracle import lmi_oracle
-from ellpy.tests.lsq_corr_oracle import construct_distance_matrix, generate_bspline_info, corr_poly, corr_bspline, mono_oracle
+from ellpy.tests.corr_oracle import construct_distance_matrix, generate_bspline_info, corr_poly, corr_bspline, mono_oracle
 
 
 class mle_oracle:

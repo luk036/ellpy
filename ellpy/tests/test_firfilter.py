@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+import time
 import numpy as np
 # import cvxpy as cvx
 from ellpy.ell import ell
@@ -66,9 +67,10 @@ class my_oracle:
         return (gmax, 0.), fmax
 
 
-def test_firfilter():
+def run_firfilter(no_trick, duration=0.000001):
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
+    E._no_defer_trick = no_trick
     P = my_oracle()
     prob1 = Problem(E, P)
     prob1.solve(100.)
@@ -78,3 +80,9 @@ def test_firfilter():
         raise Exception('ELL Error')
     print("optimal value", prob1.optim_value)
     assert prob1.status == 'optimal'
+
+def test_firfilter_use_trick(benchmark):
+    benchmark(run_firfilter, False)
+
+def test_firfilter_no_trick(benchmark):
+    benchmark(run_firfilter, True)
