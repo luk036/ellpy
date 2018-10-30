@@ -74,6 +74,7 @@ def run_firfilter(no_trick, duration=0.000001):
     P = my_oracle()
     prob1 = Problem(E, P)
     prob1.solve(100.)
+    time.sleep(duration)
 
     print('Problem status:', prob1.status)
     if prob1.status != 'optimal':

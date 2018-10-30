@@ -119,17 +119,3 @@ def generate_bspline_info(s, m):
     for i in range(m):
         Sig += [spls[i](D)]
     return Sig, t, k
-
-
-class bsp_oracle:
-    def __init__(self, F, F0):
-        self.qmi = qmi_oracle(F, F0)
-
-    def update(self, t):
-        self.qmi.update(t)
-
-    def __call__(self, x):
-        cut, feasible = mono_oracle(x)
-        if not feasible:
-            return cut, False
-        return self.qmi(x)

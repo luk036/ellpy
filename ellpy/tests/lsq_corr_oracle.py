@@ -61,37 +61,51 @@ def lsq_corr_bspline2(Y, s, m):
     return corr_bspline(Y, s, m, lsq_oracle, lsq_corr_core2)
 
 
-def lsq_corr_poly(Y, s, m):
-    n = len(s)
-    D1 = construct_distance_matrix(s)
-    D = np.ones((n, n))
-    Sig = [D]
-    for _ in range(m - 1):
-        D = np.multiply(D, D1)
-        Sig += [D]
-    Sig.reverse()
-    Q = qmi_oracle(Sig, Y)
+# class bsp_oracle:
+#     def __init__(self, F, F0):
+#         self.qmi = qmi_oracle(F, F0)
 
-    niter, a = lsq_corr_core(m, Y, Q)
-    assert niter == 40
-    return np.poly1d(a)
+#     def update(self, t):
+#         self.qmi.update(t)
+
+#     def __call__(self, x):
+#         cut, feasible = mono_oracle(x)
+#         if not feasible:
+#             return cut, False
+#         return self.qmi(x)
 
 
-def lsq_corr_bspline(Y, s, m):
-    Sig, t, k = generate_bspline_info(s, m)
-    Q = bsp_oracle(Sig, Y)
-    niter, c = lsq_corr_core(m, Y, Q)
-    assert niter == 40
-    return BSpline(t, c, k)
+# def lsq_corr_poly(Y, s, m):
+#     n = len(s)
+#     D1 = construct_distance_matrix(s)
+#     D = np.ones((n, n))
+#     Sig = [D]
+#     for _ in range(m - 1):
+#         D = np.multiply(D, D1)
+#         Sig += [D]
+#     Sig.reverse()
+#     Q = qmi_oracle(Sig, Y)
+
+#     niter, a = lsq_corr_core(m, Y, Q)
+#     assert niter == 40
+#     return np.poly1d(a)
 
 
-def lsq_corr_core(m, Y, Q):
-    c = np.ones(m)  # cannot all zeros
-    normY = np.linalg.norm(Y, 'fro')
-    E = ell(64., c)
-    P = bsearch_adaptor(Q, E)
-    _, niter, feasible = bsearch(P, [0., normY*normY])
-    print(niter, feasible)
-    assert feasible
-    c = P.x_best
-    return niter, c
+# def lsq_corr_bspline(Y, s, m):
+#     Sig, t, k = generate_bspline_info(s, m)
+#     Q = bsp_oracle(Sig, Y)
+#     niter, c = lsq_corr_core(m, Y, Q)
+#     assert niter == 40
+#     return BSpline(t, c, k)
+
+
+# def lsq_corr_core(m, Y, Q):
+#     c = np.ones(m)  # cannot all zeros
+#     normY = np.linalg.norm(Y, 'fro')
+#     E = ell(64., c)
+#     P = bsearch_adaptor(Q, E)
+#     _, niter, feasible = bsearch(P, [0., normY*normY])
+#     print(niter, feasible)
+#     assert feasible
+#     c = P.x_best
+#     return niter, c

@@ -5,6 +5,7 @@ import time
 import numpy as np
 from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell
+from ellpy.tests.spectral_fact import spectral_fact
 from .lowpass_oracle import lowpass_oracle
 
 
@@ -95,9 +96,10 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     options = Options()
     options.max_it = 20000
     options.tol = 1e-8
-    _, _, num_iters, feasible, _ = cutting_plane_dc(
+    r, _, num_iters, feasible, _ = cutting_plane_dc(
         P, E, Spsq, options)
     time.sleep(duration)
+    h = spectral_fact(r)
     return num_iters, feasible
 
 
