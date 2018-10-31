@@ -21,7 +21,7 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
     xx, yy = np.meshgrid(sx, sy)
     s = np.vstack([xx.flatten(), yy.flatten()]).T
 
-    Sig = np.ones((n, n))
+    Sig = np.zeros((n, n))
     for i in range(n):
         for j in range(i, n):
             d = np.array(s[j]) - np.array(s[i])

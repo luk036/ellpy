@@ -19,14 +19,14 @@ class qmi_oracle:
         # A = self.B.copy()
         self.A = np.zeros(F0.shape)
         self.t = None
-        self.count = -1
+        self.count = 0
         self.Q = chol_ext(len(F0))
 
     def update(self, t):
         self.t = t
 
     def __call__(self, x):
-        self.count = -1
+        self.count = 0
         nx = len(x)
         # Fx = self.F0.copy()
         # A = np.zeros(self.F0.shape)
@@ -34,8 +34,8 @@ class qmi_oracle:
         def getA(i, j):
             if i < j:
                 raise AssertionError()
-            if self.count < i:
-                self.count = i
+            if self.count < i + 1:
+                self.count = i + 1 
                 self.Fx[i] = self.F0[i]
                 self.Fx[i] -= sum(self.F[k][i] * x[k]
                                   for k in range(nx))

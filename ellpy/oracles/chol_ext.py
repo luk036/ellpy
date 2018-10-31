@@ -96,7 +96,7 @@ class chol_ext:
 
     def is_spd(self):
         p = self.p
-        return p == 0 or self.R[p-1, p-1] == 0
+        return p == 0 or self.R[p - 1, p - 1] == 0
 
     # def witness2(self):
     #     '''
@@ -116,7 +116,7 @@ class chol_ext:
             raise AssertionError()
         p = self.p
         v = np.zeros(p)
-        v[p-1] = 1. / self.R[p-1, p-1]
+        v[p - 1] = 1. / self.R[p - 1, p - 1]
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -s / self.R[i, i]
