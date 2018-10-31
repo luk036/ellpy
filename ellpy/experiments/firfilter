@@ -15,7 +15,7 @@ from ellpy.problem import Problem
 n = 20
 
 # Rule-of-thumb frequency discretization (Cheney's Approx. Theory book).
-m = 15*n
+m = 15 * n
 w = np.linspace(0, np.pi, m)
 
 # ********************************************************************
@@ -52,7 +52,7 @@ A_I = -np.sin(A_theta)
 
 
 # Optimal Chebyshev filter formulation.
-class my_oracle:
+class my_fir_oracle:
     """Oracle for Chebyshev filter"""
 
     def __call__(self, h, t):
@@ -76,7 +76,7 @@ class my_oracle:
 
 h0 = np.zeros(n)  # initial x0
 E = ell(40., h0)
-P = my_oracle()
+P = my_fir_oracle()
 #hb, fb, niter, feasible, status = cutting_plane_dc(P, E, 10.)
 prob1 = Problem(E, P)
 prob1.solve(100.)
@@ -94,7 +94,7 @@ print("optimal value", prob1.optim_value)
 # if flag != 1:
 #    raise Exception('ELL Error')
 hv = prob1.optim_var
-
+print("optimal sol'n", hv)
 # # # h is the (real) FIR coefficient vector, which we are solving for.
 # # h = cvx.Variable(n)
 # # # The objective is:

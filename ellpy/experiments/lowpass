@@ -108,6 +108,7 @@ if __name__ == "__main__":
     # options.tol = 1e-11
     r, Spsq_new, num_iters, feasible, status = cutting_plane_dc(
         P, E, Spsq, options)
+    print(r)
     print(num_iters, feasible, status)
     assert feasible
     # toc = time.time()

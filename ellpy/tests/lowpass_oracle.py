@@ -82,7 +82,7 @@ class lowpass_oracle:
             if v < 0:
                 f = -v
                 g = -self.Anr[k, :]
-                self.i_Anr = k
+                self.i_Anr = k + 1
                 return (g, f), Spsq
 
         # Begin objective function
