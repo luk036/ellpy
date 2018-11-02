@@ -59,9 +59,9 @@ class rank1_oracle:
             # 4. G >= 0 constraint
             [R, p] = chol_ext(G)
             if p != 0:
-                v = witness(R, p)
+                v, f = witness(R, p)
                 # f = -v'*G(1:p,1:p)*v
-                f = -np.dot(v, G[:p, :p].dot(v))
+                # f = -np.dot(v, G[:p, :p].dot(v))
                 g = np.zeros(n)
                 v2 = np.zeros(self.N)
                 v2[:p] = v

@@ -81,13 +81,12 @@ class cholutil:
         self.p = p
 
     def is_spd(self):
-        p = self.p
-        return p == 0 or self.R[p-1, p-1] == 0
+        return self.p == 0
 
     @cython.boundscheck(False) # turn off bounds-checking
     @cython.wraparound(False)  # turn off negative index wrapping
     def witness(self):
-        if self.p <= 0:
+        if self.is_spd():
             raise AssertionError()
 
         cdef int i, k
@@ -96,17 +95,20 @@ class cholutil:
         cdef res = np.zeros(p)
         # cdef np.ndarray[dtype=DTYPE_t, ndim=1] v = np.zeros(p)
         # cdef np.ndarray[dtype=DTYPE_t, ndim=2] R = self.R
+        cdef DTYPE_t r, f
         cdef DTYPE_t[::1] v = res
         cdef DTYPE_t[:, ::1] R = self.R
 
-        v[p-1] = 1. / R[p-1, p-1]
+        r = self.R[p - 1, p - 1]
+        v[p - 1] = 1. if r == 0 else 1. / r
+        f = 0. if r == 0 else 1.
         for i in range(p - 2, -1, -1):
             s = 0.
             for k in range(i+1, p):
                 s += R[i,k] * v[k]
             # s = np.dot(R[i, i+1:p], v[i+1:p])
             v[i] = -s / R[i, i]
-        return res
+        return res, f
 
     @cython.boundscheck(False) # turn off bounds-checking
     @cython.wraparound(False)  # turn off negative index wrapping

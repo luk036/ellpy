@@ -48,9 +48,9 @@ class qmi_c_oracle:
 
         if self.Q.is_spd():
             return None, True
-        v = self.Q.witness()
+        v, f = self.Q.witness()
         p = len(v)
         Av = v.dot(self.Fx[:p])
         g = -2*np.array([v.dot(self.F[k][:p]).dot(Av)
                           for k in range(nx)])
-        return (g, 1.), False
+        return (g, f), False

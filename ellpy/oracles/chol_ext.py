@@ -56,7 +56,6 @@ class chol_ext:
                 break
             R[i, i] = math.sqrt(d)
 
-
     # def factor2(self, getA):
     #     '''(lazy evalution of A)
     #        (square-root-free version)
@@ -95,8 +94,8 @@ class chol_ext:
             R[i, i] = math.sqrt(d)
 
     def is_spd(self):
-        p = self.p
-        return p == 0 or self.R[p - 1, p - 1] == 0
+        """is symmetric positive definite"""
+        return self.p == 0
 
     # def witness2(self):
     #     '''
@@ -116,11 +115,13 @@ class chol_ext:
             raise AssertionError()
         p = self.p
         v = np.zeros(p)
-        v[p - 1] = 1. / self.R[p - 1, p - 1]
+        r = self.R[p - 1, p - 1]
+        v[p - 1] = 1. if r == 0 else 1. / r
+        f = 0. if r == 0 else 1.
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -s / self.R[i, i]
-        return v
+        return v, f
 
     def sym_quad(self, v, F):
         # v = self.witness()

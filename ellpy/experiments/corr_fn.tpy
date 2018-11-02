@@ -58,7 +58,7 @@ class poly_oracle2:
     def __call__(self, x, t):
         n = len(x)
         g = np.zeros(n)
-        g[-1] = 1
+        g[-1] = 1 
         tc = x[-1]
         fj = tc - t
         if fj > 0:
@@ -69,7 +69,7 @@ class poly_oracle2:
         if not feasible:
             g1, fj = cut
             g[:-1] = g1
-            v = self.qmi.Q.witness()
+            v, _ = self.qmi.Q.witness()
             g[-1] = -v.dot(v)
             return (g, fj), t
 
@@ -226,7 +226,7 @@ class bsp_oracle2:
         if not feasible:
             g1, fj = cut
             g[:-1] = g1
-            v = self.qmi.Q.witness()
+            v, _ = self.qmi.Q.witness()
             g[-1] = -v.dot(v)
             return (g, fj), t
 

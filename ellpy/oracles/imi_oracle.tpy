@@ -41,7 +41,7 @@ class imi_oracle:
         self.Q.factor(getA)
         if self.Q.is_spd():
             return None, True
-        v = self.Q.witness()
+        v, f = self.Q.witness()
         p = len(v)
         if p < N:
             g1 = np.array([-v.dot(self.F[i][:p, :p].dot(v))
@@ -58,4 +58,4 @@ class imi_oracle:
             g = np.concatenate((g1, g2))
             g += -2*v1[:p2].dot(v2)
 
-        return (g, 1.), False
+        return (g, f), False
