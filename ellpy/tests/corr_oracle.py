@@ -29,14 +29,17 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
             Sig[j, i] = Sig[i, j]
 
     A = np.linalg.cholesky(Sig)
-    Ys = np.zeros((n, N))
+    # Ys = np.zeros((n, N))
+    Y = np.zeros((n, n))
 
     for k in range(N):
         x = var * np.random.randn(n)
         y = A.dot(x) + tau*np.random.randn(n)
-        Ys[:, k] = y
+        # Ys[:, k] = y
+        Y += np.outer(y, y)
 
-    Y = np.cov(Ys, bias=True)
+    # Y = np.cov(Ys, bias=True)
+    Y /= N
     return Y, s
 
 
@@ -60,10 +63,11 @@ def corr_poly(Y, s, m, oracle, corr_core):
     for _ in range(m - 1):
         D = np.multiply(D, D1)
         Sig += [D]
-    Sig.reverse()
+    # Sig.reverse()
     P = oracle(Sig, Y)
     a, num_iters, feasible = corr_core(Y, m, P)
-    return np.poly1d(a), num_iters, feasible
+    pa = np.ascontiguousarray(a[::-1])
+    return np.poly1d(pa), num_iters, feasible
 
 
 def mono_oracle(x):

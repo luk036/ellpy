@@ -46,7 +46,8 @@ def lsq_corr_core2(Y, m, P):
     normY2 = 32*normY*normY
     val = 256*np.ones(m + 1)
     val[-1] = normY2*normY2
-    x = np.ones(m + 1)  # cannot all zeros
+    x = np.zeros(m + 1)  # cannot all zeros
+    x[0] = 1.
     x[-1] = normY2/2
     E = ell(val, x)
     x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
@@ -83,12 +84,13 @@ def lsq_corr_bspline2(Y, s, m):
 #     for _ in range(m - 1):
 #         D = np.multiply(D, D1)
 #         Sig += [D]
-#     Sig.reverse()
+#     # Sig.reverse()
 #     Q = qmi_oracle(Sig, Y)
 
 #     niter, a = lsq_corr_core(m, Y, Q)
 #     assert niter == 40
-#     return np.poly1d(a)
+#     pa = np.ascontiguousarray(a[::-1])
+#     return np.poly1d(pa)
 
 
 # def lsq_corr_bspline(Y, s, m):

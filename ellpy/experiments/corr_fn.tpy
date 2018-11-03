@@ -85,7 +85,7 @@ def lsq_corr_poly2(Y, s, m):
     for _ in range(m - 1):
         D = np.multiply(D, D1)
         Sig += [D]
-    Sig.reverse()
+    # Sig.reverse()
 
     P = poly_oracle2(Sig, Y)
     normY = np.linalg.norm(Y, 'fro')
@@ -101,8 +101,9 @@ def lsq_corr_poly2(Y, s, m):
     # assert num_iters == 175
 
     a = x_best[:-1]
-    print(a)
-    return np.poly1d(a)
+    pa = np.ascontiguousarray(a[::-1])
+    print(pa)
+    return np.poly1d(pa)
 
 
 def lsq_corr_poly(Y, s, m):
@@ -115,7 +116,7 @@ def lsq_corr_poly(Y, s, m):
     for _ in range(m - 1):
         D = np.multiply(D, D1)
         Sig += [D]
-    Sig.reverse()
+    # Sig.reverse()
 
     Q = qmi_c_oracle(Sig, Y)
     E = ell(64., a)
@@ -128,8 +129,9 @@ def lsq_corr_poly(Y, s, m):
     assert niter == 40
 
     a = P.x_best
-    print(a)
-    return np.poly1d(a)
+    pa = np.ascontiguousarray(a[::-1])
+    print(pa)
+    return np.poly1d(pa)
 
 
 class bsp_oracle:

@@ -1,4 +1,5 @@
 [
+  "ellpy/tests/test_corr_fn.py::test_data",
   "ellpy/tests/test_corr_fn.py::test_lsq_corr_fn",
   "ellpy/tests/test_corr_fn.py::test_mle_corr_fn",
   "ellpy/tests/test_example1.py::test_example1",

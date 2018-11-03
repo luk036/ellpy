@@ -94,19 +94,21 @@ def mle_corr_poly(Y, s, n):
     for _ in range(n - 1):
         D = np.multiply(D, D1)
         Sig += [D]
-    Sig.reverse()
+    # Sig.reverse()
     # normY = np.linalg.norm(Y, 'fro')
-    a = np.ones(2*n)
+    x = np.ones(2*n)
 
     # P = poly_oracle(Sig, Y, a)
     # _, _, _ = bsearch(P, [0., normY*normY])
     # a = P.x_best
     P = mle_poly_oracle(Sig, Y, n)
-    E = ell(100., a)
-    a, _, num_iters, feasible, status = cutting_plane_dc(
+    E = ell(100., x)
+    x, _, num_iters, feasible, status = cutting_plane_dc(
         P, E, float('inf'), 5000)
     print(num_iters, feasible, status)
-    return np.poly1d(a[:n])
+    a = x[:n]
+    pa = np.ascontiguousarray(a[::-1])
+    return np.poly1d(pa)
 #  return prob.is_dcp()
 
 

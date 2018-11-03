@@ -17,7 +17,7 @@ if __name__ == "__main__":
     print(pol)
     print(num_iters)
     print('start cvx...')
-    splcvx = lsq_corr_bspline(Y, s, 5)
+    splcvx = lsq_corr_bspline(Y, s, 4)
     # pol, num_iters, _ = lsq_corr_poly2(Y, s, 5)
     # print(num_iters)
     # polcvx  = lsq_corr_poly(Y, s, 5)
