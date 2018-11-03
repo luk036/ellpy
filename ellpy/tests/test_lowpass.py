@@ -3,10 +3,11 @@ from __future__ import print_function
 
 import time
 import numpy as np
-from ellpy.cutting_plane import cutting_plane_dc, Options
+from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q, Options
 from ellpy.ell import ell
 from ellpy.tests.spectral_fact import spectral_fact
 from .lowpass_oracle import lowpass_oracle
+from .csdlowpass_oracle import csdlowpass_oracle
 
 
 # Modified from CVX code by Almir Mutapcic in 2006.
@@ -41,6 +42,7 @@ from .lowpass_oracle import lowpass_oracle
 # *********************************************************************
 # number of FIR coefficients (including zeroth)
 N = 32
+nnz = 8
 wpass = 0.12*np.pi   # end of passband
 wstop = 0.20*np.pi   # start of stopband
 delta0_wpass = 0.125
@@ -113,6 +115,27 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
 
 def test_lowpass():
     result, feasible = run_lowpass(True)
+    assert feasible
+    assert result > 400
+    assert result < 450
+
+def run_csdlowpass(use_parallel_cut, duration=0.000001):
+    r0 = np.zeros(N)  # initial x0
+    r0[0] = 0
+    E = ell(4., r0)
+    E.use_parallel_cut = use_parallel_cut
+    P = csdlowpass_oracle(nnz, Ap, As, Anr, Lpsq, Upsq)
+    options = Options()
+    options.max_it = 20000
+    options.tol = 1e-8
+    r, _, num_iters, feasible, _ = cutting_plane_q(
+        P, E, Spsq, options)
+    time.sleep(duration)
+    h = spectral_fact(r)
+    return num_iters, feasible
+
+def test_csdlowpass():
+    result, feasible = run_csdlowpass(True)
     assert feasible
     assert result > 400
     assert result < 450
