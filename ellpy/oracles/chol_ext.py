@@ -40,21 +40,23 @@ class chol_ext:
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
         '''
-        # N = len(A)
+        return self.factor(lambda i, j: A[i, j])
+
+        # # N = len(A)
+        # # self.p = 0
         # self.p = 0
-        self.p = 0
-        R = self.R
-        N = len(R)
-        for i in range(N):
-            for j in range(i+1):
-                d = A[i, j] - np.dot(R[:j, i], R[:j, j])
-                if i != j:
-                    R[j, i] = d / R[j, j]
-            if d <= 0:  # strictly positive???
-                self.p = i + 1
-                R[i, i] = math.sqrt(-d)
-                break
-            R[i, i] = math.sqrt(d)
+        # R = self.R
+        # N = len(R)
+        # for i in range(N):
+        #     for j in range(i+1):
+        #         d = A[i, j] - np.dot(R[:j, i], R[:j, j])
+        #         if i != j:
+        #             R[j, i] = d / R[j, j]
+        #     if d <= 0:  # strictly positive???
+        #         self.p = i + 1
+        #         R[i, i] = math.sqrt(-d)
+        #         break
+        #     R[i, i] = math.sqrt(d)
 
     # def factor2(self, getA):
     #     '''(lazy evalution of A)

@@ -1,25 +1,5 @@
 [
-  "ellpy/tests/test_corr_fn.py::test_data",
-  "ellpy/tests/test_corr_fn.py::test_lsq_corr_fn",
-  "ellpy/tests/test_corr_fn.py::test_mle_corr_fn",
-  "ellpy/tests/test_example1.py::test_example1",
-  "ellpy/tests/test_example2.py::test_example2",
-  "ellpy/tests/test_firfilter.py::test_firfilter_use_trick",
-  "ellpy/tests/test_firfilter.py::test_firfilter_no_trick",
-  "ellpy/tests/test_lmi.py::test_lmi_lazy",
-  "ellpy/tests/test_lmi.py::test_lmi_old",
-  "ellpy/tests/test_lowpass.py::test_lowpass",
-  "ellpy/tests/test_lowpass.py::test_csdlowpass",
-  "ellpy/tests/test_optscaling.py::test_two_variables",
-  "ellpy/tests/test_optscaling.py::test_binary_search",
-  "ellpy/tests/test_profit.py::test_profit",
-  "pycsd/test/test_csd_decimals.py::tests__decimals::test__01_to_decimal",
-  "pycsd/test/test_csd_decimals.py::tests__decimals::test__01a_to_decimal",
-  "pycsd/test/test_csd_decimals.py::tests__decimals::test__02_to_csd_1_place",
-  "pycsd/test/test_csd_decimals.py::tests__decimals::test__03_to_csd_4_places",
-  "pycsd/test/test_csd_decimals.py::tests__decimals::test__04_to_csd_x_places",
-  "pycsd/test/test_csd_integers.py::tests__integers::test__01_to_integer",
-  "pycsd/test/test_csd_integers.py::tests__integers::test__02_to_csd",
-  "pycsd/test/test_to_and_fro_10bits.py::tests__to_and_fro_10bits::test__01_to_integer",
-  "pycsd/test/test_to_and_fro_10bits.py::tests__to_and_fro_10bits::test__02_to_csd"
+  "ellpy/tests/test_chol.py::test_chol1",
+  "ellpy/tests/test_chol.py::test_chol2",
+  "ellpy/tests/test_chol.py::test_chol3"
 ]
