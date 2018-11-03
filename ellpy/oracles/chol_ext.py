@@ -7,8 +7,8 @@ class chol_ext:
     def __init__(self, N):
         self.R = np.zeros((N, N))
         self.p = 0
-        self.v = np.zeros(N)
-        self.d = np.zeros(N)
+        # self.v = np.zeros(N)
+        # self.d = np.zeros(N)
 
     # def factorize2(self, A):
     #     '''
@@ -119,35 +119,13 @@ class chol_ext:
         v = np.zeros(p)
         r = self.R[p - 1, p - 1]
         v[p - 1] = 1. if r == 0 else 1. / r
-        f = 0. if r == 0 else 1.
+        ep = 0. if r == 0 else 1.
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -s / self.R[i, i]
-        return v, f
+        return v, ep
 
     def sym_quad(self, v, F):
         # v = self.witness()
         p = self.p
         return v.dot(F[:p, :p].dot(v))
-
-
-# def print_case(l1):
-#     m1 = np.array(l1)
-#     R, p = chol_ext(m1)
-#     pprint(R)
-#     if p > 0:
-#         v = witness(R, p)
-#         print(np.dot(v, m1[:p, :p].dot(v)))
-
-
-# if __name__ == "__main__":
-#     l1 = [[25., 15., -5.],
-#           [15., 18., 0.],
-#           [-5., 0., 11.]]
-#     print_case(l1)
-
-#     l2 = [[18., 22., 54., 42.],
-#           [22., -70., 86., 62.],
-#           [54., 86., -174., 134.],
-#           [42., 62., 134., -106.]]
-#     print_case(l2)

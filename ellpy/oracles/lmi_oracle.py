@@ -13,7 +13,6 @@ class lmi_oracle:
     def __init__(self, F, B):
         self.F = F
         self.F0 = B
-        self.A = np.zeros(B.shape)
         self.Q = chol_ext(len(B))
 
     def __call__(self, x):
@@ -21,10 +20,8 @@ class lmi_oracle:
         n = len(x)
 
         def getA(i, j):
-            self.A[i, j] = self.F0[i, j]
-            self.A[i, j] -= sum(self.F[k][i, j] * x[k]
-                                for k in range(n))
-            return self.A[i, j]
+            return self.F0[i, j] - sum(
+                self.F[k][i, j] * x[k] for k in range(n))
 
         self.Q.factor(getA)
         if self.Q.is_spd():
