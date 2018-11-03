@@ -5,7 +5,7 @@
 
 import sys
 sys.path.append('../csd')
-import csd
+import pycsd.csd as csd
 # print dir(csd)
 import unittest
 

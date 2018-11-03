@@ -7,6 +7,6 @@ from __future__ import print_function
 import sys
 sys.path.append('./csd')
 
-import csd
+import pycsd.csd as csd
 
 print (csd.to_decimal( sys.argv[1] ))

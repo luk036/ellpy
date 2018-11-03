@@ -26,12 +26,15 @@ if sys.version_info[:2] < (2, 7):
 
 # Write the version information.
 sys.path.insert(0, 'ellpy')
+sys.path.insert(0, 'pycsd')
 import release
 version = release.write_versionfile()
 sys.path.pop(0)
 
 packages = ["ellpy",
             "ellpy.oracles",
+            "pycsd",
+            "pycsd.csd",
             "ellpy.tests"]
 
 # docdirbase = 'share/doc/ellpy-%s' % version

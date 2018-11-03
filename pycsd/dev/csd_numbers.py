@@ -3,7 +3,7 @@
 
 import sys
 sys.path.append('/home/mmcgrana/lib/python/csd')
-import csd
+import pycsd.csd as csd
 
 num_digits = 4
 

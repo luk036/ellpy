@@ -60,6 +60,12 @@ def spectral_fact(r):
 
     return h
 
+def inverse_spectral_fact(h):
+    n = len(h)
+    r = np.zeros(n)
+    for t in range(n):
+        r[t] = np.dot(h[t:], h[:n-t])
+    return r
 
 # if __name__ == "__main__":
 #     r = np.random.rand(20)

@@ -3,7 +3,7 @@
  Unittests for the CSD module
 """
 
-import csd
+import pycsd.csd as csd
 import unittest
 
 good_values_dict = {32: '+00000',

@@ -119,3 +119,74 @@ def to_decimal(csd_str, debug=False):
                 c, len(m), len(n), msb_power-ii, power_of_two, num))
 
     return num
+
+
+def to_csdfixed(num, nnz=4, debug=False):
+    """ Convert the argument to CSD Format. """
+
+    if debug:
+        print("Converting %f " % (num),)
+
+    # figure out binary range, special case for 0
+    if num == 0:
+        return '0'
+    if fabs(num) < 1.0:
+        n = 0
+    else:
+        n = ceil(log(fabs(num) * 3.0 / 2.0, 2))
+
+    csd_digits = []
+
+    # Hone in on the CSD code for the input number
+    remainder = num
+    previous_non_zero = False
+    n -= 1
+    nnz -= 1
+
+    while(n >= 0 or nnz > 0):
+
+        limit = pow(2.0, n+1) / 3.0
+
+        if debug:
+            print("  ", remainder, limit,)
+
+        # decimal point?
+        if n == -1:
+            csd_digits.extend(['.'])
+
+        # convert the number
+        if previous_non_zero:
+            csd_digits.extend(['0'])
+            # prev_non_zero = False
+
+        elif remainder > limit:
+            csd_digits.extend(['+'])
+            remainder -= pow(2.0, n)
+            prev_non_zero = True
+            nnz -= 1
+
+        elif remainder < -limit:
+            csd_digits.extend(['-'])
+            remainder += pow(2.0, n)
+            prev_non_zero = True
+            nnz -= 1
+
+        else:
+            csd_digits.extend(['0'])
+            prev_non_zero = False
+
+        n -= 1
+
+        if nnz == 0:
+            remainder = 0
+
+        if debug:
+            print(csd_digits)
+
+    # Always have something before the point
+    if fabs(num) < 1.0:
+        csd_digits.insert(0, '0')
+
+    csd_str = "".join(csd_digits)
+
+    return csd_str

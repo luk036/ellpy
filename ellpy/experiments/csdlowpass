@@ -5,11 +5,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 #import cvxpy as cvx
 from scipy.signal import remez, minimum_phase, freqz, group_delay
-from ellpy.cutting_plane import cutting_plane_dc, Options
+from ellpy.cutting_plane import cutting_plane_q, Options
 from ellpy.ell import ell
-from ellpy.tests.spectral_fact import spectral_fact
+from ellpy.tests.spectral_fact import spectral_fact, inverse_spectral_fact
 # from problem import Problem
-from ellpy.tests.lowpass_oracle import lowpass_oracle
+# from ellpy.tests.lowpass_oracle import lowpass_oracle
+from ellpy.tests.csdlowpass_oracle import csdlowpass_oracle
+from pycsd.csd import to_csdfixed, to_decimal
 
 # Modified from CVX code by Almir Mutapcic in 2006.
 # Adapted in 2010 for impulse response peak-minimization by convex iteration by Christine Law.
@@ -43,6 +45,7 @@ from ellpy.tests.lowpass_oracle import lowpass_oracle
 # *********************************************************************
 # number of FIR coefficients (including zeroth)
 N = 48
+nnz = 8
 wpass = 0.12*np.pi   # end of passband
 wstop = 0.20*np.pi   # start of stopband
 delta0_wpass = 0.125
@@ -102,11 +105,11 @@ if __name__ == "__main__":
     # Ae = diag(ones(N,1)) # initial ellipsoid (sphere)
     E = ell(40., r0)
     # E.use_parallel_cut = False
-    P = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
+    P = csdlowpass_oracle(nnz, Ap, As, Anr, Lpsq, Upsq)
     options = Options()
     options.max_it = 50000
     # options.tol = 1e-11
-    r, Spsq_new, num_iters, feasible, status = cutting_plane_dc(
+    r, Spsq_new, num_iters, feasible, status = cutting_plane_q(
         P, E, Spsq, options)
     print(r)
     print(num_iters, feasible, status)
@@ -142,7 +145,14 @@ if __name__ == "__main__":
                     # I'm not sure how accurate this function performs!!!
     h = h_sp
     print("h = ", h)
+    hcsd = np.array([to_decimal(to_csdfixed(hi, nnz)) for hi in h])        
+    print("hcsd = ", hcsd)
+
+    rcsd = inverse_spectral_fact(hcsd)
+    print("rcsd = ", rcsd)
     # compute the min attenuation in the stopband (convert to original vars)
+
+    h_sp = hcsd
     Ustop = 20*np.log10(np.sqrt(Spsq_new))
 
     print('Min attenuation in the stopband is ', Ustop, ' dB.')
