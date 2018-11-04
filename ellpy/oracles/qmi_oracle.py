@@ -30,7 +30,7 @@ class qmi_oracle:
             if i < j:
                 raise AssertionError()
             if self.count < i + 1:
-                self.count = i + 1 
+                self.count = i + 1
                 self.Fx[i] = self.F0[i]
                 self.Fx[i] -= sum(self.F[k][i] * x[k]
                                   for k in range(nx))

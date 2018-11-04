@@ -5,7 +5,6 @@ import time
 import numpy as np
 from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q, Options
 from ellpy.ell import ell
-from ellpy.tests.spectral_fact import spectral_fact
 from .lowpass_oracle import lowpass_oracle
 from .csdlowpass_oracle import csdlowpass_oracle
 
@@ -114,7 +113,7 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     options = Options()
     options.max_it = 20000
     options.tol = 1e-8
-    r, _, num_iters, feasible, _ = cutting_plane_dc(
+    _, _, num_iters, feasible, _ = cutting_plane_dc(
         P, E, Spsq, options)
     time.sleep(duration)
     # h = spectral_fact(r)
@@ -133,7 +132,7 @@ def test_lowpass():
     result, feasible = run_lowpass(True)
     assert feasible
     assert result > 400
-    assert result < 520
+    assert result < 530
 
 
 def run_csdlowpass(use_parallel_cut, duration=0.000001):
@@ -148,7 +147,7 @@ def run_csdlowpass(use_parallel_cut, duration=0.000001):
     options = Options()
     options.max_it = 20000
     options.tol = 1e-8
-    r, _, num_iters, feasible, _ = cutting_plane_q(
+    _, _, num_iters, feasible, _ = cutting_plane_q(
         Pcsd, E, Spsq, options)
     time.sleep(duration)
     # h = spectral_fact(r)
@@ -159,4 +158,4 @@ def test_csdlowpass():
     result, feasible = run_csdlowpass(True)
     assert feasible
     assert result > 400
-    assert result < 520
+    assert result < 530

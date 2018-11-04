@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import numpy as np
 from itertools import chain
-from .spectral_fact import spectral_fact
 
 
 class lowpass_oracle:

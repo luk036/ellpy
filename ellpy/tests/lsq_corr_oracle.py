@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from scipy.interpolate import BSpline
 from ellpy.oracles.qmi_oracle import qmi_oracle
 from ellpy.oracles.lmi0_oracle import lmi0_oracle
-from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
+from ellpy.cutting_plane import bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
-from ellpy.tests.corr_oracle import construct_distance_matrix, generate_bspline_info, corr_poly, corr_bspline, mono_oracle
+from ellpy.tests.corr_oracle import construct_distance_matrix, generate_bspline_info, corr_poly, corr_bspline
 
 
 class lsq_oracle:

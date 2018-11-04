@@ -2,7 +2,6 @@
 from __future__ import print_function
 
 import numpy as np
-from .lowpass_oracle import lowpass_oracle
 from .spectral_fact import spectral_fact, inverse_spectral_fact
 from pycsd.csd import to_csdfixed, to_decimal
 

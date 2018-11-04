@@ -22,7 +22,7 @@ class profit_oracle:
         vx = np.dot(self.v, x)
         te = t + vx
         fj = np.log(te) - log_Cobb
-        
+
         if fj < 0:
             te = np.exp(log_Cobb)
             t = te - vx
