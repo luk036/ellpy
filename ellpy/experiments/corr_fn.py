@@ -10,7 +10,7 @@ from corr_fn_cvx import lsq_corr_bspline
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     # import matplotlib.pylab as lab
-    Y, s = create_2d_isotropic(24, 16, 3000)
+    Y, s = create_2d_isotropic(6, 4, 3000)
     print('start ell...')
     # spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
     pol, num_iters, _ = mle_corr_poly(Y, s, 4)

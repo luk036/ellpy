@@ -2,6 +2,7 @@
 import cvxpy as cvx
 from scipy.interpolate import BSpline
 import numpy as np
+from ellpy.tests.corr_oracle import construct_distance_matrix
 
 # function [sp, tau2, Sig]
 
@@ -9,14 +10,7 @@ import numpy as np
 def lsq_corr_poly(Y, s, n):
     N = len(s)
     a = cvx.Variable(n)
-    D1 = np.zeros((N, N))
-    for i in range(N):
-        D1[i, i] = 0.
-        for j in range(i + 1, N):
-            h = s[j] - s[i]
-            d = np.sqrt(np.dot(h, h))
-            D1[i, j] = d
-            D1[j, i] = d
+    D1 = construct_distance_matrix(s)
     # D2 = np.multiply(D1, D1)
     # D3 = np.multiply(D2, D1)
     # D0 = np.ones((N,N))
@@ -49,14 +43,8 @@ def lsq_corr_bspline(Y, s, n):
 
     N = len(s)
     c = cvx.Variable(n)
-    D = np.zeros((N, N))
-    for i in range(N):
-        for j in range(i + 1, N):
-            h = s[j] - s[i]
-            d = np.sqrt(np.dot(h, h))
-            D[i, j] = d
-            D[j, i] = d
-
+    D = construct_distance_matrix(s)
+    
     # Sig = spls[0](D)*c[0] + spls[1](D)*c[1] + spls[2](D)*c[2] +
     # spls[3](D)*c[3]
     Sig = np.zeros((N, N))
