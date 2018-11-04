@@ -9,9 +9,9 @@ from pycsd.csd import to_csdfixed, to_decimal
 
 class csdlowpass_oracle:
 
-    def __init__(self, nnz, Ap, As, Anr, Lpsq, Upsq):
+    def __init__(self, nnz, lowpass):
         self.nnz = nnz
-        self.lowpass = lowpass_oracle(Ap, As, Anr, Lpsq, Upsq)
+        self.lowpass = lowpass
 
     def __call__(self, r, Spsq, retry):
         cut, Spsq2 = self.lowpass(r, Spsq)

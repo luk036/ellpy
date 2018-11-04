@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import numpy as np
 from itertools import chain
+from .spectral_fact import spectral_fact
 
 
 class lowpass_oracle:
@@ -87,7 +88,7 @@ class lowpass_oracle:
 
         # Begin objective function
         Spsq = fmax
-        f = (0., fmax)
-        # f = 0.
+        # f = (0., fmax)
+        f = 0.
         g = self.As[imax, :]
         return (g, f), Spsq
