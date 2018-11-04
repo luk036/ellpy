@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.interpolate import BSpline
-from ellpy.oracles.qmi_oracle import qmi_oracle
-from ellpy.oracles.lmi0_oracle import lmi0_oracle
-from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
-from ellpy.ell import ell
 
 
 def create_2d_isotropic(nx=10, ny=8, N=3000):
@@ -29,16 +25,13 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
             Sig[j, i] = Sig[i, j]
 
     A = np.linalg.cholesky(Sig)
-    # Ys = np.zeros((n, N))
     Y = np.zeros((n, n))
 
-    for k in range(N):
+    for _ in range(N):
         x = var * np.random.randn(n)
         y = A.dot(x) + tau*np.random.randn(n)
-        # Ys[:, k] = y
         Y += np.outer(y, y)
 
-    # Y = np.cov(Ys, bias=True)
     Y /= N
     return Y, s
 

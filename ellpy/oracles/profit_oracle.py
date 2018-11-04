@@ -16,11 +16,13 @@ class profit_oracle:
         if fj > 0:
             g = np.array([1., 0.])
             return (g, fj), t
+
         log_Cobb = self.log_pA + np.dot(self.a, y)
         x = np.exp(y)
         vx = np.dot(self.v, x)
         te = t + vx
         fj = np.log(te) - log_Cobb
+        
         if fj < 0:
             te = np.exp(log_Cobb)
             t = te - vx
@@ -60,5 +62,5 @@ class profit_q_oracle:
         if x[0] == 0 or x[1] == 0:
             raise AssertionError()
         yd = np.log(x)
-        (g, h), t = self.P(yd, t)
-        return (g, h, yd), t, 1
+        cut, t = self.P(yd, t)
+        return cut, yd, t, 1

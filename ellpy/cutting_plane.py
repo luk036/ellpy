@@ -122,9 +122,9 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
     x_best = S.xc
     status = 1  # new
     for niter in range(options.max_it):
-        cut, t1, loop = evaluate(
+        cut, x0, t1, loop = evaluate(
             S.xc, t, 0 if status != 3 else 1)
-        g, h, x0 = cut
+        g, h = cut
         if status != 3:
             if loop == 1:  # discrete sol'n
                 h += g.dot(x0 - S.xc)

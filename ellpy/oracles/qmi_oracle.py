@@ -14,10 +14,7 @@ class qmi_oracle:
     def __init__(self, F, F0):
         self.F = F
         self.F0 = F0
-        #self.B = None
         self.Fx = np.zeros(F0.shape)
-        # A = self.B.copy()
-        # self.A = np.zeros(F0.shape)
         self.t = None
         self.count = 0
         self.Q = chol_ext(len(F0))
@@ -28,8 +25,6 @@ class qmi_oracle:
     def __call__(self, x):
         self.count = 0
         nx = len(x)
-        # Fx = self.F0.copy()
-        # A = np.zeros(self.F0.shape)
 
         def getA(i, j):
             if i < j:
@@ -48,9 +43,9 @@ class qmi_oracle:
 
         if self.Q.is_spd():
             return None, True
-        v, f = self.Q.witness()
+        v, ep = self.Q.witness()
         p = len(v)
         Av = v.dot(self.Fx[:p])
         g = np.array([-2*v.dot(self.F[k][:p]).dot(Av)
                           for k in range(nx)])
-        return (g, f), False
+        return (g, ep), False
