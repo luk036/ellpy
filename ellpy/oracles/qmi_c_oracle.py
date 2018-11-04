@@ -17,7 +17,7 @@ class qmi_c_oracle:
         #self.B = None
         self.Fx = np.zeros(F0.shape)
         # A = self.B.copy()
-        self.A = np.zeros(F0.shape)
+        # self.A = np.zeros(F0.shape)
         self.t = None
         self.count = -1
         self.Q = cholutil(len(F0))
@@ -39,10 +39,10 @@ class qmi_c_oracle:
                 self.Fx[i] = self.F0[i]
                 self.Fx[i] -= sum(self.F[k][i] * x[k]
                                   for k in range(nx))
-            self.A[i, j] = -self.Fx[i].dot(self.Fx[j])
+            a = -self.Fx[i].dot(self.Fx[j])
             if i == j:
-                self.A[i, j] += self.t
-            return self.A[i, j]
+                a += self.t
+            return a
 
         self.Q.factor(getA)
 
