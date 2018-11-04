@@ -8,9 +8,6 @@ from ellpy.ell import ell
 from ellpy.tests.spectral_fact import spectral_fact
 from .lowpass_oracle import lowpass_oracle
 from .csdlowpass_oracle import csdlowpass_oracle
-import matplotlib.pyplot as plt
-#import cvxpy as cvx
-from scipy.signal import remez, minimum_phase, freqz, group_delay
 
 
 # Modified from CVX code by Almir Mutapcic in 2006.
