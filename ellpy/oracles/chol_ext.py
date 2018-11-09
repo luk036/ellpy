@@ -4,7 +4,21 @@ import math
 
 
 class chol_ext:
+    """chol_ext Cholesky factorization for LMI
+
+         If $A$ is positive definite, then $p$ is zero.
+         If it is not, then $p$ is a positive integer,
+         such that $v = R^{-1} e_p$ is a certificate vector
+         to make $v'*A[:p,:p]*v < 0$
+    """
+
     def __init__(self, N):
+        """initialization
+        
+        Arguments:
+            N {integer} -- dimension
+        """
+
         self.R = np.zeros((N, N))
         self.p = 0
         # self.v = np.zeros(N)
@@ -34,29 +48,14 @@ class chol_ext:
     #             break
 
     def factorize(self, A):
-        '''
-         If $A$ is positive definite, then $p$ is zero.
-         If it is not, then $p$ is a positive integer,
-         such that $v = R^{-1} e_p$ is a certificate vector
-         to make $v'*A[:p,:p]*v < 0$
-        '''
-        return self.factor(lambda i, j: A[i, j])
+        """Perform Cholesky Factorization
+        
+        Arguments:
+            A {np.array} -- Symmetric Matrix
+        """
 
-        # # N = len(A)
-        # # self.p = 0
-        # self.p = 0
-        # R = self.R
-        # N = len(R)
-        # for i in range(N):
-        #     for j in range(i+1):
-        #         d = A[i, j] - np.dot(R[:j, i], R[:j, j])
-        #         if i != j:
-        #             R[j, i] = d / R[j, j]
-        #     if d <= 0:  # strictly positive???
-        #         self.p = i + 1
-        #         R[i, i] = math.sqrt(-d)
-        #         break
-        #     R[i, i] = math.sqrt(d)
+        self.factor(lambda i, j: A[i, j])
+
 
     # def factor2(self, getA):
     #     '''(lazy evalution of A)
@@ -78,9 +77,12 @@ class chol_ext:
     #             break
 
     def factor(self, getA):
-        '''(lazy evalution of A)'''
-        # N = len(A)
-        # self.p = 0
+        """Perform Cholesky Factorization (Lazy evaluation)
+        
+        Arguments:
+            getA {function} -- function to access symmetric matrix
+        """
+
         self.p = 0
         R = self.R
         N = len(R)
@@ -96,7 +98,12 @@ class chol_ext:
             R[i, i] = math.sqrt(d)
 
     def is_spd(self):
-        """is symmetric positive definite"""
+        """Is $A$ symmetric positive definite (spd)
+        
+        Returns:
+            bool -- True if $A$ is a spd 
+        """
+
         return self.p == 0
 
     # def witness2(self):
@@ -113,6 +120,15 @@ class chol_ext:
     #     return v
 
     def witness(self):
+        """witness that certifies $A$ is not symmetric positive definite (spd)
+        
+        Raises:
+            AssertionError -- $A$ indeeds a spd matrix
+        
+        Returns:
+            array, float -- v, ep
+        """
+
         if self.is_spd():
             raise AssertionError()
         p = self.p
@@ -126,6 +142,16 @@ class chol_ext:
         return v, ep
 
     def sym_quad(self, v, F):
+        """[summary]
+        
+        Arguments:
+            v {[type]} -- [description]
+            F {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+
         # v = self.witness()
         p = self.p
         return v.dot(F[:p, :p].dot(v))

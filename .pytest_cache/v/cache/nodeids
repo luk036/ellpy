@@ -12,6 +12,7 @@
   "ellpy/tests/test_lmi.py::test_lmi_old",
   "ellpy/tests/test_lowpass.py::test_lowpass",
   "ellpy/tests/test_lowpass.py::test_csdlowpass",
+  "ellpy/tests/test_neg_cycle.py::test_cycle",
   "ellpy/tests/test_optscaling.py::test_two_variables",
   "ellpy/tests/test_optscaling.py::test_binary_search",
   "ellpy/tests/test_profit.py::test_profit",

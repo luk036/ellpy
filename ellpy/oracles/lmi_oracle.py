@@ -11,12 +11,27 @@ class lmi_oracle:
     """
 
     def __init__(self, F, B):
+        """[summary]
+        
+        Arguments:
+            F {[type]} -- [description]
+            B {[type]} -- [description]
+        """
+
         self.F = F
         self.F0 = B
         self.Q = chol_ext(len(B))
 
     def __call__(self, x):
-        # A = self.F0.copy()
+        """[summary]
+        
+        Arguments:
+            x {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+
         n = len(x)
 
         def getA(i, j):

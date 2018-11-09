@@ -79,7 +79,7 @@ class ell:
         '''parallel or deep cut'''
         if np.isscalar(beta):
             return self.calc_dc(beta, tsq)
-        if len(beta) < 2:
+        if len(beta) < 2:  # unlikely
             return self.calc_dc(beta[0], tsq)
         return self.calc_ll_core(beta[0], beta[1], tsq)
 

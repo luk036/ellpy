@@ -10,10 +10,25 @@ class lmi0_oracle:
     """
 
     def __init__(self, F):
+        """[summary]
+        
+        Arguments:
+            F {[type]} -- [description]
+        """
+
         self.F = F
         self.Q = chol_ext(len(F[0]))
 
     def __call__(self, x):
+        """[summary]
+        
+        Arguments:
+            x {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
+
         n = len(x)
 
         def getA(i, j):

@@ -11,9 +11,7 @@ def my_oracle(z, t):
     cut, feasible = my_oracle2(z)
     if not feasible:
         return cut, t
-
     x, y = z
-
     # objective: maximize x + y
     f0 = x + y
     fj = t - f0
