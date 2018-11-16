@@ -7,12 +7,33 @@ from pycsd.csd import to_csdfixed, to_decimal
 
 
 class csdlowpass_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, nnz, lowpass):
+        """[summary]
+
+        Arguments:
+            nnz {[type]} -- [description]
+            lowpass {[type]} -- [description]
+        """
         self.nnz = nnz
         self.lowpass = lowpass
 
     def __call__(self, r, Spsq, retry):
+        """[summary]
+
+        Arguments:
+            r {[type]} -- [description]
+            Spsq {[type]} -- [description]
+            retry {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         cut, Spsq2 = self.lowpass(r, Spsq)
         if Spsq == Spsq2:  # infeasible
             return cut, r, Spsq2, 0

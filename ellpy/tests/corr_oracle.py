@@ -4,6 +4,16 @@ from scipy.interpolate import BSpline
 
 
 def create_2d_isotropic(nx=10, ny=8, N=3000):
+    """[summary]
+
+    Keyword Arguments:
+        nx {int} -- [description] (default: {10})
+        ny {int} -- [description] (default: {8})
+        N {int} -- [description] (default: {3000})
+
+    Returns:
+        [type] -- [description]
+    """
     n = nx*ny
     s_end = [10., 8.]
     sdkern = 0.3  # width of kernel
@@ -37,6 +47,14 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
 
 
 def construct_distance_matrix(s):
+    """[summary]
+
+    Arguments:
+        s {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     n = len(s)
     D = np.zeros((n, n))
     for i in range(n):
@@ -49,6 +67,18 @@ def construct_distance_matrix(s):
 
 
 def corr_poly(Y, s, m, oracle, corr_core):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+        oracle {[type]} -- [description]
+        corr_core {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     n = len(s)
     D1 = construct_distance_matrix(s)
     D = np.ones((n, n))
@@ -64,6 +94,14 @@ def corr_poly(Y, s, m, oracle, corr_core):
 
 
 def mono_oracle(x):
+    """[summary]
+
+    Arguments:
+        x {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     # monotonic decreasing constraint
     n = len(x)
     g = np.zeros(n)
@@ -77,10 +115,30 @@ def mono_oracle(x):
 
 
 class mono_decreasing_oracle2:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
+
     def __init__(self, basis):
+        """[summary]
+
+        Arguments:
+            basis {[type]} -- [description]
+        """
         self.basis = basis
 
     def __call__(self, x, t):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         # monotonic decreasing constraint
         n = len(x)
         g = np.zeros(n)
@@ -94,6 +152,18 @@ class mono_decreasing_oracle2:
 
 
 def corr_bspline(Y, s, m, oracle, corr_core):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+        oracle {[type]} -- [description]
+        corr_core {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     Sig, t, k = generate_bspline_info(s, m)
     Pb = oracle(Sig, Y)
     P = mono_decreasing_oracle2(Pb)
@@ -102,6 +172,15 @@ def corr_bspline(Y, s, m, oracle, corr_core):
 
 
 def generate_bspline_info(s, m):
+    """[summary]
+
+    Arguments:
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     k = 2  # quadratic bspline
     h = s[-1] - s[0]
     d = np.sqrt(np.dot(h, h))

@@ -10,6 +10,12 @@ from ellpy.tests.corr_oracle import corr_poly, corr_bspline, mono_oracle
 
 class mle_oracle:
     def __init__(self, Sig, Y):
+        """[summary]
+
+        Arguments:
+            Sig {[type]} -- [description]
+            Y {[type]} -- [description]
+        """
         self.Y = Y
         self.Sig = Sig
         self.lmi0 = lmi0_oracle(Sig)
@@ -17,6 +23,15 @@ class mle_oracle:
         # self.lmi2 = lmi2_oracle(Sig, 2*Y)
 
     def __call__(self, x, t):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         cut, feasible = self.lmi(x)
         if not feasible:
             return cut, t
@@ -51,9 +66,23 @@ class mle_oracle:
 
 class mono_decreasing_oracle:
     def __init__(self, basis):
+        """[summary]
+
+        Arguments:
+            basis {[type]} -- [description]
+        """
         self.basis = basis
 
     def __call__(self, x, t):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         # monotonic decreasing constraint
         cut, feasible = mono_oracle(x)
         if not feasible:
@@ -62,6 +91,16 @@ class mono_decreasing_oracle:
 
 
 def mle_corr_core(Y, m, P):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        m {[type]} -- [description]
+        P {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     x = np.zeros(m)
     x[0] = 1.
     E = ell(50., x)
@@ -76,10 +115,30 @@ def mle_corr_core(Y, m, P):
 
 
 def mle_corr_poly(Y, s, m):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     _ = np.linalg.cholesky(Y)  # test if Y is SPD.
     return corr_poly(Y, s, m, mle_oracle, mle_corr_core)
 
 
 def mle_corr_bspline(Y, s, m):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     _ = np.linalg.cholesky(Y)  # test if Y is SPD.
     return corr_bspline(Y, s, m, mle_oracle, mle_corr_core)

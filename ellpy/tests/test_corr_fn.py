@@ -8,6 +8,8 @@ Y, s = create_2d_isotropic(5, 4, 3000)
 
 
 def test_data():
+    """[summary]
+    """
     # assert Y[2,3] == approx(1.9365965488224368)
     assert s[6, 0] == approx(2.5)
     D1 = construct_distance_matrix(s)
@@ -15,6 +17,8 @@ def test_data():
 
 
 def test_corr_fn():
+    """[summary]
+    """
     _, num_iters, feasible = lsq_corr_bspline2(Y, s, 4)
     assert feasible
     assert num_iters <= 480

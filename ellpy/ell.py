@@ -7,7 +7,12 @@ class ell:
     _use_parallel_cut = True
 
     def __init__(self, val, x):
-        '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
+        """ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }
+
+        Arguments:
+            val {[type]} -- [description]
+            x {[type]} -- [description]
+        """
         self._n = n = len(x)
         self.c1 = float(n*n) / (n*n - 1)
         self._xc = x.copy()
@@ -19,6 +24,11 @@ class ell:
             self.kappa = 1.
 
     def copy(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         E = ell(self.kappa, self.xc)
         E.Q = self.Q.copy()
         E.c1 = self.c1
@@ -27,25 +37,54 @@ class ell:
 
     @property
     def xc(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         return self._xc
 
     @xc.setter
     def xc(self, x):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+        """
         self._xc = x
 
     @property
     def use_parallel_cut(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         return self._use_parallel_cut
 
     @use_parallel_cut.setter
     def use_parallel_cut(self, b):
+        """[summary]
+
+        Arguments:
+            b {[type]} -- [description]
+        """
         self._use_parallel_cut = b
 
     def update(self, cut):
+        """[summary]
+
+        Arguments:
+            cut {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         return self.update_core(self.calc_ll, cut)
 
     def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut
+
                 g' * (x - xc) + beta <= 0
 
         Arguments:
@@ -76,7 +115,15 @@ class ell:
         return status, tsq
 
     def calc_ll(self, beta, tsq):
-        '''parallel or deep cut'''
+        """parallel or deep cut
+
+        Arguments:
+            beta {[type]} -- [description]
+            tsq {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         if np.isscalar(beta):
             return self.calc_dc(beta, tsq)
         if len(beta) < 2:  # unlikely
@@ -84,6 +131,16 @@ class ell:
         return self.calc_ll_core(beta[0], beta[1], tsq)
 
     def calc_ll_core(self, b0, b1, tsq):
+        """[summary]
+
+        Arguments:
+            b0 {[type]} -- [description]
+            b1 {[type]} -- [description]
+            tsq {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         b1sq = b1**2
         if b1sq > tsq or not self.use_parallel_cut:
             return self.calc_dc(b0, tsq)
@@ -108,7 +165,16 @@ class ell:
         return 0, (rho, sigma, delta)
 
     def calc_ll_cc(self, b1, b1sq, tsq):
-        """Situation when feasible cut."""
+        """parallel central cut
+
+        Arguments:
+            b1 {[type]} -- [description]
+            b1sq {[type]} -- [description]
+            tsq {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         n = self._n
         xi = math.sqrt(4.*tsq*(tsq - b1sq) + (n*b1sq)**2)
         sigma = (n + (2*tsq - xi) / b1sq)/(n + 1)
@@ -117,7 +183,15 @@ class ell:
         return 0, (rho, sigma, delta)
 
     def calc_dc(self, beta, tsq):
-        '''deep cut'''
+        """Deep cut
+
+        Arguments:
+            beta {[type]} -- [description]
+            tsq {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         tau = math.sqrt(tsq)
         if beta > tau:
             return 1, None    # no sol'n
@@ -134,7 +208,14 @@ class ell:
         return 0, (rho, sigma, delta)
 
     def calc_cc(self, tau):
-        '''central cut'''
+        """Central cut
+
+        Arguments:
+            tau {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         np1 = self._n + 1
         sigma = 2. / np1
         rho = tau / np1
@@ -145,21 +226,41 @@ class ell:
 class ell1d:
 
     def __init__(self, I):
+        """[summary]
+
+        Arguments:
+            I {[type]} -- [description]
+        """
         l, u = I
         self.r = (u - l)/2
         self._xc = l + self.r
 
     def copy(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         E = ell1d([self._xc - self.r,
                    self._xc + self.r])
         return E
 
     @property
     def xc(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         return self._xc
 
     @xc.setter
     def xc(self, x):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+        """
         self._xc = x
 
     def update(self, cut):

@@ -8,11 +8,32 @@ from ellpy.tests.corr_oracle import corr_poly, corr_bspline
 
 
 class lsq_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
+
     def __init__(self, F, F0):
+        """[summary]
+
+        Arguments:
+            F {[type]} -- [description]
+            F0 {[type]} -- [description]
+        """
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
 
     def __call__(self, x, t):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         n = len(x)
         g = np.zeros(n)
 
@@ -41,6 +62,16 @@ class lsq_oracle:
 
 
 def lsq_corr_core2(Y, m, P):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        m {[type]} -- [description]
+        P {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     normY = np.linalg.norm(Y, 'fro')
     normY2 = 32*normY*normY
     val = 256*np.ones(m + 1)
@@ -54,10 +85,30 @@ def lsq_corr_core2(Y, m, P):
 
 
 def lsq_corr_poly2(Y, s, m):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     return corr_poly(Y, s, m, lsq_oracle, lsq_corr_core2)
 
 
 def lsq_corr_bspline2(Y, s, m):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        m {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     return corr_bspline(Y, s, m, lsq_oracle, lsq_corr_core2)
 
 

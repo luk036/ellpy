@@ -11,6 +11,11 @@ from ellpy.ell import ell
 
 class my_oracle:
     def __init__(self, oracle):
+        """[summary]
+        
+        Arguments:
+            oracle {[type]} -- [description]
+        """
         self.c = np.array([1., -1., 1.])
         F1 = np.array([[[-7., -11.], [-11., 3.]],
                        [[7., -18.], [-18., 8.]],
@@ -24,6 +29,15 @@ class my_oracle:
         self.lmi2 = oracle(F2, B2)
 
     def __call__(self, x, t):
+        """[summary]
+        
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         f0 = np.dot(self.c, x)
         fj = f0 - t
         if fj > 0:
@@ -40,6 +54,17 @@ class my_oracle:
 
 
 def run_lmi(oracle, duration=0.000001):
+    """[summary]
+    
+    Arguments:
+        oracle {[type]} -- [description]
+    
+    Keyword Arguments:
+        duration {float} -- [description] (default: {0.000001})
+    
+    Returns:
+        [type] -- [description]
+    """
     x0 = np.array([0., 0., 0.])  # initial x0
     fmt = '{:f} {} {} {}'
 
@@ -54,10 +79,20 @@ def run_lmi(oracle, duration=0.000001):
 
 
 def test_lmi_lazy(benchmark):
+    """[summary]
+    
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     result = benchmark(run_lmi, lmi_oracle)
     assert result == 115
 
 
 def test_lmi_old(benchmark):
+    """[summary]
+    
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     result = benchmark(run_lmi, lmi_old_oracle)
     assert result == 115

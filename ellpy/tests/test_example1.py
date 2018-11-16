@@ -8,6 +8,15 @@ from .test_example2 import my_oracle2
 
 
 def my_oracle(z, t):
+    """[summary]
+    
+    Arguments:
+        z {[type]} -- [description]
+        t {[type]} -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
     cut, feasible = my_oracle2(z)
     if not feasible:
         return cut, t
@@ -22,6 +31,8 @@ def my_oracle(z, t):
 
 
 def test_example1():
+    """[summary]
+    """
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle

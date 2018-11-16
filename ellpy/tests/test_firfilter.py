@@ -49,6 +49,15 @@ A_I = np.imag(A)
 # Optimal Chebyshev filter formulation.
 class my_oracle:
     def __call__(self, h, t):
+        """[summary]
+
+        Arguments:
+            h {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         fmax = float('-Inf')
         for i in range(m):
             a_R = A_R[i, :]
@@ -68,6 +77,17 @@ class my_oracle:
 
 
 def run_firfilter(no_trick, duration=0.000001):
+    """[summary]
+
+    Arguments:
+        no_trick {[type]} -- [description]
+
+    Keyword Arguments:
+        duration {float} -- [description] (default: {0.000001})
+
+    Raises:
+        Exception -- [description]
+    """
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
     E._no_defer_trick = no_trick
@@ -82,8 +102,20 @@ def run_firfilter(no_trick, duration=0.000001):
     print("optimal value", prob1.optim_value)
     assert prob1.status == 'optimal'
 
+
 def test_firfilter_use_trick(benchmark):
+    """[summary]
+
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     benchmark(run_firfilter, False)
 
+
 def test_firfilter_no_trick(benchmark):
+    """[summary]
+
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     benchmark(run_firfilter, True)

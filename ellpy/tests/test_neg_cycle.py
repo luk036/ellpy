@@ -8,6 +8,11 @@ from ellpy.oracles.neg_cycle import negCycleFinder
 
 
 def create_test_case1():
+    """[summary]
+    
+    Returns:
+        [type] -- [description]
+    """
     G = nx.cycle_graph(5, create_using=nx.DiGraph())
     G[1][2]['weight'] = -5
     newnode = generate_unique_node()
@@ -16,6 +21,11 @@ def create_test_case1():
 
 
 def create_test_case_timing():
+    """[summary]
+    
+    Returns:
+        [type] -- [description]
+    """
     G = nx.DiGraph()
     G.add_nodes_from([1, 2, 3])
     G.add_edges_from([
@@ -30,7 +40,24 @@ def create_test_case_timing():
 
 
 def do_case(G):
+    """[summary]
+    
+    Arguments:
+        G {[type]} -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
     def get_weight(G, e):
+        """[summary]
+        
+        Arguments:
+            G {[type]} -- [description]
+            e {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         u, v = e
         return G[u][v].get('weight', 1)
 
@@ -40,6 +67,8 @@ def do_case(G):
 
 
 def test_cycle():
+    """[summary]
+    """
     G = create_test_case1()
     hasNeg = do_case(G)
     assert hasNeg

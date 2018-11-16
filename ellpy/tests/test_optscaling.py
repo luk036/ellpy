@@ -11,6 +11,17 @@ from ellpy.ell import ell, ell1d
 
 
 def vdc(n, base=2):
+    """[summary]
+    
+    Arguments:
+        n {[type]} -- [description]
+    
+    Keyword Arguments:
+        base {int} -- [description] (default: {2})
+    
+    Returns:
+        [type] -- [description]
+    """
     vdc, denom = 0., 1.
     while n:
         denom *= base
@@ -20,17 +31,35 @@ def vdc(n, base=2):
 
 
 def vdcorput(n, base=2):
-    '''
-    n - number of vectors
-    base - seeds
-    '''
+    """[summary]
+    
+    Arguments:
+        n {[type]} -- [description]
+    
+    Keyword Arguments:
+        base {int} -- [description] (default: {2})
+    
+    Returns:
+        [type] -- [description]
+    """
     return [vdc(i, base) for i in range(n)]
 
 
 def formGraph(T, pos, eta, seed=None):
-    ''' Form N by N grid of nodes, connect nodes within eta.
+    """Form N by N grid of nodes, connect nodes within eta.
         mu and eta are relative to 1/(N-1)
-    '''
+    
+    Arguments:
+        T {[type]} -- [description]
+        pos {[type]} -- [description]
+        eta {[type]} -- [description]
+    
+    Keyword Arguments:
+        seed {[type]} -- [description] (default: {None})
+    
+    Returns:
+        [type] -- [description]
+    """
     if seed is not None:
         np.random.seed(seed)
 
@@ -69,6 +98,14 @@ cmin = min(c for _, _, c in G.edges.data('cost'))
 
 
 def run_optscaling(duration=0.000001):
+    """[summary]
+    
+    Keyword Arguments:
+        duration {float} -- [description] (default: {0.000001})
+    
+    Returns:
+        [type] -- [description]
+    """
     x0 = np.array([cmax, cmin])
     t = cmax - cmin
     E = ell(1.5*t, x0)
@@ -83,6 +120,14 @@ def run_optscaling(duration=0.000001):
 
 
 def run_optscaling3(duration=0.000001):
+    """[summary]
+    
+    Keyword Arguments:
+        duration {float} -- [description] (default: {0.000001})
+    
+    Returns:
+        [type] -- [description]
+    """
     t = cmax - cmin
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
@@ -94,10 +139,20 @@ def run_optscaling3(duration=0.000001):
 
 
 def test_two_variables(benchmark):
+    """[summary]
+    
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     result = benchmark(run_optscaling)
     assert result == 26
 
 
 def test_binary_search(benchmark):
+    """[summary]
+    
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
     result = benchmark(run_optscaling3)
     assert result == 27

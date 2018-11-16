@@ -14,7 +14,6 @@ def benchmark_profit(duration=0.000001):
     Keyword Arguments:
         duration {float} -- [run benchmark duration] (default: {0.000001})
     """
-
     p, A, k = 20., 40., 30.5
     params = p, A, k
     alpha, beta = 0.1, 0.4
@@ -52,5 +51,7 @@ def benchmark_profit(duration=0.000001):
 
 
 def test_profit():
+    """[summary]
+    """
     result = benchmark_profit()
     assert result == 28

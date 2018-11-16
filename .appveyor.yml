@@ -1,6 +1,6 @@
 # AppVeyor.com is a Continuous Integration service to build and run tests under
 # Windows
-# https://ci.appveyor.com/project/luk036/pgpy
+# https://ci.appveyor.com/project/luk036/ellpy
 
 environment:
   global:
@@ -56,7 +56,7 @@ install:
   - "%CMD_IN_ENV% pip install --timeout=60 -r requirements.txt"
   - "pip install ."
 
-# Not a .NET project, we build pgpy in the install step instead
+# Not a .NET project, we build ellpy in the install step instead
 build: false
 
 test_script:

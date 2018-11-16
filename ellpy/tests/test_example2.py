@@ -7,6 +7,14 @@ from ellpy.ell import ell
 
 
 def my_oracle2(z):
+    """[summary]
+
+    Arguments:
+        z {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     x, y = z
 
     # constraint 1: x + y <= 3
@@ -23,6 +31,8 @@ def my_oracle2(z):
 
 
 def test_example2():
+    """[summary]
+    """
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle2

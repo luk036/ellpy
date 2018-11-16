@@ -4,14 +4,13 @@ from .chol_ext import chol_ext
 
 
 class lmi0_oracle:
-    """
-        Oracle for Linear Matrix Inequality constraint
+    """Oracle for Linear Matrix Inequality constraint
             F * x >= 0
     """
 
     def __init__(self, F):
         """[summary]
-        
+
         Arguments:
             F {[type]} -- [description]
         """
@@ -21,10 +20,10 @@ class lmi0_oracle:
 
     def __call__(self, x):
         """[summary]
-        
+
         Arguments:
             x {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """

@@ -7,6 +7,18 @@ class Options:
 
 
 def bsearch(evaluate, I, options=Options()):
+    """[summary]
+
+    Arguments:
+        evaluate {[type]} -- [description]
+        I {[type]} -- [description]
+
+    Keyword Arguments:
+        options {[type]} -- [description] (default: {Options()})
+
+    Returns:
+        [type] -- [description]
+    """
     # assume monotone
     feasible = False
     l, u = I
@@ -26,15 +38,37 @@ def bsearch(evaluate, I, options=Options()):
 
 class bsearch_adaptor:
     def __init__(self, P, S, options=Options()):
+        """[summary]
+
+        Arguments:
+            P {[type]} -- [description]
+            S {[type]} -- [description]
+
+        Keyword Arguments:
+            options {[type]} -- [description] (default: {Options()})
+        """
         self.P = P
         self.S = S
         self.options = options
 
     @property
     def x_best(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         return self.S.xc
 
     def __call__(self, t):
+        """[summary]
+
+        Arguments:
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         S = self.S.copy()
         self.P.update(t)
         x, _, feasible, _ = cutting_plane_feas(
@@ -46,18 +80,19 @@ class bsearch_adaptor:
 
 
 def cutting_plane_feas(evaluate, S, options=Options()):
-    '''
-    Cutting-plane method for solving convex feasibility problem
-    input
-             evaluate      perform assessment on x0
-             S(xc)         Search Space containing x*
-             t             best-so-far optimal sol'n
-             max_it        maximum number of iterations
-             tol           error tolerance
-    output
-             x             solution vector
-             niter         number of iterations performed
-    '''
+    """Cutting-plane method for solving convex feasibility problem
+
+    Arguments:
+        evaluate {[type]} -- perform assessment on x0
+        S {[type]} -- Search Space containing x*
+
+    Keyword Arguments:
+        options {[type]} -- [description] (default: {Options()})
+
+    Returns:
+        x -- solution vector
+        niter -- number of iterations performed
+    """
     feasible = False
     status = 0
     for niter in range(options.max_it):
@@ -74,19 +109,21 @@ def cutting_plane_feas(evaluate, S, options=Options()):
 
 
 def cutting_plane_dc(evaluate, S, t, options=Options()):
-    '''
-    Cutting-plane method for solving convex optimization problem
-    input
-             evaluate      perform assessment on x0
-             S(xc)         Search Space containing x*
-             t             initial best-so-far value
-             max_it        maximum number of iterations
-             tol           error tolerance
-    output
-             x_best        solution vector
-             t             best-so-far optimal value
-             niter         number of iterations performed
-    '''
+    """Cutting-plane method for solving convex optimization problem
+
+    Arguments:
+        evaluate {[type]} -- perform assessment on x0
+        S {[type]} -- Search Space containing x*
+        t {[type]} -- initial best-so-far value
+
+    Keyword Arguments:
+        options {[type]} -- [description] (default: {Options()})
+
+    Returns:
+        x_best {[type]} -- solution vector
+        t {[type]} -- best-so-far optimal value
+        niter {[type]} -- number of iterations performed
+    """
     feasible = False  # no sol'n
     x_best = S.xc
     for niter in range(options.max_it):
@@ -105,6 +142,21 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
 
 
 def cutting_plane_q(evaluate, S, t, options=Options()):
+    """Cutting-plane method for solving convex discrete optimization problem
+
+    Arguments:
+        evaluate {[type]} -- perform assessment on x0
+        S {[type]} -- Search Space containing x*
+        t {[type]} -- initial best-so-far value
+
+    Keyword Arguments:
+        options {[type]} -- [description] (default: {Options()})
+
+    Returns:
+        x_best {[type]} -- solution vector
+        t {[type]} -- best-so-far optimal value
+        niter {[type]} -- number of iterations performed
+    """
     '''
     Cutting-plane method for solving convex discrete optimization problem
     input

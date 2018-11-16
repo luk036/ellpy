@@ -14,7 +14,7 @@ class chol_ext:
 
     def __init__(self, N):
         """initialization
-        
+
         Arguments:
             N {integer} -- dimension
         """
@@ -49,13 +49,12 @@ class chol_ext:
 
     def factorize(self, A):
         """Perform Cholesky Factorization
-        
+
         Arguments:
             A {np.array} -- Symmetric Matrix
         """
 
         self.factor(lambda i, j: A[i, j])
-
 
     # def factor2(self, getA):
     #     '''(lazy evalution of A)
@@ -78,7 +77,7 @@ class chol_ext:
 
     def factor(self, getA):
         """Perform Cholesky Factorization (Lazy evaluation)
-        
+
         Arguments:
             getA {function} -- function to access symmetric matrix
         """
@@ -99,9 +98,9 @@ class chol_ext:
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
-        
+
         Returns:
-            bool -- True if $A$ is a spd 
+            bool -- True if $A$ is a spd
         """
 
         return self.p == 0
@@ -121,10 +120,10 @@ class chol_ext:
 
     def witness(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
-        
+
         Raises:
             AssertionError -- $A$ indeeds a spd matrix
-        
+
         Returns:
             array, float -- v, ep
         """
@@ -143,11 +142,11 @@ class chol_ext:
 
     def sym_quad(self, v, F):
         """[summary]
-        
+
         Arguments:
             v {[type]} -- [description]
             F {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """

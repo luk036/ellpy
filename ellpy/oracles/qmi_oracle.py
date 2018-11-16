@@ -12,6 +12,12 @@ class qmi_oracle:
     """
 
     def __init__(self, F, F0):
+        """[summary]
+
+        Arguments:
+            F {[type]} -- [description]
+            F0 {[type]} -- [description]
+        """
         self.F = F
         self.F0 = F0
         self.Fx = np.zeros(F0.shape)
@@ -20,13 +26,41 @@ class qmi_oracle:
         self.Q = chol_ext(len(F0))
 
     def update(self, t):
+        """[summary]
+
+        Arguments:
+            t {[type]} -- [description]
+        """
         self.t = t
 
     def __call__(self, x):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+
+        Raises:
+            AssertionError -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         self.count = 0
         nx = len(x)
 
         def getA(i, j):
+            """[summary]
+
+            Arguments:
+                i {[type]} -- [description]
+                j {[type]} -- [description]
+
+            Raises:
+                AssertionError -- [description]
+
+            Returns:
+                [type] -- [description]
+            """
             if i < j:
                 raise AssertionError()
             if self.count < i + 1:
@@ -47,5 +81,5 @@ class qmi_oracle:
         p = len(v)
         Av = v.dot(self.Fx[:p])
         g = np.array([-2*v.dot(self.F[k][:p]).dot(Av)
-                          for k in range(nx)])
+                      for k in range(nx)])
         return (g, ep), False

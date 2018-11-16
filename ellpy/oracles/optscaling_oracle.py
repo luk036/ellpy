@@ -4,6 +4,16 @@ import numpy as np
 
 
 def constr(G, e, x):
+    """[summary]
+
+    Arguments:
+        G {[type]} -- [description]
+        e {[type]} -- [description]
+        x {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     u, v = e
     if u <= v:
         return x[0] - G[u][v]['cost']
@@ -11,6 +21,16 @@ def constr(G, e, x):
 
 
 def pconstr(G, e, x):
+    """[summary]
+
+    Arguments:
+        G {[type]} -- [description]
+        e {[type]} -- [description]
+        x {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     u, v = e
     if u <= v:
         return np.array([1., 0.])
@@ -18,12 +38,31 @@ def pconstr(G, e, x):
 
 
 class optscaling_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, G):
+        """[summary]
+
+        Arguments:
+            G {[type]} -- [description]
+        """
         self.G = G
         self.network = network_oracle(G, constr, pconstr)
 
     def __call__(self, x, t):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         cut, feasible = self.network(x)
         if not feasible:
             return cut, t

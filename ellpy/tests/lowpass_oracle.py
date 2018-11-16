@@ -6,8 +6,22 @@ from itertools import chain
 
 
 class lowpass_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, Ap, As, Anr, Lpsq, Upsq):
+        """[summary]
+
+        Arguments:
+            Ap {[type]} -- [description]
+            As {[type]} -- [description]
+            Anr {[type]} -- [description]
+            Lpsq {[type]} -- [description]
+            Upsq {[type]} -- [description]
+        """
         self.Ap = Ap
         self.As = As
         self.Anr = Anr
@@ -21,6 +35,15 @@ class lowpass_oracle:
         self.count = 0
 
     def __call__(self, x, Spsq):
+        """[summary]
+
+        Arguments:
+            x {[type]} -- [description]
+            Spsq {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         # 1. nonnegative-real constraint
         n = len(x)
 

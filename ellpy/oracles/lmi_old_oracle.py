@@ -13,7 +13,7 @@ class lmi_old_oracle:
 
     def __init__(self, F, B):
         """[summary]
-        
+
         Arguments:
             F {[type]} -- [description]
             B {[type]} -- [description]
@@ -26,10 +26,10 @@ class lmi_old_oracle:
 
     def __call__(self, x):
         """[summary]
-        
+
         Arguments:
             x {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """

@@ -3,8 +3,20 @@ import numpy as np
 
 
 class profit_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, params, a, v):
+        """[summary]
+
+        Arguments:
+            params {[type]} -- [description]
+            a {[type]} -- [description]
+            v {[type]} -- [description]
+        """
         p, A, k = params
         self.log_pA = np.log(p * A)
         self.log_k = np.log(k)
@@ -12,6 +24,15 @@ class profit_oracle:
         self.a = a
 
     def __call__(self, y, t):
+        """[summary]
+
+        Arguments:
+            y {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         fj = y[0] - self.log_k  # constraint
         if fj > 0:
             g = np.array([1., 0.])
@@ -32,8 +53,21 @@ class profit_oracle:
 
 
 class profit_rb_oracle:
+    """[summary]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, params, a, v, vparams):
+        """[summary]
+
+        Arguments:
+            params {[type]} -- [description]
+            a {[type]} -- [description]
+            v {[type]} -- [description]
+            vparams {[type]} -- [description]
+        """
         ui, e1, e2, e3 = vparams
         self.uie = [ui * e1, ui * e2]
         self.a = a
@@ -45,6 +79,15 @@ class profit_rb_oracle:
         self.P = profit_oracle((p, A, k), a, v_rb)
 
     def __call__(self, y, t):
+        """[summary]
+
+        Arguments:
+            y {[type]} -- [description]
+            t {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         a_rb = self.a.copy()
         for i in range(2):
             a_rb[i] += self.uie[i] * (+1. if y[i] <= 0 else -1.)
@@ -53,11 +96,39 @@ class profit_rb_oracle:
 
 
 class profit_q_oracle:
+    """[summary]
+
+    Raises:
+        AssertionError -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
 
     def __init__(self, params, a, v):
+        """[summary]
+
+        Arguments:
+            params {[type]} -- [description]
+            a {[type]} -- [description]
+            v {[type]} -- [description]
+        """
         self.P = profit_oracle(params, a, v)
 
     def __call__(self, y, t, retry):
+        """[summary]
+
+        Arguments:
+            y {[type]} -- [description]
+            t {[type]} -- [description]
+            retry {[type]} -- [description]
+
+        Raises:
+            AssertionError -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         x = np.round(np.exp(y))
         if x[0] == 0 or x[1] == 0:
             raise AssertionError()

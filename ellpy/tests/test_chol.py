@@ -6,12 +6,19 @@ from ellpy.oracles.chol_ext import chol_ext
 
 
 def print_case(l1):
+    """[summary]
+    
+    Arguments:
+          l1 {[type]} -- [description]
+    """
     m1 = np.array(l1)
     Q = chol_ext(len(m1))
     Q.factorize(m1)
 
 
 def test_chol1():
+    """[summary]
+    """
     l1 = [[25., 15., -5.],
           [15., 18., 0.],
           [-5., 0., 11.]]
@@ -22,6 +29,8 @@ def test_chol1():
 
 
 def test_chol2():
+    """[summary]
+    """
     l2 = [[18., 22., 54., 42.],
           [22., -70., 86., 62.],
           [54., 86., -174., 134.],
@@ -36,6 +45,8 @@ def test_chol2():
 
 
 def test_chol3():
+    """[summary]
+    """
     l3 = [[0., 15., -5.],
           [15., 18., 0.],
           [-5., 0., 11.]]
