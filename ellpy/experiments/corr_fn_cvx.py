@@ -8,6 +8,19 @@ from ellpy.tests.corr_oracle import construct_distance_matrix
 
 
 def lsq_corr_poly(Y, s, n):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        n {[type]} -- [description]
+
+    Raises:
+        Exception -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     N = len(s)
     a = cvx.Variable(n)
     D1 = construct_distance_matrix(s)
@@ -31,6 +44,19 @@ def lsq_corr_poly(Y, s, n):
 
 
 def lsq_corr_bspline(Y, s, n):
+    """[summary]
+
+    Arguments:
+        Y {[type]} -- [description]
+        s {[type]} -- [description]
+        n {[type]} -- [description]
+
+    Raises:
+        Exception -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     k = 2
     h = s[-1] - s[0]
     d = np.sqrt(np.dot(h, h))
@@ -44,7 +70,7 @@ def lsq_corr_bspline(Y, s, n):
     N = len(s)
     c = cvx.Variable(n)
     D = construct_distance_matrix(s)
-    
+
     # Sig = spls[0](D)*c[0] + spls[1](D)*c[1] + spls[2](D)*c[2] +
     # spls[3](D)*c[3]
     Sig = np.zeros((N, N))

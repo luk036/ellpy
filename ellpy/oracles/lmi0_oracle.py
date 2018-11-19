@@ -14,7 +14,6 @@ class lmi0_oracle:
         Arguments:
             F {[type]} -- [description]
         """
-
         self.F = F
         self.Q = chol_ext(len(F[0]))
 
@@ -27,7 +26,6 @@ class lmi0_oracle:
         Returns:
             [type] -- [description]
         """
-
         n = len(x)
 
         def getA(i, j):

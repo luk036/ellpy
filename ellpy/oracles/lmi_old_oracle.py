@@ -18,7 +18,6 @@ class lmi_old_oracle:
             F {[type]} -- [description]
             B {[type]} -- [description]
         """
-
         self.F = F
         self.F0 = B
         self.A = np.zeros(B.shape)
@@ -33,7 +32,6 @@ class lmi_old_oracle:
         Returns:
             [type] -- [description]
         """
-
         n = len(x)
         self.A = self.F0.copy()
         self.A -= sum(self.F[k] * x[k] for k in range(n))

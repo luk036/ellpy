@@ -18,7 +18,6 @@ class chol_ext:
         Arguments:
             N {integer} -- dimension
         """
-
         self.R = np.zeros((N, N))
         self.p = 0
         # self.v = np.zeros(N)
@@ -53,7 +52,6 @@ class chol_ext:
         Arguments:
             A {np.array} -- Symmetric Matrix
         """
-
         self.factor(lambda i, j: A[i, j])
 
     # def factor2(self, getA):
@@ -81,7 +79,6 @@ class chol_ext:
         Arguments:
             getA {function} -- function to access symmetric matrix
         """
-
         self.p = 0
         R = self.R
         N = len(R)
@@ -102,7 +99,6 @@ class chol_ext:
         Returns:
             bool -- True if $A$ is a spd
         """
-
         return self.p == 0
 
     # def witness2(self):
@@ -127,7 +123,6 @@ class chol_ext:
         Returns:
             array, float -- v, ep
         """
-
         if self.is_spd():
             raise AssertionError()
         p = self.p
@@ -150,7 +145,6 @@ class chol_ext:
         Returns:
             [type] -- [description]
         """
-
         # v = self.witness()
         p = self.p
         return v.dot(F[:p, :p].dot(v))

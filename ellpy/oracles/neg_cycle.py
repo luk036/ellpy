@@ -6,6 +6,15 @@ Negative cycle detection for weighed graphs.
 
 
 def default_get_weight(G, e):
+    """[summary]
+
+    Arguments:
+        G {[type]} -- [description]
+        e {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     u, v = e
     return G[u][v].get('weight', 1)
 
@@ -13,6 +22,14 @@ def default_get_weight(G, e):
 class negCycleFinder:
 
     def __init__(self, G, get_weight=default_get_weight):
+        """[summary]
+
+        Arguments:
+            G {[type]} -- [description]
+
+        Keyword Arguments:
+            get_weight {[type]} -- [description] (default: {default_get_weight})
+        """
         self.G = G
         self.get_weight = get_weight
         self.dist = {v: 0 for v in G}
@@ -29,7 +46,6 @@ class negCycleFinder:
         Returns:
             handle -- a start node of the cycle
         """
-
         visited = {}
         for v in self.G:
             if v in visited:
@@ -64,7 +80,6 @@ class negCycleFinder:
         Returns:
             [type] -- [description]
         """
-
         changed = False
         for e in self.G.edges:
             wt = self.get_weight(self.G, e)
@@ -96,6 +111,11 @@ class negCycleFinder:
         return self.neg_cycle_relax()
 
     def neg_cycle_relax(self):
+        """[summary]
+
+        Returns:
+            [type] -- [description]
+        """
         # self.pred = {v: None for v in self.G}
 
         while True:
@@ -108,6 +128,14 @@ class negCycleFinder:
         return None
 
     def cycle_list(self, handle):
+        """[summary]
+
+        Arguments:
+            handle {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         v = handle
         cycle = list()
         while True:
@@ -119,6 +147,14 @@ class negCycleFinder:
         return cycle
 
     def is_negative(self, handle):
+        """[summary]
+
+        Arguments:
+            handle {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         v = handle
         while True:
             u = self.pred[v]

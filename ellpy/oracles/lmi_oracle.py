@@ -17,7 +17,6 @@ class lmi_oracle:
             F {[type]} -- [description]
             B {[type]} -- [description]
         """
-
         self.F = F
         self.F0 = B
         self.Q = chol_ext(len(B))
@@ -31,7 +30,6 @@ class lmi_oracle:
         Returns:
             [type] -- [description]
         """
-
         n = len(x)
 
         def getA(i, j):

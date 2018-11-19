@@ -9,6 +9,15 @@ class Problem:
     REGISTERED_SOLVE_METHODS = {}
 
     def __init__(self, S, oracle, options=Options()):
+        """[summary]
+        
+        Arguments:
+            S {[type]} -- [description]
+            oracle {[type]} -- [description]
+        
+        Keyword Arguments:
+            options {[type]} -- [description] (default: {Options()})
+        """
         self.S = S
         self.oracle = oracle
         self.options = options
@@ -173,5 +182,10 @@ class SolverStats:
     """
 
     def __init__(self, solver_name):
+        """[summary]
+        
+        Arguments:
+            solver_name {[type]} -- [description]
+        """
         self.solver_name = solver_name
         self.num_iters = None

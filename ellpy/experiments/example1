@@ -8,6 +8,15 @@ from ellpy.ell import ell
 
 
 def my_oracle(z, t):
+    """[summary]
+
+    Arguments:
+        z {[type]} -- [description]
+        t {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
     x, y = z
 
     # constraint 1: x + y <= 3

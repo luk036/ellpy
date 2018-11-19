@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from pprint import pprint
 
 from networkx.utils import generate_unique_node
 import networkx as nx
