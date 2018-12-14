@@ -58,7 +58,7 @@ class poly_oracle2:
     def __call__(self, x, t):
         n = len(x)
         g = np.zeros(n)
-        g[-1] = 1 
+        g[-1] = 1
         tc = x[-1]
         fj = tc - t
         if fj > 0:
@@ -153,7 +153,7 @@ class bsp_oracle:
                 g[i + 1] = 1.
                 return (g, fj), False
 
-        # if x[-1] 
+        # if x[-1]
         #     g[-1] = -1.
         #     return (g, -x[-1]), False
 
@@ -213,7 +213,7 @@ class bsp_oracle2:
                 g[i + 1] = 1.
                 return (g, fj), False
 
-        # if x[-1] 
+        # if x[-1]
         #     g[-1] = -1.
         #     return (g, -x[-1]), False
 

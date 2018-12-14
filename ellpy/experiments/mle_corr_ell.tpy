@@ -54,11 +54,11 @@ class mle_poly_oracle:
             return cut, t
 
         N = len(self.Y)
-        R = self.imi.Q.R[:N,:N]
+        R = self.imi.Q.R[:N, :N]
         # S = invR.dot(invR.T)
         diag = np.diag(R)
         f1 = 2*np.sum(np.log(diag))
-        S = self.imi.A[N:,N:]
+        S = self.imi.A[N:, N:]
         # SY = S.dot(self.Y)
         f1 += sum(S[k].dot(self.Y[k]) for k in range(N))
         # f1 += np.trace(SY)
@@ -84,7 +84,7 @@ class mle_poly_oracle:
 
 
 def mle_corr_poly(Y, s, n):
-    _ = np.linalg.cholesky(Y) # test if Y is SPD.
+    _ = np.linalg.cholesky(Y)  # test if Y is SPD.
 
     N = len(s)
     D1 = construct_distance_matrix(s)

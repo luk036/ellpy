@@ -3,6 +3,7 @@ from __future__ import print_function
 from pprint import pprint
 import numpy as np
 
+
 class oracle:
     def __init__(self, i):
         self.i2 = i
@@ -18,17 +19,18 @@ class max_oracle:
     def __call__(self):
         Lt = []
         Li = []
-        while True:  
-            try:  
+        while True:
+            try:
                 oracle = next(self.it)
                 Lt += [oracle()]
-            except StopIteration:  
-                # 遇到StopIteration就退出循环  
+            except StopIteration:
+                # 遇到StopIteration就退出循环
                 break
         Lt = np.array(Lt)
         t = np.max(Lt)
         ti = np.argmax(Lt)
         return t, ti
+
 
 if __name__ == "__main__":
     k = 0
