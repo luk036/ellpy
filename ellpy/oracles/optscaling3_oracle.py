@@ -4,13 +4,13 @@ from .network3_oracle import network3_oracle
 
 def constr3(G, e, x, t):
     """[summary]
-    
+
     Arguments:
         G {[type]} -- [description]
         e {[type]} -- [description]
         x {[type]} -- [description]
         t {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -22,13 +22,13 @@ def constr3(G, e, x, t):
 
 def pconstr3(G, e, x, t):
     """[summary]
-    
+
     Arguments:
         G {[type]} -- [description]
         e {[type]} -- [description]
         x {[type]} -- [description]
         t {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -40,14 +40,14 @@ def pconstr3(G, e, x, t):
 
 class optscaling3_oracle:
     """[summary]
-    
+
     Returns:
         [type] -- [description]
     """
 
     def __init__(self, G):
         """[summary]
-        
+
         Arguments:
             G {[type]} -- [description]
         """
@@ -56,7 +56,7 @@ class optscaling3_oracle:
 
     def update(self, t):
         """[summary]
-        
+
         Arguments:
             t {[type]} -- [description]
         """
@@ -64,10 +64,10 @@ class optscaling3_oracle:
 
     def __call__(self, x):
         """[summary]
-        
+
         Arguments:
             x {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """

@@ -12,13 +12,13 @@ from ellpy.ell import ell, ell1d
 
 def vdc(n, base=2):
     """[summary]
-    
+
     Arguments:
         n {[type]} -- [description]
-    
+
     Keyword Arguments:
         base {int} -- [description] (default: {2})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -32,13 +32,13 @@ def vdc(n, base=2):
 
 def vdcorput(n, base=2):
     """[summary]
-    
+
     Arguments:
         n {[type]} -- [description]
-    
+
     Keyword Arguments:
         base {int} -- [description] (default: {2})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -48,15 +48,15 @@ def vdcorput(n, base=2):
 def formGraph(T, pos, eta, seed=None):
     """Form N by N grid of nodes, connect nodes within eta.
         mu and eta are relative to 1/(N-1)
-    
+
     Arguments:
         T {[type]} -- [description]
         pos {[type]} -- [description]
         eta {[type]} -- [description]
-    
+
     Keyword Arguments:
         seed {[type]} -- [description] (default: {None})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -99,10 +99,10 @@ cmin = min(c for _, _, c in G.edges.data('cost'))
 
 def run_optscaling(duration=0.000001):
     """[summary]
-    
+
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -121,10 +121,10 @@ def run_optscaling(duration=0.000001):
 
 def run_optscaling3(duration=0.000001):
     """[summary]
-    
+
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -140,7 +140,7 @@ def run_optscaling3(duration=0.000001):
 
 def test_two_variables(benchmark):
     """[summary]
-    
+
     Arguments:
         benchmark {[type]} -- [description]
     """
@@ -150,7 +150,7 @@ def test_two_variables(benchmark):
 
 def test_binary_search(benchmark):
     """[summary]
-    
+
     Arguments:
         benchmark {[type]} -- [description]
     """

@@ -7,7 +7,7 @@ from ellpy.oracles.chol_ext import chol_ext
 
 def print_case(l1):
     """[summary]
-    
+
     Arguments:
           l1 {[type]} -- [description]
     """

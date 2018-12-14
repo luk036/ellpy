@@ -13,4 +13,3 @@ from .network_oracle import network_oracle
 from .network3_oracle import network3_oracle
 from .optscaling_oracle import optscaling_oracle
 from .optscaling3_oracle import optscaling3_oracle
-

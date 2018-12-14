@@ -60,12 +60,13 @@ def spectral_fact(r):
 
     return h
 
+
 def inverse_spectral_fact(h):
     """[summary]
-    
+
     Arguments:
         h {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """

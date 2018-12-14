@@ -12,7 +12,7 @@ from ellpy.ell import ell
 class my_oracle:
     def __init__(self, oracle):
         """[summary]
-        
+
         Arguments:
             oracle {[type]} -- [description]
         """
@@ -30,11 +30,11 @@ class my_oracle:
 
     def __call__(self, x, t):
         """[summary]
-        
+
         Arguments:
             x {[type]} -- [description]
             t {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """
@@ -55,13 +55,13 @@ class my_oracle:
 
 def run_lmi(oracle, duration=0.000001):
     """[summary]
-    
+
     Arguments:
         oracle {[type]} -- [description]
-    
+
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -80,7 +80,7 @@ def run_lmi(oracle, duration=0.000001):
 
 def test_lmi_lazy(benchmark):
     """[summary]
-    
+
     Arguments:
         benchmark {[type]} -- [description]
     """
@@ -90,7 +90,7 @@ def test_lmi_lazy(benchmark):
 
 def test_lmi_old(benchmark):
     """[summary]
-    
+
     Arguments:
         benchmark {[type]} -- [description]
     """

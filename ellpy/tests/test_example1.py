@@ -9,11 +9,11 @@ from .test_example2 import my_oracle2
 
 def my_oracle(z, t):
     """[summary]
-    
+
     Arguments:
         z {[type]} -- [description]
         t {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """

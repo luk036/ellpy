@@ -47,10 +47,10 @@ from .csdlowpass_oracle import csdlowpass_oracle
 # number of FIR coefficients (including zeroth)
 def create_lowpass_case(N=48):
     """[summary]
-    
+
     Keyword Arguments:
         N {int} -- [description] (default: {48})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -106,11 +106,11 @@ def create_lowpass_case(N=48):
 
 def create_csdlowpass_case(N=48, nnz=8):
     """[summary]
-    
+
     Keyword Arguments:
         N {int} -- [description] (default: {48})
         nnz {int} -- [description] (default: {8})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -121,13 +121,13 @@ def create_csdlowpass_case(N=48, nnz=8):
 
 def run_lowpass(use_parallel_cut, duration=0.000001):
     """[summary]
-    
+
     Arguments:
         use_parallel_cut {[type]} -- [description]
-    
+
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
-    
+
     Returns:
         [type] -- [description]
     """
@@ -167,13 +167,13 @@ def test_lowpass():
 
 def run_csdlowpass(use_parallel_cut, duration=0.000001):
     """[summary]
-    
+
     Arguments:
         use_parallel_cut {[type]} -- [description]
-    
+
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
-    
+
     Returns:
         [type] -- [description]
     """

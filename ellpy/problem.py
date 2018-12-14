@@ -10,11 +10,11 @@ class Problem:
 
     def __init__(self, S, oracle, options=Options()):
         """[summary]
-        
+
         Arguments:
             S {[type]} -- [description]
             oracle {[type]} -- [description]
-        
+
         Keyword Arguments:
             options {[type]} -- [description] (default: {Options()})
         """
@@ -183,7 +183,7 @@ class SolverStats:
 
     def __init__(self, solver_name):
         """[summary]
-        
+
         Arguments:
             solver_name {[type]} -- [description]
         """

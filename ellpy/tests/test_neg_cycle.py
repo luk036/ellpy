@@ -8,7 +8,7 @@ from ellpy.oracles.neg_cycle import negCycleFinder
 
 def create_test_case1():
     """[summary]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -21,7 +21,7 @@ def create_test_case1():
 
 def create_test_case_timing():
     """[summary]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -40,20 +40,20 @@ def create_test_case_timing():
 
 def do_case(G):
     """[summary]
-    
+
     Arguments:
         G {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """
     def get_weight(G, e):
         """[summary]
-        
+
         Arguments:
             G {[type]} -- [description]
             e {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """
