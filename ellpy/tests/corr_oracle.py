@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.interpolate import BSpline
+from ellpy.tests.halton_n import halton_n
 
 
 def create_2d_isotropic(nx=10, ny=8, N=3000):
@@ -22,10 +23,12 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
     np.random.seed(5)
 
     # create sites s
-    sx = np.linspace(0, s_end[0], nx)
-    sy = np.linspace(0, s_end[1], ny)
-    xx, yy = np.meshgrid(sx, sy)
-    s = np.vstack([xx.flatten(), yy.flatten()]).T
+    # sx = np.linspace(0, s_end[0], nx)
+    # sy = np.linspace(0, s_end[1], ny)
+    # xx, yy = np.meshgrid(sx, sy)
+    # s = np.vstack([xx.flatten(), yy.flatten()]).T
+    s = np.array([(s_end[0]*x, s_end[1]*y)
+                  for x, y in halton_n(n, 2, [2, 3])])
 
     Sig = np.zeros((n, n))
     for i in range(n):

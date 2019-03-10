@@ -1,4 +1,7 @@
 {
+  "pycsd/test/test_csd_decimals.py::tests__decimals": true,
+  "pycsd/test/test_csd_integers.py::tests__integers": true,
   "pycsd/test/test_decimal.py::test__integer_conversion::testToCSD": true,
+  "pycsd/test/test_to_and_fro_10bits.py::tests__to_and_fro_10bits": true,
   "tests/test_lmi.py::testcase": true
 }
