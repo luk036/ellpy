@@ -132,7 +132,7 @@ class chol_ext:
         ep = 0. if r == 0 else 1.
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
-            v[i] = -s / self.R[i, i]
+            v[i] = -(s / self.R[i, i])
         return v, ep
 
     def sym_quad(self, v, F):
