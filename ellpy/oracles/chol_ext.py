@@ -11,6 +11,7 @@ class chol_ext:
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
     """
+    p = 0
 
     def __init__(self, N):
         """initialization
@@ -19,9 +20,7 @@ class chol_ext:
             N {integer} -- dimension
         """
         self.R = np.zeros((N, N))
-        self.p = 0
-        # self.v = np.zeros(N)
-        # self.d = np.zeros(N)
+        self.n = N
 
     # def factorize2(self, A):
     #     '''
@@ -81,13 +80,13 @@ class chol_ext:
         """
         self.p = 0
         R = self.R
-        N = len(R)
-        for i in range(N):
+
+        for i in range(self.n):
             for j in range(i+1):
                 d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
                 if i != j:
                     R[j, i] = d / R[j, j]
-            if d <= 0:  # strictly positive???
+            if d <= 0.:  # strictly positive???
                 self.p = i + 1
                 R[i, i] = math.sqrt(-d)
                 break
@@ -128,23 +127,23 @@ class chol_ext:
         p = self.p
         v = np.zeros(p)
         r = self.R[p - 1, p - 1]
-        v[p - 1] = 1. if r == 0 else 1. / r
         ep = 0. if r == 0 else 1.
+        v[p - 1] = 1. if r == 0 else 1. / r
+
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -(s / self.R[i, i])
         return v, ep
 
-    def sym_quad(self, v, F):
+    def sym_quad(self, v, A):
         """[summary]
 
         Arguments:
             v {[type]} -- [description]
-            F {[type]} -- [description]
+            A {[type]} -- [description]
 
         Returns:
             [type] -- [description]
         """
-        # v = self.witness()
         p = self.p
-        return v.dot(F[:p, :p].dot(v))
+        return v.dot(A[:p, :p].dot(v))

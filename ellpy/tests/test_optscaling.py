@@ -45,6 +45,10 @@ def vdcorput(n, base=2):
     return [vdc(i, base) for i in range(n)]
 
 
+class SimpleDiGraph(nx.DiGraph):
+    nodemap = {}
+
+
 def formGraph(T, pos, eta, seed=None):
     """Form N by N grid of nodes, connect nodes within eta.
         mu and eta are relative to 1/(N-1)
@@ -72,7 +76,11 @@ def formGraph(T, pos, eta, seed=None):
 
     # connect nodes with edges
     G = nx.random_geometric_graph(n, eta, pos=pos)
-    G = nx.DiGraph(G)
+    G = SimpleDiGraph(nx.DiGraph(G))
+    # G.add_node('dummy', pos = (0.3, 0.4))
+    # G.add_edge('dummy', 1)
+    # G.nodemap = {v : i_v for i_v, v in enumerate(G.nodes())}
+    G.nodemap = range(G.number_of_nodes())
     return G
 
 

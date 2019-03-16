@@ -19,7 +19,7 @@ class lmi_oracle:
         """
         self.F = F
         self.F0 = B
-        self.Q = chol_ext(len(B))
+        self.Q = chol_ext(len(self.F0))
 
     def __call__(self, x):
         """[summary]

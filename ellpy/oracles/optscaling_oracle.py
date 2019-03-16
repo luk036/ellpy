@@ -15,8 +15,10 @@ def constr(G, e, x):
         [type] -- [description]
     """
     u, v = e
+    i_u = G.nodemap[u]
+    i_v = G.nodemap[v]
     cost = G[u][v]['cost']
-    return x[0] - cost if u <= v else cost - x[1]
+    return x[0] - cost if i_u <= i_v else cost - x[1]
 
 
 def pconstr(G, e, x):
@@ -31,7 +33,9 @@ def pconstr(G, e, x):
         [type] -- [description]
     """
     u, v = e
-    return np.array([1.,  0.] if u <= v else [0., -1.])
+    i_u = G.nodemap[u]
+    i_v = G.nodemap[v]
+    return np.array([1.,  0.] if i_u <= i_v else [0., -1.])
 
 
 class optscaling_oracle:

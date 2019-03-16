@@ -15,7 +15,9 @@ def constr3(G, e, x, t):
         [type] -- [description]
     """
     u, v = e
-    if u <= v:
+    i_u = G.nodemap[u]
+    i_v = G.nodemap[v]
+    if i_u <= i_v:
         return x + t - G[u][v]['cost']
     return G[u][v]['cost'] - x
 
@@ -33,7 +35,9 @@ def pconstr3(G, e, x, t):
         [type] -- [description]
     """
     u, v = e
-    if u <= v:
+    i_u = G.nodemap[u]
+    i_v = G.nodemap[v]
+    if i_u <= i_v:
         return 1.
     return -1.
 
