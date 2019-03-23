@@ -6,7 +6,7 @@ from .chol_ext import chol_ext
 class lmi_oracle:
     """Oracle for Linear Matrix Inequality constraint
             F * x <= B
-        Or
+       or
             (B - F * x) must be a semidefinte matrix
     """
 

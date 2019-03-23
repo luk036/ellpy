@@ -4,13 +4,8 @@ import math
 
 
 class chol_ext:
-    """chol_ext Cholesky factorization for LMI
+    """chol_ext Cholesky factorization for LMI """
 
-         If $A$ is positive definite, then $p$ is zero.
-         If it is not, then $p$ is a positive integer,
-         such that $v = R^{-1} e_p$ is a certificate vector
-         to make $v'*A[:p,:p]*v < 0$
-    """
     p = 0
 
     def __init__(self, N):
@@ -22,34 +17,16 @@ class chol_ext:
         self.R = np.zeros((N, N))
         self.n = N
 
-    # def factorize2(self, A):
-    #     '''
-    #     (square-root-free version)
-    #      If $A$ is positive definite, then $p$ is zero.
-    #      If it is not, then $p$ is a positive integer,
-    #      such that $v = R^{-1} e_p$ is a certificate vector
-    #      to make $v'*A[:p,:p]*v < 0$
-    #     '''
-    #     # N = len(A)
-    #     # self.p = 0
-    #     self.p = 0
-    #     R = self.R
-    #     d = self.d
-    #     N = len(R)
-    #     for i in range(N):
-    #         for j in range(i+1):
-    #             d[i] = A[i, j] - np.dot(d[:j], R[:j, i] * R[:j, j])
-    #             if i != j:
-    #                 R[j, i] = d[i] / d[j]
-    #         if d[i] <= 0:  # strictly positive???
-    #             self.p = i + 1
-    #             break
-
     def factorize(self, A):
         """Perform Cholesky Factorization
 
         Arguments:
             A {np.array} -- Symmetric Matrix
+
+         If $A$ is positive definite, then $p$ is zero.
+         If it is not, then $p$ is a positive integer,
+         such that $v = R^{-1} e_p$ is a certificate vector
+         to make $v'*A[:p,:p]*v < 0$
         """
         self.factor(lambda i, j: A[i, j])
 
@@ -79,18 +56,18 @@ class chol_ext:
             getA {function} -- function to access symmetric matrix
         """
         self.p = 0
-        R = self.R
 
         for i in range(self.n):
             for j in range(i+1):
-                d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
+                d = getA(i, j) - np.dot(self.R[:j, i], self.R[:j, j])
                 if i != j:
-                    R[j, i] = d / R[j, j]
+                    self.R[j, i] = d / self.R[j, j]
             if d <= 0.:  # strictly positive???
                 self.p = i + 1
-                R[i, i] = math.sqrt(-d)
+                self.R[i, i] = math.sqrt(-d)
                 break
-            R[i, i] = math.sqrt(d)
+            else:
+                self.R[i, i] = math.sqrt(d)
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
