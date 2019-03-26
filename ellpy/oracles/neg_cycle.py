@@ -57,7 +57,7 @@ class negCycleFinder:
             u = v
             i_u = self.G.nodemap[u]
             while True:
-                visited[i_u] = v
+                visited[i_u] = i_v
                 if u not in self.pred:
                     break
                 u = self.pred[u]
@@ -65,7 +65,7 @@ class negCycleFinder:
                 #    break
                 i_u = self.G.nodemap[u]
                 if visited[i_u] < N:
-                    if visited[i_u] == v:
+                    if visited[i_u] == i_v:
                         if self.is_negative(u):
                             # should be "yield u"
                             return u
