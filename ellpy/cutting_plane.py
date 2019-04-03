@@ -177,13 +177,14 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
         cut, x0, t1, loop = evaluate(
             S.xc, t, 0 if status != 3 else 1)
         g, h = cut
-        if status != 3:
-            if loop == 1:  # discrete sol'n
-                h += g.dot(x0 - S.xc)
-        else:  # can't cut in the previous iteration
+        # if status != 3:
+        #     if loop == 1:  # discrete sol'n
+        #         h += g.dot(x0 - S.xc)
+        # else:  # can't cut in the previous iteration
+        if status == 3:
             if loop == 0:  # no more alternative cut
                 break
-            h += g.dot(x0 - S.xc)
+            # h += g.dot(x0 - S.xc)
         if t != t1:  # best t obtained
             feasible = True
             t = t1

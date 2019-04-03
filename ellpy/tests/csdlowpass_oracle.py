@@ -41,5 +41,6 @@ class csdlowpass_oracle:
         h = spectral_fact(r)
         hcsd = np.array([to_decimal(to_csdfixed(hi, self.nnz)) for hi in h])
         rcsd = inverse_spectral_fact(hcsd)
-        cut, Spsq2 = self.lowpass(rcsd, Spsq)
-        return cut, rcsd, Spsq2, 1
+        (gc, hc), Spsq2 = self.lowpass(rcsd, Spsq)
+        hc += gc.dot(rcsd - r)
+        return (gc, hc), rcsd, Spsq2, 1

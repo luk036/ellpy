@@ -89,7 +89,7 @@ class profit_rb_oracle:
             [type] -- [description]
         """
         a_rb = self.a.copy()
-        for i in range(2):
+        for i in [0, 1]:
             a_rb[i] += self.uie[i] * (+1. if y[i] <= 0 else -1.)
         self.P.a = a_rb
         return self.P(y, t)
@@ -133,5 +133,6 @@ class profit_q_oracle:
         if x[0] == 0 or x[1] == 0:
             raise AssertionError()
         yd = np.log(x)
-        cut, t = self.P(yd, t)
-        return cut, yd, t, 1
+        (g, h), t = self.P(yd, t)
+        h += g.dot(yd - y)
+        return (g, h), yd, t, 1
