@@ -93,13 +93,13 @@ x = [i for i in vdcorput(T, xbase)]
 y = [i for i in vdcorput(T, ybase)]
 pos = zip(x, y)
 G = formGraph(T, pos, 1.6, seed=5)
-# Add a sink, connect all spareTSV to it.
-for u, v in G.edges():
-    h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
-    G[u][v]['cost'] = np.sqrt(np.dot(h, h))
+# for u, v in G.edges():
+#     h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
+#     G[u][v]['cost'] = np.sqrt(np.dot(h, h))
 
 for u, v in G.edges():
-    G[u][v]['cost'] = np.log(abs(G[u][v]['cost']))
+    h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
+    G[u][v]['cost'] = np.log(np.sqrt(np.dot(h, h)))
 
 cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))

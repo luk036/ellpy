@@ -5,7 +5,7 @@ import math
 
 class chol_ext:
     """chol_ext Cholesky factorization for LMI """
-
+    sqrt_free = True
     p = 0
 
     def __init__(self, N):
@@ -50,7 +50,7 @@ class chol_ext:
     #             break
 
     def factor(self, getA):
-        """Perform Cholesky Factorization (square-root free)
+        """Perform Cholesky Factorization (square-root free version)
 
         Arguments:
             getA {function} -- function to access symmetric matrix
@@ -70,7 +70,6 @@ class chol_ext:
             else:
                 self.R[i, i] = d
 
-
     def factor3(self, getA):
         """Perform Cholesky Factorization (Lazy evaluation)
 
@@ -78,6 +77,7 @@ class chol_ext:
             getA {function} -- function to access symmetric matrix
         """
         self.p = 0
+        self.sqrt_free = False
 
         for i in range(self.n):
             for j in range(i+1):
@@ -126,13 +126,14 @@ class chol_ext:
             raise AssertionError()
         p = self.p
         v = np.zeros(p)
-        r = self.R[p - 1, p - 1]
-        ep = 0. if r == 0 else 1.
-        v[p - 1] = 1. if r == 0 else 1. / math.sqrt(r)
+        # r = self.R[p - 1, p - 1]
+        # ep = 0. if r == 0 else 1.
+        # v[p - 1] = 1. if r == 0 else 1. / math.sqrt(r)
+        v[p - 1] = 1.
 
         for i in range(p - 2, -1, -1):
             v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
-        return v, ep
+        return v, self.R[p - 1, p - 1]
 
     def witness3(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -143,18 +144,41 @@ class chol_ext:
         Returns:
             array, float -- v, ep
         """
+        if self.sqrt_free:
+            raise AssertionError()
         if self.is_spd():
             raise AssertionError()
+
         p = self.p
         v = np.zeros(p)
-        r = self.R[p - 1, p - 1]
-        ep = 0. if r == 0 else 1.
-        v[p - 1] = 1. if r == 0 else 1. / r
+        # r = self.R[p - 1, p - 1]
+        # ep = 0. if r == 0 else 1.
+        # v[p - 1] = 1. if r == 0 else 1. / r
+        v[p - 1] = 1.
 
         for i in range(p - 2, -1, -1):
             s = np.dot(self.R[i, i+1:p], v[i+1:p])
             v[i] = -(s / self.R[i, i])
-        return v, ep
+
+        ep = self.R[p - 1, p - 1]
+        return v, ep*ep
+
+    def sqrt(self):
+        if not self.is_spd():
+            raise AssertionError()
+
+        if not self.sqrt_free:
+            return self.R
+
+        n = self.n
+        M = np.zeros((n, n))
+
+        for i in range(self.n):
+            M[i, i] = math.sqrt(self.R[i, i])
+            for j in range(i+1, n):
+                M[i, j] = self.R[i, j] * M[i, i]
+
+        return M
 
     def sym_quad(self, v, A):
         """[summary]

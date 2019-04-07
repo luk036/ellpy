@@ -40,7 +40,7 @@ class mle_oracle:
         if not feasible:
             return cut, t
 
-        R = self.lmi0.Q.R
+        R = self.lmi0.Q.sqrt()
         invR = np.linalg.inv(R)
         S = (invR).dot(invR.T)
         SY = S.dot(self.Y)
