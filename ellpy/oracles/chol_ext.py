@@ -50,6 +50,28 @@ class chol_ext:
     #             break
 
     def factor(self, getA):
+        """Perform Cholesky Factorization (square-root free)
+
+        Arguments:
+            getA {function} -- function to access symmetric matrix
+        """
+        self.p = 0
+
+        for i in range(self.n):
+            for j in range(i+1):
+                d = getA(i, j) - np.dot(self.R[:j, i], self.R[j, :j])
+                if i != j:
+                    self.R[i, j] = d
+                    self.R[j, i] = d / self.R[j, j]
+            if d <= 0.:  # strictly positive???
+                self.p = i + 1
+                self.R[i, i] = -d
+                break
+            else:
+                self.R[i, i] = d
+
+
+    def factor3(self, getA):
         """Perform Cholesky Factorization (Lazy evaluation)
 
         Arguments:
@@ -91,6 +113,28 @@ class chol_ext:
     #     return v
 
     def witness(self):
+        """witness that certifies $A$ is not symmetric positive definite (spd)
+            (square-root-free version)
+
+        Raises:
+            AssertionError -- $A$ indeeds a spd matrix
+
+        Returns:
+            array, float -- v, ep
+        """
+        if self.is_spd():
+            raise AssertionError()
+        p = self.p
+        v = np.zeros(p)
+        r = self.R[p - 1, p - 1]
+        ep = 0. if r == 0 else 1.
+        v[p - 1] = 1. if r == 0 else 1. / math.sqrt(r)
+
+        for i in range(p - 2, -1, -1):
+            v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
+        return v, ep
+
+    def witness3(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
 
         Raises:
