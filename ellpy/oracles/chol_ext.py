@@ -30,25 +30,6 @@ class chol_ext:
         """
         self.factor(lambda i, j: A[i, j])
 
-    # def factor2(self, getA):
-    #     '''(lazy evalution of A)
-    #        (square-root-free version)
-    #     '''
-    #     # N = len(A)
-    #     # self.p = 0
-    #     self.p = 0
-    #     R = self.R
-    #     d = self.d
-    #     N = len(R)
-    #     for i in range(N):
-    #         for j in range(i+1):
-    #             d[i] = getA(i, j) - np.dot(d[:j], R[:j, i]*R[:j, j])
-    #             if i != j:
-    #                 R[j, i] = d[i] / d[j]
-    #         if d[i] <= 0:  # strictly positive???
-    #             self.p = i + 1
-    #             break
-
     def factor(self, getA):
         """Perform Cholesky Factorization (square-root free version)
 
@@ -63,33 +44,33 @@ class chol_ext:
                 if i != j:
                     self.R[i, j] = d
                     self.R[j, i] = d / self.R[j, j]
-            if d <= 0.:  # strictly positive???
+            if d <= 0.:  # strictly positive
                 self.p = i + 1
                 self.R[i, i] = -d
                 break
             else:
                 self.R[i, i] = d
 
-    def factor3(self, getA):
-        """Perform Cholesky Factorization (Lazy evaluation)
+    # def factor3(self, getA):
+    #     """Perform Cholesky Factorization (Lazy evaluation)
 
-        Arguments:
-            getA {function} -- function to access symmetric matrix
-        """
-        self.p = 0
-        self.sqrt_free = False
+    #     Arguments:
+    #         getA {function} -- function to access symmetric matrix
+    #     """
+    #     self.p = 0
+    #     self.sqrt_free = False
 
-        for i in range(self.n):
-            for j in range(i+1):
-                d = getA(i, j) - np.dot(self.R[:j, i], self.R[:j, j])
-                if i != j:
-                    self.R[j, i] = d / self.R[j, j]
-            if d <= 0.:  # strictly positive???
-                self.p = i + 1
-                self.R[i, i] = math.sqrt(-d)
-                break
-            else:
-                self.R[i, i] = math.sqrt(d)
+    #     for i in range(self.n):
+    #         for j in range(i+1):
+    #             d = getA(i, j) - np.dot(self.R[:j, i], self.R[:j, j])
+    #             if i != j:
+    #                 self.R[j, i] = d / self.R[j, j]
+    #         if d <= 0.:  # strictly positive
+    #             self.p = i + 1
+    #             self.R[i, i] = math.sqrt(-d)
+    #             break
+    #         else:
+    #             self.R[i, i] = math.sqrt(d)
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
@@ -98,19 +79,6 @@ class chol_ext:
             bool -- True if $A$ is a spd
         """
         return self.p == 0
-
-    # def witness2(self):
-    #     '''
-    #     (square-root-free version)
-    #     '''
-    #     if self.is_spd():
-    #         raise AssertionError()
-    #     p = self.p
-    #     v = np.zeros(p)
-    #     v[p-1] = 1. / math.sqrt(-self.d[p-1])
-    #     for i in range(p - 2, -1, -1):
-    #         v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
-    #     return v
 
     def witness(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -135,33 +103,33 @@ class chol_ext:
             v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
         return v, self.R[p - 1, p - 1]
 
-    def witness3(self):
-        """witness that certifies $A$ is not symmetric positive definite (spd)
+    # def witness3(self):
+    #     """witness that certifies $A$ is not symmetric positive definite (spd)
 
-        Raises:
-            AssertionError -- $A$ indeeds a spd matrix
+    #     Raises:
+    #         AssertionError -- $A$ indeeds a spd matrix
 
-        Returns:
-            array, float -- v, ep
-        """
-        if self.sqrt_free:
-            raise AssertionError()
-        if self.is_spd():
-            raise AssertionError()
+    #     Returns:
+    #         array, float -- v, ep
+    #     """
+    #     if self.sqrt_free:
+    #         raise AssertionError()
+    #     if self.is_spd():
+    #         raise AssertionError()
 
-        p = self.p
-        v = np.zeros(p)
-        # r = self.R[p - 1, p - 1]
-        # ep = 0. if r == 0 else 1.
-        # v[p - 1] = 1. if r == 0 else 1. / r
-        v[p - 1] = 1.
+    #     p = self.p
+    #     v = np.zeros(p)
+    #     # r = self.R[p - 1, p - 1]
+    #     # ep = 0. if r == 0 else 1.
+    #     # v[p - 1] = 1. if r == 0 else 1. / r
+    #     v[p - 1] = 1.
 
-        for i in range(p - 2, -1, -1):
-            s = np.dot(self.R[i, i+1:p], v[i+1:p])
-            v[i] = -(s / self.R[i, i])
+    #     for i in range(p - 2, -1, -1):
+    #         s = np.dot(self.R[i, i+1:p], v[i+1:p])
+    #         v[i] = -(s / self.R[i, i])
 
-        ep = self.R[p - 1, p - 1]
-        return v, ep*ep
+    #     ep = self.R[p - 1, p - 1]
+    #     return v, ep*ep
 
     def sqrt(self):
         if not self.is_spd():
