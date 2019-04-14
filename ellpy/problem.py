@@ -130,10 +130,13 @@ class Problem:
             The optimal value for the problem, or a string indicating
             why the problem could not be solved.
         """
-        xb, fb, num_iters, feasible, status = cutting_plane_dc(
-            self.oracle, self.S, t, self.options)
+        ell_info = cutting_plane_dc(self.oracle, self.S, t, self.options)
+        xb = ell_info.val
+        fb = ell_info.value
+        num_iters = ell_info.num_iters
+        status = ell_info.status
 
-        if feasible:
+        if ell_info.feasible:
             if status == 2:
                 self._status = 'optimal'
             else:

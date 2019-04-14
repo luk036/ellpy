@@ -77,7 +77,6 @@ class my_fir_oracle:
 h0 = np.zeros(n)  # initial x0
 E = ell(40., h0)
 P = my_fir_oracle()
-#hb, fb, niter, feasible, status = cutting_plane_dc(P, E, 10.)
 prob1 = Problem(E, P)
 prob1.solve(100.)
 

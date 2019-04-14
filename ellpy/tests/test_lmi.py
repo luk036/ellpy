@@ -66,16 +66,16 @@ def run_lmi(oracle, duration=0.000001):
         [type] -- [description]
     """
     x0 = np.array([0., 0., 0.])  # initial x0
-    fmt = '{:f} {} {} {}'
-
     E = ell(10., x0)
     P = my_oracle(oracle)
-    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, 100.)
-    print(fmt.format(fb, niter, feasible, status))
-    print(xb)
-    assert feasible
+    ell_info = cutting_plane_dc(P, E, 100.)
+    
+    # fmt = '{:f} {} {} {}'
+    # print(fmt.format(fb, niter, feasible, status))
+    # print(xb)
+    assert ell_info.feasible
     time.sleep(duration)
-    return niter
+    return ell_info.num_iters
 
 
 def test_lmi_lazy(benchmark):

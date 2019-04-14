@@ -80,8 +80,8 @@ def lsq_corr_core2(Y, m, P):
     x[0] = 1.
     x[-1] = normY2/2
     E = ell(val, x)
-    x_best, _, num_iters, feasible, _ = cutting_plane_dc(P, E, normY2)
-    return x_best[:-1], num_iters, feasible
+    ell_info = cutting_plane_dc(P, E, normY2)
+    return ell_info.val[:-1], ell_info.num_iters, ell_info.feasible
 
 
 def lsq_corr_poly2(Y, s, m):

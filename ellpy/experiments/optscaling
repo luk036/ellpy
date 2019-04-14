@@ -108,12 +108,13 @@ if __name__ == "__main__":
     t = cmax - cmin
     E = ell(1.5*t, x0)
     P = optscaling_oracle(G)
-    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, 1.001*t)
-
-    fmt = '{:f} {} {} {}'
+    ell_info = cutting_plane_dc(P, E, 1.001*t)
+    xb = ell_info.val
+    fb = ell_info.value
     print(np.exp(xb))
-    print(fmt.format(np.exp(fb), niter, feasible, status))
-    assert feasible
+    # fmt = '{:f} {} {} {}'
+    # print(fmt.format(np.exp(fb), niter, feasible, status))
+    assert ell_info.feasible
 
 # def test_optscaling2():
     # mid = (cmax + cmin)/2.
@@ -121,11 +122,10 @@ if __name__ == "__main__":
     t = cmax - cmin
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
-    # xb, fb, niter, feasible, status = cutting_plane_dc(P, I, 1.1*t)
     P = bsearch_adaptor(Q, I)
-    fb, niter, feasible = bsearch(P, [0., 1.001*t])
+    bs_info = bsearch(P, [0., 1.001*t])
 
-    fmt = '{:f} {} {} {}'
+    # fmt = '{:f} {} {} {}'
     # print(np.exp(xb))
-    print(fmt.format(np.exp(fb), niter, feasible, status))
-    assert feasible
+    # print(fmt.format(np.exp(fb), niter, feasible, status))
+    assert bs_info.feasible

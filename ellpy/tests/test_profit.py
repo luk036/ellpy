@@ -25,10 +25,9 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_oracle(params, a, v)
-    _, _, niter, feasible, _ = \
-        cutting_plane_dc(P, E, 0.)
-    assert feasible
-    assert niter == 37
+    ell_info = cutting_plane_dc(P, E, 0.)
+    assert ell_info.feasible
+    assert ell_info.num_iters == 37
 
     ui = 1.
     e1 = 0.003
@@ -37,17 +36,17 @@ def benchmark_profit(duration=0.000001):
 
     E = ell(r, y0)
     P = profit_rb_oracle(params, a, v, (ui, e1, e2, e3))
-    _, _, niter, feasible, _ = cutting_plane_dc(P, E, 0.)
-    assert feasible
-    assert niter == 42
+    ell_info = cutting_plane_dc(P, E, 0.)
+    assert ell_info.feasible
+    assert ell_info.num_iters == 42
 
     E = ell(r, y0)
     P = profit_q_oracle(params, a, v)
-    _, _, niter, feasible, _ = cutting_plane_q(P, E, 0.)
-    assert feasible
-    assert niter == 28
+    ell_info = cutting_plane_q(P, E, 0.)
+    assert ell_info.feasible
+    assert ell_info.num_iters == 28
     time.sleep(duration)
-    return niter
+    return ell_info.num_iters
 
 
 def test_profit():

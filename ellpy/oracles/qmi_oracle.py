@@ -10,6 +10,8 @@ class qmi_oracle:
      where
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
     """
+    t = None
+    count = 0
 
     def __init__(self, F, F0):
         """[summary]
@@ -21,8 +23,6 @@ class qmi_oracle:
         self.F = F
         self.F0 = F0
         self.Fx = np.zeros(F0.shape)
-        self.t = None
-        self.count = 0
         self.Q = chol_ext(len(F0))
 
     def update(self, t):

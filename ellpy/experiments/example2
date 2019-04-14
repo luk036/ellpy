@@ -35,7 +35,7 @@ if __name__ == "__main__":
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle2
-    xb, niter, feasible, status = cutting_plane_feas(P, E)
-    assert feasible
-    print(niter, feasible, status)
-    print(xb)
+    ell_info = cutting_plane_feas(P, E)
+    assert ell_info.feasible
+    print(ell_info.num_iters, ell_info.status)
+    print(ell_info.val)

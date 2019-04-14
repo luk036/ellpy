@@ -102,8 +102,11 @@ if __name__ == "__main__":
     r0[0] = 0
     E = ell(40., r0)
     P, Spsq = create_csdlowpass_case(N, nnz)
-    r, Spsq_new, num_iters, feasible, status = cutting_plane_q(P, E, Spsq)
+    ell_info = cutting_plane_q(P, E, Spsq)
+    r = ell_info.val
+    Spsq_new = ell_info.value
+    
+    print(ell_info.num_iters, ell_info.feasible, ell_info.status)
     print(r)
-    print(num_iters, feasible, status)
-    assert feasible
+    assert ell_info.feasible
     plot_lowpass_result(r, Spsq_new)

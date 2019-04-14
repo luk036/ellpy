@@ -118,13 +118,13 @@ def run_optscaling(duration=0.000001):
     t = cmax - cmin
     E = ell(1.5*t, x0)
     P = optscaling_oracle(G)
-    xb, fb, niter, feasible, status = cutting_plane_dc(P, E, 1.001*t)
+    ell_info = cutting_plane_dc(P, E, 1.001*t)
     time.sleep(duration)
-    fmt = '{:f} {} {} {}'
-    print(np.exp(xb))
-    print(fmt.format(np.exp(fb), niter, feasible, status))
-    assert feasible
-    return niter
+    # fmt = '{:f} {} {} {}'
+    # print(np.exp(xb))
+    # print(fmt.format(np.exp(fb), niter, feasible, status))
+    assert ell_info.feasible
+    return ell_info.num_iters
 
 
 def run_optscaling3(duration=0.000001):
@@ -140,10 +140,10 @@ def run_optscaling3(duration=0.000001):
     I = ell1d([cmin, cmax])
     Q = optscaling3_oracle(G)
     P = bsearch_adaptor(Q, I)
-    _, niter, feasible = bsearch(P, [0., 1.001*t])
+    bs_info = bsearch(P, [0., 1.001*t])
     time.sleep(duration)
-    assert feasible
-    return niter
+    assert bs_info.feasible
+    return bs_info.num_iters
 
 
 def test_two_variables(benchmark):

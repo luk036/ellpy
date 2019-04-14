@@ -100,7 +100,7 @@ class ell:
         Qg = self.Q.dot(g)
         omega = g.dot(Qg)
         tsq = self.kappa * omega
-        if tsq <= 0:
+        if tsq <= 0.:
             return 4, 0.
         status, params = calc_ell(beta, tsq)
         if status != 0:
@@ -157,7 +157,7 @@ class ell:
         b0sq = b0**2
         t0 = tsq - b0sq
         t1 = tsq - b1sq
-        bav = (b0 + b1)/2.
+        bav = (b0 + b1)/2
         xi = math.sqrt(4*t0*t1 + (n*(b1sq - b0sq))**2)
         sigma = (n + (tsq - b0b1 - xi/2)/(2 * bav**2)) / (n + 1)
         rho = sigma * bav
@@ -176,10 +176,10 @@ class ell:
             [type] -- [description]
         """
         n = self._n
-        xi = math.sqrt(4.*tsq*(tsq - b1sq) + (n*b1sq)**2)
+        xi = math.sqrt(4*tsq*(tsq - b1sq) + (n*b1sq)**2)
         sigma = (n + (2*tsq - xi) / b1sq)/(n + 1)
-        rho = sigma*b1/2.
-        delta = self.c1*(tsq - (b1sq - xi/n)/2.)/tsq
+        rho = sigma*b1/2
+        delta = self.c1*(tsq - (b1sq - xi/n)/2)/tsq
         return 0, (rho, sigma, delta)
 
     def calc_dc(self, beta, tsq):

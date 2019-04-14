@@ -108,10 +108,9 @@ def mle_corr_core(Y, m, P):
     # options = Options()
     # options.max_it = 2000
     # options.tol = 1e-8
-    x_best, _, num_iters, feasible, status = cutting_plane_dc(
-        P, E, float('inf'))
-    print(num_iters, feasible, status)
-    return x_best, num_iters, feasible
+    ell_info = cutting_plane_dc(P, E, float('inf'))
+    # print(num_iters, feasible, status)
+    return ell_info.val, ell_info.num_iters, ell_info.feasible
 
 
 def mle_corr_poly(Y, s, m):

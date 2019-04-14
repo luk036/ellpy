@@ -90,7 +90,7 @@ class profit_rb_oracle:
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += self.uie[i] * (+1. if y[i] <= 0 else -1.)
+            a_rb[i] += self.uie[i] if y[i] <= 0. else -self.uie[i]
         self.P.a = a_rb
         return self.P(y, t)
 
