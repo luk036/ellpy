@@ -100,8 +100,8 @@ class ell:
         Qg = self.Q.dot(g)
         omega = g.dot(Qg)
         tsq = self.kappa * omega
-        if tsq <= 0.:
-            return 4, 0.
+        # if tsq <= 0.: # unlikely
+        #     return 4, 0.
         status, params = calc_ell(beta, tsq)
         if status != 0:
             return status, tsq
@@ -109,9 +109,9 @@ class ell:
         self._xc -= (rho / omega) * Qg
         self.Q -= (sigma / omega) * np.outer(Qg, Qg)
         self.kappa *= delta
-        if self.kappa > 1e100 or self.kappa < 1e-100:  # unlikely
-            self.Q *= self.kappa
-            self.kappa = 1.
+        # if self.kappa > 1e100 or self.kappa < 1e-100:  # unlikely
+        #     self.Q *= self.kappa
+        #     self.kappa = 1.
         return status, tsq
 
     def calc_ll(self, beta, tsq):
