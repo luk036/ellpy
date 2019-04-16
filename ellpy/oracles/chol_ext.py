@@ -6,7 +6,7 @@ import math
 class chol_ext:
     """chol_ext Cholesky factorization for LMI """
     sqrt_free = True
-    p = 0
+    p = None
 
     def __init__(self, N):
         """initialization
@@ -14,7 +14,7 @@ class chol_ext:
         Arguments:
             N {integer} -- dimension
         """
-        self.R = np.zeros((N, N))
+        self.T = np.zeros((N, N))
         self.n = N
 
     def factorize(self, A):
@@ -36,20 +36,17 @@ class chol_ext:
         Arguments:
             getA {function} -- function to access symmetric matrix
         """
-        self.p = 0
-
+        T = self.T
         for i in range(self.n):
             for j in range(i+1):
-                d = getA(i, j) - np.dot(self.R[:j, i], self.R[j, :j])
+                d = getA(i, j) - np.dot(T[:j, i], T[j, :j])
+                T[i, j] = d
                 if i != j:
-                    self.R[i, j] = d
-                    self.R[j, i] = d / self.R[j, j]
+                    T[j, i] = d / T[j, j]
             if d <= 0.:  # strictly positive
-                self.p = i + 1
-                self.R[i, i] = -d
-                break
-            else:
-                self.R[i, i] = d
+                self.p = i
+                return
+        self.p = self.n
 
     # def factor3(self, getA):
     #     """Perform Cholesky Factorization (Lazy evaluation)
@@ -62,15 +59,15 @@ class chol_ext:
 
     #     for i in range(self.n):
     #         for j in range(i+1):
-    #             d = getA(i, j) - np.dot(self.R[:j, i], self.R[:j, j])
+    #             d = getA(i, j) - np.dot(self.T[:j, i], self.T[:j, j])
     #             if i != j:
-    #                 self.R[j, i] = d / self.R[j, j]
+    #                 self.T[j, i] = d / self.T[j, j]
     #         if d <= 0.:  # strictly positive
     #             self.p = i + 1
-    #             self.R[i, i] = math.sqrt(-d)
+    #             self.T[i, i] = math.sqrt(-d)
     #             break
     #         else:
-    #             self.R[i, i] = math.sqrt(d)
+    #             self.T[i, i] = math.sqrt(d)
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
@@ -78,7 +75,7 @@ class chol_ext:
         Returns:
             bool -- True if $A$ is a spd
         """
-        return self.p == 0
+        return self.p == self.n
 
     def witness(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -93,15 +90,13 @@ class chol_ext:
         if self.is_spd():
             raise AssertionError()
         p = self.p
-        v = np.zeros(p)
-        # r = self.R[p - 1, p - 1]
-        # ep = 0. if r == 0 else 1.
-        # v[p - 1] = 1. if r == 0 else 1. / math.sqrt(r)
-        v[p - 1] = 1.
+        n = p + 1
+        v = np.zeros(n)
+        v[p] = 1.
 
-        for i in range(p - 2, -1, -1):
-            v[i] = -np.dot(self.R[i, i+1:p], v[i+1:p])
-        return v, self.R[p - 1, p - 1]
+        for i in range(p, 0, -1):
+            v[i-1] = -np.dot(self.T[i-1, i:n], v[i:n])
+        return v, -self.T[p, p]
 
     # def witness3(self):
     #     """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -119,16 +114,16 @@ class chol_ext:
 
     #     p = self.p
     #     v = np.zeros(p)
-    #     # r = self.R[p - 1, p - 1]
+    #     # r = self.T[p - 1, p - 1]
     #     # ep = 0. if r == 0 else 1.
     #     # v[p - 1] = 1. if r == 0 else 1. / r
     #     v[p - 1] = 1.
 
     #     for i in range(p - 2, -1, -1):
-    #         s = np.dot(self.R[i, i+1:p], v[i+1:p])
-    #         v[i] = -(s / self.R[i, i])
+    #         s = np.dot(self.T[i, i+1:p], v[i+1:p])
+    #         v[i] = -(s / self.T[i, i])
 
-    #     ep = self.R[p - 1, p - 1]
+    #     ep = self.T[p - 1, p - 1]
     #     return v, ep*ep
 
     def sqrt(self):
@@ -136,15 +131,15 @@ class chol_ext:
             raise AssertionError()
 
         if not self.sqrt_free:
-            return self.R
+            return self.T
 
         n = self.n
         M = np.zeros((n, n))
 
         for i in range(self.n):
-            M[i, i] = math.sqrt(self.R[i, i])
+            M[i, i] = math.sqrt(self.T[i, i])
             for j in range(i+1, n):
-                M[i, j] = self.R[i, j] * M[i, i]
+                M[i, j] = self.T[i, j] * M[i, i]
 
         return M
 
@@ -158,5 +153,5 @@ class chol_ext:
         Returns:
             [type] -- [description]
         """
-        p = self.p
-        return v.dot(A[:p, :p].dot(v))
+        n = self.p + 1
+        return v.dot(A[:n, :n].dot(v))
