@@ -1,4 +1,8 @@
 {
+  "ellpy/tests/test_corr_fn.py": true,
+  "ellpy/tests/test_neg_cycle.py::test_cycle": true,
+  "ellpy/tests/test_optscaling.py::test_binary_search": true,
+  "ellpy/tests/test_optscaling.py::test_two_variables": true,
   "pycsd/test/test_decimal.py::test__integer_conversion::testToCSD": true,
   "tests/test_lmi.py::testcase": true
 }
