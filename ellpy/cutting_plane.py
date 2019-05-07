@@ -32,7 +32,7 @@ def cutting_plane_feas(evaluate, S, options=Options()):
     """
     feasible = False
     status = 0
-    for niter in range(1, options.max_it):
+    for niter in range(options.max_it):
         cut, feasible = evaluate(S.xc)
         if feasible:  # feasible sol'n obtained
             break
@@ -43,7 +43,7 @@ def cutting_plane_feas(evaluate, S, options=Options()):
             status = 2
             break
 
-    return CInfo(feasible, niter, status)
+    return CInfo(feasible, niter+1, status)
 
 
 def cutting_plane_dc(evaluate, S, t, options=Options()):
@@ -64,21 +64,21 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
     """
     feasible = False  # no sol'n
     x_best = S.xc
-    for niter in range(1, options.max_it):
+    for niter in range(options.max_it):
         cut, t1 = evaluate(S.xc, t)
         if t != t1:  # best t obtained
             feasible = True
             t = t1
             x_best = S.xc
         status, tsq = S.update(cut)
-        if status == 1:
+        if status != 0:
             break
         if tsq < options.tol:
             status = 2
             break
 
     # return x_best, t, niter, feasible, status
-    ret = CInfo(feasible, niter, status)
+    ret = CInfo(feasible, niter+1, status)
     ret.val = x_best
     ret.value = t
     return ret
@@ -116,7 +116,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
     # x_last = S.xc
     x_best = S.xc
     status = 1  # new
-    for niter in range(1, options.max_it):
+    for niter in range(options.max_it):
         cut, x0, t1, loop = evaluate(
             S.xc, t, 0 if status != 3 else 1)
         g, h = cut
@@ -132,6 +132,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
             feasible = True
             t = t1
             x_best = x0.copy()
+            
         status, tsq = S.update((g, h))
         if status == 1:
             break
@@ -139,7 +140,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
             status = 2
             break
 
-    ret = CInfo(feasible, niter, status)
+    ret = CInfo(feasible, niter+1, status)
     ret.val = x_best
     ret.value = t
     return ret
@@ -162,7 +163,7 @@ def bsearch(evaluate, I, options=Options()):
     feasible = False
     l, u = I
     t = l + (u - l)/2
-    for niter in range(1, options.max_it):
+    for niter in range(0, options.max_it):
         if evaluate(t):  # feasible sol'n obtained
             feasible = True
             u = t
@@ -173,7 +174,7 @@ def bsearch(evaluate, I, options=Options()):
         if tau < options.tol:
             break
     
-    ret = CInfo(feasible, niter, None)
+    ret = CInfo(feasible, niter+1, None)
     ret.value = u
     return ret
 

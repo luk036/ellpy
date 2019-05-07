@@ -97,8 +97,8 @@ class ell:
             tau -- "volumn" of ellipsoid
         """
         g, beta = cut
-        Qg = self.Q.dot(g)
-        omega = g.dot(Qg)
+        Qg = self.Q.dot(g) # n^2 multiplications
+        omega = g.dot(Qg) # n^2 multiplications
         tsq = self.kappa * omega
         # if tsq <= 0.: # unlikely
         #     return 4, 0.
@@ -107,7 +107,7 @@ class ell:
             return status, tsq
         rho, sigma, delta = params
         self._xc -= (rho / omega) * Qg
-        self.Q -= (sigma / omega) * np.outer(Qg, Qg)
+        self.Q -= (sigma / omega) * np.outer(Qg, Qg) # n*(n+1)/2
         self.kappa *= delta
         # if self.kappa > 1e100 or self.kappa < 1e-100:  # unlikely
         #     self.Q *= self.kappa
