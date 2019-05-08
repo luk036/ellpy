@@ -118,7 +118,7 @@ def run_optscaling(duration=0.000001):
     t = cmax - cmin
     E = ell(1.5*t, x0)
     P = optscaling_oracle(G)
-    ell_info = cutting_plane_dc(P, E, 1.001*t)
+    ell_info = cutting_plane_dc(P, E, float('inf'))
     time.sleep(duration)
     # fmt = '{:f} {} {} {}'
     # print(np.exp(xb))

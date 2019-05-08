@@ -108,7 +108,7 @@ if __name__ == "__main__":
     t = cmax - cmin
     E = ell(1.5*t, x0)
     P = optscaling_oracle(G)
-    ell_info = cutting_plane_dc(P, E, 1.001*t)
+    ell_info = cutting_plane_dc(P, E, float('inf'))
     xb = ell_info.val
     fb = ell_info.value
     print(np.exp(xb))

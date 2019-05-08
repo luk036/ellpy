@@ -80,7 +80,7 @@ def lsq_corr_core2(Y, m, P):
     x[0] = 1.
     x[-1] = normY2/2
     E = ell(val, x)
-    ell_info = cutting_plane_dc(P, E, normY2)
+    ell_info = cutting_plane_dc(P, E, float('inf'))
     return ell_info.val[:-1], ell_info.num_iters, ell_info.feasible
 
 

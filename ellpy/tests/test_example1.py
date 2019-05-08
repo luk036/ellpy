@@ -36,7 +36,7 @@ def test_example1():
     x0 = np.array([0., 0.])  # initial x0
     E = ell(10., x0)
     P = my_oracle
-    ell_info = cutting_plane_dc(P, E, -100.)
+    ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert ell_info.feasible
 
     # fmt = '{:f} {} {} {}'
