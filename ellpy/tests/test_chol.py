@@ -67,7 +67,7 @@ def test_chol4():
           [-5., 0., 11.]]
     m1 = np.array(l1)
     Q1 = chol_ext(len(m1))
-    Q1.allow_semipositive = True
+    Q1.allow_semidefinite = True
     Q1.factorize(m1)
     assert Q1.is_spd()
 
@@ -81,7 +81,7 @@ def test_chol5():
           [42., 62., 134., -106.]]
     m2 = np.array(l2)
     Q = chol_ext(len(m2))
-    Q.allow_semipositive = True
+    Q.allow_semidefinite = True
     Q.factorize(m2)
     assert not Q.is_spd()
     Q.witness()
@@ -97,7 +97,7 @@ def test_chol6():
           [-5., 0., 11.]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
-    Q.allow_semipositive = True
+    Q.allow_semidefinite = True
     Q.factorize(m3)
     assert Q.is_spd()
 #     [v, ep] = Q.witness2()
@@ -113,7 +113,7 @@ def test_chol7():
           [-5., 0., -20.]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
-    Q.allow_semipositive = True
+    Q.allow_semidefinite = True
     Q.factorize(m3)
     assert not Q.is_spd()
     ep = Q.witness()
