@@ -49,7 +49,10 @@ class lsq_oracle:
         if not feasible:
             g1, fj = cut
             g[:-1] = g1
-            v, _ = self.qmi.Q.witness()
+            self.qmi.Q.witness()
+            # n = self.qmi.Q.p[-1] + 1
+            p = self.qmi.Q.p
+            v = self.qmi.Q.v[p]
             g[-1] = -v.dot(v)
             return (g, fj), t
 

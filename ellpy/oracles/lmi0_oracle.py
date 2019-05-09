@@ -34,7 +34,7 @@ class lmi0_oracle:
         self.Q.factor(getA)
         if self.Q.is_spd():
             return None, True
-        v, ep = self.Q.witness()
-        g = np.array([-self.Q.sym_quad(v, self.F[i])
+        ep = self.Q.witness()
+        g = np.array([-self.Q.sym_quad(self.F[i])
                       for i in range(n)])
         return (g, ep), False
