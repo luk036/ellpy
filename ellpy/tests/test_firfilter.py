@@ -11,7 +11,7 @@ from ellpy.problem import Problem
 # Problem specs.
 # ********************************************************************
 # Number of FIR coefficients (including the zeroth one).
-n = 10
+n = 32
 
 # Rule-of-thumb frequency discretization (Cheney's Approx. Theory book).
 m = 15*n
@@ -101,15 +101,7 @@ def run_firfilter(no_trick, duration=0.000001):
         raise Exception('ELL Error')
     print("optimal value", prob1.optim_value)
     assert prob1.status == 'optimal'
-
-
-def test_firfilter_use_trick(benchmark):
-    """[summary]
-
-    Arguments:
-        benchmark {[type]} -- [description]
-    """
-    benchmark(run_firfilter, False)
+    return prob1._solver_stats.num_iters
 
 
 def test_firfilter_no_trick(benchmark):
@@ -118,4 +110,15 @@ def test_firfilter_no_trick(benchmark):
     Arguments:
         benchmark {[type]} -- [description]
     """
-    benchmark(run_firfilter, True)
+    num_iters = benchmark(run_firfilter, True)
+    assert num_iters <= 208
+
+
+def test_firfilter_use_trick(benchmark):
+    """[summary]
+
+    Arguments:
+        benchmark {[type]} -- [description]
+    """
+    num_iters = benchmark(run_firfilter, False)
+    assert num_iters <= 208

@@ -147,13 +147,16 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     return ell_info.num_iters, ell_info.feasible
 
 
-# def test_lowpass0(benchmark):
-#     result = benchmark(run_lowpass, False)
-#     assert result == 13442
+# def test_no_parallel_cut(benchmark):
+#     result, feasible = benchmark(run_lowpass, False)
+#     assert feasible
+#     assert result >= 13334
 
-# def test_lowpass1(benchmark):
-#     result = benchmark(run_lowpass, True)
-#     assert result == 568
+# def test_w_parallel_cut(benchmark):
+#     result, feasible = benchmark(run_lowpass, True)
+#     assert feasible
+#     assert result <= 568
+
 
 def test_lowpass():
     """[summary]

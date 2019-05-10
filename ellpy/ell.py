@@ -98,8 +98,8 @@ class ell:
             tau -- "volumn" of ellipsoid
         """
         g, beta = cut
-        Qg = self.Q.dot(g) # n^2 multiplications
-        omega = g.dot(Qg) # n^2 multiplications
+        Qg = self.Q.dot(g)  # n^2 multiplications
+        omega = g.dot(Qg)  # n^2 multiplications
         tsq = self.kappa * omega
         # if tsq <= 0.: # unlikely
         #     return 4, 0.
@@ -108,9 +108,9 @@ class ell:
             return status, tsq
         rho, sigma, delta = params
         self._xc -= (rho / omega) * Qg
-        self.Q -= (sigma / omega) * np.outer(Qg, Qg) # n*(n+1)/2
+        self.Q -= (sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
         self.kappa *= delta
-        if self._no_defer_trick or self.kappa > 1e100 or self.kappa < 1e-100:  # unlikely
+        if self._no_defer_trick:
             self.Q *= self.kappa
             self.kappa = 1.
         return status, tsq

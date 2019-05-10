@@ -59,14 +59,34 @@ def construct_distance_matrix(s):
         [type] -- [description]
     """
     n = len(s)
-    D = np.zeros((n, n))
+    D1 = np.zeros((n, n))
     for i in range(n):
         for j in range(i + 1, n):
             h = s[j] - s[i]
             d = np.sqrt(np.dot(h, h))
-            D[i, j] = d
-            D[j, i] = d
-    return D
+            D1[i, j] = d
+            D1[j, i] = d
+    return D1
+
+
+def construct_poly_matrix(s, m):
+    """[summary]
+
+    Arguments:
+        s {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
+    n = len(s)
+    D1 = construct_distance_matrix(s)
+    D = np.ones((n, n))
+    Sig = [D]
+    for _ in range(m - 1):
+        D = np.multiply(D, D1)
+        Sig += [D]
+
+    return Sig
 
 
 def corr_poly(Y, s, m, oracle, corr_core):
@@ -82,14 +102,7 @@ def corr_poly(Y, s, m, oracle, corr_core):
     Returns:
         [type] -- [description]
     """
-    n = len(s)
-    D1 = construct_distance_matrix(s)
-    D = np.ones((n, n))
-    Sig = [D]
-    for _ in range(m - 1):
-        D = np.multiply(D, D1)
-        Sig += [D]
-    # Sig.reverse()
+    Sig = construct_poly_matrix(s, m)
     P = oracle(Sig, Y)
     a, num_iters, feasible = corr_core(Y, m, P)
     pa = np.ascontiguousarray(a[::-1])

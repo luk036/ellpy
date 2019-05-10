@@ -19,6 +19,20 @@ class CInfo:
 def cutting_plane_feas(evaluate, S, options=Options()):
     """Cutting-plane method for solving convex feasibility problem
 
+    Description:
+        A function f(x) is *convex* if there always exist a g(x)
+        such that f(z) >= f(x) + g(x)^T * (z - x), forall z, x in dom f.
+        Note that dom f does not need to be a convex set in our definition.
+        The affine function g^T (x - xc) + beta is called a cutting-plane,
+        or a ``cut'' for short. 
+        This algorithm solves the following feasibility problem:
+
+                find x
+                s.t. f(x) <= 0,
+
+        A *separation oracle* asserts that an evalution point x0 is feasible,
+        or provide a cut that separates the feasible region and x0. 
+
     Arguments:
         evaluate {[type]} -- perform assessment on x0
         S {[type]} -- Search Space containing x*
@@ -132,7 +146,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
             feasible = True
             t = t1
             x_best = x0.copy()
-            
+
         status, tsq = S.update((g, h))
         if status == 1:
             break
@@ -173,7 +187,7 @@ def bsearch(evaluate, I, options=Options()):
         t = l + tau
         if tau < options.tol:
             break
-    
+
     ret = CInfo(feasible, niter+1, None)
     ret.value = u
     return ret
