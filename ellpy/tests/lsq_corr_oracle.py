@@ -51,8 +51,8 @@ class lsq_oracle:
             g[:-1] = g1
             self.qmi.Q.witness()
             # n = self.qmi.Q.p[-1] + 1
-            p = self.qmi.Q.p
-            v = self.qmi.Q.v[p]
+            s, n = self.qmi.Q.p
+            v = self.qmi.Q.v[s:n]
             g[-1] = -v.dot(v)
             return (g, fj), t
 

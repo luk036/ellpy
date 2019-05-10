@@ -40,7 +40,7 @@ def test_chol2():
     Q.factorize(m2)
     assert not Q.is_spd()
     Q.witness()
-    assert Q.p == range(0, 2)
+    assert Q.p == (0, 2)
     # assert ep == 1.0
 
 
@@ -55,7 +55,7 @@ def test_chol3():
     Q.factorize(m3)
     assert not Q.is_spd()
     ep = Q.witness()
-    assert Q.p == range(0, 1)
+    assert Q.p == (0, 1)
     assert Q.v[0] == 1.0
     assert ep == 0.0
 
@@ -85,7 +85,7 @@ def test_chol5():
     Q.factorize(m2)
     assert not Q.is_spd()
     Q.witness()
-    assert Q.p == range(0, 2)
+    assert Q.p == (0, 2)
     # assert ep == 1.0
 
 

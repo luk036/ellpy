@@ -46,18 +46,17 @@ class chol_ext:
         start = 0 # range start
         self.p = None
         for i in range(self.n):
-            r = range(start, i+1)
-            for j in r:
+            for j in range(start, i+1):
                 d = getA(i, j) - np.dot(T[start:j, i], T[j, start:j])
                 T[i, j] = d
                 if i != j:
                     T[j, i] = d / T[j, j]
-            if d > 0.:
+            if T[i, i] > 0.:
                 continue
-            if d < 0. or not self.allow_semidefinite:
-                self.p = r
+            if T[i, i] < 0. or not self.allow_semidefinite:
+                self.p = start, i+1
                 break
-            start = i+1 # d == 0, restart at i+1
+            start = i+1 # T[i, i] == 0, restart at i+1
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
@@ -82,11 +81,11 @@ class chol_ext:
         """
         if self.is_spd():
             raise AssertionError()
-        n = self.p.stop
+        start, n = self.p
         m = n - 1
         self.v[m] = 1.
-        for i in reversed(self.p[:-1]):
-            self.v[i] = -np.dot(self.T[i, i+1:n], self.v[i+1:n])
+        for i in range(m, start, -1):
+            self.v[i-1] = -np.dot(self.T[i-1, i:n], self.v[i:n])
         return -self.T[m, m]
 
     def sym_quad(self, A):
@@ -99,8 +98,7 @@ class chol_ext:
         Returns:
             [type] -- [description]
         """
-        s = self.p.start
-        n = self.p.stop
+        s, n = self.p
         v = self.v[s:n]
         return v.dot(A[s:n, s:n].dot(v))
 
