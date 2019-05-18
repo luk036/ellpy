@@ -30,13 +30,27 @@ def my_oracle2(z):
     return None, True
 
 
-def test_example2():
+def test_case_feasible():
     """[summary]
     """
-    x0 = np.array([0., 0.])  # initial x0
+    x0 = np.array([0., 0.])  # initial guess
     E = ell(10., x0)
     P = my_oracle2
     ell_info = cutting_plane_feas(P, E)
     assert ell_info.feasible
+    assert ell_info.status == 0
     print(ell_info.num_iters, ell_info.status)
     print(ell_info.val)
+
+
+def test_case_infeasible():
+    """[summary]
+    """
+    x0 = np.array([100., 100.])  # wrong initial guess
+    E = ell(10., x0)
+    P = my_oracle2
+    ell_info = cutting_plane_feas(P, E)
+    assert ell_info.status == 1 # no sol'n
+    assert ell_info.num_iters == 1 # small
+    assert not ell_info.feasible
+ 

@@ -30,7 +30,7 @@ def my_oracle(z, t):
     return (-1.*np.array([1., 1.]), fj), t
 
 
-def test_example1():
+def test_case_feasible():
     """[summary]
     """
     x0 = np.array([0., 0.])  # initial x0
@@ -42,3 +42,14 @@ def test_example1():
     # fmt = '{:f} {} {} {}'
     # print(fmt.format(fb, niter, feasible, status))
     # print(xb)
+
+def test_case_infeasible():
+    """[summary]
+    """
+    x0 = np.array([100., 100.])  # initial x0
+    E = ell(10., x0)
+    P = my_oracle
+    ell_info = cutting_plane_dc(P, E, float('-inf'))
+    assert not ell_info.feasible
+    assert ell_info.status == 1 # no sol'n
+
