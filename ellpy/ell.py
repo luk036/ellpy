@@ -150,7 +150,7 @@ class ell:
         if b0 == 0:
             return self.calc_ll_cc(b1, b1sq, tsq)
         n = self._n
-        b0b1 = b0*b1
+        b0b1 = b0 * b1
         if n*b0b1 < -tsq:  # unlikely
             return 3, None  # no effect
 
@@ -201,7 +201,7 @@ class ell:
         n = self._n
         gamma = tau + n*beta
         if gamma < 0:
-            return 3, None  # no effect
+            return 3, None  # no effect, unlikely
 
         rho = gamma/(n + 1)
         sigma = 2*rho/(tau + beta)

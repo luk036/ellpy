@@ -32,9 +32,7 @@ class negCycleFinder:
         """
         self.G = G
         self.get_weight = get_weight
-        # self.dist = {v: 0 for v in G}
         self.dist = list(0 for _ in self.G)
-        # self.pred = {v: None for v in G}
         self.pred = {}
 
     def find_cycle(self):
@@ -113,9 +111,7 @@ class negCycleFinder:
         Returns:
             [type] -- [description]
         """
-        # self.dist = {v: 0. for v in self.G}
         self.dist = list(0 for _ in self.G)
-        # self.pred = {v: None for v in self.G}
         self.pred = {}
         return self.neg_cycle_relax()
 

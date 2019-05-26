@@ -69,12 +69,12 @@ def run_lmi(oracle, duration=0.000001):
     E = ell(10., x0)
     P = my_oracle(oracle)
     ell_info = cutting_plane_dc(P, E, float('inf'))
+    time.sleep(duration)
     
     # fmt = '{:f} {} {} {}'
     # print(fmt.format(fb, niter, feasible, status))
     # print(xb)
     assert ell_info.feasible
-    time.sleep(duration)
     return ell_info.num_iters
 
 

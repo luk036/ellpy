@@ -16,8 +16,8 @@ class CInfo:
         self.status = status
 
 
-def cutting_plane_feas(evaluate, S, options=Options()):
-    """Cutting-plane method for solving convex feasibility problem
+def cutting_plane_feas(Omega, S, options=Options()):
+    """Find a point in a convex set (defined through a cutting-plane oracle).
 
     Description:
         A function f(x) is *convex* if there always exist a g(x)
@@ -34,8 +34,8 @@ def cutting_plane_feas(evaluate, S, options=Options()):
         or provide a cut that separates the feasible region and x0. 
 
     Arguments:
-        evaluate {[type]} -- perform assessment on x0
-        S {[type]} -- Search Space containing x*
+        Omega {[type]} -- perform assessment on x0
+        S {[type]} -- Initial search space known to contain x*
 
     Keyword Arguments:
         options {[type]} -- [description] (default: {Options()})
@@ -47,10 +47,10 @@ def cutting_plane_feas(evaluate, S, options=Options()):
     feasible = False
     status = 0
     for niter in range(options.max_it):
-        cut, feasible = evaluate(S.xc)
+        cut, feasible = Omega(S.xc) # query the oracle at S.xc
         if feasible:  # feasible sol'n obtained
             break
-        status, tsq = S.update(cut)
+        status, tsq = S.update(cut) # update S
         if status != 0:
             break
         if tsq < options.tol:
@@ -60,11 +60,11 @@ def cutting_plane_feas(evaluate, S, options=Options()):
     return CInfo(feasible, niter+1, status)
 
 
-def cutting_plane_dc(evaluate, S, t, options=Options()):
+def cutting_plane_dc(Omega, S, t, options=Options()):
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
-        evaluate {[type]} -- perform assessment on x0
+        Omega {[type]} -- perform assessment on x0
         S {[type]} -- Search Space containing x*
         t {[type]} -- initial best-so-far value
 
@@ -79,7 +79,7 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
     feasible = False  # no sol'n
     x_best = S.xc
     for niter in range(options.max_it):
-        cut, t1 = evaluate(S.xc, t)
+        cut, t1 = Omega(S.xc, t)
         if t != t1:  # best t obtained
             feasible = True
             t = t1
@@ -91,18 +91,17 @@ def cutting_plane_dc(evaluate, S, t, options=Options()):
             status = 2
             break
 
-    # return x_best, t, niter, feasible, status
     ret = CInfo(feasible, niter+1, status)
     ret.val = x_best
     ret.value = t
     return ret
 
 
-def cutting_plane_q(evaluate, S, t, options=Options()):
+def cutting_plane_q(Omega, S, t, options=Options()):
     """Cutting-plane method for solving convex discrete optimization problem
 
     Arguments:
-        evaluate {[type]} -- perform assessment on x0
+        Omega {[type]} -- perform assessment on x0
         S {[type]} -- Search Space containing x*
         t {[type]} -- initial best-so-far value
 
@@ -117,7 +116,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
     '''
     Cutting-plane method for solving convex discrete optimization problem
     input
-             oracle        perform assessment on x0
+             Omega        perform assessment on x0
              S(xc)         Search space containing x*
              t             best-so-far optimal sol'n
              max_it        maximum number of iterations
@@ -131,7 +130,7 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
     x_best = S.xc
     status = 1  # new
     for niter in range(options.max_it):
-        cut, x0, t1, loop = evaluate(
+        cut, x0, t1, loop = Omega(
             S.xc, t, 0 if status != 3 else 1)
         g, h = cut
         # if status != 3:
@@ -160,12 +159,12 @@ def cutting_plane_q(evaluate, S, t, options=Options()):
     return ret
 
 
-def bsearch(evaluate, I, options=Options()):
+def bsearch(Omega, I, options=Options()):
     """[summary]
 
     Arguments:
-        evaluate {[type]} -- [description]
-        I {[type]} -- [description]
+        Omega {[type]} -- [description]
+        I {[type]} -- interval (initial search space)
 
     Keyword Arguments:
         options {[type]} -- [description] (default: {Options()})
@@ -174,20 +173,21 @@ def bsearch(evaluate, I, options=Options()):
         [type] -- [description]
     """
     # assume monotone
-    feasible = False
+    # feasible = False
     l, u = I
-    t = l + (u - l)/2
-    for niter in range(0, options.max_it):
-        if evaluate(t):  # feasible sol'n obtained
-            feasible = True
+    u_orig = u
+    for niter in range(options.max_it):
+        t = l + (u - l)/2
+        if Omega(t):  # feasible sol'n obtained
+            # feasible = True
             u = t
         else:
             l = t
         tau = (u - l)/2
-        t = l + tau
         if tau < options.tol:
             break
 
+    feasible = (u != u_orig)
     ret = CInfo(feasible, niter+1, None)
     ret.value = u
     return ret
