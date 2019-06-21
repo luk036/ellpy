@@ -59,6 +59,7 @@ def test_chol3():
     assert Q.v[0] == 1.0
     assert ep == 0.0
 
+
 def test_chol4():
     """[summary]
     """
@@ -104,6 +105,7 @@ def test_chol6():
 #     assert len(v) == 1
 #     assert v[0] == 1.0
 #     assert ep == 0.0
+
 
 def test_chol7():
     """[summary]

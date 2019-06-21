@@ -8,9 +8,13 @@ class chol_ext:
 
        - LDLT square-root-free version
        - Option allow semidefinite
-       - A matrix $A$ is positive definite iff v^T A v > 0 for all v in R^n.
+       - A matrix $A \in R^{m x m}$ is positive definite iff v^T A v > 0 for all v in R^n.
+       - O($p^2 \cdot n$) per iteration, independent of $m$
+
+        Member variables:
+            p {integer} -- the row where the process stops
     """
-    p = None
+    p = None 
     allow_semidefinite = False
 
     def __init__(self, N):

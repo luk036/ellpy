@@ -14,9 +14,6 @@ def spectral_fact(r):
            should be passed in as a column vector
       Output
         h: impulse response that gives the desired auto-correlation
-
-
-    luk: I'm not sure how accurate this function performs!!!
     """
 
     # length of the impulse response sequence

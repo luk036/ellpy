@@ -29,13 +29,12 @@ def benchmark_profit(duration=0.000001):
     assert ell_info.feasible
     assert ell_info.num_iters == 37
 
-    ui = 1.
     e1 = 0.003
     e2 = 0.007
-    e3 = 1.
+    e3 = e4 = e5 = 1.
 
     E = ell(r, y0)
-    P = profit_rb_oracle(params, a, v, (ui, e1, e2, e3))
+    P = profit_rb_oracle(params, a, v, (e1, e2, e3, e4, e5))
     ell_info = cutting_plane_dc(P, E, 0.)
     assert ell_info.feasible
     assert ell_info.num_iters == 42

@@ -68,15 +68,12 @@ class profit_rb_oracle:
             v {[type]} -- [description]
             vparams {[type]} -- [description]
         """
-        ui, e1, e2, e3 = vparams
-        self.uie = [ui * e1, ui * e2]
-        self.a = a
         p, A, k = params
-        p -= ui * e3
-        k -= ui * e3
-        v_rb = v.copy()
-        v_rb += ui * e3
-        self.P = profit_oracle((p, A, k), a, v_rb)
+        e1, e2, e3, e4, e5 = vparams
+        params_rb = p - e3, A, k - e4
+        self.a = a
+        self.e = [e1, e2]
+        self.P = profit_oracle(params_rb, a, v + e5)
 
     def __call__(self, y, t):
         """[summary]
@@ -90,7 +87,7 @@ class profit_rb_oracle:
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += self.uie[i] if y[i] <= 0. else -self.uie[i]
+            a_rb[i] += self.e[i] if y[i] <= 0 else -self.e[i]
         self.P.a = a_rb
         return self.P(y, t)
 

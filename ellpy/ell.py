@@ -88,6 +88,8 @@ class ell:
 
                 g' * (x - xc) + beta <= 0
 
+            Note: At most one square-root per iteration.
+
         Arguments:
             calc_ell {[type]} -- [description]
             g {array} -- cut
