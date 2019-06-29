@@ -41,7 +41,7 @@ def create_test_case_timing():
         ('a3', 'a1', {'weight': 2}),
         ('a1', 'a3', {'weight': 5})
     ])
-    G.nodemap = {v : i_v for i_v, v in enumerate(nodelist)}
+    G.nodemap = {v: i_v for i_v, v in enumerate(nodelist)}
     return G
 
 

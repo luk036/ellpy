@@ -43,6 +43,7 @@ def test_case_feasible():
     # print(fmt.format(fb, niter, feasible, status))
     # print(xb)
 
+
 def test_case_infeasible():
     """[summary]
     """
@@ -51,5 +52,4 @@ def test_case_infeasible():
     P = my_oracle
     ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert not ell_info.feasible
-    assert ell_info.status == 1 # no sol'n
-
+    assert ell_info.status == 1  # no sol'n

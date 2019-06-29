@@ -14,7 +14,7 @@ class chol_ext:
         Member variables:
             p {integer} -- the row where the process stops
     """
-    p = None 
+    p = None
     allow_semidefinite = False
 
     def __init__(self, N):
@@ -47,7 +47,7 @@ class chol_ext:
             getA {function} -- function to access symmetric matrix
         """
         T = self.T
-        start = 0 # range start
+        start = 0  # range start
         self.p = None
         for i in range(self.n):
             for j in range(start, i+1):
@@ -60,7 +60,7 @@ class chol_ext:
             if T[i, i] < 0. or not self.allow_semidefinite:
                 self.p = start, i+1
                 break
-            start = i+1 # T[i, i] == 0, restart at i+1
+            start = i+1  # T[i, i] == 0, restart at i+1
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
@@ -116,4 +116,3 @@ class chol_ext:
             for j in range(i+1, n):
                 M[i, j] = self.T[i, j] * M[i, i]
         return M
-

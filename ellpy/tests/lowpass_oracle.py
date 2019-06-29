@@ -12,6 +12,12 @@ class lowpass_oracle:
         [type] -- [description]
     """
 
+    # for round robin counters
+    i_Anr = 0
+    i_As = 0
+    i_Ap = 0
+    count = 0
+
     def __init__(self, Ap, As, Anr, Lpsq, Upsq):
         """[summary]
 
@@ -27,12 +33,6 @@ class lowpass_oracle:
         self.Anr = Anr
         self.Lpsq = Lpsq
         self.Upsq = Upsq
-
-        # for round robin counters
-        self.i_Anr = 0
-        self.i_As = 0
-        self.i_Ap = 0
-        self.count = 0
 
     def __call__(self, x, Spsq):
         """[summary]
