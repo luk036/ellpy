@@ -1,0 +1,113 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import remez, minimum_phase, freqz, group_delay
+from ellpy.cutting_plane import cutting_plane_q
+from ellpy.ell import ell
+# from ellpy.tests.csdlowpass_oracle import csdlowpass_oracle
+from ellpy.tests.test_lowpass import create_csdlowpass_case
+from ellpy.tests.spectral_fact import spectral_fact
+
+
+def plot_lowpass_result(r, Spsq_new):
+    # *********************************************************************
+    # plotting routines
+    # *********************************************************************
+    # frequency response of the designed filter, where j = sqrt(-1)
+    h_sp = spectral_fact(r)  # from CVX distribution, Examples subdirectory
+    # I'm not sure how accurate this function performs!!!
+    h = h_sp
+    print("h = ", h)
+    # compute the min attenuation in the stopband (convert to original vars)
+    Ustop = 20 * np.log10(np.sqrt(Spsq_new))
+
+    print('Min attenuation in the stopband is ', Ustop, ' dB.')
+
+    freq = [0, 0.12, 0.2, 1.0]
+    desired = [1, 0]
+    h_linear = remez(151, freq, desired, Hz=2.)
+    h_min_hom = minimum_phase(h_linear, method='homomorphic')
+
+    # fig, axs = plt.subplots(4, figsize=(4, 8))
+    fig = plt.figure()
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+    ax4 = fig.add_subplot(224)
+    axs = (ax1, ax2, ax3, ax4)
+    for h, style, color in zip((h_linear, h_min_hom, h_sp), ('-', '-', '--'),
+                               ('k', 'r', 'c')):
+        # if feasible:
+        w, H = freqz(h)
+        w, gd = group_delay((h, 1))
+        w /= np.pi
+        axs[0].plot(h, color=color, linestyle=style)
+        axs[1].plot(w, np.abs(H), color=color, linestyle=style)
+        axs[2].plot(w, 20 * np.log10(np.abs(H)), color=color, linestyle=style)
+        axs[3].plot(w, gd, color=color, linestyle=style)
+
+    for ax in axs:
+        ax.grid(True, color='0.5')
+        ax.fill_between(freq[1:3], *ax.get_ylim(), color='#ffeeaa', zorder=1)
+
+    axs[0].set(xlim=[0, len(h_linear) - 1],
+               ylabel='Amplitude',
+               xlabel='Samples')
+    axs[1].legend(['Linear', 'Min-Hom', 'Our'], title='Phase')
+    for ax, ylim in zip(axs[1:], ([0, 1.1], [-150, 10], [-60, 60])):
+        ax.set(xlim=[0, 1], ylim=ylim, xlabel='Frequency')
+    axs[1].set(ylabel='Magnitude')
+    axs[2].set(ylabel='Magnitude (dB)')
+    axs[3].set(ylabel='Group delay')
+    plt.tight_layout()
+    plt.show()
+
+
+# Modified from CVX code by Almir Mutapcic in 2006.
+# Adapted in 2010 for impulse response peak-minimization by convex iteration
+# by Christine Law.
+#
+# "FIR Filter Design via Spectral Factorization and Convex Optimization"
+# by S.-P. Wu, S. Boyd, and L. Vandenberghe
+#
+# Designs an FIR lowpass filter using spectral factorization method with
+# constraint on maximum passband ripple and stopband attenuation:
+#
+#   minimize   max |H(w)|                      for w in stopband
+#       s.t.   1/delta <= |H(w)| <= delta      for w in passband
+#
+# We change variables via spectral factorization method and get:
+#
+#   minimize   max R(w)                          for w in stopband
+#       s.t.   (1/delta)**2 <= R(w) <= delta**2  for w in passband
+#              R(w) >= 0                         for all w
+#
+# where R(w) is squared magnitude frequency response
+# (and Fourier transform of autocorrelation coefficients r).
+# Variables are coeffients r and G = hh' where h is impulse response.
+# delta is allowed passband ripple.
+# This is a convex problem (can be formulated as an SDP after sampling).
+
+# *********************************************************************
+# filter specs (for a low-pass filter)
+# *********************************************************************
+# number of FIR coefficients (including zeroth)
+
+if __name__ == "__main__":
+    # tic = time.time()
+    N = 48
+    nnz = 5
+
+    r0 = np.zeros(N)  # initial x0
+    r0[0] = 0
+    E = ell(40., r0)
+    P, Spsq = create_csdlowpass_case(N, nnz)
+    ell_info = cutting_plane_q(P, E, Spsq)
+    r = ell_info.val
+    Spsq_new = ell_info.value
+
+    print(ell_info.num_iters, ell_info.feasible, ell_info.status)
+    print(r)
+    assert ell_info.feasible
+    plot_lowpass_result(r, Spsq_new)

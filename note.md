@@ -1,6 +1,6 @@
 ## An Ellipsoid is also an oracle!
 
-## Multiplier-less FIR filter design using Convex 	
+## Multiplier-less FIR filter design using Convex
 
 multipliers are expensive
 canonical signed digit representation

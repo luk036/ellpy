@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+"""
+   from csd
+"""
+
+from __future__ import print_function
+import sys
+import pycsd.csd as csd
+
+sys.path.append('./csd')
+print(csd.to_decimal(sys.argv[1]))

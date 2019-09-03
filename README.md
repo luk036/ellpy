@@ -8,4 +8,4 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/luk036/ellpy/badge)](https://www.codefactor.io/repository/github/luk036/ellpy)
 [![BCH compliance](https://bettercodehub.com/edge/badge/luk036/ellpy?branch=master)](https://bettercodehub.com/)
 
-ellipsoid method python code 
+ellipsoid method python code
