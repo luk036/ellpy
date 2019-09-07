@@ -82,9 +82,9 @@ class ell:
         Returns:
             [type] -- [description]
         """
-        return self.update_core(self.calc_ll, cut)
+        return self.update_core(self.__calc_ll, cut)
 
-    def update_core(self, calc_ell, cut):
+    def update_core(self, __calc_ell, cut):
         """Update ellipsoid core function using the cut
 
                 g' * (x - xc) + beta <= 0
@@ -92,7 +92,7 @@ class ell:
             Note: At most one square-root per iteration.
 
         Arguments:
-            calc_ell {[type]} -- [description]
+            __calc_ell {[type]} -- [description]
             g {array} -- cut
             beta {array or scalar} -- [description]
 
@@ -106,7 +106,7 @@ class ell:
         tsq = self.kappa * omega
         # if tsq <= 0.: # unlikely
         #     return 4, 0.
-        status, params = calc_ell(beta, tsq)
+        status, params = __calc_ell(beta, tsq)
         if status != 0:
             return status, tsq
         rho, sigma, delta = params
@@ -118,7 +118,7 @@ class ell:
             self.kappa = 1.
         return status, tsq
 
-    def calc_ll(self, beta, tsq):
+    def __calc_ll(self, beta, tsq):
         """parallel or deep cut
 
         Arguments:
@@ -129,12 +129,12 @@ class ell:
             [type] -- [description]
         """
         if np.isscalar(beta):
-            return self.calc_dc(beta, tsq)
+            return self.__calc_dc(beta, tsq)
         if len(beta) < 2:  # unlikely
-            return self.calc_dc(beta[0], tsq)
-        return self.calc_ll_core(beta[0], beta[1], tsq)
+            return self.__calc_dc(beta[0], tsq)
+        return self.__calc_ll_core(beta[0], beta[1], tsq)
 
-    def calc_ll_core(self, b0, b1, tsq):
+    def __calc_ll_core(self, b0, b1, tsq):
         """[summary]
 
         Arguments:
@@ -147,11 +147,11 @@ class ell:
         """
         b1sq = b1**2
         if b1sq > tsq or not self.use_parallel_cut:
-            return self.calc_dc(b0, tsq)
+            return self.__calc_dc(b0, tsq)
         if b1 < b0:  # unlikely
             return 1, None  # no sol'n
         if b0 == 0:
-            return self.calc_ll_cc(b1, b1sq, tsq)
+            return self.__calc_ll_cc(b1, b1sq, tsq)
         n = self._n
         b0b1 = b0 * b1
         if n * b0b1 < -tsq:  # unlikely
@@ -168,7 +168,7 @@ class ell:
         delta = self.c1 * (t0 + t1 + xi / n) / (2 * tsq)
         return 0, (rho, sigma, delta)
 
-    def calc_ll_cc(self, b1, b1sq, tsq):
+    def __calc_ll_cc(self, b1, b1sq, tsq):
         """parallel central cut
 
         Arguments:
@@ -186,7 +186,7 @@ class ell:
         delta = self.c1 * (tsq - (b1sq - xi / n) / 2) / tsq
         return 0, (rho, sigma, delta)
 
-    def calc_dc(self, beta, tsq):
+    def __calc_dc(self, beta, tsq):
         """Deep cut
 
         Arguments:
@@ -200,7 +200,7 @@ class ell:
         if beta > tau:
             return 1, None  # no sol'n
         if beta == 0:
-            return self.calc_cc(tau)
+            return self.__calc_cc(tau)
         n = self._n
         gamma = tau + n * beta
         if gamma < 0:
@@ -211,7 +211,7 @@ class ell:
         delta = self.c1 * (tsq - beta**2) / tsq
         return 0, (rho, sigma, delta)
 
-    def calc_cc(self, tau):
+    def __calc_cc(self, tau):
         """Central cut
 
         Arguments:
