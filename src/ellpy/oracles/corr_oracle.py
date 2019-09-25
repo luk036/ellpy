@@ -35,7 +35,7 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
     for i in range(n):
         for j in range(i, n):
             d = np.array(s[j]) - np.array(s[i])
-            Sig[i, j] = np.exp(-sdkern * np.sqrt(np.dot(d, d)))
+            Sig[i, j] = np.exp(-sdkern * np.sqrt(d @ d))
             Sig[j, i] = Sig[i, j]
 
     A = np.linalg.cholesky(Sig)
@@ -64,7 +64,7 @@ def construct_distance_matrix(s):
     for i in range(n):
         for j in range(i + 1, n):
             h = s[j] - s[i]
-            d = np.sqrt(np.dot(h, h))
+            d = np.sqrt(h @ h)
             D1[i, j] = d
             D1[j, i] = d
     return D1
@@ -199,7 +199,7 @@ def generate_bspline_info(s, m):
     """
     k = 2  # quadratic bspline
     h = s[-1] - s[0]
-    d = np.sqrt(np.dot(h, h))
+    d = np.sqrt(h @ h)
     t = np.linspace(0, d * 1.2, m + k + 1)
     spls = []
     for i in range(m):

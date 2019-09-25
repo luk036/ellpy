@@ -10,7 +10,7 @@ class sdp_oracle:
         self.lmi = lmi_oracle(F, B)
 
     def __call__(self, x, t):
-        f0 = np.dot(self.c, x)
+        f0 = self.c @ x
         fj = f0 - t
         if fj > 0:
             return (self.c, fj), t

@@ -70,7 +70,7 @@ def inverse_spectral_fact(h):
     n = len(h)
     r = np.zeros(n)
     for t in range(n):
-        r[t] = np.dot(h[t:], h[:n - t])
+        r[t] = h[t:] @ h[:n - t]
     return r
 
 

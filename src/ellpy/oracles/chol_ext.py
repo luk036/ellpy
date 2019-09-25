@@ -14,10 +14,12 @@ class chol_ext:
        - O($p^2 n$) per iteration, independent of $m$
 
         Member variables:
-            p {integer} -- the row where the process stops
+            p {integer} -- the rows where the process starts and stops
+            v {nd.array} -- witness
+            n {integer} -- dimension
     """
-    p = None
     allow_semidefinite = False
+    p = None
 
     def __init__(self, N):
         """initialization
@@ -25,9 +27,9 @@ class chol_ext:
         Arguments:
             N {integer} -- dimension
         """
-        self.T = np.zeros((N, N))
-        self.n = N
         self.v = np.zeros(N)
+        self.n = N
+        self.T = np.zeros((N, N))
 
     def factorize(self, A):
         """Perform Cholesky Factorization
@@ -91,7 +93,7 @@ class chol_ext:
         m = n - 1
         self.v[m] = 1.
         for i in range(m, start, -1):
-            self.v[i - 1] = -np.dot(self.T[i - 1, i:n], self.v[i:n])
+            self.v[i - 1] = -(self.T[i - 1, i:n] @ self.v[i:n])
         return -self.T[m, m]
 
     def sym_quad(self, A):
@@ -106,14 +108,14 @@ class chol_ext:
         """
         s, n = self.p
         v = self.v[s:n]
-        return v.dot(A[s:n, s:n].dot(v))
+        return v @ A[s:n, s:n] @ v
 
     def sqrt(self):
         if not self.is_spd():
             raise AssertionError()
         n = self.n
         M = np.zeros((n, n))
-        for i in range(self.n):
+        for i in range(n):
             M[i, i] = math.sqrt(self.T[i, i])
             for j in range(i + 1, n):
                 M[i, j] = self.T[i, j] * M[i, i]

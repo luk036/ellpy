@@ -97,11 +97,11 @@ pos = zip(x, y)
 G = formGraph(T, pos, 1.6, seed=5)
 # for u, v in G.edges():
 #     h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
-#     G[u][v]['cost'] = np.sqrt(np.dot(h, h))
+#     G[u][v]['cost'] = np.sqrt(h @ h)
 
 for u, v in G.edges():
     h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
-    G[u][v]['cost'] = np.log(np.sqrt(np.dot(h, h)))
+    G[u][v]['cost'] = np.log(np.sqrt(h @ h))
 
 cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))

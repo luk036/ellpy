@@ -62,7 +62,7 @@ def lsq_corr_bspline(Y, s, n):
     """
     k = 2
     h = s[-1] - s[0]
-    d = np.sqrt(np.dot(h, h))
+    d = np.sqrt(h @ h)
     t = np.linspace(0, d * 1.2, n + k + 1)
     spls = []
     for i in range(n):

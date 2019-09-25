@@ -39,7 +39,7 @@ class my_oracle:
         Returns:
             [type] -- [description]
         """
-        f0 = np.dot(self.c, x)
+        f0 = self.c @ x
         fj = f0 - t
         if fj > 0:
             return (self.c, fj), t

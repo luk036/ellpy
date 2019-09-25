@@ -37,9 +37,9 @@ class profit_oracle:
             g = np.array([1., 0.])
             return (g, fj), t
 
-        log_Cobb = self.log_pA + np.dot(self.a, y)
+        log_Cobb = self.log_pA + self.a @ y
         x = np.exp(y)
-        vx = np.dot(self.v, x)
+        vx = self.v @ x
         te = t + vx
         fj = np.log(te) - log_Cobb
 
