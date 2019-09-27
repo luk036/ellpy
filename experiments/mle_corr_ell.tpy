@@ -49,8 +49,8 @@ class mle_poly_oracle:
             self.c[i] = sum(Y[k].dot(Sig[i][k]) for k in range(N))
 
     def __call__(self, x, t):
-        cut, feasible = self.imi(x)
-        if not feasible:
+        cut = self.imi(x)
+        if cut is not None:
             return cut, t
 
         N = len(self.Y)

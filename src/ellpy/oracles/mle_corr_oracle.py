@@ -31,12 +31,12 @@ class mle_oracle:
         Returns:
             [type] -- [description]
         """
-        cut, feasible = self.lmi(x)
-        if not feasible:
+        cut = self.lmi(x)
+        if cut is not None:
             return cut, t
 
-        cut, feasible = self.lmi0(x)
-        if not feasible:
+        cut = self.lmi0(x)
+        if cut is not None:
             return cut, t
 
         R = self.lmi0.Q.sqrt()
@@ -83,7 +83,7 @@ class mono_decreasing_oracle:
             [type] -- [description]
         """
         # monotonic decreasing constraint
-        cut, feasible = mono_oracle(x)
-        if not feasible:
+        cut = mono_oracle(x)
+        if cut is not None:
             return cut, t
         return self.basis(x, t)

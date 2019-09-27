@@ -47,8 +47,9 @@ def cutting_plane_feas(Omega, S, options=Options()):
     feasible = False
     status = 0
     for niter in range(options.max_it):
-        cut, feasible = Omega(S.xc)  # query the oracle at S.xc
-        if feasible:  # feasible sol'n obtained
+        cut = Omega(S.xc)  # query the oracle at S.xc
+        if cut is None:  # feasible sol'n obtained
+            feasible = True
             break
         status, tsq = S.update(cut)  # update S
         if status != 0:

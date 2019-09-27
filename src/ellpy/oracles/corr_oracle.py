@@ -127,8 +127,8 @@ def mono_oracle(x):
         if fj > 0:
             g[i] = -1.
             g[i + 1] = 1.
-            return (g, fj), False
-    return None, True
+            return g, fj
+    return None
 
 
 class mono_decreasing_oracle2:
@@ -158,8 +158,8 @@ class mono_decreasing_oracle2:
         # monotonic decreasing constraint
         n = len(x)
         g = np.zeros(n)
-        cut, feasible = mono_oracle(x[:-1])
-        if not feasible:
+        cut = mono_oracle(x[:-1])
+        if cut is not None:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.

@@ -39,7 +39,7 @@ class lmi2_oracle:
             fj = f + self.Q.sym_quad(self.U)
             #fj = np.dot(v, S[:p, :p].dot(v))
             g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])
-            return (g, (f, fj)), False
+            return g, (f, fj)
 
         self.Q.factor(getS)
         if not self.Q.is_spd():
@@ -47,6 +47,6 @@ class lmi2_oracle:
             # p = len(v)
             fj = f + self.Q.sym_quad(self.U)
             g = np.array([-self.Q.sym_quad(self.F[i]) for i in range(n)])
-            return (g, (f, fj)), False
+            return g, (f, fj)
 
-        return None, True
+        return None

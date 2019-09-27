@@ -34,16 +34,16 @@ class lsq_oracle:
         n = len(x)
         g = np.zeros(n)
 
-        cut, feasible = self.lmi0(x[:-1])
-        if not feasible:
+        cut = self.lmi0(x[:-1])
+        if cut is not None:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.
             return (g, fj), t
 
         self.qmi.update(x[-1])
-        cut, feasible = self.qmi(x[:-1])
-        if not feasible:
+        cut = self.qmi(x[:-1])
+        if cut is not None:
             g1, fj = cut
             g[:-1] = g1
             self.qmi.Q.witness()

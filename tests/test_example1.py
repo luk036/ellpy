@@ -21,14 +21,14 @@ def my_oracle2(z):
     # constraint 1: x + y <= 3
     fj = x + y - 3
     if fj > 0:
-        return (np.array([1., 1.]), fj), False
+        return np.array([1., 1.]), fj
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
     if fj > 0:
-        return (np.array([-1., 1.]), fj), False
+        return np.array([-1., 1.]), fj
 
-    return None, True
+    return None
 
 
 def my_oracle(z, t):
@@ -41,8 +41,8 @@ def my_oracle(z, t):
     Returns:
         [type] -- [description]
     """
-    cut, feasible = my_oracle2(z)
-    if not feasible:
+    cut = my_oracle2(z)
+    if cut is not None:
         return cut, t
     x, y = z
     # objective: maximize x + y

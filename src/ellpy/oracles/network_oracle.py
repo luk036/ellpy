@@ -45,7 +45,7 @@ class network_oracle:
         self.S.get_weight = get_weight
         C = self.S.find_neg_cycle()
         if C is None:
-            return None, True
+            return None
         f = -sum(self.f(self.G, e, x) for e in C)
         g = -sum(self.p(self.G, e, x) for e in C)
-        return (g, f), False
+        return g, f

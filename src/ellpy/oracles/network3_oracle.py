@@ -56,6 +56,6 @@ class network3_oracle:
         if C is not None:
             f = -sum(self.f(self.G, e, x, self.t) for e in C)
             g = -sum(self.p(self.G, e, x, self.t) for e in C)
-            return (g, f), False
+            return g, f
 
-        return None, True
+        return None

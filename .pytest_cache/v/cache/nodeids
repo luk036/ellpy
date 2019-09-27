@@ -1,26 +1,4 @@
 [
-  "tests/test_chol.py::test_chol1",
-  "tests/test_chol.py::test_chol2",
-  "tests/test_chol.py::test_chol3",
-  "tests/test_chol.py::test_chol4",
-  "tests/test_chol.py::test_chol5",
-  "tests/test_chol.py::test_chol6",
-  "tests/test_chol.py::test_chol7",
-  "tests/test_corr_fn.py::test_data",
-  "tests/test_corr_fn.py::test_corr_fn",
   "tests/test_example1.py::test_case_feasible",
-  "tests/test_example1.py::test_case_infeasible",
-  "tests/test_example2.py::test_case_feasible",
-  "tests/test_example2.py::test_case_infeasible",
-  "tests/test_firfilter.py::test_firfilter_no_trick",
-  "tests/test_firfilter.py::test_firfilter_use_trick",
-  "tests/test_lmi.py::test_lmi_lazy",
-  "tests/test_lmi.py::test_lmi_old",
-  "tests/test_lowpass.py::test_lowpass",
-  "tests/test_lowpass.py::test_csdlowpass",
-  "tests/test_neg_cycle.py::test_cycle",
-  "tests/test_optscaling.py::test_two_variables",
-  "tests/test_optscaling.py::test_binary_search",
-  "tests/test_profit.py::test_profit",
-  "tests/test_skeleton.py::test_fib"
+  "tests/test_example1.py::test_case_infeasible"
 ]

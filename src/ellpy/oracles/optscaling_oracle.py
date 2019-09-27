@@ -64,8 +64,8 @@ class optscaling_oracle:
         Returns:
             [type] -- [description]
         """
-        cut, feasible = self.network(x)
-        if not feasible:
+        cut = self.network(x)
+        if cut is not None:
             return cut, t
         s = x[0] - x[1]
         fj = s - t
