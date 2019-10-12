@@ -1,4 +1,4 @@
 [
-  "tests/test_example1.py::test_case_feasible",
-  "tests/test_example1.py::test_case_infeasible"
+  "tests/test_optscaling.py::test_two_variables",
+  "tests/test_optscaling.py::test_binary_search"
 ]

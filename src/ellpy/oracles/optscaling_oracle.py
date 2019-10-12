@@ -16,10 +16,9 @@ def constr(G, e, x):
         [type] -- [description]
     """
     u, v = e
-    i_u = G.nodemap[u]
-    i_v = G.nodemap[v]
     cost = G[u][v]['cost']
-    return x[0] - cost if i_u <= i_v else cost - x[1]
+    assert u != v
+    return x[0] - cost if id(u) < id(v) else cost - x[1]
 
 
 def pconstr(G, e, x):
@@ -34,9 +33,8 @@ def pconstr(G, e, x):
         [type] -- [description]
     """
     u, v = e
-    i_u = G.nodemap[u]
-    i_v = G.nodemap[v]
-    return np.array([1., 0.] if i_u <= i_v else [0., -1.])
+    assert u != v
+    return np.array([1., 0.] if id(u) < id(v) else [0., -1.])
 
 
 class optscaling_oracle:
@@ -45,14 +43,14 @@ class optscaling_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, G):
+    def __init__(self, G, dist):
         """[summary]
 
         Arguments:
             G {[type]} -- [description]
         """
         self.G = G
-        self.network = network_oracle(G, constr, pconstr)
+        self.network = network_oracle(G, constr, pconstr, dist)
 
     def __call__(self, x, t):
         """[summary]
@@ -65,7 +63,7 @@ class optscaling_oracle:
             [type] -- [description]
         """
         cut = self.network(x)
-        if cut is not None:
+        if cut:
             return cut, t
         s = x[0] - x[1]
         fj = s - t

@@ -61,7 +61,7 @@ def formGraph(T, pos, eta, seed=None):
     Returns:
         [type] -- [description]
     """
-    if seed is not None:
+    if seed:
         np.random.seed(seed)
 
     N = np.sqrt(T)

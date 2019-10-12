@@ -50,7 +50,7 @@ class mle_poly_oracle:
 
     def __call__(self, x, t):
         cut = self.imi(x)
-        if cut is not None:
+        if cut:
             return cut, t
 
         N = len(self.Y)

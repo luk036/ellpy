@@ -20,6 +20,8 @@ def default_get_weight(G, e):
 
 
 class negCycleFinder:
+    pred = {}
+
     def __init__(self, G, get_weight=default_get_weight):
         """[summary]
 
@@ -27,12 +29,11 @@ class negCycleFinder:
             G {[type]} -- [description]
 
         Keyword Arguments:
-            get_weight (type): [description] (default: {default_get_weight})
+            get_weight {[type]} -- [description] (default: {default_get_weight})
         """
         self.G = G
         self.get_weight = get_weight
-        self.dist = list(0 for _ in self.G)
-        self.pred = {}
+        # self.dist = list(0 for _ in self.G)
 
     def find_cycle(self):
         """Find a cycle on policy graph
@@ -44,32 +45,29 @@ class negCycleFinder:
         Returns:
             handle -- a start node of the cycle
         """
-        N = self.G.number_of_nodes()
-        visited = list(N for _ in self.G)
+        # N = self.G.number_of_nodes()
+        # visited = list(N for _ in self.G)
+        visited = {}
 
         for v in self.G:
-            i_v = self.G.nodemap[v]
-            if visited[i_v] < N:
+            if v in visited:
                 continue
             u = v
-            i_u = self.G.nodemap[u]
             while True:
-                visited[i_u] = i_v
+                visited[u] = v
                 if u not in self.pred:
                     break
                 u = self.pred[u]
                 # if u is None:
                 #    break
-                i_u = self.G.nodemap[u]
-                if visited[i_u] < N:
-                    if visited[i_u] == i_v:
-                        if self.is_negative(u):
-                            # should be "yield u"
-                            return u
+                if u in visited:
+                    if visited[u] == v:
+                        # if self.is_negative(u, dist):
+                        return u
                     break
         return None
 
-    def relax(self):
+    def relax(self, dist):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -87,16 +85,14 @@ class negCycleFinder:
         for e in self.G.edges():
             wt = self.get_weight(self.G, e)
             u, v = e
-            i_u = self.G.nodemap[u]
-            i_v = self.G.nodemap[v]
-            d = self.dist[i_u] + wt
-            if self.dist[i_v] > d:
-                self.dist[i_v] = d
+            d = dist[u] + wt
+            if dist[v] > d:
+                dist[v] = d
                 self.pred[v] = u
                 changed = True
         return changed
 
-    def find_neg_cycle(self):
+    def find_neg_cycle(self, dist):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -110,24 +106,24 @@ class negCycleFinder:
         Returns:
             [type] -- [description]
         """
-        self.dist = list(0 for _ in self.G)
+        # self.dist = list(0 for _ in self.G)
         self.pred = {}
-        return self.neg_cycle_relax()
+        return self.neg_cycle_relax(dist)
 
-    def neg_cycle_relax(self):
+    def neg_cycle_relax(self, dist):
         """[summary]
 
         Returns:
             [type] -- [description]
         """
-        # self.pred = {v: None for v in self.G}
-
         while True:
-            changed = self.relax()
+            changed = self.relax(dist)
             if not changed:
                 break
             v = self.find_cycle()
             if v is not None:
+                # Will zero cycle be found???
+                assert self.is_negative(v, dist)
                 return self.cycle_list(v)
         return None
 
@@ -150,7 +146,7 @@ class negCycleFinder:
                 break
         return cycle
 
-    def is_negative(self, handle):
+    def is_negative(self, handle, dist):
         """[summary]
 
         Arguments:
@@ -160,12 +156,11 @@ class negCycleFinder:
             [type] -- [description]
         """
         v = handle
+        # do while loop in C++
         while True:
             u = self.pred[v]
-            i_u = self.G.nodemap[u]
-            i_v = self.G.nodemap[v]
             wt = self.get_weight(self.G, (u, v))
-            if self.dist[i_v] > self.dist[i_u] + wt:
+            if dist[v] > dist[u] + wt:
                 return True
             v = u
             if v == handle:

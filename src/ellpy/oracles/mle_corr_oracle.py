@@ -32,11 +32,11 @@ class mle_oracle:
             [type] -- [description]
         """
         cut = self.lmi(x)
-        if cut is not None:
+        if cut:
             return cut, t
 
         cut = self.lmi0(x)
-        if cut is not None:
+        if cut:
             return cut, t
 
         R = self.lmi0.Q.sqrt()
@@ -84,6 +84,6 @@ class mono_decreasing_oracle:
         """
         # monotonic decreasing constraint
         cut = mono_oracle(x)
-        if cut is not None:
+        if cut:
             return cut, t
         return self.basis(x, t)

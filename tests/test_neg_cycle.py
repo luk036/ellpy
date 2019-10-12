@@ -7,21 +7,15 @@ import networkx as nx
 from ellpy.oracles.neg_cycle import negCycleFinder
 
 
-class SimpleDiGraph(nx.DiGraph):
-    nodemap = {}
-
-
 def create_test_case1():
     """[summary]
 
     Returns:
         [type] -- [description]
     """
-    G = SimpleDiGraph(nx.cycle_graph(5, create_using=nx.DiGraph()))
+    G = nx.cycle_graph(5, create_using=nx.DiGraph())
     G[1][2]['weight'] = -5
-    # newnode = generate_unique_node()
     G.add_edges_from([(5, n) for n in G])
-    G.nodemap = range(6)
     return G
 
 
@@ -31,7 +25,7 @@ def create_test_case_timing():
     Returns:
         [type] -- [description]
     """
-    G = SimpleDiGraph()
+    G = nx.DiGraph()
     nodelist = ['a1', 'a2', 'a3']
     G.add_nodes_from(nodelist)
     G.add_edges_from([
@@ -42,11 +36,10 @@ def create_test_case_timing():
         ('a3', 'a1', {'weight': 2}),
         ('a1', 'a3', {'weight': 5})
     ])
-    G.nodemap = {v: i_v for i_v, v in enumerate(nodelist)}
     return G
 
 
-def do_case(G):
+def do_case(G, dist):
     """[summary]
 
     Arguments:
@@ -69,22 +62,26 @@ def do_case(G):
         return G[u][v].get('weight', 1)
 
     N = negCycleFinder(G, get_weight)
-    cycle = N.find_neg_cycle()
+    cycle = N.find_neg_cycle(dist)
     return cycle is not None
 
 
-def test_cycle():
-    """[summary]
-    """
+def test_neg_cycle():
     G = create_test_case1()
-    hasNeg = do_case(G)
+    dist = list(0 for _ in G)
+    hasNeg = do_case(G, dist)
     assert hasNeg
 
-    G = SimpleDiGraph(nx.path_graph(5, create_using=nx.DiGraph()))
-    G.nodemap = range(G.number_of_nodes())
-    hasNeg = do_case(G)
+
+def test_no_neg_cycle():
+    G = nx.path_graph(5, create_using=nx.DiGraph())
+    dist = list(0 for _ in G)
+    hasNeg = do_case(G, dist)
     assert not hasNeg
 
+
+def test_timing_graph():
     G = create_test_case_timing()
-    hasNeg = do_case(G)
+    dist = {v: 0 for v in G}
+    hasNeg = do_case(G, dist)
     assert not hasNeg

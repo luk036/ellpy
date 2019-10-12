@@ -81,7 +81,7 @@ class Problem:
             why the problem could not be solved.
         """
         # func_name = kwargs.pop("method", None)
-        # if func_name is not None:
+        # if func_name:
         #     func = Problem.REGISTERED_SOLVE_METHODS[func_name]
         #     return func(self, *args, **kwargs)
         return self._solve(*args, **kwargs)

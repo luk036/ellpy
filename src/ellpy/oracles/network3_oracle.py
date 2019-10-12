@@ -8,7 +8,9 @@ class network3_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, G, f, p):
+    t = None
+
+    def __init__(self, G, f, p, dist):
         """[summary]
 
         Arguments:
@@ -20,7 +22,7 @@ class network3_oracle:
         self.f = f
         self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
-        self.t = None
+        self.dist = dist
 
     def update(self, t):
         """[summary]
@@ -52,10 +54,10 @@ class network3_oracle:
             return self.f(G, e, x, self.t)
 
         self.S.get_weight = get_weight
-        C = self.S.find_neg_cycle()
-        if C is not None:
-            f = -sum(self.f(self.G, e, x, self.t) for e in C)
-            g = -sum(self.p(self.G, e, x, self.t) for e in C)
-            return g, f
+        C = self.S.find_neg_cycle(self.dist)
+        if C is None:
+            return None
 
-        return None
+        f = -sum(self.f(self.G, e, x, self.t) for e in C)
+        g = -sum(self.p(self.G, e, x, self.t) for e in C)
+        return g, f

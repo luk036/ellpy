@@ -45,11 +45,11 @@ class my_oracle:
             return (self.c, fj), t
 
         cut = self.lmi1(x)
-        if cut is not None:
+        if cut:
             return cut, t
 
         cut = self.lmi2(x)
-        if cut is not None:
+        if cut:
             return cut, t
         return (self.c, 0.), f0
 

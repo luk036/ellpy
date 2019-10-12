@@ -15,11 +15,9 @@ def constr3(G, e, x, t):
         [type] -- [description]
     """
     u, v = e
-    i_u = G.nodemap[u]
-    i_v = G.nodemap[v]
-    if i_u <= i_v:
-        return x + t - G[u][v]['cost']
-    return G[u][v]['cost'] - x
+    assert u != v
+    cost = G[u][v]['cost']
+    return x + t - cost if id(u) < id(v) else cost - x
 
 
 def pconstr3(G, e, x, t):
@@ -35,11 +33,8 @@ def pconstr3(G, e, x, t):
         [type] -- [description]
     """
     u, v = e
-    i_u = G.nodemap[u]
-    i_v = G.nodemap[v]
-    if i_u <= i_v:
-        return 1.
-    return -1.
+    assert u != v
+    return 1. if id(u) < id(v) else -1.
 
 
 class optscaling3_oracle:
@@ -48,14 +43,14 @@ class optscaling3_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, G):
+    def __init__(self, G, dist):
         """[summary]
 
         Arguments:
             G {[type]} -- [description]
         """
         self.G = G
-        self.network3 = network3_oracle(G, constr3, pconstr3)
+        self.network3 = network3_oracle(G, constr3, pconstr3, dist)
 
     def update(self, t):
         """[summary]

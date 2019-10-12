@@ -42,7 +42,7 @@ def my_oracle(z, t):
         [type] -- [description]
     """
     cut = my_oracle2(z)
-    if cut is not None:
+    if cut:
         return cut, t
     x, y = z
     # objective: maximize x + y

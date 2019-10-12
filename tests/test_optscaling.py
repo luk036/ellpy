@@ -47,10 +47,6 @@ def vdcorput(n, base=2):
     return [vdc(i, base) for i in range(n)]
 
 
-class SimpleDiGraph(nx.DiGraph):
-    nodemap = {}
-
-
 def formGraph(T, pos, eta, seed=None):
     """Form N by N grid of nodes, connect nodes within eta.
         mu and eta are relative to 1/(N-1)
@@ -66,7 +62,7 @@ def formGraph(T, pos, eta, seed=None):
     Returns:
         [type] -- [description]
     """
-    if seed is not None:
+    if seed:
         np.random.seed(seed)
 
     N = np.sqrt(T)
@@ -78,11 +74,10 @@ def formGraph(T, pos, eta, seed=None):
 
     # connect nodes with edges
     G = nx.random_geometric_graph(n, eta, pos=pos)
-    G = SimpleDiGraph(nx.DiGraph(G))
+    G = nx.DiGraph(G)
     # G.add_node('dummy', pos = (0.3, 0.4))
     # G.add_edge('dummy', 1)
     # G.nodemap = {v : i_v for i_v, v in enumerate(G.nodes())}
-    G.nodemap = range(G.number_of_nodes())
     return G
 
 
@@ -119,7 +114,8 @@ def run_optscaling(duration=0.000001):
     x0 = np.array([cmax, cmin])
     t = cmax - cmin
     E = ell(1.5 * t, x0)
-    P = optscaling_oracle(G)
+    dist = list(0 for _ in G)
+    P = optscaling_oracle(G, dist)
     ell_info = cutting_plane_dc(P, E, float('inf'))
     time.sleep(duration)
     # fmt = '{:f} {} {} {}'
@@ -140,7 +136,8 @@ def run_optscaling3(duration=0.000001):
     """
     t = cmax - cmin
     Iv = ell1d([cmin, cmax])
-    Q = optscaling3_oracle(G)
+    dist = list(0 for _ in G)
+    Q = optscaling3_oracle(G, dist)
     P = bsearch_adaptor(Q, Iv)
     bs_info = bsearch(P, [0., 1.001 * t])
     time.sleep(duration)
@@ -155,7 +152,7 @@ def test_two_variables(benchmark):
         benchmark {[type]} -- [description]
     """
     result = benchmark(run_optscaling)
-    assert result == 26
+    assert result == 24
 
 
 def test_binary_search(benchmark):

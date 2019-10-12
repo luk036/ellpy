@@ -35,7 +35,7 @@ class lsq_oracle:
         g = np.zeros(n)
 
         cut = self.lmi0(x[:-1])
-        if cut is not None:
+        if cut:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.
@@ -43,7 +43,7 @@ class lsq_oracle:
 
         self.qmi.update(x[-1])
         cut = self.qmi(x[:-1])
-        if cut is not None:
+        if cut:
             g1, fj = cut
             g[:-1] = g1
             self.qmi.Q.witness()

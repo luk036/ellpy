@@ -159,7 +159,7 @@ class mono_decreasing_oracle2:
         n = len(x)
         g = np.zeros(n)
         cut = mono_oracle(x[:-1])
-        if cut is not None:
+        if cut:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.
