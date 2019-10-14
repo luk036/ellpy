@@ -4,39 +4,6 @@ import numpy as np
 from .network_oracle import network_oracle
 
 
-def constr(G, e, x):
-    """[summary]
-
-    Arguments:
-        G {[type]} -- [description]
-        e {[type]} -- [description]
-        x {[type]} -- [description]
-
-    Returns:
-        [type] -- [description]
-    """
-    u, v = e
-    cost = G[u][v]['cost']
-    assert u != v
-    return x[0] - cost if id(u) < id(v) else cost - x[1]
-
-
-def pconstr(G, e, x):
-    """[summary]
-
-    Arguments:
-        G {[type]} -- [description]
-        e {[type]} -- [description]
-        x {[type]} -- [description]
-
-    Returns:
-        [type] -- [description]
-    """
-    u, v = e
-    assert u != v
-    return np.array([1., 0.] if id(u) < id(v) else [0., -1.])
-
-
 class optscaling_oracle:
     """[summary]
 
@@ -49,8 +16,39 @@ class optscaling_oracle:
         Arguments:
             G {[type]} -- [description]
         """
-        self.G = G
-        self.network = network_oracle(G, constr, pconstr, dist)
+
+        def constr(G, e, x):
+            """[summary]
+
+            Arguments:
+                G {[type]} -- [description]
+                e {[type]} -- [description]
+                x {[type]} -- [description]
+
+            Returns:
+                [type] -- [description]
+            """
+            u, v = e
+            cost = G[u][v]['cost']
+            assert u != v
+            return x[0] - cost if u < v else cost - x[1]
+
+        def pconstr(G, e, x):
+            """[summary]
+
+            Arguments:
+                G {[type]} -- [description]
+                e {[type]} -- [description]
+                x {[type]} -- [description]
+
+            Returns:
+                [type] -- [description]
+            """
+            u, v = e
+            assert u != v
+            return np.array([1., 0.] if u < v else [0., -1.])
+
+        self.network = network_oracle(G, dist, constr, pconstr)
 
     def __call__(self, x, t):
         """[summary]

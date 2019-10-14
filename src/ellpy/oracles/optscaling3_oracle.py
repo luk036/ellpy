@@ -2,41 +2,6 @@
 from .network3_oracle import network3_oracle
 
 
-def constr3(G, e, x, t):
-    """[summary]
-
-    Arguments:
-        G {[type]} -- [description]
-        e {[type]} -- [description]
-        x {[type]} -- [description]
-        t {[type]} -- [description]
-
-    Returns:
-        [type] -- [description]
-    """
-    u, v = e
-    assert u != v
-    cost = G[u][v]['cost']
-    return x + t - cost if id(u) < id(v) else cost - x
-
-
-def pconstr3(G, e, x, t):
-    """[summary]
-
-    Arguments:
-        G {[type]} -- [description]
-        e {[type]} -- [description]
-        x {[type]} -- [description]
-        t {[type]} -- [description]
-
-    Returns:
-        [type] -- [description]
-    """
-    u, v = e
-    assert u != v
-    return 1. if id(u) < id(v) else -1.
-
-
 class optscaling3_oracle:
     """[summary]
 
@@ -49,8 +14,41 @@ class optscaling3_oracle:
         Arguments:
             G {[type]} -- [description]
         """
-        self.G = G
-        self.network3 = network3_oracle(G, constr3, pconstr3, dist)
+        # self.G = G
+        def constr3(G, e, x, t):
+            """[summary]
+
+            Arguments:
+                G {[type]} -- [description]
+                e {[type]} -- [description]
+                x {[type]} -- [description]
+                t {[type]} -- [description]
+
+            Returns:
+                [type] -- [description]
+            """
+            u, v = e
+            assert u != v
+            cost = G[u][v]['cost']
+            return x + t - cost if u < v else cost - x
+
+        def pconstr3(G, e, x, t):
+            """[summary]
+
+            Arguments:
+                G {[type]} -- [description]
+                e {[type]} -- [description]
+                x {[type]} -- [description]
+                t {[type]} -- [description]
+
+            Returns:
+                [type] -- [description]
+            """
+            u, v = e
+            assert u != v
+            return 1. if u < v else -1.
+
+        self.network3 = network3_oracle(G, dist, constr3, pconstr3)
 
     def update(self, t):
         """[summary]
