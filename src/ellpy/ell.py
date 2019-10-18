@@ -8,6 +8,10 @@ class ell:
     _use_parallel_cut = True
     _no_defer_trick = False
 
+    rho = 0.
+    sigma = 0.
+    delta = 0.
+
     def __init__(self, val, x):
         """ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }
 
@@ -106,13 +110,13 @@ class ell:
         tsq = self.kappa * omega
         # if tsq <= 0.: # unlikely
         #     return 4, 0.
-        status, params = __calc_ell(beta, tsq)
+        status = __calc_ell(beta, tsq)
         if status != 0:
             return status, tsq
-        rho, sigma, delta = params
-        self._xc -= (rho / omega) * Qg
-        self.Q -= (sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
-        self.kappa *= delta
+        # rho, sigma, delta = params
+        self._xc -= (self.rho / omega) * Qg
+        self.Q -= (self.sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
+        self.kappa *= self.delta
         if self._no_defer_trick:
             self.Q *= self.kappa
             self.kappa = 1.
@@ -149,13 +153,14 @@ class ell:
         if b1sq > tsq or not self.use_parallel_cut:
             return self.__calc_dc(b0, tsq)
         if b1 < b0:  # unlikely
-            return 1, None  # no sol'n
+            return 1  # no sol'n
         if b0 == 0:
-            return self.__calc_ll_cc(b1, b1sq, tsq)
+            self.__calc_ll_cc(b1, b1sq, tsq)
+            return 0
         n = self._n
         b0b1 = b0 * b1
         if n * b0b1 < -tsq:  # unlikely
-            return 3, None  # no effect
+            return 3  # no effect
 
         # parallel cut
         b0sq = b0**2
@@ -163,10 +168,10 @@ class ell:
         t1 = tsq - b1sq
         bav = (b0 + b1) / 2
         xi = math.sqrt(4 * t0 * t1 + (n * (b1sq - b0sq))**2)
-        sigma = (n + (tsq - b0b1 - xi / 2) / (2 * bav**2)) / (n + 1)
-        rho = sigma * bav
-        delta = self.c1 * (t0 + t1 + xi / n) / (2 * tsq)
-        return 0, (rho, sigma, delta)
+        self.sigma = (n + (tsq - b0b1 - xi / 2) / (2 * bav**2)) / (n + 1)
+        self.rho = self.sigma * bav
+        self.delta = self.c1 * (t0 + t1 + xi / n) / (2 * tsq)
+        return 0
 
     def __calc_ll_cc(self, b1, b1sq, tsq):
         """parallel central cut
@@ -181,10 +186,9 @@ class ell:
         """
         n = self._n
         xi = math.sqrt(4 * tsq * (tsq - b1sq) + (n * b1sq)**2)
-        sigma = (n + (2 * tsq - xi) / b1sq) / (n + 1)
-        rho = sigma * b1 / 2
-        delta = self.c1 * (tsq - (b1sq - xi / n) / 2) / tsq
-        return 0, (rho, sigma, delta)
+        self.sigma = (n + (2 * tsq - xi) / b1sq) / (n + 1)
+        self.rho = self.sigma * b1 / 2
+        self.delta = self.c1 * (tsq - (b1sq - xi / n) / 2) / tsq
 
     def __calc_dc(self, beta, tsq):
         """Deep cut
@@ -198,18 +202,19 @@ class ell:
         """
         tau = math.sqrt(tsq)
         if beta > tau:
-            return 1, None  # no sol'n
+            return 1  # no sol'n
         if beta == 0:
-            return self.__calc_cc(tau)
+            self.__calc_cc(tau)
+            return 0
         n = self._n
         gamma = tau + n * beta
         if gamma < 0:
-            return 3, None  # no effect, unlikely
+            return 3  # no effect, unlikely
 
-        rho = gamma / (n + 1)
-        sigma = 2 * rho / (tau + beta)
-        delta = self.c1 * (tsq - beta**2) / tsq
-        return 0, (rho, sigma, delta)
+        self.rho = gamma / (n + 1)
+        self.sigma = 2 * self.rho / (tau + beta)
+        self.delta = self.c1 * (tsq - beta**2) / tsq
+        return 0
 
     def __calc_cc(self, tau):
         """Central cut
@@ -221,10 +226,9 @@ class ell:
             [type] -- [description]
         """
         np1 = self._n + 1
-        sigma = 2. / np1
-        rho = tau / np1
-        delta = self.c1
-        return 0, (rho, sigma, delta)
+        self.sigma = 2. / np1
+        self.rho = tau / np1
+        self.delta = self.c1
 
 
 class ell1d:

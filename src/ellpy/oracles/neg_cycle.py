@@ -21,7 +21,36 @@ class negCycleFinder:
         # self.get_weight = get_weight
         # self.dist = list(0 for _ in self.G)
 
-    def find_cycle(self):
+    def find_neg_cycle(self, dist, get_weight):
+        """Perform a updating of dist and pred
+
+        Arguments:
+            G {[type]} -- [description]
+            dist {dictionary} -- [description]
+            pred {dictionary} -- [description]
+
+        Keyword Arguments:
+            weight {str} -- [description] (default: {'weight'})
+
+        Returns:
+            [type] -- [description]
+        """
+        self.pred = {}
+        found = False
+        while not found:
+            changed = self.__relax(dist, get_weight)
+            if not changed:
+                break
+            v = self.__find_cycle()
+            if v is not None:
+                # Will zero cycle be found???
+                assert self.__is_negative(v, dist, get_weight)
+                return self.__cycle_list(v)
+        return None
+
+    # private:
+
+    def __find_cycle(self):
         """Find a cycle on policy graph
 
         Arguments:
@@ -53,7 +82,7 @@ class negCycleFinder:
                     break
         return None
 
-    def relax(self, dist, get_weight):
+    def __relax(self, dist, get_weight):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -73,40 +102,12 @@ class negCycleFinder:
             u, v = e
             d = dist[u] + wt
             if dist[v] > d:
+                changed = True
                 dist[v] = d
                 self.pred[v] = u
-                changed = True
         return changed
 
-    def find_neg_cycle(self, dist, get_weight):
-        """Perform a updating of dist and pred
-
-        Arguments:
-            G {[type]} -- [description]
-            dist {dictionary} -- [description]
-            pred {dictionary} -- [description]
-
-        Keyword Arguments:
-            weight {str} -- [description] (default: {'weight'})
-
-        Returns:
-            [type] -- [description]
-        """
-        # self.dist = list(0 for _ in self.G)
-        self.pred = {}
-        found = False
-        while not found:
-            changed = self.relax(dist, get_weight)
-            if not changed:
-                break
-            v = self.find_cycle()
-            if v is not None:
-                # Will zero cycle be found???
-                assert self.is_negative(v, dist, get_weight)
-                return self.cycle_list(v)
-        return None
-
-    def cycle_list(self, handle):
+    def __cycle_list(self, handle):
         """[summary]
 
         Arguments:
@@ -125,7 +126,7 @@ class negCycleFinder:
                 break
         return cycle
 
-    def is_negative(self, handle, dist, get_weight):
+    def __is_negative(self, handle, dist, get_weight):
         """[summary]
 
         Arguments:

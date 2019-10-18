@@ -5,11 +5,17 @@ import numpy as np
 
 from ellpy.cutting_plane import cutting_plane_dc
 from ellpy.ell import ell
-from ellpy.oracles.corr_oracle import corr_bspline, corr_poly, create_2d_isotropic
+from ellpy.oracles.corr_oracle import (
+    corr_bspline,
+    corr_poly,
+    create_2d_isotropic,
+    create_2d_sites
+)
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
 
-Y, s = create_2d_isotropic(5, 4, 3000)
+s = create_2d_sites(5, 4)
+Y = create_2d_isotropic(s, 3000)
 
 
 def lsq_corr_core2(Y, m, P):

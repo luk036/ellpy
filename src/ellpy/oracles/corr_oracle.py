@@ -5,7 +5,7 @@ from scipy.interpolate import BSpline
 from .halton_n import halton_n
 
 
-def create_2d_isotropic(nx=10, ny=8, N=3000):
+def create_2d_sites(nx=10, ny=8):
     """[summary]
 
     Keyword Arguments:
@@ -18,18 +18,27 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
     """
     n = nx * ny
     s_end = [10., 8.]
+    s = np.array([(s_end[0] * x, s_end[1] * y)
+                  for x, y in halton_n(n, 2, [2, 3])])
+    return s
+
+
+def create_2d_isotropic(s, N=3000):
+    """[summary]
+
+    Keyword Arguments:
+        nx {int} -- [description] (default: {10})
+        ny {int} -- [description] (default: {8})
+        N {int} -- [description] (default: {3000})
+
+    Returns:
+        [type] -- [description]
+    """
+    n = s.shape[0]
     sdkern = 0.3  # width of kernel
     var = 2.  # standard derivation
     tau = 0.00001  # standard derivation of white noise
     np.random.seed(5)
-
-    # create sites s
-    # sx = np.linspace(0, s_end[0], nx)
-    # sy = np.linspace(0, s_end[1], ny)
-    # xx, yy = np.meshgrid(sx, sy)
-    # s = np.vstack([xx.flatten(), yy.flatten()]).T
-    s = np.array([(s_end[0] * x, s_end[1] * y)
-                  for x, y in halton_n(n, 2, [2, 3])])
 
     Sig = np.zeros((n, n))
     for i in range(n):
@@ -47,7 +56,7 @@ def create_2d_isotropic(nx=10, ny=8, N=3000):
         Y += np.outer(y, y)
 
     Y /= N
-    return Y, s
+    return Y
 
 
 def construct_distance_matrix(s):
