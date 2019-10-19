@@ -91,11 +91,11 @@ y = [i for i in vdcorput(T, ybase)]
 pos = zip(x, y)
 G = formGraph(T, pos, 1.6, seed=5)
 # for u, v in G.edges():
-#     h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
+#     h = np.array(G.nodes()[u]['pos']) - np.array(G.nodes()[v]['pos'])
 #     G[u][v]['cost'] = np.sqrt(h @ h)
 
 for u, v in G.edges():
-    h = np.array(G.node[u]['pos']) - np.array(G.node[v]['pos'])
+    h = np.array(G.nodes()[u]['pos']) - np.array(G.nodes()[v]['pos'])
     G[u][v]['cost'] = np.log(np.sqrt(h @ h))
 
 cmax = max(c for _, _, c in G.edges.data('cost'))
