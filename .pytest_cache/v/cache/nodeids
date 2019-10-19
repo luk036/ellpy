@@ -1,4 +1,4 @@
 [
-  "tests/test_corr_fn.py::test_data",
-  "tests/test_corr_fn.py::test_corr_fn"
+  "tests/test_optscaling.py::test_two_variables",
+  "tests/test_optscaling.py::test_binary_search"
 ]

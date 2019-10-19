@@ -124,8 +124,10 @@ class profit_q_oracle:
             [type] -- [description]
         """
         x = np.round(np.exp(y))
-        if x[0] == 0 or x[1] == 0:
-            raise AssertionError()
+        if x[0] == 0:
+            x[0] = 1
+        if x[1] == 0:
+            x[1] = 1
         yd = np.log(x)
         (g, h), t = self.P(yd, t)
         h += g.dot(yd - y)

@@ -24,8 +24,10 @@ class qmi_oracle:
         """
         self.F = F
         self.F0 = F0
-        self.Fx = np.zeros(F0.shape)
-        self.Q = chol_ext(len(F0))
+
+        n, m = F0.shape
+        self.Fx = np.zeros([m, n])
+        self.Q = chol_ext(m)  # take column
 
     def update(self, t):
         """[summary]
@@ -67,8 +69,8 @@ class qmi_oracle:
                 raise AssertionError()
             if self.count < i + 1:
                 self.count = i + 1
-                self.Fx[i] = self.F0[i]
-                self.Fx[i] -= sum(self.F[k][i] * x[k] for k in range(nx))
+                self.Fx[i] = self.F0[:, i]
+                self.Fx[i] -= sum(self.F[k][:, i] * x[k] for k in range(nx))
             a = -self.Fx[i].dot(self.Fx[j])
             if i == j:
                 a += self.t
