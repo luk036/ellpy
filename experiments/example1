@@ -21,18 +21,18 @@ def my_oracle(z, t):
 
     # constraint 1: x + y <= 3
     fj = x + y - 3
-    if fj > 0:
+    if fj > 0.:
         return (np.array([1., 1.]), fj), t
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
-    if fj > 0:
+    if fj > 0.:
         return (np.array([-1., 1.]), fj), t
 
     # objective: maximize x + y
     f0 = x + y
     fj = t - f0
-    if fj < 0:
+    if fj < 0.:
         fj = 0.
         t = f0
     return (np.array([-1., -1.]), fj), t
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     E = ell(10., x0)
     P = my_oracle
-    ell_info = cutting_plane_dc(P, E, float('-inf'))
+    xb, ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert ell_info.feasible
-    print(ell_info.val)
+    print(xb)
     # assert niter == 115

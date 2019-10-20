@@ -15,7 +15,7 @@ class negCycleFinder:
             G {[type]} -- [description]
 
         Keyword Arguments:
-            get_weight {[type]} -- [description] (default: {default_get_weight})
+            get_weight (default: {default_get_weight})
         """
         self.G = G
         # self.get_weight = get_weight
@@ -36,11 +36,7 @@ class negCycleFinder:
             [type] -- [description]
         """
         self.pred = {}
-        found = False
-        while not found:
-            changed = self.__relax(dist, get_weight)
-            if not changed:
-                break
+        while self.__relax(dist, get_weight):
             v = self.__find_cycle()
             if v is not None:
                 # Will zero cycle be found???

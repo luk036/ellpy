@@ -94,13 +94,13 @@ def lsq_corr_poly2(Y, s, m):
     val[-1] = normY2*normY2
     x = np.zeros(m + 1)
     E = ell(val, x)
-    ell_info = cutting_plane_dc(P, E, normY2)
+    xb, ell_info = cutting_plane_dc(P, E, normY2)
 
     print(ell_info.num_iters, ell_info.feasible)
     assert ell_info.feasible
     # assert ell_info.num_iters == 175
 
-    a = ell_info.val[:-1]
+    a = xb[:-1]
     pa = np.ascontiguousarray(a[::-1])
     print(pa)
     return np.poly1d(pa)
@@ -122,7 +122,7 @@ def lsq_corr_poly(Y, s, m):
     E = ell(64., a)
     P = bsearch_adaptor(Q, E)
     normY = np.linalg.norm(Y, 'fro')
-    bs_info = bsearch(P, [0., normY*normY])
+    _, bs_info = bsearch(P, [0., normY*normY])
 
     # print(niter, feasible)
     assert bs_info.feasible
@@ -183,7 +183,7 @@ def lsq_corr_bspline(Y, s, m):
     E = ell(64., c)
     P = bsearch_adaptor(Q, E)
 
-    bs_info = bsearch(P, [0., normY*normY])
+    _, bs_info = bsearch(P, [0., normY*normY])
 
     # print(niter, feasible)
     assert bs_info.feasible
@@ -260,12 +260,12 @@ def lsq_corr_bspline2(Y, s, m):
     x = np.zeros(m + 1)
     E = ell(val, x)
 
-    ell_info = cutting_plane_dc(P, E, normY2)
+    xb, ell_info = cutting_plane_dc(P, E, normY2)
     print(ell_info.num_iters, ell_info.feasible)
     assert ell_info.feasible
     # assert ell_info.num_iters == 40
 
-    c = ell_info.val[:-1]
+    c = xb[:-1]
     return BSpline(t, c, k)
 
 

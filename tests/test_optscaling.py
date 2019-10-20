@@ -116,7 +116,7 @@ def run_optscaling(duration=0.000001):
     E = ell(1.5 * t, x0)
     dist = list(0 for _ in G)
     P = optscaling_oracle(G, dist)
-    ell_info = cutting_plane_dc(P, E, float('inf'))
+    _, ell_info = cutting_plane_dc(P, E, float('inf'))
     time.sleep(duration)
     # fmt = '{:f} {} {} {}'
     # print(np.exp(xb))
@@ -139,7 +139,7 @@ def run_optscaling3(duration=0.000001):
     dist = list(0 for _ in G)
     Q = optscaling3_oracle(G, dist)
     P = bsearch_adaptor(Q, Iv)
-    bs_info = bsearch(P, [0., 1.001 * t])
+    _, bs_info = bsearch(P, [0., 1.001 * t])
     time.sleep(duration)
     assert bs_info.feasible
     return bs_info.num_iters

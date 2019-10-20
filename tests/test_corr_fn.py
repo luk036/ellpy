@@ -37,8 +37,8 @@ def lsq_corr_core2(Y, m, P):
     x[0] = 1.
     x[-1] = normY2 / 2
     E = ell(val, x)
-    ell_info = cutting_plane_dc(P, E, float('inf'))
-    return ell_info.val[:-1], ell_info.num_iters, ell_info.feasible
+    xb, ell_info = cutting_plane_dc(P, E, float('inf'))
+    return xb[:-1], ell_info.num_iters, ell_info.feasible
 
 
 def lsq_corr_poly2(Y, s, m):
@@ -73,9 +73,9 @@ def mle_corr_core(Y, m, P):
     # options = Options()
     # options.max_it = 2000
     # options.tol = 1e-8
-    ell_info = cutting_plane_dc(P, E, float('inf'))
+    xb, ell_info = cutting_plane_dc(P, E, float('inf'))
     # print(num_iters, feasible, status)
-    return ell_info.val, ell_info.num_iters, ell_info.feasible
+    return xb, ell_info.num_iters, ell_info.feasible
 
 
 def mle_corr_poly(Y, s, m):

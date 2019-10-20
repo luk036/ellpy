@@ -144,7 +144,7 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     options = Options()
     options.max_it = 20000
     options.tol = 1e-8
-    ell_info = cutting_plane_dc(P, E, Spsq, options)
+    _, ell_info = cutting_plane_dc(P, E, Spsq, options)
     time.sleep(duration)
     # h = spectral_fact(r)
     return ell_info.num_iters, ell_info.feasible
@@ -194,7 +194,7 @@ def run_csdlowpass(use_parallel_cut, duration=0.000001):
     options.max_it = 20000
     options.tol = 1e-8
 
-    ell_info = cutting_plane_q(Pcsd, E, Spsq, options)
+    _, ell_info = cutting_plane_q(Pcsd, E, Spsq, options)
     time.sleep(duration)
     # h = spectral_fact(r)
     return ell_info.num_iters, ell_info.feasible

@@ -103,8 +103,8 @@ def mle_corr_poly(Y, s, n):
     # a = P.x_best
     P = mle_poly_oracle(Sig, Y, n)
     E = ell(100., x)
-    ell_info = cutting_plane_dc(P, E, float('inf'), 5000)
-    a = ell_info.val[:n]
+    xb, ell_info = cutting_plane_dc(P, E, float('inf'), 5000)
+    a = xb[:n]
     pa = np.ascontiguousarray(a[::-1])
     return np.poly1d(pa)
 #  return prob.is_dcp()
@@ -133,8 +133,8 @@ def mle_corr_bspline(Y, s, n):
     # _, _, _ = bsearch(P, [0., normY*normY])
     P = mle_bspline_oracle(Sig, Y, n)
     E = ell(100., c)
-    ell_info = cutting_plane_dc(P, E, float('inf'), 50000)
-    return BSpline(t, ell_info.val[:n], k)
+    xb, ell_info = cutting_plane_dc(P, E, float('inf'), 50000)
+    return BSpline(t, xb[:n], k)
 
 
 def construct_distance_matrix(s):

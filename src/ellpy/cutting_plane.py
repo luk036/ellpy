@@ -7,10 +7,19 @@ class Options:
 
 
 class CInfo:
-    value = None
     val = None
+    feasible: bool
+    num_iters: int
+    status: int
 
-    def __init__(self, feasible, num_iters, status):
+    def __init__(self, feasible: bool, num_iters: int, status: int):
+        """initialize
+
+        Arguments:
+            feasible {bool} -- [description]
+            num_iters {int} -- [description]
+            status {int} -- [description]
+        """
         self.feasible = feasible
         self.num_iters = num_iters
         self.status = status
@@ -61,13 +70,13 @@ def cutting_plane_feas(Omega, S, options=Options()):
     return CInfo(feasible, niter + 1, status)
 
 
-def cutting_plane_dc(Omega, S, t, options=Options()):
+def cutting_plane_dc(Omega, S, t: float, options=Options()):
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
         Omega {[type]} -- perform assessment on x0
         S {[type]} -- Search Space containing x*
-        t {[type]} -- initial best-so-far value
+        t {float} -- initial best-so-far value
 
     Keyword Arguments:
         options {[type]} -- [description] (default: {Options()})
@@ -77,12 +86,12 @@ def cutting_plane_dc(Omega, S, t, options=Options()):
         t {[type]} -- best-so-far optimal value
         niter {[type]} -- number of iterations performed
     """
-    feasible = False  # no sol'n
     x_best = S.xc
+    t_orig = t
+
     for niter in range(options.max_it):
         cut, t1 = Omega(S.xc, t)
         if t != t1:  # best t obtained
-            feasible = True
             t = t1
             x_best = S.xc
         status, tsq = S.update(cut)
@@ -92,26 +101,25 @@ def cutting_plane_dc(Omega, S, t, options=Options()):
             status = 2
             break
 
-    ret = CInfo(feasible, niter + 1, status)
-    ret.val = x_best
+    ret = CInfo(t != t_orig, niter + 1, status)
     ret.value = t
-    return ret
+    return x_best, ret
 
 
-def cutting_plane_q(Omega, S, t, options=Options()):
+def cutting_plane_q(Omega, S, t: float, options=Options()):
     """Cutting-plane method for solving convex discrete optimization problem
 
     Arguments:
         Omega {[type]} -- perform assessment on x0
         S {[type]} -- Search Space containing x*
-        t {[type]} -- initial best-so-far value
+        t {float} -- initial best-so-far value
 
     Keyword Arguments:
         options {[type]} -- [description] (default: {Options()})
 
     Returns:
         x_best {[type]} -- solution vector
-        t {[type]} -- best-so-far optimal value
+        t {float} -- best-so-far optimal value
         niter {[type]} -- number of iterations performed
     """
     '''
@@ -126,9 +134,9 @@ def cutting_plane_q(Omega, S, t, options=Options()):
              x             solution vector
              niter         number of iterations performed
     '''
-    feasible = False  # no sol'n
     # x_last = S.xc
-    x_best = S.xc
+    x_best = S.xc  # real copy
+    t_orig = t
     status = 1  # new
     for niter in range(options.max_it):
         cut, x0, t1, loop = Omega(S.xc, t, 0 if status != 3 else 1)
@@ -142,7 +150,6 @@ def cutting_plane_q(Omega, S, t, options=Options()):
                 break
             # h += g.dot(x0 - S.xc)
         if t != t1:  # best t obtained
-            feasible = True
             t = t1
             x_best = x0.copy()
 
@@ -153,10 +160,9 @@ def cutting_plane_q(Omega, S, t, options=Options()):
             status = 2
             break
 
-    ret = CInfo(feasible, niter + 1, status)
-    ret.val = x_best
+    ret = CInfo(t != t_orig, niter + 1, status)
     ret.value = t
-    return ret
+    return x_best, ret
 
 
 def bsearch(Omega, I, options=Options()):
@@ -190,7 +196,7 @@ def bsearch(Omega, I, options=Options()):
     feasible = (upper != u_orig)
     ret = CInfo(feasible, niter + 1, None)
     ret.value = upper
-    return ret
+    return upper, ret
 
 
 class bsearch_adaptor:
