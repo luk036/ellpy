@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
+import numpy as np
+
 from .network3_oracle import network3_oracle
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class optscaling3_oracle:
@@ -15,14 +22,14 @@ class optscaling3_oracle:
             G {[type]} -- [description]
         """
         # self.G = G
-        def constr3(G, e, x, t):
+        def constr3(G, e, x: float, t: float) -> float:
             """[summary]
 
             Arguments:
                 G {[type]} -- [description]
                 e {[type]} -- [description]
                 x {[type]} -- [description]
-                t {[type]} -- [description]
+                t {float} -- [description]
 
             Returns:
                 [type] -- [description]
@@ -32,14 +39,14 @@ class optscaling3_oracle:
             cost = G[u][v]['cost']
             return x + t - cost if u < v else cost - x
 
-        def pconstr3(G, e, x, t):
+        def pconstr3(G, e, x: float, t: float) -> float:
             """[summary]
 
             Arguments:
                 G {[type]} -- [description]
                 e {[type]} -- [description]
                 x {[type]} -- [description]
-                t {[type]} -- [description]
+                t {float} -- [description]
 
             Returns:
                 [type] -- [description]
@@ -50,15 +57,15 @@ class optscaling3_oracle:
 
         self.network3 = network3_oracle(G, dist, constr3, pconstr3)
 
-    def update(self, t):
+    def update(self, t: float):
         """[summary]
 
         Arguments:
-            t {[type]} -- [description]
+            t {float} -- [description]
         """
         self.network3.update(t)
 
-    def __call__(self, x):
+    def __call__(self, x: float):
         """[summary]
 
         Arguments:

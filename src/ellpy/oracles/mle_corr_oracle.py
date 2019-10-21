@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 # import cvxpy as cvx
+from typing import Tuple
+
 import numpy as np
 
 from .corr_oracle import mono_oracle
 from .lmi0_oracle import lmi0_oracle
 from .lmi_oracle import lmi_oracle
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class mle_oracle:
@@ -21,15 +26,15 @@ class mle_oracle:
         self.lmi = lmi_oracle(Sig, 2 * Y)
         # self.lmi2 = lmi2_oracle(Sig, 2*Y)
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         cut = self.lmi(x)
         if cut:
@@ -72,15 +77,15 @@ class mono_decreasing_oracle:
         """
         self.basis = basis
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         # monotonic decreasing constraint
         cut = mono_oracle(x)

@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import time
+from typing import Tuple
 
 import numpy as np
 
@@ -9,6 +10,9 @@ from ellpy.cutting_plane import cutting_plane_dc
 from ellpy.ell import ell
 from ellpy.oracles.lmi_old_oracle import lmi_old_oracle
 from ellpy.oracles.lmi_oracle import lmi_oracle
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class my_oracle:
@@ -29,15 +33,15 @@ class my_oracle:
         self.lmi1 = oracle(F1, B1)
         self.lmi2 = oracle(F2, B2)
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         f0 = self.c @ x
         fj = f0 - t

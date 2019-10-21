@@ -19,9 +19,9 @@ class chol_ext:
             n {integer} -- dimension
     """
     allow_semidefinite = False
-    p = None
+    p = (0, 0)
 
-    def __init__(self, N):
+    def __init__(self, N: int):
         """initialization
 
         Arguments:
@@ -31,7 +31,7 @@ class chol_ext:
         self.n = N
         self.T = np.zeros((N, N))
 
-    def factorize(self, A):
+    def factorize(self, A: np.ndarray):
         """Perform Cholesky Factorization
 
         Arguments:
@@ -48,11 +48,11 @@ class chol_ext:
         """Perform Cholesky Factorization (square-root free version)
 
         Arguments:
-            getA {function} -- function to access symmetric matrix
+            getA {callable} -- function to access symmetric matrix
         """
         T = self.T
         start = 0  # range start
-        self.p = None
+        self.p = (0, 0)
         for i in range(self.n):
             for j in range(start, i + 1):
                 d = getA(i, j) - np.dot(T[start:j, i], T[j, start:j])
@@ -72,7 +72,7 @@ class chol_ext:
         Returns:
             bool -- True if $A$ is a spd
         """
-        return self.p is None
+        return self.p == (0, 0)
 
     def witness(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -96,7 +96,7 @@ class chol_ext:
             self.v[i - 1] = -(self.T[i - 1, i:n] @ self.v[i:n])
         return -self.T[m, m]
 
-    def sym_quad(self, A):
+    def sym_quad(self, A: np.ndarray):
         """[summary]
 
         Arguments:

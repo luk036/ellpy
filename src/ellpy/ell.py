@@ -86,7 +86,7 @@ class ell:
         """[summary]
 
         Arguments:
-            cut {[type]} -- [description]
+            cut {float} -- [description]
 
         Returns:
             [type] -- [description]
@@ -102,7 +102,7 @@ class ell:
 
         Arguments:
             calc_ell {[type]} -- [description]
-            cut {[type]} -- [description]
+            cut {float} -- [description]
 
         Returns:
             status -- 0: success

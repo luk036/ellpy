@@ -6,8 +6,6 @@ Negative cycle detection for weighed graphs.
 
 
 class negCycleFinder:
-    pred = {}
-
     def __init__(self, G):
         """[summary]
 
@@ -18,6 +16,8 @@ class negCycleFinder:
             get_weight (default: {default_get_weight})
         """
         self.G = G
+        self.pred: dict = {}
+
         # self.get_weight = get_weight
         # self.dist = list(0 for _ in self.G)
 

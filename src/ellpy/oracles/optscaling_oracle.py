@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import numpy as np
 
 from .network_oracle import network_oracle
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class optscaling_oracle:
@@ -50,15 +55,15 @@ class optscaling_oracle:
 
         self.network = network_oracle(G, dist, constr, pconstr)
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         cut = self.network(x)
         if cut:

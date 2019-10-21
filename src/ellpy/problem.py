@@ -6,7 +6,7 @@ class Problem:
     _optim_var = None
     _status = None
     _solver_stats = None
-    REGISTERED_SOLVE_METHODS = {}
+    # REGISTERED_SOLVE_METHODS = {}
 
     def __init__(self, S, oracle, options=Options()):
         """[summary]
@@ -86,18 +86,18 @@ class Problem:
         #     return func(self, *args, **kwargs)
         return self._solve(*args, **kwargs)
 
-    @classmethod
-    def register_solve(cls, name, func):
-        """Adds a solve method to the Problem class.
+    # @classmethod
+    # def register_solve(cls, name, func):
+    #     """Adds a solve method to the Problem class.
 
-        Parameters
-        ----------
-        name : str
-            The keyword for the method.
-        func : function
-            The function that executes the solve method.
-        """
-        cls.REGISTERED_SOLVE_METHODS[name] = func
+    #     Parameters
+    #     ----------
+    #     name : str
+    #         The keyword for the method.
+    #     func : function
+    #         The function that executes the solve method.
+    #     """
+    #     cls.REGISTERED_SOLVE_METHODS[name] = func
 
     def _solve(self, t
                # solver=None,

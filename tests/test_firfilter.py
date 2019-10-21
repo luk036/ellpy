@@ -50,12 +50,12 @@ A_I = np.imag(A)
 
 # Optimal Chebyshev filter formulation.
 class my_oracle:
-    def __call__(self, h, t):
+    def __call__(self, h, t: float):
         """[summary]
 
         Arguments:
             h {[type]} -- [description]
-            t {[type]} -- [description]
+            t {float} -- [description]
 
         Returns:
             [type] -- [description]

@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import List, Optional, Tuple
+
 import numpy as np
 
 from .chol_ext import chol_ext
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 # import cholutil
 
@@ -15,7 +20,7 @@ class qmi_oracle:
     t = None
     count = 0
 
-    def __init__(self, F, F0):
+    def __init__(self, F: List[np.ndarray], F0: np.ndarray):
         """[summary]
 
         Arguments:
@@ -29,25 +34,25 @@ class qmi_oracle:
         self.Fx = np.zeros([m, n])
         self.Q = chol_ext(m)  # take column
 
-    def update(self, t):
+    def update(self, t: float):
         """[summary]
 
         Arguments:
-            t {[type]} -- [description]
+            t {float} -- [description]
         """
         self.t = t
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
+            x {np.ndarray} -- [description]
 
         Raises:
-            AssertionError -- [description]
+            AssertionError: [description]
 
         Returns:
-            [type] -- [description]
+            Optional[Cut] -- [description]
         """
         self.count = 0
         nx = len(x)

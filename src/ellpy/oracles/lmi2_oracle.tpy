@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from .chol_ext import chol_ext
+from typing import Tuple
+
+Cut = Tuple[np.ndarray, float]
 
 
 class lmi2_oracle:
@@ -16,7 +19,7 @@ class lmi2_oracle:
         self.S = np.zeros(U.shape)
         self.Q = chol_ext(len(U))
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         #A = self.U.copy()
         #S = np.zeros(A.shape)
         n = len(x)

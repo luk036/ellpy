@@ -54,7 +54,7 @@ A_I = -np.sin(A_theta)
 # Optimal Chebyshev filter formulation.
 class my_fir_oracle:
     """Oracle for Chebyshev filter"""
-    def __call__(self, h, t):
+    def __call__(self, h, t: float):
         fmax = float('-Inf')
         for i in range(m):
             a_R = A_R[i, :]

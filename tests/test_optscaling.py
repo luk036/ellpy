@@ -52,7 +52,7 @@ def formGraph(T, pos, eta, seed=None):
         mu and eta are relative to 1/(N-1)
 
     Arguments:
-        T {[type]} -- [description]
+        t {float} -- [description]
         pos {[type]} -- [description]
         eta {[type]} -- [description]
 
@@ -134,12 +134,11 @@ def run_optscaling3(duration=0.000001):
     Returns:
         [type] -- [description]
     """
-    t = cmax - cmin
     Iv = ell1d([cmin, cmax])
     dist = list(0 for _ in G)
     Q = optscaling3_oracle(G, dist)
     P = bsearch_adaptor(Q, Iv)
-    _, bs_info = bsearch(P, [0., 1.001 * t])
+    bs_info = bsearch(P, [0., 1.001 * (cmax - cmin)])
     time.sleep(duration)
     assert bs_info.feasible
     return bs_info.num_iters

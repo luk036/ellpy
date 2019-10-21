@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import Optional, Tuple
+
+import numpy as np
+
 from .neg_cycle import negCycleFinder
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class network_oracle:
@@ -22,14 +29,14 @@ class network_oracle:
         self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
+            x {np.ndarray} -- [description]
 
         Returns:
-            [type] -- [description]
+            Optional[Cut] -- [description]
         """
         def get_weight(G, e):
             """get weight

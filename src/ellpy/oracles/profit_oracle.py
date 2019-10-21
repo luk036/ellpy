@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import numpy as np
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class profit_oracle:
@@ -22,12 +27,12 @@ class profit_oracle:
         self.v = v
         self.a = a
 
-    def __call__(self, y, t):
+    def __call__(self, y: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
             y {[type]} -- [description]
-            t {[type]} -- [description]
+            t {float} -- [description]
 
         Returns:
             [type] -- [description]
@@ -73,15 +78,15 @@ class profit_rb_oracle:
         self.e = [e1, e2]
         self.P = profit_oracle(params_rb, a, v + e5)
 
-    def __call__(self, y, t):
+    def __call__(self, y: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            y {[type]} -- [description]
-            t {[type]} -- [description]
+            y {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
@@ -114,7 +119,7 @@ class profit_q_oracle:
 
         Arguments:
             y {[type]} -- [description]
-            t {[type]} -- [description]
+            t {float} -- [description]
             retry {[type]} -- [description]
 
         Raises:

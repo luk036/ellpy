@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import Optional, Tuple
+
 import numpy as np
 
 from .chol_ext import chol_ext
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class lmi_oracle:
@@ -21,14 +26,14 @@ class lmi_oracle:
         self.F0 = B
         self.Q = chol_ext(len(self.F0))
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
+            x {np.ndarray} -- [description]
 
         Returns:
-            [type] -- [description]
+            Optional[Cut] -- [description]
         """
         n = len(x)
 

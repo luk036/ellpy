@@ -2,11 +2,14 @@
 import numpy as np
 from math import *
 from .chol_ext import *
+from typing import Tuple
+
+Cut = Tuple[np.ndarray, float]
 
 
 class rank1_oracle:
 
-    def __init__(self, N, A):
+    def __init__(self, N, A: np.ndarray):
         self.N = N
         self.i_diag = 0
         self.iD = np.zeros(N)

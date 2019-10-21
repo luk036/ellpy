@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+from typing import List, Optional, Tuple
+
 import numpy as np
 
 from .chol_ext import chol_ext
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class lmi0_oracle:
     """Oracle for Linear Matrix Inequality constraint
             F * x >= 0
     """
-    def __init__(self, F):
+    def __init__(self, F: List[np.ndarray]):
         """[summary]
 
         Arguments:
@@ -17,14 +22,14 @@ class lmi0_oracle:
         self.F = F
         self.Q = chol_ext(len(F[0]))
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
+            x {np.ndarray} -- [description]
 
         Returns:
-            [type] -- [description]
+            Optional[Cut] -- [description]
         """
         n = len(x)
 

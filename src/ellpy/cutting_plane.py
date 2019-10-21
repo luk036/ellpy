@@ -7,7 +7,6 @@ class Options:
 
 
 class CInfo:
-    val = None
     feasible: bool
     num_iters: int
     status: int
@@ -23,6 +22,7 @@ class CInfo:
         self.feasible = feasible
         self.num_iters = num_iters
         self.status = status
+        self.value: float = 0.
 
 
 def cutting_plane_feas(Omega, S, options=Options()):
@@ -82,8 +82,8 @@ def cutting_plane_dc(Omega, S, t: float, options=Options()):
         options {[type]} -- [description] (default: {Options()})
 
     Returns:
-        x_best {[type]} -- solution vector
-        t {[type]} -- best-so-far optimal value
+        x_best {float} -- solution vector
+        t {float} -- best-so-far optimal value
         niter {[type]} -- number of iterations performed
     """
     x_best = S.xc
@@ -118,7 +118,7 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
         options {[type]} -- [description] (default: {Options()})
 
     Returns:
-        x_best {[type]} -- solution vector
+        x_best {float} -- solution vector
         t {float} -- best-so-far optimal value
         niter {[type]} -- number of iterations performed
     """
@@ -193,10 +193,9 @@ def bsearch(Omega, I, options=Options()):
         if tau < options.tol:
             break
 
-    feasible = (upper != u_orig)
-    ret = CInfo(feasible, niter + 1, None)
+    ret = CInfo(upper != u_orig, niter + 1, 0)
     ret.value = upper
-    return upper, ret
+    return ret
 
 
 class bsearch_adaptor:
@@ -223,11 +222,11 @@ class bsearch_adaptor:
         """
         return self.S.xc
 
-    def __call__(self, t):
+    def __call__(self, t: float):
         """[summary]
 
         Arguments:
-            t {[type]} -- [description]
+            t {float} -- [description]
 
         Returns:
             [type] -- [description]

@@ -126,7 +126,7 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     """[summary]
 
     Arguments:
-        use_parallel_cut {[type]} -- [description]
+        use_parallel_cut {float} -- [description]
 
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})
@@ -174,7 +174,7 @@ def run_csdlowpass(use_parallel_cut, duration=0.000001):
     """[summary]
 
     Arguments:
-        use_parallel_cut {[type]} -- [description]
+        use_parallel_cut {float} -- [description]
 
     Keyword Arguments:
         duration {float} -- [description] (default: {0.000001})

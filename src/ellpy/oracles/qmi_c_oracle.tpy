@@ -11,7 +11,7 @@ class qmi_c_oracle:
         F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
     """
 
-    def __init__(self, F, F0):
+    def __init__(self, F: List[np.ndarray], F0: np.ndarray):
         self.F = F
         self.F0 = F0
         #self.B = None
@@ -22,10 +22,10 @@ class qmi_c_oracle:
         self.count = -1
         self.Q = cholutil(len(F0))
 
-    def update(self, t):
+    def update(self, t: float):
         self.t = t
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> Optional[Cut]:
         self.count = -1
         nx = len(x)
         # Fx = self.F0.copy()

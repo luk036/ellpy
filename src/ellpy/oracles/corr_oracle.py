@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import numpy as np
 from scipy.interpolate import BSpline
 
 from .halton_n import halton_n
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 def create_2d_sites(nx=10, ny=8):
@@ -154,15 +159,15 @@ class mono_decreasing_oracle2:
         """
         self.basis = basis
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         # monotonic decreasing constraint
         n = len(x)

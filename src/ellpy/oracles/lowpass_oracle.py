@@ -2,8 +2,12 @@
 from __future__ import print_function
 
 from itertools import chain
+from typing import Tuple
 
 import numpy as np
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class lowpass_oracle:

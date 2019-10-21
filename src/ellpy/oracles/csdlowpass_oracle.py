@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+from typing import Tuple
+
 import numpy as np
 from pycsd.csd import to_csdfixed, to_decimal
 
 from .spectral_fact import inverse_spectral_fact, spectral_fact
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class csdlowpass_oracle:

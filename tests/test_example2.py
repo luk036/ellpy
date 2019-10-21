@@ -41,7 +41,6 @@ def test_case_feasible():
     assert ell_info.feasible
     assert ell_info.status == 0
     print(ell_info.num_iters, ell_info.status)
-    print(ell_info.val)
 
 
 def test_case_infeasible():

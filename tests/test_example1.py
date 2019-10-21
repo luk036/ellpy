@@ -31,12 +31,12 @@ def my_oracle2(z):
     return None
 
 
-def my_oracle(z, t):
+def my_oracle(z, t: float):
     """[summary]
 
     Arguments:
         z {[type]} -- [description]
-        t {[type]} -- [description]
+        t {float} -- [description]
 
     Returns:
         [type] -- [description]

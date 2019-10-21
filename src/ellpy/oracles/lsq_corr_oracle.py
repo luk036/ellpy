@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+from typing import List, Tuple
+
 import numpy as np
 
 from .lmi0_oracle import lmi0_oracle
 from .qmi_oracle import qmi_oracle
+
+# np.ndarray = np.ndarray
+Cut = Tuple[np.ndarray, float]
 
 
 class lsq_oracle:
@@ -11,7 +16,7 @@ class lsq_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, F, F0):
+    def __init__(self, F: List[np.ndarray], F0: np.ndarray):
         """[summary]
 
         Arguments:
@@ -21,15 +26,15 @@ class lsq_oracle:
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            t {[type]} -- [description]
+            x {np.ndarray} -- [description]
+            t {float} -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- [description]
         """
         n = len(x)
         g = np.zeros(n)

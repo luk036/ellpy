@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+from typing import Optional, Tuple, Union
+
+import numpy as np
+
 from .neg_cycle import negCycleFinder
+
+# np.ndarray = np.ndarray
+Cut = Tuple[Union[np.ndarray, float], float]
 
 
 class network3_oracle:
@@ -24,15 +31,15 @@ class network3_oracle:
         self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
 
-    def update(self, t):
+    def update(self, t: float):
         """[summary]
 
         Arguments:
-            t {[type]} -- [description]
+            t {float} -- [description]
         """
         self.t = t
 
-    def __call__(self, x):
+    def __call__(self, x) -> Optional[Cut]:
         """[summary]
 
         Arguments:

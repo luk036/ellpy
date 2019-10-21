@@ -23,7 +23,7 @@ class mle_bspline_oracle:
     def __init__(self, Sig, Y, n):
         self.mle_poly = mle_poly_oracle(Sig, Y, n)
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         # n = len(x)
         # g = np.zeros(n)
 
@@ -48,7 +48,7 @@ class mle_poly_oracle:
         for i in range(n):
             self.c[i] = sum(Y[k].dot(Sig[i][k]) for k in range(N))
 
-    def __call__(self, x, t):
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         cut = self.imi(x)
         if cut:
             return cut, t
