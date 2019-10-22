@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from typing import Optional, Tuple
-
-import numpy as np
+from typing import Any, Callable, Optional, Tuple
 
 from .neg_cycle import negCycleFinder
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Cut = Tuple[Any, float]
 
 
 class network_oracle:
@@ -15,7 +12,7 @@ class network_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, G, dist, f, p):
+    def __init__(self, G, dist, f: Callable, p: Callable):
         """initization
 
         Arguments:
@@ -29,7 +26,7 @@ class network_oracle:
         self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
 
-    def __call__(self, x: np.ndarray) -> Optional[Cut]:
+    def __call__(self, x) -> Optional[Cut]:
         """[summary]
 
         Arguments:

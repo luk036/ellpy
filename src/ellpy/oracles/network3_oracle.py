@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from typing import Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Optional, Tuple
 
 from .neg_cycle import negCycleFinder
 
-# np.ndarray = np.ndarray
-Cut = Tuple[Union[np.ndarray, float], float]
+Cut = Tuple[Any, float]
 
 
 class network3_oracle:

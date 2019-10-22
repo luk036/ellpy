@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
+from typing import Any, Callable, Tuple
 
 
 class Options:
-    max_it = 2000
-    tol = 1e-8
+    max_it: int = 2000
+    tol: float = 1e-8
 
 
 class CInfo:
-    feasible: bool
-    num_iters: int
-    status: int
-
     def __init__(self, feasible: bool, num_iters: int, status: int):
         """initialize
 
@@ -19,13 +16,14 @@ class CInfo:
             num_iters {int} -- [description]
             status {int} -- [description]
         """
-        self.feasible = feasible
-        self.num_iters = num_iters
-        self.status = status
+        self.feasible: bool = feasible
+        self.num_iters: int = num_iters
+        self.status: int = status
         self.value: float = 0.
 
 
-def cutting_plane_feas(Omega, S, options=Options()):
+def cutting_plane_feas(Omega: Callable[[Any], Any],
+                       S, options=Options()) -> CInfo:
     """Find a point in a convex set (defined through a cutting-plane oracle).
 
     Description:
@@ -70,7 +68,8 @@ def cutting_plane_feas(Omega, S, options=Options()):
     return CInfo(feasible, niter + 1, status)
 
 
-def cutting_plane_dc(Omega, S, t: float, options=Options()):
+def cutting_plane_dc(Omega: Callable[[Any, float], Any], S,
+                     t: float, options=Options()) -> Tuple[Any, CInfo]:
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
@@ -82,9 +81,8 @@ def cutting_plane_dc(Omega, S, t: float, options=Options()):
         options {[type]} -- [description] (default: {Options()})
 
     Returns:
-        x_best {float} -- solution vector
-        t {float} -- best-so-far optimal value
-        niter {[type]} -- number of iterations performed
+        x_best {Any} -- solution vector
+        ret {CInfo}
     """
     x_best = S.xc
     t_orig = t
@@ -122,18 +120,6 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
         t {float} -- best-so-far optimal value
         niter {[type]} -- number of iterations performed
     """
-    '''
-    Cutting-plane method for solving convex discrete optimization problem
-    input
-             Omega        perform assessment on x0
-             S(xc)         Search space containing x*
-             t             best-so-far optimal sol'n
-             max_it        maximum number of iterations
-             tol           error tolerance
-    output
-             x             solution vector
-             niter         number of iterations performed
-    '''
     # x_last = S.xc
     x_best = S.xc  # real copy
     t_orig = t
@@ -148,7 +134,6 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
         if status == 3:
             if loop == 0:  # no more alternative cut
                 break
-            # h += g.dot(x0 - S.xc)
         if t != t1:  # best t obtained
             t = t1
             x_best = x0.copy()
@@ -165,7 +150,8 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
     return x_best, ret
 
 
-def bsearch(Omega, I, options=Options()):
+def bsearch(Omega: Callable[[float], bool], I: Tuple[float, float],
+            options=Options()) -> CInfo:
     """[summary]
 
     Arguments:

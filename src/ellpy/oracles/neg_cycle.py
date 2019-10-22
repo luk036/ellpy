@@ -3,6 +3,9 @@
 Negative cycle detection for weighed graphs.
 1. Support Lazy evalution
 """
+from typing import Callable, Optional, Union
+
+D = Union[dict, list]
 
 
 class negCycleFinder:
@@ -21,19 +24,15 @@ class negCycleFinder:
         # self.get_weight = get_weight
         # self.dist = list(0 for _ in self.G)
 
-    def find_neg_cycle(self, dist, get_weight):
-        """Perform a updating of dist and pred
+    def find_neg_cycle(self, dist: D, get_weight: Callable) -> Optional[list]:
+        """[summary]
 
         Arguments:
-            G {[type]} -- [description]
-            dist {dictionary} -- [description]
-            pred {dictionary} -- [description]
-
-        Keyword Arguments:
-            weight {str} -- [description] (default: {'weight'})
+            dist {D} -- [description]
+            get_weight {Callable} -- [description]
 
         Returns:
-            [type] -- [description]
+            Optional[list] -- [description]
         """
         self.pred = {}
         while self.__relax(dist, get_weight):
