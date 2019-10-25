@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, Optional, Tuple
-
+from typing import Any, Optional, Tuple, Callable
 from .neg_cycle import negCycleFinder
 
 Cut = Tuple[Any, float]
@@ -12,45 +11,52 @@ class network_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, G, dist, f: Callable, p: Callable):
-        """initization
+    def __init__(self, G, dist, h):
+        """[summary]
 
         Arguments:
-            G {Graph's node} -- [description]
-            f {function} -- [description]
-            p {gradient} -- [description]
+            G {[type]} -- [description]
+            f {[type]} -- [description]
+            p {[type]} -- [description]
         """
         self.G = G
         self.dist = dist
-        self.f = f
-        self.p = p  # partial derivative of f w.r.t x
+        self.h = h
         self.S = negCycleFinder(G)
+
+    def update(self, t):
+        """[summary]
+
+        Arguments:
+            t {float} -- [description]
+        """
+        self.h.update(t)
 
     def __call__(self, x) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
+            x {[type]} -- [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            [type] -- [description]
         """
         def get_weight(G, e):
-            """get weight
+            """[summary]
 
             Arguments:
-                self {[type]} -- [description]
+                G {[type]} -- [description]
                 e {[type]} -- [description]
 
             Returns:
                 [type] -- [description]
             """
-            return self.f(G, e, x)
+            return self.h.eval(G, e, x)
 
-        # self.S.get_weight = get_weight
         C = self.S.find_neg_cycle(self.dist, get_weight)
         if C is None:
             return None
-        f = -sum(self.f(self.G, e, x) for e in C)
-        g = -sum(self.p(self.G, e, x) for e in C)
+
+        f = -sum(self.h.eval(self.G, e, x) for e in C)
+        g = -sum(self.h.grad(self.G, e, x) for e in C)
         return g, f

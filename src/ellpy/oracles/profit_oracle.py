@@ -38,21 +38,21 @@ class profit_oracle:
             [type] -- [description]
         """
         fj = y[0] - self.log_k  # constraint
-        if fj > 0:
+        if fj > 0.:
             g = np.array([1., 0.])
             return (g, fj), t
 
         log_Cobb = self.log_pA + self.a @ y
-        x = np.exp(y)
-        vx = self.v @ x
+        q = self.v * np.exp(y)
+        vx = q[0] + q[1]
         te = t + vx
         fj = np.log(te) - log_Cobb
 
-        if fj < 0:
+        if fj < 0.:  # feasible
             te = np.exp(log_Cobb)
             t = te - vx
             fj = 0.
-        g = (self.v * x) / te - self.a
+        g = q / te - self.a
         return (g, fj), t
 
 
@@ -71,11 +71,11 @@ class profit_rb_oracle:
             v {[type]} -- [description]
             vparams {[type]} -- [description]
         """
-        p, A, k = params
         e1, e2, e3, e4, e5 = vparams
-        params_rb = p - e3, A, k - e4
         self.a = a
         self.e = [e1, e2]
+        p, A, k = params
+        params_rb = p - e3, A, k - e4
         self.P = profit_oracle(params_rb, a, v + e5)
 
     def __call__(self, y: np.ndarray, t: float) -> Tuple[Cut, float]:

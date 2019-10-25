@@ -150,7 +150,7 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
     return x_best, ret
 
 
-def bsearch(Omega: Callable[[float], bool], I: Tuple[float, float],
+def bsearch(Omega: Callable[[Any], bool], I: Tuple,
             options=Options()) -> CInfo:
     """[summary]
 
@@ -208,7 +208,7 @@ class bsearch_adaptor:
         """
         return self.S.xc
 
-    def __call__(self, t: float):
+    def __call__(self, t):
         """[summary]
 
         Arguments:

@@ -4,7 +4,6 @@ from __future__ import print_function
 import time
 
 import numpy as np
-
 from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q
 from ellpy.ell import ell
 from ellpy.oracles.profit_oracle import profit_oracle, profit_q_oracle, profit_rb_oracle

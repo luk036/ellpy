@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import Tuple
-
 import numpy as np
-
 from .network_oracle import network_oracle
 
 # np.ndarray = np.ndarray
@@ -21,39 +19,39 @@ class optscaling_oracle:
         Arguments:
             G {[type]} -- [description]
         """
+        class ratio:
+            def eval(self, G, e, x: np.ndarray) -> float:
+                """[summary]
 
-        def constr(G, e, x):
-            """[summary]
+                Arguments:
+                    G {[type]} -- [description]
+                    e {[type]} -- [description]
+                    x {[type]} -- [description]
 
-            Arguments:
-                G {[type]} -- [description]
-                e {[type]} -- [description]
-                x {[type]} -- [description]
+                Returns:
+                    [type] -- [description]
+                """
+                u, v = e
+                cost = G[u][v]['cost']
+                assert u != v
+                return x[0] - cost if u < v else cost - x[1]
 
-            Returns:
-                [type] -- [description]
-            """
-            u, v = e
-            cost = G[u][v]['cost']
-            assert u != v
-            return x[0] - cost if u < v else cost - x[1]
+            def grad(self, G, e, x):
+                """[summary]
 
-        def pconstr(G, e, x):
-            """[summary]
+                Arguments:
+                    G {[type]} -- [description]
+                    e {[type]} -- [description]
+                    x {[type]} -- [description]
 
-            Arguments:
-                G {[type]} -- [description]
-                e {[type]} -- [description]
-                x {[type]} -- [description]
+                Returns:
+                    [type] -- [description]
+                """
+                u, v = e
+                assert u != v
+                return np.array([1., 0.] if u < v else [0., -1.])
 
-            Returns:
-                [type] -- [description]
-            """
-            u, v = e
-            assert u != v
-            return np.array([1., 0.] if u < v else [0., -1.])
-
-        self.network = network_oracle(G, dist, constr, pconstr)
+        self.network = network_oracle(G, dist, ratio())
 
     def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
         """[summary]
