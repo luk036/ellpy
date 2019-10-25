@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+from typing import Optional, Tuple
+
 from .network_oracle import network_oracle
-from typing import Tuple, Optional
 
 Cut = Tuple[float, float]
 

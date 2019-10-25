@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Optional, Tuple, Callable
+from typing import Any, Optional, Tuple
+
 from .neg_cycle import negCycleFinder
 
 Cut = Tuple[Any, float]

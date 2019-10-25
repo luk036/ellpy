@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from typing import Tuple
+
 import numpy as np
+
 from .network_oracle import network_oracle
 
 # np.ndarray = np.ndarray
