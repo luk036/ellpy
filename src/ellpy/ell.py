@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import math
-
 import numpy as np
 
 
@@ -16,7 +15,7 @@ class ell:
     delta: float
     tsq: float
 
-    def __init__(self, val, x):
+    def __init__(self, val, x: np.ndarray):
         """ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }
 
         Arguments:
