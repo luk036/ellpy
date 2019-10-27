@@ -1,26 +1,37 @@
 # -*- coding: utf-8 -*-
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 
-from .chol_ext import chol_ext
+from .gmi_oracle import gmi_oracle
 
-# np.ndarray = np.ndarray
 Cut = Tuple[np.ndarray, float]
 
 
 class lmi0_oracle:
     """Oracle for Linear Matrix Inequality constraint
+
             F * x >= 0
     """
-    def __init__(self, F: List[np.ndarray]):
+    class __lmi0:
+        def __init__(self, F):
+            self.F = F
+
+        def eval(self, i, j, x):
+            n = len(x)
+            return sum(self.F[k][i, j] * x[k] for k in range(n))
+
+        def neg_grad_sym_quad(self, Q, x):
+            return np.array([-Q.sym_quad(Fk) for Fk in self.F])
+
+    def __init__(self, F):
         """[summary]
 
         Arguments:
             F {[type]} -- [description]
         """
-        self.F = F
-        self.Q = chol_ext(len(F[0]))
+        self.gmi = gmi_oracle(self.__lmi0(F), len(F[0]))
+        self.Q = self.gmi.Q
 
     def __call__(self, x: np.ndarray) -> Optional[Cut]:
         """[summary]
@@ -31,14 +42,4 @@ class lmi0_oracle:
         Returns:
             Optional[Cut] -- [description]
         """
-        n = len(x)
-
-        def getA(i, j):
-            return sum(self.F[k][i, j] * x[k] for k in range(n))
-
-        self.Q.factor(getA)
-        if self.Q.is_spd():
-            return None
-        ep = self.Q.witness()
-        g = np.array([-self.Q.sym_quad(self.F[i]) for i in range(n)])
-        return g, ep
+        return self.gmi(x)

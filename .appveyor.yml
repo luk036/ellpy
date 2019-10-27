@@ -19,9 +19,9 @@ environment:
       PYTHON_VERSION: "3.7.5"
       PYTHON_ARCH: "64"
 
-    - PYTHON: "C:\\Python38-x64"
-      PYTHON_VERSION: "3.8.0"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python38-x64"
+    #   PYTHON_VERSION: "3.8.0"
+    #   PYTHON_ARCH: "64"
 
 install:
   # Install Python (from the official .msi of http://python.org) and pip when
