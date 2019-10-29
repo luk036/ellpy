@@ -38,4 +38,4 @@ if __name__ == "__main__":
     ell_info = cutting_plane_feas(P, E)
     assert ell_info.feasible
     print(ell_info.num_iters, ell_info.status)
-    print(ell_info.val)
+    print(ell_info.value)

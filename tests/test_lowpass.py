@@ -59,7 +59,7 @@ def create_lowpass_case(N=48):
     """
     wpass = 0.12 * np.pi  # end of passband
     wstop = 0.20 * np.pi  # start of stopband
-    delta0_wpass = 0.125
+    delta0_wpass = 0.025
     delta0_wstop = 0.125
     # maximum passband ripple in dB (+/- around 0 dB)
     delta = 20 * np.log10(1 + delta0_wpass)
@@ -166,8 +166,8 @@ def test_lowpass():
     """
     result, feasible = run_lowpass(True)
     assert feasible
-    assert result > 400
-    assert result < 530
+    assert result >= 1170
+    assert result <= 1172
 
 
 def run_csdlowpass(use_parallel_cut, duration=0.000001):
@@ -183,7 +183,7 @@ def run_csdlowpass(use_parallel_cut, duration=0.000001):
         [type] -- [description]
     """
     N = 32
-    nnz = 8
+    nnz = 7
 
     r0 = np.zeros(N)  # initial x0
     r0[0] = 0
@@ -205,5 +205,5 @@ def test_csdlowpass():
     """
     result, feasible = run_csdlowpass(True)
     assert feasible
-    assert result > 400
-    assert result < 530
+    assert result >= 1130
+    assert result <= 1136

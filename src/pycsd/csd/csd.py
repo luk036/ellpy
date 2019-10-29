@@ -133,7 +133,7 @@ def to_csdfixed(num, nnz=4, debug=False):
     if fabs(num) < 1.0:
         n = 0
     else:
-        n = ceil(log(fabs(num) * 3.0 / 2.0, 2))
+        n = ceil(log(fabs(num) * 3.0 / 2.0, 2))  # ???
 
     csd_digits = []
 
@@ -141,7 +141,7 @@ def to_csdfixed(num, nnz=4, debug=False):
     remainder = num
     previous_non_zero = False
     n -= 1
-    nnz -= 1
+    # nnz -= 1
 
     while(n >= 0 or nnz > 0):
 
