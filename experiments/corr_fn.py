@@ -121,8 +121,8 @@ def lsq_corr_bspline2(Y, s, m):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     # import matplotlib.pylab as lab
-    s = create_2d_sites(6, 4)
-    Y = create_2d_isotropic(s, 3000)
+    s = create_2d_sites(20, 16)
+    Y = create_2d_isotropic(s, 1000)
     print('start ell...')
     spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
     pol, num_iters, _ = lsq_corr_poly2(Y, s, 5)
