@@ -13,7 +13,7 @@ class profit_oracle:
     This example is taken from [Aliabadi and Salahi, 2013]
 
         max     p(A x1^alpha x2^beta) - v1*x1 - v2*x2
-        s.t.    x1 <= k
+        s.t.    x1 ≤ k
 
     where:
 
@@ -77,14 +77,14 @@ class profit_rb_oracle:
     This example is taken from [Aliabadi and Salahi, 2013]:
 
         max     p'(A x1^alpha' x2^beta') - v1'*x1 - v2'*x2
-        s.t.    x1 <= k'
+        s.t.    x1 ≤ k'
 
     where:
-        alpha' = alpha +/- e1
-        beta' = beta +/- e2
-        p' = p +/- e3
-        k' = k +/- e4
-        v' = v +/- e5
+        alpha' = alpha ± e1
+        beta' = beta ± e2
+        p' = p ± e3
+        k' = k ± e4
+        v' = v ± e5
 
     See also:
         profit_oracle
@@ -121,7 +121,7 @@ class profit_rb_oracle:
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += self.e[i] if y[i] <= 0 else -self.e[i]
+            a_rb[i] += -self.e[i] if y[i] > 0. else self.e[i]
         self.P.a = a_rb
         return self.P(y, t)
 
@@ -129,18 +129,18 @@ class profit_rb_oracle:
 class profit_q_oracle:
     """Oracle for a decrete profit maximization problem.
 
-    This example is taken from [Aliabadi and Salahi, 2013]:
-
-        max  p'(A x1^alpha' x2^beta') - v1'*x1 - v2'*x2
-        s.t. x1 <= k'
+        max     p(A x1^alpha x2^beta) - v1*x1 - v2*x2
+        s.t.    x1 ≤ k
 
     where:
 
-        alpha' = alpha +/- e1
-        beta' = beta +/- e2
-        p' = p +/- e3
-        k' = k +/- e4
-        v' = v +/- e5
+        p(A x1^alpha x2^beta): Cobb-Douglas production function
+        p: the market price per unit
+        A: the scale of production
+        alpha, beta: the output elasticities
+        x: input quantity (must be integer value)
+        v: output price
+        k: a given constant that restricts the quantity of x1
 
     Raises:
         AssertionError -- [description]
@@ -152,9 +152,9 @@ class profit_q_oracle:
         """[summary]
 
         Arguments:
-            params {[type]} -- [description]
-            a {[type]} -- [description]
-            v {[type]} -- [description]
+            params {Tuple[float, float, float]} -- p, A, k
+            a {Arr} -- the output elasticities
+            v {Arr} -- output price
         """
         self.P = profit_oracle(params, a, v)
 
@@ -164,7 +164,7 @@ class profit_q_oracle:
         Arguments:
             y {Arr} -- input quantity (in log scale)
             t {float} -- the best-so-far optimal value
-            retry {[type]} -- [description]
+            retry {[type]} -- unused
 
         Raises:
             AssertionError -- [description]

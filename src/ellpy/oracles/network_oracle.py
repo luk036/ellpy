@@ -7,34 +7,36 @@ Cut = Tuple[Any, float]
 
 
 class network_oracle:
-    """[summary]
+    """Oracle for Parametric Network Problem:
 
-    Returns:
-        [type] -- [description]
+        find    x, u
+        s.t.    u[j] - u[i] ≤ h(e, x)
+                ∀ e(i, j) ∈ E
+
     """
-    def __init__(self, G, dist, h):
+    def __init__(self, G, u, h):
         """[summary]
 
         Arguments:
-            G {[type]} -- [description]
-            f {[type]} -- [description]
-            p {[type]} -- [description]
+            G -- a directed graph (V, E)
+            u -- list or dictionary
+            h -- function evaluation and gradient
         """
         self.G = G
-        self.dist = dist
+        self.u = u
         self.h = h
         self.S = negCycleFinder(G)
 
-    def update(self, t):
+    def update(self, t: float):
         """[summary]
 
         Arguments:
-            t {float} -- [description]
+            t {float} -- the best-so-far optimal value
         """
         self.h.update(t)
 
     def __call__(self, x) -> Optional[Cut]:
-        """[summary]
+        """Make object callable for cutting_plane_fea()
 
         Arguments:
             x {[type]} -- [description]
@@ -42,7 +44,7 @@ class network_oracle:
         Returns:
             [type] -- [description]
         """
-        def get_weight(G, e):
+        def get_weight(G, e) -> float:
             """[summary]
 
             Arguments:
@@ -50,11 +52,11 @@ class network_oracle:
                 e {[type]} -- [description]
 
             Returns:
-                [type] -- [description]
+                float -- [description]
             """
             return self.h.eval(G, e, x)
 
-        C = self.S.find_neg_cycle(self.dist, get_weight)
+        C = self.S.find_neg_cycle(self.u, get_weight)
         if C is None:
             return None
 
