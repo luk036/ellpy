@@ -148,4 +148,4 @@ def test_corr_fn():
 
     _, num_iters, feasible = mle_corr_poly(Y, s, 4)
     assert feasible
-    assert num_iters <= 221
+    assert num_iters <= 234

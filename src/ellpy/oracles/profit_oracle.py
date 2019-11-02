@@ -1,25 +1,37 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class profit_oracle:
-    """[summary]
+    """Oracle for a profit maximization problem.
 
-    Returns:
-        [type] -- [description]
+    This example is taken from [Aliabadi and Salahi, 2013]
+
+        max     p(A x1^alpha x2^beta) - v1*x1 - v2*x2
+        s.t.    x1 <= k
+
+    where:
+
+        p(A x1^alpha x2^beta): Cobb-Douglas production function
+        p: the market price per unit
+        A: the scale of production
+        alpha, beta: the output elasticities
+        x: input quantity
+        v: output price
+        k: a given constant that restricts the quantity of x1
     """
-    def __init__(self, params, a, v):
+    def __init__(self, params: Tuple[float, float, float], a: Arr, v: Arr):
         """[summary]
 
         Arguments:
-            params {[type]} -- [description]
-            a {[type]} -- [description]
-            v {[type]} -- [description]
+            params {Tuple[float, float, float]} -- p, A, k
+            a {Arr} -- the output elasticities
+            v {Arr} -- output price
         """
         p, A, k = params
         self.log_pA = np.log(p * A)
@@ -27,15 +39,18 @@ class profit_oracle:
         self.v = v
         self.a = a
 
-    def __call__(self, y: np.ndarray, t: float) -> Tuple[Cut, float]:
-        """[summary]
+    def __call__(self, y: Arr, t: float) -> Tuple[Cut, float]:
+        """Make object callable for cutting_plane_dc()
 
         Arguments:
-            y {[type]} -- [description]
-            t {float} -- [description]
+            y {Arr} -- input quantity (in log scale)
+            t {float} -- the best-so-far optimal value
 
         Returns:
-            [type] -- [description]
+            Tuple[Cut, float] -- Cut and the updated best-so-far value
+
+        See also:
+            cutting_plane_dc
         """
         fj = y[0] - self.log_k  # constraint
         if fj > 0.:
@@ -57,19 +72,32 @@ class profit_oracle:
 
 
 class profit_rb_oracle:
-    """[summary]
+    """Oracle for a robust profit maximization problem.
 
-    Returns:
-        [type] -- [description]
+    This example is taken from [Aliabadi and Salahi, 2013]:
+
+        max     p'(A x1^alpha' x2^beta') - v1'*x1 - v2'*x2
+        s.t.    x1 <= k'
+
+    where:
+        alpha' = alpha +/- e1
+        beta' = beta +/- e2
+        p' = p +/- e3
+        k' = k +/- e4
+        v' = v +/- e5
+
+    See also:
+        profit_oracle
     """
-    def __init__(self, params, a, v, vparams):
+    def __init__(self, params: Tuple[float, float, float], a: Arr,
+                 v: Arr, vparams: Tuple[float, float, float, float, float]):
         """[summary]
 
         Arguments:
-            params {[type]} -- [description]
-            a {[type]} -- [description]
-            v {[type]} -- [description]
-            vparams {[type]} -- [description]
+            params {Tuple[float, float, float]} -- p, A, k
+            a {Arr} -- the output elasticities
+            v {Arr} -- output price
+            vparams {Tuple} -- paramters for uncertainty
         """
         e1, e2, e3, e4, e5 = vparams
         self.a = a
@@ -78,15 +106,18 @@ class profit_rb_oracle:
         params_rb = p - e3, A, k - e4
         self.P = profit_oracle(params_rb, a, v + e5)
 
-    def __call__(self, y: np.ndarray, t: float) -> Tuple[Cut, float]:
-        """[summary]
+    def __call__(self, y: Arr, t: float) -> Tuple[Cut, float]:
+        """Make object callable for cutting_plane_dc()
 
         Arguments:
-            y {np.ndarray} -- [description]
-            t {float} -- [description]
+            y {Arr} -- input quantity (in log scale)
+            t {float} -- the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float] -- Cut and the updated best-so-far value
+
+        See also:
+            cutting_plane_dc
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
@@ -96,13 +127,26 @@ class profit_rb_oracle:
 
 
 class profit_q_oracle:
-    """[summary]
+    """Oracle for a decrete profit maximization problem.
+
+    This example is taken from [Aliabadi and Salahi, 2013]:
+
+        max  p'(A x1^alpha' x2^beta') - v1'*x1 - v2'*x2
+        s.t. x1 <= k'
+
+    where:
+
+        alpha' = alpha +/- e1
+        beta' = beta +/- e2
+        p' = p +/- e3
+        k' = k +/- e4
+        v' = v +/- e5
 
     Raises:
         AssertionError -- [description]
 
-    Returns:
-        [type] -- [description]
+    See also:
+        profit_oracle
     """
     def __init__(self, params, a, v):
         """[summary]
@@ -115,18 +159,21 @@ class profit_q_oracle:
         self.P = profit_oracle(params, a, v)
 
     def __call__(self, y, t, retry):
-        """[summary]
+        """Make object callable for cutting_plane_q()
 
         Arguments:
-            y {[type]} -- [description]
-            t {float} -- [description]
+            y {Arr} -- input quantity (in log scale)
+            t {float} -- the best-so-far optimal value
             retry {[type]} -- [description]
 
         Raises:
             AssertionError -- [description]
 
         Returns:
-            [type] -- [description]
+            Tuple -- Cut, t, and the actual evaluation point
+
+        See also:
+            cutting_plane_q
         """
         x = np.round(np.exp(y))
         if x[0] == 0:
