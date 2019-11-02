@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import time
-
 import networkx as nx
 import numpy as np
 
-from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
-from ellpy.ell import ell, ell1d
-from ellpy.oracles.optscaling3_oracle import optscaling3_oracle
+from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.ell import ell
 from ellpy.oracles.optscaling_oracle import optscaling_oracle
 
 
@@ -102,7 +99,7 @@ cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))
 
 
-def run_optscaling(duration=0.000001):
+def test_optscaling():
     """[summary]
 
     Keyword Arguments:
@@ -117,48 +114,8 @@ def run_optscaling(duration=0.000001):
     dist = list(0 for _ in G)
     P = optscaling_oracle(G, dist)
     _, ell_info = cutting_plane_dc(P, E, float('inf'))
-    time.sleep(duration)
     # fmt = '{:f} {} {} {}'
     # print(np.exp(xb))
     # print(fmt.format(np.exp(fb), niter, feasible, status))
     assert ell_info.feasible
     return ell_info.num_iters
-
-
-def run_optscaling3(duration=0.000001):
-    """[summary]
-
-    Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
-
-    Returns:
-        [type] -- [description]
-    """
-    Iv = ell1d([cmin, cmax])
-    dist = list(0 for _ in G)
-    Q = optscaling3_oracle(G, dist)
-    P = bsearch_adaptor(Q, Iv)
-    bs_info = bsearch(P, [0., 1.001 * (cmax - cmin)])
-    time.sleep(duration)
-    assert bs_info.feasible
-    return bs_info.num_iters
-
-
-def test_two_variables(benchmark):
-    """[summary]
-
-    Arguments:
-        benchmark {[type]} -- [description]
-    """
-    result = benchmark(run_optscaling)
-    assert result == 24
-
-
-def test_binary_search(benchmark):
-    """[summary]
-
-    Arguments:
-        benchmark {[type]} -- [description]
-    """
-    result = benchmark(run_optscaling3)
-    assert result == 27

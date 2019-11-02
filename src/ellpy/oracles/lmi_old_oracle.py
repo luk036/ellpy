@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
 from .chol_ext import chol_ext
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class lmi_old_oracle:
@@ -27,7 +27,7 @@ class lmi_old_oracle:
         self.A = np.zeros(B.shape)
         self.Q = chol_ext(len(B))
 
-    def __call__(self, x: np.ndarray) -> Optional[Cut]:
+    def __call__(self, x: Arr) -> Optional[Cut]:
         """[summary]
 
         Arguments:

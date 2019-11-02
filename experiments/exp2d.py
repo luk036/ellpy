@@ -15,10 +15,10 @@ nx = 80   # number of points
 ny = 64
 n = nx*ny
 s_end = [10., 8.]
-sdkern = 0.5  # width of kernel
+sdkern = 0.25  # width of kernel
 var = 2.     # standard derivation
 tau = 0.00001    # standard derivation of white noise
-N = 100  # number of samples
+N = 4  # number of samples
 
 # create sites s
 sx = np.linspace(0, s_end[0], nx)
@@ -31,7 +31,7 @@ Sig = np.ones((n, n))
 for i in range(n):
     for j in range(i, n):
         d = np.array(s[j]) - np.array(s[i])
-        Sig[i, j] = np.exp(-sdkern * np.dot(d, d))
+        Sig[i, j] = np.exp(-sdkern * np.sqrt(np.dot(d, d)))
         Sig[j, i] = Sig[i, j]
 
 A = linalg.sqrtm(Sig)
@@ -45,13 +45,13 @@ for k in range(N):
 Y = np.cov(Ys, bias=True)
 
 plt.subplot(2, 2, 1)
-lab.contourf(xx, yy, np.reshape(Ys[:, 1], (ny, nx)), cmap='Greens')
+lab.contourf(xx, yy, np.reshape(Ys[:, 0], (ny, nx)), cmap='Greens')
 plt.subplot(2, 2, 2)
-lab.contourf(xx, yy, np.reshape(Ys[:, 3], (ny, nx)), cmap='Greens')
+lab.contourf(xx, yy, np.reshape(Ys[:, 1], (ny, nx)), cmap='Greens')
 plt.subplot(2, 2, 3)
-lab.contourf(xx, yy, np.reshape(Ys[:, 5], (ny, nx)), cmap='Greens')
+lab.contourf(xx, yy, np.reshape(Ys[:, 2], (ny, nx)), cmap='Greens')
 plt.subplot(2, 2, 4)
-lab.contourf(xx, yy, np.reshape(Ys[:, 7], (ny, nx)), cmap='Greens')
+lab.contourf(xx, yy, np.reshape(Ys[:, 3], (ny, nx)), cmap='Greens')
 plt.show()
 
 

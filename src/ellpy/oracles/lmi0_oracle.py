@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
-from .gmi_oracle import gmi_oracle
+from .chol_ext import chol_ext
 
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class lmi0_oracle:
@@ -13,33 +14,32 @@ class lmi0_oracle:
 
             F * x >= 0
     """
-    class __lmi0:
-        def __init__(self, F):
-            self.F = F
-
-        def eval(self, i, j, x):
-            n = len(x)
-            return sum(self.F[k][i, j] * x[k] for k in range(n))
-
-        def neg_grad_sym_quad(self, Q, x):
-            return np.array([-Q.sym_quad(Fk) for Fk in self.F])
-
     def __init__(self, F):
         """[summary]
 
         Arguments:
             F {[type]} -- [description]
         """
-        self.gmi = gmi_oracle(self.__lmi0(F), len(F[0]))
-        self.Q = self.gmi.Q
+        self.F = F
+        self.Q = chol_ext(len(F[0]))
 
-    def __call__(self, x: np.ndarray) -> Optional[Cut]:
+    def __call__(self, x: Arr) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
+            x {Arr} -- [description]
 
         Returns:
             Optional[Cut] -- [description]
         """
-        return self.gmi(x)
+        def getA(i, j):
+            n = len(x)
+            return sum(self.F[k][i, j] * x[k] for k in range(n))
+
+        self.Q.factor(getA)
+        if self.Q.is_spd():
+            return None
+
+        ep = self.Q.witness()
+        g = np.array([-self.Q.sym_quad(Fk) for Fk in self.F])
+        return g, ep

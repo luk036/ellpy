@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 from scipy.interpolate import BSpline
 
 from .halton_n import halton_n
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray, float]
+Cut = Tuple[Arr, float]
 
 
-def create_2d_sites(nx=10, ny=8):
+def create_2d_sites(nx=10, ny=8) -> Arr:
     """[summary]
 
     Keyword Arguments:
         nx {int} -- [description] (default: {10})
         ny {int} -- [description] (default: {8})
-        N {int} -- [description] (default: {3000})
 
     Returns:
-        [type] -- [description]
+        Arr -- [description]
     """
     n = nx * ny
     s_end = [10., 8.]
@@ -28,19 +27,9 @@ def create_2d_sites(nx=10, ny=8):
     return s
 
 
-def create_2d_isotropic(s, N=3000):
-    """[summary]
-
-    Keyword Arguments:
-        nx {int} -- [description] (default: {10})
-        ny {int} -- [description] (default: {8})
-        N {int} -- [description] (default: {3000})
-
-    Returns:
-        [type] -- [description]
-    """
+def create_2d_isotropic(s, N=3000) -> Arr:
     n = s.shape[0]
-    sdkern = 0.3  # width of kernel
+    sdkern = 0.1  # width of kernel
     var = 2.  # standard derivation
     tau = 0.00001  # standard derivation of white noise
     np.random.seed(5)
@@ -49,7 +38,7 @@ def create_2d_isotropic(s, N=3000):
     for i in range(n):
         for j in range(i, n):
             d = np.array(s[j]) - np.array(s[i])
-            Sig[i, j] = np.exp(-sdkern * np.sqrt(d @ d))
+            Sig[i, j] = np.exp(-sdkern * d @ d)
             Sig[j, i] = Sig[i, j]
 
     A = np.linalg.cholesky(Sig)
