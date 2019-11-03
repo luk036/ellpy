@@ -11,9 +11,10 @@ Cut = Tuple[Arr, float]
 
 class lmi_oracle:
     """Oracle for Linear Matrix Inequality constraint
-            F * x <= B
-       or
-            (B - F * x) must be a semidefinte matrix
+
+        find  x
+        s.t.​  (B - F*x) ⪰ 0
+
     """
     def __init__(self, F, B):
         """[summary]

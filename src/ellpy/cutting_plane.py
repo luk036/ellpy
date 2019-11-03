@@ -212,7 +212,7 @@ class bsearch_adaptor:
         """[summary]
 
         Arguments:
-            t {float} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             [type] -- [description]

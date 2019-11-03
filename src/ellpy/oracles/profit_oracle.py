@@ -12,15 +12,15 @@ class profit_oracle:
 
     This example is taken from [Aliabadi and Salahi, 2013]
 
-        max     p(A x1^alpha x2^beta) - v1*x1 - v2*x2
+        max     p(A x1^α x2^β) - v1*x1 - v2*x2
         s.t.    x1 ≤ k
 
     where:
 
-        p(A x1^alpha x2^beta): Cobb-Douglas production function
+        p(A x1^α x2^β): Cobb-Douglas production function
         p: the market price per unit
         A: the scale of production
-        alpha, beta: the output elasticities
+        α, β: the output elasticities
         x: input quantity
         v: output price
         k: a given constant that restricts the quantity of x1
@@ -76,12 +76,13 @@ class profit_rb_oracle:
 
     This example is taken from [Aliabadi and Salahi, 2013]:
 
-        max     p'(A x1^alpha' x2^beta') - v1'*x1 - v2'*x2
+        max     p'(A x1^α' x2^β') - v1'*x1 - v2'*x2
         s.t.    x1 ≤ k'
 
     where:
-        alpha' = alpha ± e1
-        beta' = beta ± e2
+
+        α' = α ± e1
+        β' = β ± e2
         p' = p ± e3
         k' = k ± e4
         v' = v ± e5
@@ -129,15 +130,15 @@ class profit_rb_oracle:
 class profit_q_oracle:
     """Oracle for a decrete profit maximization problem.
 
-        max     p(A x1^alpha x2^beta) - v1*x1 - v2*x2
+        max     p(A x1^α x2^β) - v1*x1 - v2*x2
         s.t.    x1 ≤ k
 
     where:
 
-        p(A x1^alpha x2^beta): Cobb-Douglas production function
+        p(A x1^α x2^β): Cobb-Douglas production function
         p: the market price per unit
         A: the scale of production
-        alpha, beta: the output elasticities
+        α, β: the output elasticities
         x: input quantity (must be integer value)
         v: output price
         k: a given constant that restricts the quantity of x1

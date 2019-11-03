@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 
 from .lmi0_oracle import lmi0_oracle
 from .qmi_oracle import qmi_oracle
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class lsq_oracle:
@@ -16,7 +16,7 @@ class lsq_oracle:
     Returns:
         [type] -- [description]
     """
-    def __init__(self, F: List[np.ndarray], F0: np.ndarray):
+    def __init__(self, F: List[Arr], F0: Arr):
         """[summary]
 
         Arguments:
@@ -26,12 +26,12 @@ class lsq_oracle:
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
-            t {float} -- [description]
+            x {Arr} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float] -- [description]

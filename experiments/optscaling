@@ -51,7 +51,7 @@ def formGraph(T, pos, eta, seed=None):
         mu and eta are relative to 1/(N-1)
 
     Arguments:
-        t {float} -- [description]
+        t {float} -- the best-so-far optimal value
         pos {[type]} -- [description]
         eta {[type]} -- [description]
 

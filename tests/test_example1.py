@@ -36,7 +36,7 @@ def my_oracle(z, t: float):
 
     Arguments:
         z {[type]} -- [description]
-        t {float} -- [description]
+        t {float} -- the best-so-far optimal value
 
     Returns:
         [type] -- [description]

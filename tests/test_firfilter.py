@@ -55,7 +55,7 @@ class my_oracle:
 
         Arguments:
             h {[type]} -- [description]
-            t {float} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             [type] -- [description]

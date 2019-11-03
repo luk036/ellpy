@@ -36,13 +36,13 @@ class network_oracle:
         self.h.update(t)
 
     def __call__(self, x) -> Optional[Cut]:
-        """Make object callable for cutting_plane_fea()
+        """Make object callable for cutting_plane_feas()
 
         Arguments:
             x {[type]} -- [description]
 
         Returns:
-            [type] -- [description]
+            Optional[Cut] -- [description]
         """
         def get_weight(G, e) -> float:
             """[summary]

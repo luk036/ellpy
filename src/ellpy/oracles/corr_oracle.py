@@ -148,12 +148,12 @@ class mono_decreasing_oracle2:
         """
         self.basis = basis
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
-            t {float} -- [description]
+            x {Arr} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float] -- [description]

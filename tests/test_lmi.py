@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import time
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -11,8 +11,8 @@ from ellpy.ell import ell
 from ellpy.oracles.lmi_old_oracle import lmi_old_oracle
 from ellpy.oracles.lmi_oracle import lmi_oracle
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class my_oracle:
@@ -33,12 +33,12 @@ class my_oracle:
         self.lmi1 = oracle(F1, B1)
         self.lmi2 = oracle(F2, B2)
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
-            t {float} -- [description]
+            x {Arr} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float] -- [description]

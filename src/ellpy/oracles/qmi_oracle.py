@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
 from .gmi_oracle import gmi_oracle
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 # import cholutil
 
@@ -14,14 +14,18 @@ Cut = Tuple[np.ndarray, float]
 class qmi_oracle:
     class QMI:
         """Oracle for Quadratic Matrix Inequality
-            F(x).T * F(x) <= I*t
-         where
-            F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
+
+              find  x
+              s.t.​  t*I - F(x)^T F(x) ⪰ 0
+
+            where
+
+              F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
         """
         t = None
         count = 0
 
-        def __init__(self, F: List[np.ndarray], F0: np.ndarray):
+        def __init__(self, F: List[Arr], F0: Arr):
             """[summary]
 
             Arguments:
@@ -37,11 +41,11 @@ class qmi_oracle:
             """[summary]
 
             Arguments:
-                t {float} -- [description]
+                t {float} -- the best-so-far optimal value
             """
             self.t = t
 
-        def eval(self, i, j, x: np.ndarray):
+        def eval(self, i, j, x: Arr) -> float:
             if i < j:
                 raise AssertionError()
             if self.count < i + 1:
@@ -54,7 +58,7 @@ class qmi_oracle:
                 a += self.t
             return a
 
-        def neg_grad_sym_quad(self, Q, x):
+        def neg_grad_sym_quad(self, Q, x: Arr):
             s, n = Q.p
             v = Q.v[s:n]
             Av = v.dot(self.Fx[s:n])
@@ -77,15 +81,15 @@ class qmi_oracle:
         """[summary]
 
         Arguments:
-            t {float} -- [description]
+            t {float} -- the best-so-far optimal value
         """
         self.qmi.update(t)
 
-    def __call__(self, x: np.ndarray) -> Optional[Cut]:
+    def __call__(self, x: Arr) -> Optional[Cut]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
+            x {Arr} -- [description]
 
         Returns:
             Optional[Cut] -- [description]

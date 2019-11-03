@@ -12,7 +12,9 @@ Cut = Tuple[Arr, float]
 class lmi0_oracle:
     """Oracle for Linear Matrix Inequality constraint
 
-            F * x >= 0
+        find  x
+        s.t.​  F * x ⪰ 0
+
     """
     def __init__(self, F):
         """[summary]

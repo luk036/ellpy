@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # import cvxpy as cvx
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -8,8 +8,8 @@ from .corr_oracle import mono_oracle
 from .lmi0_oracle import lmi0_oracle
 from .lmi_oracle import lmi_oracle
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class mle_oracle:
@@ -26,12 +26,12 @@ class mle_oracle:
         self.lmi = lmi_oracle(Sig, 2 * Y)
         # self.lmi2 = lmi2_oracle(Sig, 2*Y)
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
-            t {float} -- [description]
+            x {Arr} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float] -- [description]
@@ -77,12 +77,12 @@ class mono_decreasing_oracle:
         """
         self.basis = basis
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
-            t {float} -- [description]
+            x {Arr} -- [description]
+            t {float} -- the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float] -- [description]
