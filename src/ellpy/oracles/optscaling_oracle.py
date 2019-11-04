@@ -21,11 +21,18 @@ class optscaling_oracle:
                 π, ψ, u, positive
     """
     class ratio:
-        def eval(self, G, e, x: Arr) -> float:
+        def __init__(self, G):
             """[summary]
 
             Arguments:
                 G {[type]} -- [description]
+            """
+            self.G = G
+
+        def eval(self, e, x: Arr) -> float:
+            """[summary]
+
+            Arguments:
                 e {[type]} -- [description]
                 x {Arr} -- (π, ψ) in log scale
 
@@ -33,15 +40,14 @@ class optscaling_oracle:
                 float -- function evaluation
             """
             u, v = e
-            cost = G[u][v]['cost']
+            cost = self.G[u][v]['cost']
             assert u != v
             return x[0] - cost if u < v else cost - x[1]
 
-        def grad(self, G, e, x: Arr) -> Arr:
+        def grad(self, e, x: Arr) -> Arr:
             """[summary]
 
             Arguments:
-                G {[type]} -- [description]
                 e {[type]} -- [description]
                 x {Arr} -- (π, ψ) in log scale
 
@@ -58,7 +64,7 @@ class optscaling_oracle:
         Arguments:
             G {[type]} -- [description]
         """
-        self.network = network_oracle(G, u, self.ratio())
+        self.network = network_oracle(G, u, self.ratio(G))
 
     def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
         """Make object callable for cutting_plane_dc()

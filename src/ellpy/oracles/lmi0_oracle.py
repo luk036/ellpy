@@ -20,7 +20,7 @@ class lmi0_oracle:
         """[summary]
 
         Arguments:
-            F {[type]} -- [description]
+            F {List[Arr]} -- [description]
         """
         self.F = F
         self.Q = chol_ext(len(F[0]))

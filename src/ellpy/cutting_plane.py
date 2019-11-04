@@ -28,9 +28,9 @@ def cutting_plane_feas(Omega: Callable[[Any], Any],
 
     Description:
         A function f(x) is *convex* if there always exist a g(x)
-        such that f(z) >= f(x) + g(x)^T * (z - x), forall z, x in dom f.
+        such that f(z) >= f(x) + g(x)' * (z - x), forall z, x in dom f.
         Note that dom f does not need to be a convex set in our definition.
-        The affine function g^T (x - xc) + beta is called a cutting-plane,
+        The affine function g' (x - xc) + beta is called a cutting-plane,
         or a ``cut'' for short.
         This algorithm solves the following feasibility problem:
 

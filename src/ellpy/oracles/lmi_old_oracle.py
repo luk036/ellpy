@@ -19,8 +19,8 @@ class lmi_old_oracle:
         """[summary]
 
         Arguments:
-            F {[type]} -- [description]
-            B {[type]} -- [description]
+            F {List[Arr]} -- [description]
+            B {Arr} -- [description]
         """
         self.F = F
         self.F0 = B

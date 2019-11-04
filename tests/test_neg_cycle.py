@@ -48,7 +48,7 @@ def do_case(G, dist):
     Returns:
         [type] -- [description]
     """
-    def get_weight(G, e):
+    def get_weight(e):
         """[summary]
 
         Arguments:

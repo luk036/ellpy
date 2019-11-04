@@ -44,22 +44,21 @@ class network_oracle:
         Returns:
             Optional[Cut] -- [description]
         """
-        def get_weight(G, e) -> float:
+        def get_weight(e) -> float:
             """[summary]
 
             Arguments:
-                G {[type]} -- [description]
                 e {[type]} -- [description]
 
             Returns:
                 float -- [description]
             """
-            return self.h.eval(G, e, x)
+            return self.h.eval(e, x)
 
         C = self.S.find_neg_cycle(self.u, get_weight)
         if C is None:
             return None
 
-        f = -sum(self.h.eval(self.G, e, x) for e in C)
-        g = -sum(self.h.grad(self.G, e, x) for e in C)
+        f = -sum(self.h.eval(e, x) for e in C)
+        g = -sum(self.h.grad(e, x) for e in C)
         return g, f

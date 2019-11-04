@@ -2,12 +2,12 @@
 from __future__ import print_function
 
 from itertools import chain
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class lowpass_oracle:
@@ -23,7 +23,7 @@ class lowpass_oracle:
     i_Ap = 0
     count = 0
 
-    def __init__(self, Ap, As, Anr, Lpsq, Upsq):
+    def __init__(self, Ap: Arr, As: Arr, Anr: Arr, Lpsq, Upsq):
         """[summary]
 
         Arguments:
@@ -39,12 +39,12 @@ class lowpass_oracle:
         self.Lpsq = Lpsq
         self.Upsq = Upsq
 
-    def __call__(self, x, Spsq):
+    def __call__(self, x: Arr, Spsq: float):
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
-            Spsq {[type]} -- [description]
+            x {Arr} -- coefficients of autocorrelation
+            Spsq {float} -- the best-so-far Sp^2
 
         Returns:
             [type] -- [description]
@@ -115,7 +115,7 @@ class lowpass_oracle:
 
         # Begin objective function
         Spsq = fmax
-        # f = (0., fmax)
-        f = 0.
+        f = (0., fmax)
+        # f = 0.
         g = self.As[imax, :]
         return (g, f), Spsq

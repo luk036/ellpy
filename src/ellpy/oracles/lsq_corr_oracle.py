@@ -13,6 +13,15 @@ Cut = Tuple[Arr, float]
 class lsq_oracle:
     """[summary]
 
+        min   ‖ F0 − F(x) ‖
+        s.t.  F(x) ⪰ 0
+
+        where
+
+            F(x) = F1 x1 + ··· + Fn xn
+
+            {Fk}i,j = Ψk(‖sj − si‖^2)
+
     Returns:
         [type] -- [description]
     """
@@ -20,8 +29,8 @@ class lsq_oracle:
         """[summary]
 
         Arguments:
-            F {[type]} -- [description]
-            F0 {[type]} -- [description]
+            F {List[Arr]} -- [description]
+            F0 {Arr} -- [description]
         """
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)

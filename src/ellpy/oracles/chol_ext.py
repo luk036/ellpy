@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 import math
+from typing import Union
 
 import numpy as np
+
+Arr = Union[np.ndarray]
 
 
 class chol_ext:
     """Cholesky factorization for LMI
 
-       - LDLT square-root-free version
+       - LDL^T square-root-free version
        - Option allow semidefinite
-       - A matrix $A in R^{m x m}$ is positive definite iff v^T A v > 0
+       - A matrix $A in R^{m x m}$ is positive definite iff v' A v > 0
            for all v in R^n.
-       - O($p^2 n$) per iteration, independent of $m$
+       - O(p^2 n) per iteration, independent of N
 
         Member variables:
             p {integer} -- the rows where the process starts and stops
-            v {nd.array} -- witness
+            v {Arr} -- witness
             n {integer} -- dimension
     """
     allow_semidefinite = False
@@ -31,7 +34,7 @@ class chol_ext:
         self.n = N
         self.T = np.zeros((N, N))
 
-    def factorize(self, A: np.ndarray):
+    def factorize(self, A: Arr):
         """Perform Cholesky Factorization
 
         Arguments:
@@ -78,7 +81,7 @@ class chol_ext:
         """witness that certifies $A$ is not symmetric positive definite (spd)
             (square-root-free version)
 
-           evidence $v^T A v = ep$
+           evidence: v' A v = -ep
 
         Raises:
             AssertionError -- $A$ indeeds a spd matrix
@@ -96,7 +99,7 @@ class chol_ext:
             self.v[i - 1] = -(self.T[i - 1, i:n] @ self.v[i:n])
         return -self.T[m, m]
 
-    def sym_quad(self, A: np.ndarray):
+    def sym_quad(self, A: Arr):
         """[summary]
 
         Arguments:

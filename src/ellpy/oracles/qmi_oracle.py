@@ -16,7 +16,7 @@ class qmi_oracle:
         """Oracle for Quadratic Matrix Inequality
 
               find  x
-              s.t.​  t*I - F(x)^T F(x) ⪰ 0
+              s.t.​  t*I - F(x)' F(x) ⪰ 0
 
             where
 
@@ -29,8 +29,8 @@ class qmi_oracle:
             """[summary]
 
             Arguments:
-                F {[type]} -- [description]
-                F0 {[type]} -- [description]
+                F {List[Arr]} -- [description]
+                F0 {Arr} -- [description]
             """
             self.F = F
             self.F0 = F0
@@ -69,8 +69,8 @@ class qmi_oracle:
         """[summary]
 
         Arguments:
-            F {[type]} -- [description]
-            F0 {[type]} -- [description]
+            F {List[Arr]} -- [description]
+            F0 {Arr} -- [description]
         """
         n, m = F0.shape
         self.qmi = self.QMI(F, F0)

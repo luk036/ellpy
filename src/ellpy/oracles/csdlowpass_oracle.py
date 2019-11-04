@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 from pycsd.csd import to_csdfixed, to_decimal
 
 from .spectral_fact import inverse_spectral_fact, spectral_fact
 
-# np.ndarray = np.ndarray
-Cut = Tuple[np.ndarray, float]
+Arr = Union[np.ndarray]
+Cut = Tuple[Arr, float]
 
 
 class csdlowpass_oracle:
@@ -28,13 +28,13 @@ class csdlowpass_oracle:
         self.nnz = nnz
         self.lowpass = lowpass
 
-    def __call__(self, r, Spsq, retry):
+    def __call__(self, r: Arr, Spsq, retry: int):
         """[summary]
 
         Arguments:
-            r {[type]} -- [description]
+            r {Arr} -- [description]
             Spsq {[type]} -- [description]
-            retry {[type]} -- [description]
+            retry {int} -- [description]
 
         Returns:
             [type] -- [description]

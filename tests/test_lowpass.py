@@ -166,7 +166,7 @@ def test_lowpass():
     """
     result, feasible = run_lowpass(True)
     assert feasible
-    assert result >= 1170
+    assert result >= 1090
     assert result <= 1194
 
 
@@ -205,5 +205,5 @@ def test_csdlowpass():
     """
     result, feasible = run_csdlowpass(True)
     assert feasible
-    assert result >= 1122
+    assert result >= 1051
     assert result <= 1136
