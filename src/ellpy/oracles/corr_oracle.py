@@ -6,7 +6,7 @@ from scipy.interpolate import BSpline
 
 from .halton_n import halton_n
 
-Arr = Union[np.ndarray, float]
+Arr = Union[np.ndarray]
 Cut = Tuple[Arr, float]
 
 
