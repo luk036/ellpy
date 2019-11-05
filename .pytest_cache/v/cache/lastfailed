@@ -1,4 +1,5 @@
 {
   "pycsd/test/test_decimal.py::test__integer_conversion::testToCSD": true,
-  "tests/test_lmi.py::testcase": true
+  "tests/test_lmi.py::testcase": true,
+  "tests/test_lowpass.py::test_csdlowpass": true
 }

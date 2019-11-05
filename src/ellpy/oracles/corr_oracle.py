@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 import numpy as np
 from scipy.interpolate import BSpline
@@ -11,14 +11,14 @@ Cut = Tuple[Arr, float]
 
 
 def create_2d_sites(nx=10, ny=8) -> Arr:
-    """[summary]
+    """Create a 2d sites object
 
     Keyword Arguments:
         nx {int} -- [description] (default: {10})
         ny {int} -- [description] (default: {8})
 
     Returns:
-        Arr -- [description]
+        Arr -- location of sites
     """
     n = nx * ny
     s_end = [10., 8.]
@@ -27,9 +27,20 @@ def create_2d_sites(nx=10, ny=8) -> Arr:
     return s
 
 
-def create_2d_isotropic(s, N=3000) -> Arr:
+def create_2d_isotropic(s: Arr, N=3000) -> Arr:
+    """Create a 2d isotropic object
+    
+    Arguments:
+        s {Arr} -- location of sites
+    
+    Keyword Arguments:
+        N {int} -- [description] (default: {3000})
+    
+    Returns:
+        Arr -- Biased covariance matrix
+    """
     n = s.shape[0]
-    sdkern = 0.1  # width of kernel
+    sdkern = 0.12  # width of kernel
     var = 2.  # standard derivation
     tau = 0.00001  # standard derivation of white noise
     np.random.seed(5)
@@ -53,11 +64,11 @@ def create_2d_isotropic(s, N=3000) -> Arr:
     return Y
 
 
-def construct_distance_matrix(s):
-    """[summary]
+def construct_distance_matrix(s: Arr) -> Arr:
+    """Construct a distance matrix object
 
     Arguments:
-        s {[type]} -- [description]
+        s {Arr} -- location of sites
 
     Returns:
         [type] -- [description]
@@ -73,14 +84,15 @@ def construct_distance_matrix(s):
     return D1
 
 
-def construct_poly_matrix(s, m):
-    """[summary]
+def construct_poly_matrix(s: Arr, m) -> List[Arr]:
+    """Construct distance matrix for polynomial
 
     Arguments:
-        s {[type]} -- [description]
+        s {Arr} -- location of sites
+        m {int} -- degree of polynomial
 
     Returns:
-        [type] -- [description]
+        List[Arr] -- [description]
     """
     n = len(s)
     D1 = construct_distance_matrix(s)
@@ -89,7 +101,6 @@ def construct_poly_matrix(s, m):
     for _ in range(m - 1):
         D = np.multiply(D, D1)
         Sig += [D]
-
     return Sig
 
 

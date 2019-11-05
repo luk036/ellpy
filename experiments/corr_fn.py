@@ -135,7 +135,7 @@ if __name__ == "__main__":
     # polcvx  = lsq_corr_poly(Y, s, 5)
 
     # h = s[-1] - s[0]
-    d = 1.1 * np.sqrt(10**2 + 8**2)
+    d = np.sqrt(10**2 + 8**2)
     xs = np.linspace(0, d, 100)
     plt.plot(xs, spl(xs), 'g', label='BSpline')
     # plt.plot(xs, splcvx(xs), 'b', label='BSpline CVX')

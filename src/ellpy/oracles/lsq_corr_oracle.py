@@ -16,11 +16,16 @@ class lsq_oracle:
         min   ‖ F0 − F(x) ‖
         s.t.  F(x) ⪰ 0
 
-        where
+    Transform the problem into:
 
-            F(x) = F1 x1 + ··· + Fn xn
+        min   t
+        s.t.  x[n+1] ≤ t
+              x[n+1]*I - F(x)' F(x) ⪰ 0
 
-            {Fk}i,j = Ψk(‖sj − si‖^2)
+    where
+        F(x) = F[1] x[1] + ··· + F[n] x[n]
+
+        {Fk}i,j = Ψk(‖sj − si‖^2)
 
     Returns:
         [type] -- [description]
