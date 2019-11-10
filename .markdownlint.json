@@ -1,0 +1,9 @@
+{
+    "default": true,
+    "MD003": { "style": "setext_with_atx" },
+    "MD007": { "indent": 4 },
+    "MD013": { "line_length": 500 },
+    "MD026": { "punctuation" : ",;:!" },
+    "MD030": { "ul_single": 3, "ol_single": 2, "ul_multi": 3, "ol_multi": 2 },
+    "no-hard-tabs": false
+}

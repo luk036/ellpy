@@ -31,7 +31,7 @@ Sig = np.ones((n, n))
 for i in range(n):
     for j in range(i, n):
         d = np.array(s[j]) - np.array(s[i])
-        Sig[i, j] = np.exp(-sdkern * np.sqrt(np.dot(d, d)))
+        Sig[i, j] = np.exp(-sdkern * np.dot(d, d))
         Sig[j, i] = Sig[i, j]
 
 A = linalg.sqrtm(Sig)

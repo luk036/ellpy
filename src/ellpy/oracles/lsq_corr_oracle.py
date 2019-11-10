@@ -25,7 +25,7 @@ class lsq_oracle:
     where
         F(x) = F[1] x[1] + ··· + F[n] x[n]
 
-        {Fk}i,j = Ψk(‖sj − si‖^2)
+        {Fk}i,j = Ψk(‖sj − si‖)
 
     Returns:
         [type] -- [description]

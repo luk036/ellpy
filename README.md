@@ -1,4 +1,5 @@
-# ellpy
+ellpy
+=====
 
 [![Build Status](https://travis-ci.org/luk036/ellpy.svg?branch=master)](https://travis-ci.org/luk036/ellpy)
 [![Build status](https://ci.appveyor.com/api/projects/status/0v1cf05tcueny7d9?svg=true)](https://ci.appveyor.com/project/luk036/ellpy)
@@ -9,3 +10,22 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/luk036/ellpy?branch=master)](https://bettercodehub.com/)
 
 ellipsoid method python code
+
+Features
+--------
+
+-   At most one square-root per iteration.
+-   Include oracles for Matrix Inequalities and Network problems.
+-   Suport Parallel-Cuts.
+
+See also
+--------
+
+-   [ellcpp](https://github.com/luk036/ellcpp)
+-   [Presentation Slides](https://luk036.github.io/cvx)
+
+Note
+----
+
+This project has been set up using PyScaffold 3.2.1. For details and usage
+information on PyScaffold see <https://pyscaffold.org/>.

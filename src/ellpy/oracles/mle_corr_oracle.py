@@ -13,12 +13,15 @@ Cut = Tuple[Arr, float]
 
 
 class mle_oracle:
-    def __init__(self, Sig, Y):
-        """[summary]
+    def __init__(self, Sig: Arr, Y: Arr):
+        """Maximum likelyhood estimation:
+
+            min  ​log det Ω(p) + Tr( Ω(p)^{−1} Y )
+            ​s.t.​ 2Y ⪰ Ω(p) ⪰ 0,​
 
         Arguments:
-            Sig {[type]} -- [description]
-            Y {[type]} -- [description]
+            Sig {Arr} -- Covariance matrix
+            Y {Arr} -- Biased covariance matrix
         """
         self.Y = Y
         self.Sig = Sig
@@ -30,7 +33,7 @@ class mle_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
+            x {Arr} -- coefficients of basis functions
             t {float} -- the best-so-far optimal value
 
         Returns:
@@ -52,7 +55,7 @@ class mle_oracle:
         f1 = 2 * np.sum(np.log(diag)) + np.trace(SY)
 
         f = f1 - t
-        if f < 0:
+        if f < 0.:
             t = f1
             f = 0.
 

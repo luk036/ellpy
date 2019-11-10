@@ -3,7 +3,11 @@ import cvxpy as cvx
 import numpy as np
 from scipy.interpolate import BSpline
 
-from ellpy.oracles.corr_oracle import construct_distance_matrix
+from ellpy.oracles.corr_oracle import (
+    construct_distance_matrix,
+    create_2d_isotropic,
+    create_2d_sites
+)
 
 # function [sp, tau2, Sig]
 
@@ -92,3 +96,29 @@ def lsq_corr_bspline(Y, s, n):
     if prob.status != cvx.OPTIMAL:
         raise Exception('CVXPY Error')
     return BSpline(t, np.array(c.value).flatten(), k)
+
+
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    # import matplotlib.pylab as lab
+    s = create_2d_sites(10, 8)
+    Y = create_2d_isotropic(s, 1000)
+    # print('start ell...')
+    # spl, num_iters, _ = lsq_corr_bspline(Y, s, 5)
+    # pol, num_iters, _ = lsq_corr_poly(Y, s, 5)
+    # # pol, num_iters, _ = mle_corr_poly(Y, s, 4)
+    # print(pol)
+    # print(num_iters)
+    print('start cvx...')
+    splcvx = lsq_corr_bspline(Y, s, 5)
+    polcvx = lsq_corr_poly(Y, s, 5)
+
+    # h = s[-1] - s[0]
+    d = np.sqrt(10**2 + 8**2)
+    xs = np.linspace(0, d, 100)
+    # plt.plot(xs, spl(xs), 'g', label='BSpline')
+    plt.plot(xs, splcvx(xs), 'b', label='BSpline CVX')
+    # plt.plot(xs, np.polyval(pol, xs), 'r', label='Polynomial')
+    plt.plot(xs, np.polyval(polcvx, xs), 'r', label='Polynomial CVX')
+    plt.legend(loc='best')
+    plt.show()
