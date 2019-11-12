@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import Union
+
 import cvxpy as cvx
 import numpy as np
 from scipy.interpolate import BSpline
@@ -9,16 +11,16 @@ from ellpy.oracles.corr_oracle import (
     create_2d_sites
 )
 
-# function [sp, tau2, Sig]
+Arr = Union[np.ndarray]
 
 
-def lsq_corr_poly(Y, s, n):
+def lsq_corr_poly(Y: Arr, s: Arr, n: int):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        n {[type]} -- [description]
+        Y {Arr} -- [description]
+        s {Arr} -- [description]
+        n {int} -- [description]
 
     Raises:
         Exception -- [description]
@@ -50,13 +52,13 @@ def lsq_corr_poly(Y, s, n):
 #  return prob.is_dcp()
 
 
-def lsq_corr_bspline(Y, s, n):
+def lsq_corr_bspline(Y: Arr, s: Arr, n: int):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        n {[type]} -- [description]
+        Y {Arr} -- [description]
+        s {Arr} -- [description]
+        n {int} -- [description]
 
     Raises:
         Exception -- [description]
