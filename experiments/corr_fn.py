@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+from typing import Callable, Union
+
 import numpy as np
 
 from ellpy.cutting_plane import cutting_plane_dc
@@ -13,23 +15,25 @@ from ellpy.oracles.corr_oracle import (
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
 
+Arr = Union[np.ndarray]
 
-def lsq_corr_core2(Y, m, P):
+
+def lsq_corr_core2(Y: Arr, n: int, P: Callable):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        m {[type]} -- [description]
-        P {[type]} -- [description]
+        Y {Arr} -- [description]
+        n {int} -- [description]
+        P {Callable} -- [description]
 
     Returns:
         [type] -- [description]
     """
     normY = np.linalg.norm(Y, 'fro')
     normY2 = 32 * normY * normY
-    val = 256 * np.ones(m + 1)
+    val = 256 * np.ones(n + 1)
     val[-1] = normY2 * normY2
-    x = np.zeros(m + 1)  # cannot all zeros
+    x = np.zeros(n + 1)  # cannot all zeros
     x[0] = 1.
     x[-1] = normY2 / 2
     E = ell(val, x)
@@ -37,32 +41,32 @@ def lsq_corr_core2(Y, m, P):
     return xb[:-1], ell_info.num_iters, ell_info.feasible
 
 
-def lsq_corr_poly2(Y, s, m):
+def lsq_corr_poly2(Y, s, n):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
+        Y {Arr} -- [description]
+        s {Arr} -- [description]
+        n {int} -- [description]
 
     Returns:
         [type] -- [description]
     """
-    return corr_poly(Y, s, m, lsq_oracle, lsq_corr_core2)
+    return corr_poly(Y, s, n, lsq_oracle, lsq_corr_core2)
 
 
-def mle_corr_core(Y, m, P):
+def mle_corr_core(Y: Arr, n: int, P: Callable):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        m {[type]} -- [description]
-        P {[type]} -- [description]
+        Y {Arr} -- [description]
+        n {int} -- [description]
+        P {Callable} -- [description]
 
     Returns:
         [type] -- [description]
     """
-    x = np.zeros(m)
+    x = np.zeros(n)
     x[0] = 1.
     E = ell(50., x)
     # E.use_parallel_cut = False

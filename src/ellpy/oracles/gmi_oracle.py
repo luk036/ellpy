@@ -44,9 +44,7 @@ class gmi_oracle:
             return self.H.eval(i, j, x)
 
         self.Q.factor(getA)
-        if self.Q.is_spd():
-            return None
-        ep = self.Q.witness()
-
-        g = self.H.neg_grad_sym_quad(self.Q, x)
-        return g, ep
+        if not self.Q.is_spd():
+            ep = self.Q.witness()
+            g = self.H.neg_grad_sym_quad(self.Q, x)
+            return g, ep

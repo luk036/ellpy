@@ -39,9 +39,7 @@ class lmi0_oracle:
             return sum(self.F[k][i, j] * x[k] for k in range(n))
 
         self.Q.factor(getA)
-        if self.Q.is_spd():
-            return None
-
-        ep = self.Q.witness()
-        g = np.array([-self.Q.sym_quad(Fk) for Fk in self.F])
-        return g, ep
+        if not self.Q.is_spd():
+            ep = self.Q.witness()
+            g = np.array([-self.Q.sym_quad(Fk) for Fk in self.F])
+            return g, ep

@@ -51,5 +51,3 @@ class lmi2_oracle:
             fj = f + self.Q.sym_quad(self.U)
             g = np.array([-self.Q.sym_quad(self.F[i]) for i in range(n)])
             return g, (f, fj)
-
-        return None

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union, List
+from typing import List, Tuple, Union
 
 import numpy as np
 from scipy.interpolate import BSpline
@@ -29,13 +29,13 @@ def create_2d_sites(nx=10, ny=8) -> Arr:
 
 def create_2d_isotropic(s: Arr, N=3000) -> Arr:
     """Create a 2d isotropic object
-    
+
     Arguments:
         s {Arr} -- location of sites
-    
+
     Keyword Arguments:
         N {int} -- [description] (default: {3000})
-    
+
     Returns:
         Arr -- Biased covariance matrix
     """
@@ -142,7 +142,6 @@ def mono_oracle(x):
             g[i] = -1.
             g[i + 1] = 1.
             return g, fj
-    return None
 
 
 class mono_decreasing_oracle2:

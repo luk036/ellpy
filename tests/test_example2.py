@@ -28,8 +28,6 @@ def my_oracle2(z):
     if fj > 0:
         return np.array([-1., 1.]), fj
 
-    return None
-
 
 def test_case_feasible():
     """[summary]
