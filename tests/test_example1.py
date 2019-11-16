@@ -11,10 +11,10 @@ def my_oracle2(z):
     """[summary]
 
     Arguments:
-        z {[type]} -- [description]
+        z ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x, y = z
 
@@ -33,11 +33,11 @@ def my_oracle(z, t: float):
     """[summary]
 
     Arguments:
-        z {[type]} -- [description]
-        t {float} -- the best-so-far optimal value
+        z ([type]): [description]
+        t (float): the best-so-far optimal value
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     cut = my_oracle2(z)
     if cut:

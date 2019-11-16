@@ -10,7 +10,7 @@ def print_case(l1):
     """[summary]
 
     Arguments:
-          l1 {[type]} -- [description]
+          l1 ([type]): [description]
     """
     m1 = np.array(l1)
     Q = chol_ext(len(m1))

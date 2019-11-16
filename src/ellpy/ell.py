@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import math
+from typing import Union
+
 import numpy as np
+
+Arr = Union[np.ndarray]
 
 
 class ell:
@@ -15,12 +19,12 @@ class ell:
     delta: float
     tsq: float
 
-    def __init__(self, val, x: np.ndarray):
-        """ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }
+    def __init__(self, val: Union[Arr, float], x: Arr):
+        """ell = { x | (x - xc)' * Q^-1 * (x - xc) <= kappa }
 
         Arguments:
-            val {[type]} -- [description]
-            x {ndarray} -- [description]
+            val (Union[Arr, float]): [description]
+            x (Arr): [description]
         """
         self._n = n = len(x)
         self.c1 = float(n * n) / (n * n - 1)
@@ -36,7 +40,7 @@ class ell:
         """[summary]
 
         Returns:
-            ell -- [description]
+            ell: [description]
         """
         E = ell(self.kappa, self.xc)
         E.Q = self.Q.copy()
@@ -50,7 +54,7 @@ class ell:
         """[summary]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         return self._xc
 
@@ -59,7 +63,7 @@ class ell:
         """[summary]
 
         Arguments:
-            x {[type]} -- [description]
+            x ([type]): [description]
         """
         self._xc = x
 
@@ -68,7 +72,7 @@ class ell:
         """[summary]
 
         Returns:
-            bool -- [description]
+            bool: [description]
         """
         return self._use_parallel_cut
 
@@ -77,7 +81,7 @@ class ell:
         """[summary]
 
         Arguments:
-            b {bool} -- [description]
+            b (bool): [description]
         """
         self._use_parallel_cut = b
 
@@ -85,10 +89,10 @@ class ell:
         """[summary]
 
         Arguments:
-            cut {float} -- [description]
+            cut (float): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         return self.update_core(self.__calc_ll, cut)
 
@@ -100,12 +104,12 @@ class ell:
             Note: At most one square-root per iteration.
 
         Arguments:
-            calc_ell {[type]} -- [description]
-            cut {float} -- [description]
+            calc_ell ([type]): [description]
+            cut (float): [description]
 
         Returns:
-            status -- 0: success
-            tau -- "volumn" of ellipsoid
+            status: 0: success
+            tau: "volumn" of ellipsoid
         """
         g, beta = cut
         Qg = self.Q.dot(g)  # n^2 multiplications
@@ -129,10 +133,10 @@ class ell:
         """parallel or deep cut
 
         Arguments:
-            beta {[type]} -- [description]
+            beta ([type]): [description]
 
         Returns:
-            int -- [description]
+            int: [description]
         """
         if np.isscalar(beta):
             return self.__calc_dc(beta)
@@ -144,11 +148,11 @@ class ell:
         """[summary]
 
         Arguments:
-            b0 {float} -- [description]
-            b1 {float} -- [description]
+            b0 (float): [description]
+            b1 (float): [description]
 
         Returns:
-            int -- [description]
+            int: [description]
         """
         b1sq = b1**2
         if b1sq > self.tsq or not self.use_parallel_cut:
@@ -179,8 +183,8 @@ class ell:
         """parallel central cut
 
         Arguments:
-            b1 {float} -- [description]
-            b1sq {float} -- [description]
+            b1 (float): [description]
+            b1sq (float): [description]
         """
         n = self._n
         xi = math.sqrt(4 * self.tsq * (self.tsq - b1sq) + (n * b1sq)**2)
@@ -192,10 +196,10 @@ class ell:
         """Deep cut
 
         Arguments:
-            beta {float} -- [description]
+            beta (float): [description]
 
         Returns:
-            int -- [description]
+            int: [description]
         """
         tau = math.sqrt(self.tsq)
         if beta > tau:
@@ -217,7 +221,7 @@ class ell:
         """Central cut
 
         Arguments:
-            tau {float} -- [description]
+            tau (float): [description]
         """
         np1 = self._n + 1
         self.sigma = 2. / np1
@@ -233,7 +237,7 @@ class ell1d:
         """[summary]
 
         Arguments:
-            I {[type]} -- [description]
+            I ([type]): [description]
         """
         l, u = I
         self._r = (u - l) / 2
@@ -243,7 +247,7 @@ class ell1d:
         """[summary]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         E = ell1d([self._xc - self._r, self._xc + self._r])
         return E
@@ -253,7 +257,7 @@ class ell1d:
         """[summary]
 
         Returns:
-            float -- [description]
+            float: [description]
         """
         return self._xc
 
@@ -262,7 +266,7 @@ class ell1d:
         """[summary]
 
         Arguments:
-            x {float} -- [description]
+            x (float): [description]
         """
         self._xc = x
 
@@ -271,12 +275,12 @@ class ell1d:
                 g' * (x - xc) + beta <= 0
 
         Arguments:
-            g {floay} -- cut
-            beta {array or scalar} -- [description]
+            g (floay): cut
+            beta (array or scalar): [description]
 
         Returns:
-            status -- 0: success
-            tau -- "volumn" of ellipsoid
+            status: 0: success
+            tau: "volumn" of ellipsoid
         """
         g, beta = cut
         tau = abs(self._r * g)

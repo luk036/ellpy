@@ -13,7 +13,7 @@ class negCycleFinder:
         """[summary]
 
         Arguments:
-            G {[type]} -- [description]
+            G ([type]): [description]
 
         Keyword Arguments:
             get_weight (default: {default_get_weight})
@@ -28,11 +28,11 @@ class negCycleFinder:
         """[summary]
 
         Arguments:
-            dist {D} -- [description]
-            get_weight {Callable} -- [description]
+            dist (D): [description]
+            get_weight (Callable): [description]
 
         Returns:
-            Optional[list] -- [description]
+            Optional[list]: [description]
         """
         self.pred = {}
         while self.__relax(dist, get_weight):
@@ -49,10 +49,10 @@ class negCycleFinder:
 
         Arguments:
             G {NetworkX graph}
-            pred {dictionary} -- policy graph
+            pred (dictionary): policy graph
 
         Returns:
-            handle -- a start node of the cycle
+            handle: a start node of the cycle
         """
         # N = self.G.number_of_nodes()
         # visited = list(N for _ in self.G)
@@ -79,15 +79,15 @@ class negCycleFinder:
         """Perform a updating of dist and pred
 
         Arguments:
-            G {NetworkX graph} -- [description]
-            dist {dictionary} -- [description]
-            pred {dictionary} -- [description]
+            G (NetworkX graph): [description]
+            dist (dictionary): [description]
+            pred (dictionary): [description]
 
         Keyword Arguments:
-            weight {str} -- [description]
+            weight (str): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         changed = False
         for e in self.G.edges():
@@ -104,10 +104,10 @@ class negCycleFinder:
         """[summary]
 
         Arguments:
-            handle {[type]} -- [description]
+            handle ([type]): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         v = handle
         cycle = list()
@@ -123,10 +123,10 @@ class negCycleFinder:
         """[summary]
 
         Arguments:
-            handle {[type]} -- [description]
+            handle ([type]): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         v = handle
         # do while loop in C++

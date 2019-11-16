@@ -29,8 +29,8 @@ class qmi_oracle:
             """[summary]
 
             Arguments:
-                F {List[Arr]} -- [description]
-                F0 {Arr} -- [description]
+                F (List[Arr]): [description]
+                F0 (Arr): [description]
             """
             self.F = F
             self.F0 = F0
@@ -41,7 +41,7 @@ class qmi_oracle:
             """[summary]
 
             Arguments:
-                t {float} -- the best-so-far optimal value
+                t (float): the best-so-far optimal value
             """
             self.t = t
 
@@ -69,8 +69,8 @@ class qmi_oracle:
         """[summary]
 
         Arguments:
-            F {List[Arr]} -- [description]
-            F0 {Arr} -- [description]
+            F (List[Arr]): [description]
+            F0 (Arr): [description]
         """
         n, m = F0.shape
         self.qmi = self.QMI(F, F0)
@@ -81,7 +81,7 @@ class qmi_oracle:
         """[summary]
 
         Arguments:
-            t {float} -- the best-so-far optimal value
+            t (float): the best-so-far optimal value
         """
         self.qmi.update(t)
 
@@ -89,10 +89,10 @@ class qmi_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
+            x (Arr): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         self.qmi.count = 0
         return self.gmi(x)

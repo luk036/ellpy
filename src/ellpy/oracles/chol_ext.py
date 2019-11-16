@@ -17,9 +17,9 @@ class chol_ext:
        - O(p^2 n) per iteration, independent of N
 
         Member variables:
-            p {integer} -- the rows where the process starts and stops
-            v {Arr} -- witness
-            n {integer} -- dimension
+            p (integer): the rows where the process starts and stops
+            v (Arr): witness
+            n (integer): dimension
     """
     allow_semidefinite = False
     p = (0, 0)
@@ -28,7 +28,7 @@ class chol_ext:
         """initialization
 
         Arguments:
-            N {integer} -- dimension
+            N (integer): dimension
         """
         self.v = np.zeros(N)
         self.n = N
@@ -38,7 +38,7 @@ class chol_ext:
         """Perform Cholesky Factorization
 
         Arguments:
-            A {np.array} -- Symmetric Matrix
+            A (np.array): Symmetric Matrix
 
          If $A$ is positive definite, then $p$ is zero.
          If it is not, then $p$ is a positive integer,
@@ -51,7 +51,7 @@ class chol_ext:
         """Perform Cholesky Factorization (square-root free version)
 
         Arguments:
-            getA {callable} -- function to access symmetric matrix
+            getA (callable): function to access symmetric matrix
         """
         T = self.T
         start = 0  # range start
@@ -73,7 +73,7 @@ class chol_ext:
         """Is $A$ symmetric positive definite (spd)
 
         Returns:
-            bool -- True if $A$ is a spd
+            bool: True if $A$ is a spd
         """
         return self.p == (0, 0)
 
@@ -84,11 +84,11 @@ class chol_ext:
            evidence: v' A v = -ep
 
         Raises:
-            AssertionError -- $A$ indeeds a spd matrix
+            AssertionError: $A$ indeeds a spd matrix
 
         Returns:
-            array -- v
-            float -- ep
+            array: v
+            float: ep
         """
         if self.is_spd():
             raise AssertionError()
@@ -103,11 +103,11 @@ class chol_ext:
         """[summary]
 
         Arguments:
-            v {[type]} -- [description]
-            A {[type]} -- [description]
+            v ([type]): [description]
+            A ([type]): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         s, n = self.p
         v = self.v[s:n]

@@ -52,10 +52,10 @@ def create_lowpass_case(N=48):
     """[summary]
 
     Keyword Arguments:
-        N {int} -- [description] (default: {48})
+        N (int): [description] (default: {48})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     wpass = 0.12 * np.pi  # end of passband
     wstop = 0.20 * np.pi  # start of stopband
@@ -111,11 +111,11 @@ def create_csdlowpass_case(N=48, nnz=8):
     """[summary]
 
     Keyword Arguments:
-        N {int} -- [description] (default: {48})
-        nnz {int} -- [description] (default: {8})
+        N (int): [description] (default: {48})
+        nnz (int): [description] (default: {8})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     P, Spsq = create_lowpass_case(N)
     Pcsd = csdlowpass_oracle(nnz, P)
@@ -126,13 +126,13 @@ def run_lowpass(use_parallel_cut, duration=0.000001):
     """[summary]
 
     Arguments:
-        use_parallel_cut {float} -- [description]
+        use_parallel_cut (float): [description]
 
     Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
+        duration (float): [description] (default: {0.000001})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     N = 32
 
@@ -174,13 +174,13 @@ def run_csdlowpass(use_parallel_cut, duration=0.000001):
     """[summary]
 
     Arguments:
-        use_parallel_cut {float} -- [description]
+        use_parallel_cut (float): [description]
 
     Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
+        duration (float): [description] (default: {0.000001})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     N = 32
     nnz = 7

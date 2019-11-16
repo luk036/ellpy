@@ -14,11 +14,11 @@ def create_2d_sites(nx=10, ny=8) -> Arr:
     """Create a 2d sites object
 
     Keyword Arguments:
-        nx {int} -- [description] (default: {10})
-        ny {int} -- [description] (default: {8})
+        nx (int): [description] (default: {10})
+        ny (int): [description] (default: {8})
 
     Returns:
-        Arr -- location of sites
+        Arr: location of sites
     """
     n = nx * ny
     s_end = [10., 8.]
@@ -31,13 +31,13 @@ def create_2d_isotropic(s: Arr, N=3000) -> Arr:
     """Create a 2d isotropic object
 
     Arguments:
-        s {Arr} -- location of sites
+        s (Arr): location of sites
 
     Keyword Arguments:
-        N {int} -- [description] (default: {3000})
+        N (int): [description] (default: {3000})
 
     Returns:
-        Arr -- Biased covariance matrix
+        Arr: Biased covariance matrix
     """
     n = s.shape[0]
     sdkern = 0.12  # width of kernel
@@ -68,10 +68,10 @@ def construct_distance_matrix(s: Arr) -> Arr:
     """Construct a distance matrix object
 
     Arguments:
-        s {Arr} -- location of sites
+        s (Arr): location of sites
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     n = len(s)
     D1 = np.zeros((n, n))
@@ -88,11 +88,11 @@ def construct_poly_matrix(s: Arr, m) -> List[Arr]:
     """Construct distance matrix for polynomial
 
     Arguments:
-        s {Arr} -- location of sites
-        m {int} -- degree of polynomial
+        s (Arr): location of sites
+        m (int): degree of polynomial
 
     Returns:
-        List[Arr] -- [description]
+        List[Arr]: [description]
     """
     n = len(s)
     D1 = construct_distance_matrix(s)
@@ -108,14 +108,14 @@ def corr_poly(Y, s, m, oracle, corr_core):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
-        oracle {[type]} -- [description]
-        corr_core {[type]} -- [description]
+        Y ([type]): [description]
+        s ([type]): [description]
+        m ([type]): [description]
+        oracle ([type]): [description]
+        corr_core ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     Sig = construct_poly_matrix(s, m)
     P = oracle(Sig, Y)
@@ -128,10 +128,10 @@ def mono_oracle(x):
     """[summary]
 
     Arguments:
-        x {[type]} -- [description]
+        x ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     # monotonic decreasing constraint
     n = len(x)
@@ -148,13 +148,13 @@ class mono_decreasing_oracle2:
     """[summary]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     def __init__(self, basis):
         """[summary]
 
         Arguments:
-            basis {[type]} -- [description]
+            basis ([type]): [description]
         """
         self.basis = basis
 
@@ -162,11 +162,11 @@ class mono_decreasing_oracle2:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
-            t {float} -- the best-so-far optimal value
+            x (Arr): [description]
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float]: [description]
         """
         # monotonic decreasing constraint
         n = len(x)
@@ -184,14 +184,14 @@ def corr_bspline(Y, s, m, oracle, corr_core):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
-        oracle {[type]} -- [description]
-        corr_core {[type]} -- [description]
+        Y ([type]): [description]
+        s ([type]): [description]
+        m ([type]): [description]
+        oracle ([type]): [description]
+        corr_core ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     Sig, t, k = generate_bspline_info(s, m)
     Pb = oracle(Sig, Y)
@@ -204,11 +204,11 @@ def generate_bspline_info(s, m):
     """[summary]
 
     Arguments:
-        s {[type]} -- [description]
-        m {[type]} -- [description]
+        s ([type]): [description]
+        m ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     k = 2  # quadratic bspline
     h = s[-1] - s[0]

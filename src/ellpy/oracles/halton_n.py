@@ -7,12 +7,12 @@ def halton_n(k, n, b):
     """Generate base-b Halton sequence 0,..,k
 
     Arguments:
-        k {int} -- maximum sequence index, non-negative integer
-        n {int} -- [description]
-        b {list(int)} -- sequence base, integer exceeding 1
+        k (int): maximum sequence index, non-negative integer
+        n (int): [description]
+        b (list(int)): sequence base, integer exceeding 1
 
     Returns:
-        {list(float)} -- base-b low discrepancy sequence
+        (list(float)): base-b low discrepancy sequence
     """
     if n == 1:
         for s in vdcorput(k, b[0]):

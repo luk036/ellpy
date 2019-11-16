@@ -12,9 +12,9 @@ class CInfo:
         """initialize
 
         Arguments:
-            feasible {bool} -- [description]
-            num_iters {int} -- [description]
-            status {int} -- [description]
+            feasible (bool): [description]
+            num_iters (int): [description]
+            status (int): [description]
         """
         self.feasible: bool = feasible
         self.num_iters: int = num_iters
@@ -41,15 +41,15 @@ def cutting_plane_feas(Omega: Callable[[Any], Any],
         or provide a cut that separates the feasible region and x0.
 
     Arguments:
-        Omega {[type]} -- perform assessment on x0
-        S {[type]} -- Initial search space known to contain x*
+        Omega ([type]): perform assessment on x0
+        S ([type]): Initial search space known to contain x*
 
     Keyword Arguments:
-        options {[type]} -- [description] (default: {Options()})
+        options ([type]): [description] (default: {Options()})
 
     Returns:
-        x -- solution vector
-        niter -- number of iterations performed
+        x: solution vector
+        niter: number of iterations performed
     """
     feasible = False
     status = 0
@@ -73,15 +73,15 @@ def cutting_plane_dc(Omega: Callable[[Any, float], Any], S,
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
-        Omega {[type]} -- perform assessment on x0
-        S {[type]} -- Search Space containing x*
-        t {float} -- initial best-so-far value
+        Omega ([type]): perform assessment on x0
+        S ([type]): Search Space containing x*
+        t (float): initial best-so-far value
 
     Keyword Arguments:
-        options {[type]} -- [description] (default: {Options()})
+        options ([type]): [description] (default: {Options()})
 
     Returns:
-        x_best {Any} -- solution vector
+        x_best (Any): solution vector
         ret {CInfo}
     """
     x_best = S.xc
@@ -108,17 +108,17 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
     """Cutting-plane method for solving convex discrete optimization problem
 
     Arguments:
-        Omega {[type]} -- perform assessment on x0
-        S {[type]} -- Search Space containing x*
-        t {float} -- initial best-so-far value
+        Omega ([type]): perform assessment on x0
+        S ([type]): Search Space containing x*
+        t (float): initial best-so-far value
 
     Keyword Arguments:
-        options {[type]} -- [description] (default: {Options()})
+        options ([type]): [description] (default: {Options()})
 
     Returns:
-        x_best {float} -- solution vector
-        t {float} -- best-so-far optimal value
-        niter {[type]} -- number of iterations performed
+        x_best (float): solution vector
+        t (float): best-so-far optimal value
+        niter ([type]): number of iterations performed
     """
     # x_last = S.xc
     x_best = S.xc  # real copy
@@ -155,14 +155,14 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
     """[summary]
 
     Arguments:
-        Omega {[type]} -- [description]
-        I {[type]} -- interval (initial search space)
+        Omega ([type]): [description]
+        I ([type]): interval (initial search space)
 
     Keyword Arguments:
-        options {[type]} -- [description] (default: {Options()})
+        options ([type]): [description] (default: {Options()})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     # assume monotone
     # feasible = False
@@ -189,11 +189,11 @@ class bsearch_adaptor:
         """[summary]
 
         Arguments:
-            P {[type]} -- [description]
-            S {[type]} -- [description]
+            P ([type]): [description]
+            S ([type]): [description]
 
         Keyword Arguments:
-            options {[type]} -- [description] (default: {Options()})
+            options ([type]): [description] (default: {Options()})
         """
         self.P = P
         self.S = S
@@ -204,7 +204,7 @@ class bsearch_adaptor:
         """[summary]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         return self.S.xc
 
@@ -212,10 +212,10 @@ class bsearch_adaptor:
         """[summary]
 
         Arguments:
-            t {float} -- the best-so-far optimal value
+            t (float): the best-so-far optimal value
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         S = self.S.copy()
         self.P.update(t)

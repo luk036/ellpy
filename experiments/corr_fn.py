@@ -22,12 +22,12 @@ def lsq_corr_core2(Y: Arr, n: int, P: Callable):
     """[summary]
 
     Arguments:
-        Y {Arr} -- [description]
-        n {int} -- [description]
-        P {Callable} -- [description]
+        Y (Arr): [description]
+        n (int): [description]
+        P (Callable): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     normY = np.linalg.norm(Y, 'fro')
     normY2 = 32 * normY * normY
@@ -45,12 +45,12 @@ def lsq_corr_poly2(Y, s, n):
     """[summary]
 
     Arguments:
-        Y {Arr} -- [description]
-        s {Arr} -- [description]
-        n {int} -- [description]
+        Y (Arr): [description]
+        s (Arr): [description]
+        n (int): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     return corr_poly(Y, s, n, lsq_oracle, lsq_corr_core2)
 
@@ -59,12 +59,12 @@ def mle_corr_core(Y: Arr, n: int, P: Callable):
     """[summary]
 
     Arguments:
-        Y {Arr} -- [description]
-        n {int} -- [description]
-        P {Callable} -- [description]
+        Y (Arr): [description]
+        n (int): [description]
+        P (Callable): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x = np.zeros(n)
     x[0] = 1.
@@ -82,12 +82,12 @@ def mle_corr_poly(Y, s, m):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
+        Y ([type]): [description]
+        s ([type]): [description]
+        m ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     _ = np.linalg.cholesky(Y)  # test if Y is SPD.
     return corr_poly(Y, s, m, mle_oracle, mle_corr_core)
@@ -97,12 +97,12 @@ def mle_corr_bspline(Y, s, m):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
+        Y ([type]): [description]
+        s ([type]): [description]
+        m ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     _ = np.linalg.cholesky(Y)  # test if Y is SPD.
     return corr_bspline(Y, s, m, mle_oracle, mle_corr_core)
@@ -112,12 +112,12 @@ def lsq_corr_bspline2(Y, s, m):
     """[summary]
 
     Arguments:
-        Y {[type]} -- [description]
-        s {[type]} -- [description]
-        m {[type]} -- [description]
+        Y ([type]): [description]
+        s ([type]): [description]
+        m ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     return corr_bspline(Y, s, m, lsq_oracle, lsq_corr_core2)
 

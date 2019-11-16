@@ -15,13 +15,13 @@ def vdc(n, base=2):
     """[summary]
 
     Arguments:
-        n {[type]} -- [description]
+        n ([type]): [description]
 
     Keyword Arguments:
-        base {int} -- [description] (default: {2})
+        base (int): [description] (default: {2})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     vdc, denom = 0., 1.
     while n:
@@ -35,13 +35,13 @@ def vdcorput(n, base=2):
     """[summary]
 
     Arguments:
-        n {int} -- number of vectors
+        n (int): number of vectors
 
     Keyword Arguments:
-        base {int} -- [description] (default: {2})
+        base (int): [description] (default: {2})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     return [vdc(i, base) for i in range(n)]
 
@@ -51,15 +51,15 @@ def formGraph(T, pos, eta, seed=None):
         mu and eta are relative to 1/(N-1)
 
     Arguments:
-        t {float} -- the best-so-far optimal value
-        pos {[type]} -- [description]
-        eta {[type]} -- [description]
+        t (float): the best-so-far optimal value
+        pos ([type]): [description]
+        eta ([type]): [description]
 
     Keyword Arguments:
-        seed {[type]} -- [description] (default: {None})
+        seed ([type]): [description] (default: {None})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     if seed:
         np.random.seed(seed)

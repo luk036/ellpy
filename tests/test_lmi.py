@@ -20,7 +20,7 @@ class my_oracle:
         """[summary]
 
         Arguments:
-            oracle {[type]} -- [description]
+            oracle ([type]): [description]
         """
         self.c = np.array([1., -1., 1.])
         F1 = np.array([[[-7., -11.], [-11., 3.]], [[7., -18.], [-18., 8.]],
@@ -37,11 +37,11 @@ class my_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
-            t {float} -- the best-so-far optimal value
+            x (Arr): [description]
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float]: [description]
         """
         f0 = self.c @ x
         fj = f0 - t
@@ -62,13 +62,13 @@ def run_lmi(oracle, duration=0.000001):
     """[summary]
 
     Arguments:
-        oracle {[type]} -- [description]
+        oracle ([type]): [description]
 
     Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
+        duration (float): [description] (default: {0.000001})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x0 = np.array([0., 0., 0.])  # initial x0
     E = ell(10., x0)
@@ -87,7 +87,7 @@ def test_lmi_lazy(benchmark):
     """[summary]
 
     Arguments:
-        benchmark {[type]} -- [description]
+        benchmark ([type]): [description]
     """
     result = benchmark(run_lmi, lmi_oracle)
     assert result == 115
@@ -97,7 +97,7 @@ def test_lmi_old(benchmark):
     """[summary]
 
     Arguments:
-        benchmark {[type]} -- [description]
+        benchmark ([type]): [description]
     """
     result = benchmark(run_lmi, lmi_old_oracle)
     assert result == 115

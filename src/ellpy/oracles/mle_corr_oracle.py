@@ -20,8 +20,8 @@ class mle_oracle:
             ​s.t.​ 2Y ⪰ Ω(p) ⪰ 0,​
 
         Arguments:
-            Sig {Arr} -- Covariance matrix
-            Y {Arr} -- Biased covariance matrix
+            Sig (Arr): Covariance matrix
+            Y (Arr): Biased covariance matrix
         """
         self.Y = Y
         self.Sig = Sig
@@ -33,11 +33,11 @@ class mle_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- coefficients of basis functions
-            t {float} -- the best-so-far optimal value
+            x (Arr): coefficients of basis functions
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float]: [description]
         """
         cut = self.lmi(x)
         if cut:
@@ -76,7 +76,7 @@ class mono_decreasing_oracle:
         """[summary]
 
         Arguments:
-            basis {[type]} -- [description]
+            basis ([type]): [description]
         """
         self.basis = basis
 
@@ -84,11 +84,11 @@ class mono_decreasing_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
-            t {float} -- the best-so-far optimal value
+            x (Arr): [description]
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float]: [description]
         """
         # monotonic decreasing constraint
         cut = mono_oracle(x)

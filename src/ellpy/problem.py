@@ -12,11 +12,11 @@ class Problem:
         """[summary]
 
         Arguments:
-            S {[type]} -- [description]
-            oracle {[type]} -- [description]
+            S ([type]): [description]
+            oracle ([type]): [description]
 
         Keyword Arguments:
-            options {[type]} -- [description] (default: {Options()})
+            options ([type]): [description] (default: {Options()})
         """
         self.S = S
         self.oracle = oracle
@@ -186,7 +186,7 @@ class SolverStats:
         """[summary]
 
         Arguments:
-            solver_name {[type]} -- [description]
+            solver_name ([type]): [description]
         """
         self.solver_name = solver_name
         self.num_iters = None

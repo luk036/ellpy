@@ -11,11 +11,11 @@ def my_oracle(z, t: float):
     """[summary]
 
     Arguments:
-        z {[type]} -- [description]
-        t {float} -- the best-so-far optimal value
+        z ([type]): [description]
+        t (float): the best-so-far optimal value
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x, y = z
 

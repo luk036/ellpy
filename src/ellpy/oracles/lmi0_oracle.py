@@ -20,7 +20,7 @@ class lmi0_oracle:
         """[summary]
 
         Arguments:
-            F {List[Arr]} -- [description]
+            F (List[Arr]): [description]
         """
         self.F = F
         self.Q = chol_ext(len(F[0]))
@@ -29,10 +29,10 @@ class lmi0_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
+            x (Arr): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         def getA(i, j):
             n = len(x)

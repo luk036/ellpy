@@ -21,8 +21,8 @@ class gmi_oracle:
         """[summary]
 
         Arguments:
-            H {[type]} -- [description]
-            n {int} -- dimension
+            H ([type]): [description]
+            n (int): dimension
         """
         self.H = H
         self.m = m
@@ -35,10 +35,10 @@ class gmi_oracle:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
+            x (np.ndarray): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         def getA(i, j):
             return self.H.eval(i, j, x)

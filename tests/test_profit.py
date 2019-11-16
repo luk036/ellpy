@@ -14,7 +14,7 @@ def benchmark_profit(duration=0.000001):
     """benchmark profit
 
     Keyword Arguments:
-        duration {float} -- [run benchmark duration] (default: {0.000001})
+        duration (float): [run benchmark duration] (default: {0.000001})
     """
     p, A, k = 20., 40., 30.5
     params = p, A, k

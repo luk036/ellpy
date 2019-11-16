@@ -16,14 +16,14 @@ class csdlowpass_oracle:
     """[summary]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     def __init__(self, nnz, lowpass):
         """[summary]
 
         Arguments:
-            nnz {[type]} -- [description]
-            lowpass {[type]} -- [description]
+            nnz ([type]): [description]
+            lowpass ([type]): [description]
         """
         self.nnz = nnz
         self.lowpass = lowpass
@@ -32,12 +32,12 @@ class csdlowpass_oracle:
         """[summary]
 
         Arguments:
-            r {Arr} -- [description]
-            Spsq {[type]} -- [description]
-            retry {int} -- [description]
+            r (Arr): [description]
+            Spsq ([type]): [description]
+            retry (int): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         cut, Spsq2 = self.lowpass(r, Spsq)
         if Spsq == Spsq2:  # infeasible

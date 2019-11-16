@@ -18,15 +18,15 @@ def lsq_corr_poly(Y: Arr, s: Arr, n: int):
     """[summary]
 
     Arguments:
-        Y {Arr} -- [description]
-        s {Arr} -- [description]
-        n {int} -- [description]
+        Y (Arr): [description]
+        s (Arr): [description]
+        n (int): [description]
 
     Raises:
-        Exception -- [description]
+        Exception: [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     N = len(s)
     a = cvx.Variable(n)
@@ -56,15 +56,15 @@ def lsq_corr_bspline(Y: Arr, s: Arr, n: int):
     """[summary]
 
     Arguments:
-        Y {Arr} -- [description]
-        s {Arr} -- [description]
-        n {int} -- [description]
+        Y (Arr): [description]
+        s (Arr): [description]
+        n (int): [description]
 
     Raises:
-        Exception -- [description]
+        Exception: [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     k = 2
     h = s[-1] - s[0]

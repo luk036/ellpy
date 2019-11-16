@@ -14,7 +14,7 @@ class lowpass_oracle:
     """[summary]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
 
     # for round robin counters
@@ -27,11 +27,11 @@ class lowpass_oracle:
         """[summary]
 
         Arguments:
-            Ap {[type]} -- [description]
-            As {[type]} -- [description]
-            Anr {[type]} -- [description]
-            Lpsq {[type]} -- [description]
-            Upsq {[type]} -- [description]
+            Ap ([type]): [description]
+            As ([type]): [description]
+            Anr ([type]): [description]
+            Lpsq ([type]): [description]
+            Upsq ([type]): [description]
         """
         self.Ap = Ap
         self.As = As
@@ -43,11 +43,11 @@ class lowpass_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- coefficients of autocorrelation
-            Spsq {float} -- the best-so-far Sp^2
+            x (Arr): coefficients of autocorrelation
+            Spsq (float): the best-so-far Sp^2
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         # 1. nonnegative-real constraint
         n = len(x)

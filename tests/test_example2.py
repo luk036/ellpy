@@ -11,10 +11,10 @@ def my_oracle2(z):
     """[summary]
 
     Arguments:
-        z {[type]} -- [description]
+        z ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x, y = z
 

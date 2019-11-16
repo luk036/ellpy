@@ -28,14 +28,14 @@ class lsq_oracle:
         {Fk}i,j = Ψk(‖sj − si‖)
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     def __init__(self, F: List[Arr], F0: Arr):
         """[summary]
 
         Arguments:
-            F {List[Arr]} -- [description]
-            F0 {Arr} -- [description]
+            F (List[Arr]): [description]
+            F0 (Arr): [description]
         """
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
@@ -44,11 +44,11 @@ class lsq_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
-            t {float} -- the best-so-far optimal value
+            x (Arr): [description]
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- [description]
+            Tuple[Cut, float]: [description]
         """
         n = len(x)
         g = np.zeros(n)

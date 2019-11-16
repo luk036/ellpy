@@ -62,10 +62,10 @@ def inverse_spectral_fact(h):
     """[summary]
 
     Arguments:
-        h {[type]} -- [description]
+        h ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     n = len(h)
     r = np.zeros(n)

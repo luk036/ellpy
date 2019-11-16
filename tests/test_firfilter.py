@@ -54,11 +54,11 @@ class my_oracle:
         """[summary]
 
         Arguments:
-            h {[type]} -- [description]
-            t {float} -- the best-so-far optimal value
+            h ([type]): [description]
+            t (float): the best-so-far optimal value
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         fmax = float('-Inf')
         for i in range(m):
@@ -82,13 +82,13 @@ def run_firfilter(no_trick, duration=0.000001):
     """[summary]
 
     Arguments:
-        no_trick {[type]} -- [description]
+        no_trick ([type]): [description]
 
     Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
+        duration (float): [description] (default: {0.000001})
 
     Raises:
-        Exception -- [description]
+        Exception: [description]
     """
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
@@ -110,7 +110,7 @@ def test_firfilter_no_trick(benchmark):
     """[summary]
 
     Arguments:
-        benchmark {[type]} -- [description]
+        benchmark ([type]): [description]
     """
     num_iters = benchmark(run_firfilter, True)
     assert num_iters <= 208
@@ -120,7 +120,7 @@ def test_firfilter_use_trick(benchmark):
     """[summary]
 
     Arguments:
-        benchmark {[type]} -- [description]
+        benchmark ([type]): [description]
     """
     num_iters = benchmark(run_firfilter, False)
     assert num_iters <= 208

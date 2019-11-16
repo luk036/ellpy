@@ -29,9 +29,9 @@ class profit_oracle:
         """[summary]
 
         Arguments:
-            params {Tuple[float, float, float]} -- p, A, k
-            a {Arr} -- the output elasticities
-            v {Arr} -- output price
+            params (Tuple[float, float, float]): p, A, k
+            a (Arr): the output elasticities
+            v (Arr): output price
         """
         p, A, k = params
         self.log_pA = np.log(p * A)
@@ -43,11 +43,11 @@ class profit_oracle:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
-            y {Arr} -- input quantity (in log scale)
-            t {float} -- the best-so-far optimal value
+            y (Arr): input quantity (in log scale)
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- Cut and the updated best-so-far value
+            Tuple[Cut, float]: Cut and the updated best-so-far value
 
         See also:
             cutting_plane_dc
@@ -95,10 +95,10 @@ class profit_rb_oracle:
         """[summary]
 
         Arguments:
-            params {Tuple[float, float, float]} -- p, A, k
-            a {Arr} -- the output elasticities
-            v {Arr} -- output price
-            vparams {Tuple} -- paramters for uncertainty
+            params (Tuple[float, float, float]): p, A, k
+            a (Arr): the output elasticities
+            v (Arr): output price
+            vparams (Tuple): paramters for uncertainty
         """
         e1, e2, e3, e4, e5 = vparams
         self.a = a
@@ -111,11 +111,11 @@ class profit_rb_oracle:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
-            y {Arr} -- input quantity (in log scale)
-            t {float} -- the best-so-far optimal value
+            y (Arr): input quantity (in log scale)
+            t (float): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float] -- Cut and the updated best-so-far value
+            Tuple[Cut, float]: Cut and the updated best-so-far value
 
         See also:
             cutting_plane_dc
@@ -144,7 +144,7 @@ class profit_q_oracle:
         k: a given constant that restricts the quantity of x1
 
     Raises:
-        AssertionError -- [description]
+        AssertionError: [description]
 
     See also:
         profit_oracle
@@ -153,9 +153,9 @@ class profit_q_oracle:
         """[summary]
 
         Arguments:
-            params {Tuple[float, float, float]} -- p, A, k
-            a {Arr} -- the output elasticities
-            v {Arr} -- output price
+            params (Tuple[float, float, float]): p, A, k
+            a (Arr): the output elasticities
+            v (Arr): output price
         """
         self.P = profit_oracle(params, a, v)
 
@@ -163,15 +163,15 @@ class profit_q_oracle:
         """Make object callable for cutting_plane_q()
 
         Arguments:
-            y {Arr} -- input quantity (in log scale)
-            t {float} -- the best-so-far optimal value
-            retry {[type]} -- unused
+            y (Arr): input quantity (in log scale)
+            t (float): the best-so-far optimal value
+            retry ([type]): unused
 
         Raises:
-            AssertionError -- [description]
+            AssertionError: [description]
 
         Returns:
-            Tuple -- Cut, t, and the actual evaluation point
+            Tuple: Cut, t, and the actual evaluation point
 
         See also:
             cutting_plane_q

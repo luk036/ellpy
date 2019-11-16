@@ -13,13 +13,13 @@ def vdc(n, base=2):
     """[summary]
 
     Arguments:
-        n {[type]} -- [description]
+        n ([type]): [description]
 
     Keyword Arguments:
-        base {int} -- [description] (default: {2})
+        base (int): [description] (default: {2})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     vdc, denom = 0., 1.
     while n:
@@ -33,13 +33,13 @@ def vdcorput(n, base=2):
     """[summary]
 
     Arguments:
-        n {[type]} -- [description]
+        n ([type]): [description]
 
     Keyword Arguments:
-        base {int} -- [description] (default: {2})
+        base (int): [description] (default: {2})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     return [vdc(i, base) for i in range(n)]
 
@@ -49,15 +49,15 @@ def formGraph(T, pos, eta, seed=None):
         mu and eta are relative to 1/(N-1)
 
     Arguments:
-        t {float} -- [description]
-        pos {[type]} -- [description]
-        eta {[type]} -- [description]
+        t (float): [description]
+        pos ([type]): [description]
+        eta ([type]): [description]
 
     Keyword Arguments:
-        seed {[type]} -- [description] (default: {None})
+        seed ([type]): [description] (default: {None})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     if seed:
         np.random.seed(seed)
@@ -103,10 +103,10 @@ def test_optscaling():
     """[summary]
 
     Keyword Arguments:
-        duration {float} -- [description] (default: {0.000001})
+        duration (float): [description] (default: {0.000001})
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     x0 = np.array([cmax, cmin])
     t = cmax - cmin

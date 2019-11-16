@@ -19,8 +19,8 @@ class lmi_old_oracle:
         """[summary]
 
         Arguments:
-            F {List[Arr]} -- [description]
-            B {Arr} -- [description]
+            F (List[Arr]): [description]
+            B (Arr): [description]
         """
         self.F = F
         self.F0 = B
@@ -31,10 +31,10 @@ class lmi_old_oracle:
         """[summary]
 
         Arguments:
-            x {np.ndarray} -- [description]
+            x (np.ndarray): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         n = len(x)
         self.A = self.F0.copy()

@@ -25,7 +25,7 @@ class optscaling_oracle:
             """[summary]
 
             Arguments:
-                G {[type]} -- [description]
+                G ([type]): [description]
             """
             self.G = G
 
@@ -33,11 +33,11 @@ class optscaling_oracle:
             """[summary]
 
             Arguments:
-                e {[type]} -- [description]
-                x {Arr} -- (π, ψ) in log scale
+                e ([type]): [description]
+                x (Arr): (π, ψ) in log scale
 
             Returns:
-                float -- function evaluation
+                float: function evaluation
             """
             u, v = e
             cost = self.G[u][v]['cost']
@@ -48,11 +48,11 @@ class optscaling_oracle:
             """[summary]
 
             Arguments:
-                e {[type]} -- [description]
-                x {Arr} -- (π, ψ) in log scale
+                e ([type]): [description]
+                x (Arr): (π, ψ) in log scale
 
             Returns:
-                [type] -- [description]
+                [type]: [description]
             """
             u, v = e
             assert u != v
@@ -62,7 +62,7 @@ class optscaling_oracle:
         """Construct a new optscaling oracle object
 
         Arguments:
-            G {[type]} -- [description]
+            G ([type]): [description]
         """
         self.network = network_oracle(G, u, self.ratio(G))
 
@@ -70,8 +70,8 @@ class optscaling_oracle:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
-            x {Arr} -- (π, ψ) in log scale
-            t {float} -- the best-so-far optimal value
+            x (Arr): (π, ψ) in log scale
+            t (float): the best-so-far optimal value
 
         Returns:
             Tuple[Cut, float]

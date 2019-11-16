@@ -11,7 +11,7 @@ def create_test_case1():
     """[summary]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     G = nx.cycle_graph(5, create_using=nx.DiGraph())
     G[1][2]['weight'] = -5
@@ -23,7 +23,7 @@ def create_test_case_timing():
     """[summary]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     G = nx.DiGraph()
     nodelist = ['a1', 'a2', 'a3']
@@ -43,20 +43,20 @@ def do_case(G, dist):
     """[summary]
 
     Arguments:
-        G {[type]} -- [description]
+        G ([type]): [description]
 
     Returns:
-        [type] -- [description]
+        [type]: [description]
     """
     def get_weight(e):
         """[summary]
 
         Arguments:
-            G {[type]} -- [description]
-            e {[type]} -- [description]
+            G ([type]): [description]
+            e ([type]): [description]
 
         Returns:
-            [type] -- [description]
+            [type]: [description]
         """
         u, v = e
         return G[u][v].get('weight', 1)

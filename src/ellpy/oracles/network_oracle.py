@@ -18,9 +18,9 @@ class network_oracle:
         """[summary]
 
         Arguments:
-            G -- a directed graph (V, E)
-            u -- list or dictionary
-            h -- function evaluation and gradient
+            G: a directed graph (V, E)
+            u: list or dictionary
+            h: function evaluation and gradient
         """
         self.G = G
         self.u = u
@@ -31,7 +31,7 @@ class network_oracle:
         """[summary]
 
         Arguments:
-            t {float} -- the best-so-far optimal value
+            t (float): the best-so-far optimal value
         """
         self.h.update(t)
 
@@ -39,19 +39,19 @@ class network_oracle:
         """Make object callable for cutting_plane_feas()
 
         Arguments:
-            x {[type]} -- [description]
+            x ([type]): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         def get_weight(e) -> float:
             """[summary]
 
             Arguments:
-                e {[type]} -- [description]
+                e ([type]): [description]
 
             Returns:
-                float -- [description]
+                float: [description]
             """
             return self.h.eval(e, x)
 

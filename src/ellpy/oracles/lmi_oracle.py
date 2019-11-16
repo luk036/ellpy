@@ -20,8 +20,8 @@ class lmi_oracle:
         """[summary]
 
         Arguments:
-            F {List[Arr]} -- [description]
-            B {Arr} -- [description]
+            F (List[Arr]): [description]
+            B (Arr): [description]
         """
         self.F = F
         self.F0 = B
@@ -31,10 +31,10 @@ class lmi_oracle:
         """[summary]
 
         Arguments:
-            x {Arr} -- [description]
+            x (Arr): [description]
 
         Returns:
-            Optional[Cut] -- [description]
+            Optional[Cut]: [description]
         """
         def getA(i, j):
             n = len(x)
