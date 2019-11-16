@@ -3,6 +3,7 @@ ellpy
 
 [![Build Status](https://travis-ci.org/luk036/ellpy.svg?branch=master)](https://travis-ci.org/luk036/ellpy)
 [![Build status](https://ci.appveyor.com/api/projects/status/0v1cf05tcueny7d9?svg=true)](https://ci.appveyor.com/project/luk036/ellpy)
+[![Documentation Status](https://readthedocs.org/projects/ellpy/badge/?version=latest)](https://ellpy.readthedocs.io/en/latest/?badge=latest)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a2f75bd3cc1e4c34be4741bdd61168ba)](https://app.codacy.com/app/luk036/ellpy?utm_source=github.com&utm_medium=referral&utm_content=luk036/ellpy&utm_campaign=badger)
 [![codecov](https://codecov.io/gh/luk036/ellpy/branch/master/graph/badge.svg)](https://codecov.io/gh/luk036/ellpy)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6ce78bab65047bfe53d6/maintainability)](https://codeclimate.com/github/luk036/ellpy/maintainability)
