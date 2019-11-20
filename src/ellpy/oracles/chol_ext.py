@@ -21,8 +21,7 @@ class chol_ext:
             v (Arr): witness
             n (integer): dimension
     """
-    allow_semidefinite = False
-    p = (0, 0)
+    __slots__ = ('p', 'v', 'n', 'T', 'allow_semidefinite')
 
     def __init__(self, N: int):
         """initialization
@@ -30,6 +29,9 @@ class chol_ext:
         Arguments:
             N (integer): dimension
         """
+        self.allow_semidefinite = False
+        self.p = (0, 0)
+
         self.v = np.zeros(N)
         self.n = N
         self.T = np.zeros((N, N))

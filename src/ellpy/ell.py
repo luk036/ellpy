@@ -8,16 +8,8 @@ Arr = Union[np.ndarray]
 
 
 class ell:
-    _use_parallel_cut = True
-    _no_defer_trick = False
-
-    _n: int  # dimension
-    c1: float
-    kappa: float
-    rho: float
-    sigma: float
-    delta: float
-    tsq: float
+    __slots__ = ('_n', 'c1', 'kappa', 'rho', 'sigma', 'delta', 'tsq',
+                 '_xc', 'Q', '_use_parallel_cut', '_no_defer_trick')
 
     def __init__(self, val: Union[Arr, float], x: Arr):
         """ell = { x | (x - xc)' * Q^-1 * (x - xc) <= kappa }
@@ -26,6 +18,9 @@ class ell:
             val (Union[Arr, float]): [description]
             x (Arr): [description]
         """
+        self._use_parallel_cut = True
+        self._no_defer_trick = False
+
         self._n = n = len(x)
         self.c1 = float(n * n) / (n * n - 1)
         self._xc = x.copy()
@@ -230,8 +225,7 @@ class ell:
 
 
 class ell1d:
-    _r: float
-    _xc: float
+    __slots__ = ('_r', '_xc')
 
     def __init__(self, I):
         """[summary]

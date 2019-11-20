@@ -9,6 +9,8 @@ D = Union[dict, list]
 
 
 class negCycleFinder:
+    __slots__ = ('G', 'pred')
+
     def __init__(self, G):
         """[summary]
 

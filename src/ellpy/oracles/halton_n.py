@@ -12,7 +12,7 @@ def halton_n(k, n, b):
         b (list(int)): sequence base, integer exceeding 1
 
     Returns:
-        (list(float)): base-b low discrepancy sequence
+        list(float): base-b low discrepancy sequence
     """
     if n == 1:
         for s in vdcorput(k, b[0]):
