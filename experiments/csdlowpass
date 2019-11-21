@@ -174,8 +174,8 @@ def plot_lowpass_result(rf, Spsqf, rcsd, Spsqcsd):
 
 if __name__ == "__main__":
     # tic = time.time()
-    N = 48
-    nnz = 3
+    N = 32
+    nnz = 7
 
     r0 = np.zeros(N)  # initial x0
     r0[0] = 0
