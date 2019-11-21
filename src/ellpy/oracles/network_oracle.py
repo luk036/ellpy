@@ -60,3 +60,4 @@ class network_oracle:
             f = -sum(self.h.eval(e, x) for e in C)
             g = -sum(self.h.grad(e, x) for e in C)
             return g, f
+        return None

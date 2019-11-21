@@ -44,3 +44,4 @@ class lmi_old_oracle:
             ep = self.Q.witness()
             g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])
             return g, ep
+        return None

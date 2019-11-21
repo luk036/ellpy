@@ -48,3 +48,4 @@ class gmi_oracle:
             ep = self.Q.witness()
             g = self.H.neg_grad_sym_quad(self.Q, x)
             return g, ep
+        return None

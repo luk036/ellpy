@@ -43,6 +43,7 @@ class negCycleFinder:
                 # Will zero cycle be found???
                 assert self.__is_negative(v, dist, get_weight)
                 return self.__cycle_list(v)
+        return None
 
     # private:
 
@@ -76,6 +77,7 @@ class negCycleFinder:
                         # if self.is_negative(u, dist):
                         return u
                     break
+        return None
 
     def __relax(self, dist, get_weight):
         """Perform a updating of dist and pred
