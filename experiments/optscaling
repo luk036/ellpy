@@ -5,10 +5,9 @@ from __future__ import print_function
 # import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
-from ellpy.cutting_plane import cutting_plane_dc, bsearch, bsearch_adaptor
+from ellpy.cutting_plane import cutting_plane_dc
 from ellpy.oracles.optscaling_oracle import optscaling_oracle
-from ellpy.oracles.optscaling3_oracle import optscaling3_oracle
-from ellpy.ell import ell, ell1d
+from ellpy.ell import ell
 
 
 def vdc(n, base=2):
@@ -107,22 +106,11 @@ if __name__ == "__main__":
     x0 = np.array([cmax, cmin])
     t = cmax - cmin
     E = ell(1.5 * t, x0)
-    P = optscaling_oracle(G)
+    dist = list(0 for _ in G)
+    P = optscaling_oracle(G, dist)
     xb, ell_info = cutting_plane_dc(P, E, float('inf'))
     fb = ell_info.value
     print(np.exp(xb))
     # fmt = '{:f} {} {} {}'
     # print(fmt.format(np.exp(fb), niter, feasible, status))
     assert ell_info.feasible
-
-    # def test_optscaling2():
-    # mid = (cmax + cmin)/2.
-    Iv = ell1d([cmin, cmax])
-    Q = optscaling3_oracle(G)
-    P = bsearch_adaptor(Q, Iv)
-    bs_info = bsearch(P, [0., 1.001 * (cmax - cmin)])
-
-    # fmt = '{:f} {} {} {}'
-    # print(np.exp(xb))
-    # print(fmt.format(np.exp(fb), niter, feasible, status))
-    assert bs_info.feasible
