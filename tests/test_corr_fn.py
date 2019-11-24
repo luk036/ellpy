@@ -3,7 +3,8 @@ from pytest import approx
 
 import numpy as np
 
-from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.cutting_plane import cutting_plane_dc, \
+    bsearch, bsearch_adaptor
 from ellpy.ell import ell
 from ellpy.oracles.corr_oracle import (
     corr_bspline,
@@ -13,6 +14,7 @@ from ellpy.oracles.corr_oracle import (
 )
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
+from ellpy.oracles.qmi_oracle import qmi_oracle
 
 s = create_2d_sites(5, 4)
 Y = create_2d_isotropic(s, 3000)
@@ -53,6 +55,30 @@ def lsq_corr_poly2(Y, s, n):
         [type]: [description]
     """
     return corr_poly(Y, s, n, lsq_oracle, lsq_corr_core2)
+
+
+def lsq_corr_core(Y, n, Q):
+    x = np.zeros(n)  # cannot all zeros
+    x[0] = 1.
+    E = ell(256., x)
+    P = bsearch_adaptor(Q, E)
+    normY = np.linalg.norm(Y, 'fro')
+    bs_info = bsearch(P, [0., normY*normY])
+    return P.x_best, bs_info.num_iters, bs_info.feasible
+
+
+def lsq_corr_poly(Y, s, n):
+    """[summary]
+
+    Arguments:
+        Y ([type]): [description]
+        s ([type]): [description]
+        n ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    return corr_poly(Y, s, n, qmi_oracle, lsq_corr_core)
 
 
 def mle_corr_core(Y, n, P):
@@ -134,6 +160,10 @@ def test_data():
 def test_corr_fn():
     """[summary]
     """
+    _, num_iters, feasible = lsq_corr_poly(Y, s, 4)
+    assert feasible
+    assert num_iters <= 36
+
     _, num_iters, feasible = lsq_corr_bspline2(Y, s, 4)
     assert feasible
     assert num_iters <= 480
