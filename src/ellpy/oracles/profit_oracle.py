@@ -12,7 +12,7 @@ class profit_oracle:
 
     This example is taken from [Aliabadi and Salahi, 2013]
 
-        max     p(A x1^α x2^β) - v1*x1 - v2*x2
+        max     p(A x1^α x2^β) − v1*x1 − v2*x2
         s.t.    x1 ≤ k
 
     where:

@@ -43,11 +43,6 @@ class my_oracle:
         Returns:
             Tuple[Cut, float]: [description]
         """
-        f0 = self.c @ x
-        fj = f0 - t
-        if fj > 0:
-            return (self.c, fj), t
-
         cut = self.lmi1(x)
         if cut:
             return cut, t
@@ -55,6 +50,11 @@ class my_oracle:
         cut = self.lmi2(x)
         if cut:
             return cut, t
+
+        f0 = self.c @ x
+        fj = f0 - t
+        if fj > 0:
+            return (self.c, fj), t
         return (self.c, 0.), f0
 
 
@@ -90,7 +90,7 @@ def test_lmi_lazy(benchmark):
         benchmark ([type]): [description]
     """
     result = benchmark(run_lmi, lmi_oracle)
-    assert result == 115
+    assert result == 113
 
 
 def test_lmi_old(benchmark):
@@ -100,4 +100,4 @@ def test_lmi_old(benchmark):
         benchmark ([type]): [description]
     """
     result = benchmark(run_lmi, lmi_old_oracle)
-    assert result == 115
+    assert result == 113

@@ -10,7 +10,7 @@ class network_oracle:
     """Oracle for Parametric Network Problem:
 
         find    x, u
-        s.t.    u[j] - u[i] ≤ h(e, x)
+        s.t.    u[j] − u[i] ≤ h(e, x)
                 ∀ e(i, j) ∈ E
 
     """

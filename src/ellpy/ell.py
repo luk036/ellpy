@@ -12,7 +12,7 @@ class ell:
                  '_xc', 'Q', '_use_parallel_cut', '_no_defer_trick')
 
     def __init__(self, val: Union[Arr, float], x: Arr):
-        """ell = { x | (x - xc)' * Q^-1 * (x - xc) <= kappa }
+        """ell = { x | (x − xc)' * Q^−1 * (x − xc) <= kappa }
 
         Arguments:
             val (Union[Arr, float]): [description]
@@ -94,7 +94,7 @@ class ell:
     def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut
 
-                g' * (x - xc) + beta <= 0
+                g' * (x − xc) + beta <= 0
 
             Note: At most one square-root per iteration.
 

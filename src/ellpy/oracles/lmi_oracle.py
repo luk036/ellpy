@@ -13,7 +13,7 @@ class lmi_oracle:
     """Oracle for Linear Matrix Inequality constraint
 
         find  x
-        s.t.​  (B - F*x) ⪰ 0
+        s.t.​  (B − F*x) ⪰ 0
 
     """
     def __init__(self, F, B):

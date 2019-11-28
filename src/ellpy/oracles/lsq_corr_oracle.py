@@ -20,7 +20,7 @@ class lsq_oracle:
 
         min   t
         s.t.  x[n+1] ≤ t
-              x[n+1]*I - F(x)' F(x) ⪰ 0
+              x[n+1]*I − F(x)' F(x) ⪰ 0
 
     where
         F(x) = F[1] x[1] + ··· + F[n] x[n]

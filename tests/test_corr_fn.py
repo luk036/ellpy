@@ -157,25 +157,31 @@ def test_data():
     # assert D1[2, 4] == approx(5.0)
 
 
-def test_corr_fn():
-    """[summary]
-    """
+def test_lsq_corr_poly():
     _, num_iters, feasible = lsq_corr_poly(Y, s, 4)
     assert feasible
     assert num_iters <= 36
 
+
+def test_lsq_corr_bspline2():
     _, num_iters, feasible = lsq_corr_bspline2(Y, s, 4)
     assert feasible
     assert num_iters <= 480
 
+
+def test_lsq_corr_poly2():
     _, num_iters, feasible = lsq_corr_poly2(Y, s, 4)
     assert feasible
     assert num_iters <= 570
 
+
+def test_mle_corr_bspline():
     _, num_iters, feasible = mle_corr_bspline(Y, s, 4)
     assert feasible
     assert num_iters <= 178
 
+
+def test_mle_corr_poly():
     _, num_iters, feasible = mle_corr_poly(Y, s, 4)
     assert feasible
     assert num_iters <= 234

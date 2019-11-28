@@ -16,11 +16,11 @@ class qmi_oracle:
         """Oracle for Quadratic Matrix Inequality
 
               find  x
-              s.t.​  t*I - F(x)' F(x) ⪰ 0
+              s.t.​  t*I − F(x)' F(x) ⪰ 0
 
             where
 
-              F(x) = F0 - (F1 * x1 + F2 * x2 + ...)
+              F(x) = F0 − (F1 * x1 + F2 * x2 + ...)
         """
         t = None
         count = 0
