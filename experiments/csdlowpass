@@ -261,12 +261,12 @@ def main(args):
     r0[0] = 0
     E = ell(40., r0)
     P, Spsq = create_lowpass_case(N)
-    rf, ell_info = cutting_plane_dc(P, E, Spsq)
+    rf, t, ell_info = cutting_plane_dc(P, E, Spsq)
 
     if not ell_info.feasible:
         _logger.error("Configuration is not feasible")
     else:
-        Spsqf = ell_info.value
+        Spsqf = t
         hf = spectral_fact(rf)
         # print(ell_info.num_iters, ell_info.feasible, ell_info.status)
         print(hf)
@@ -275,12 +275,12 @@ def main(args):
     r0[0] = 0
     E = ell(40., r0)
     P, Spsq = create_csdlowpass_case(N, nnz)
-    rcsd, ell_info = cutting_plane_q(P, E, Spsq)
+    rcsd, t, ell_info = cutting_plane_q(P, E, Spsq)
 
     if not ell_info.feasible:
         _logger.error("Configuration is not feasible")
     else:
-        Spsqcsd = ell_info.value
+        Spsqcsd = t
         h_spcsd = spectral_fact(rcsd)
         h_spcsd_str = [to_csdfixed(hi, nnz) for hi in h_spcsd]
 

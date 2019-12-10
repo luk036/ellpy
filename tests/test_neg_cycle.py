@@ -52,7 +52,6 @@ def do_case(G, dist):
         """[summary]
 
         Arguments:
-            G ([type]): [description]
             e ([type]): [description]
 
         Returns:
@@ -63,7 +62,7 @@ def do_case(G, dist):
 
     N = negCycleFinder(G)
     cycle = N.find_neg_cycle(dist, get_weight)
-    return cycle is not None
+    return cycle != []
 
 
 def test_neg_cycle():

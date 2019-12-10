@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
-from typing import Union
+from typing import Union, Tuple
 
 import numpy as np
 
@@ -8,22 +8,29 @@ Arr = Union[np.ndarray]
 
 
 class ell:
+    """Ellipsoid Search Space
+
+            ell = {x | (x − xc)' Q^−1 (x − xc) ​≤ κ}
+
+    Returns:
+        [type] -- [description]
+    """
     __slots__ = ('_n', 'c1', 'kappa', 'rho', 'sigma', 'delta', 'tsq',
-                 '_xc', 'Q', '_use_parallel_cut', '_no_defer_trick')
+                 '_xc', 'Q', 'use_parallel_cut', '_no_defer_trick')
 
     def __init__(self, val: Union[Arr, float], x: Arr):
-        """ell = { x | (x − xc)' * Q^−1 * (x − xc) <= kappa }
+        """Construct a new ell object
 
         Arguments:
             val (Union[Arr, float]): [description]
             x (Arr): [description]
         """
-        self._use_parallel_cut = True
+        self.use_parallel_cut = True
         self._no_defer_trick = False
 
         self._n = n = len(x)
         self.c1 = float(n * n) / (n * n - 1)
-        self._xc = x.copy()
+        self._xc = x
         if np.isscalar(val):
             self.Q = np.eye(n)
             self.kappa = val
@@ -40,13 +47,13 @@ class ell:
         E = ell(self.kappa, self.xc)
         E.Q = self.Q.copy()
         E.c1 = self.c1
-        E._use_parallel_cut = self._use_parallel_cut
+        E.use_parallel_cut = self.use_parallel_cut
         E._no_defer_trick = self._no_defer_trick
         return E
 
     @property
     def xc(self):
-        """[summary]
+        """copy the whole array anyway
 
         Returns:
             [type]: [description]
@@ -54,45 +61,45 @@ class ell:
         return self._xc
 
     @xc.setter
-    def xc(self, x):
-        """[summary]
+    def xc(self, x: Arr):
+        """Set the xc object
 
         Arguments:
             x ([type]): [description]
         """
         self._xc = x
 
-    @property
-    def use_parallel_cut(self) -> bool:
-        """[summary]
+    # @property
+    # def use_parallel_cut(self) -> bool:
+    #     """[summary]
 
-        Returns:
-            bool: [description]
-        """
-        return self._use_parallel_cut
+    #     Returns:
+    #         bool: [description]
+    #     """
+    #     return self._use_parallel_cut
 
-    @use_parallel_cut.setter
-    def use_parallel_cut(self, b: bool):
-        """[summary]
+    # @use_parallel_cut.setter
+    # def use_parallel_cut(self, b: bool):
+    #     """[summary]
+
+    #     Arguments:
+    #         b (bool): [description]
+    #     """
+    #     self._use_parallel_cut = b
+
+    def update(self, cut) -> Tuple[int, float]:
+        """Update ellipsoid core function using the cut(s)
 
         Arguments:
-            b (bool): [description]
-        """
-        self._use_parallel_cut = b
-
-    def update(self, cut):
-        """[summary]
-
-        Arguments:
-            cut (float): [description]
+            cut: cutting-plane
 
         Returns:
-            [type]: [description]
+            Tuple[int, float]: [description]
         """
         return self.update_core(self.__calc_ll, cut)
 
     def update_core(self, calc_ell, cut):
-        """Update ellipsoid core function using the cut
+        """Update ellipsoid core function using the cut(s)
 
                 g' * (x − xc) + beta <= 0
 
@@ -110,15 +117,14 @@ class ell:
         Qg = self.Q.dot(g)  # n^2 multiplications
         omega = g.dot(Qg)  # n^2 multiplications
         self.tsq = self.kappa * omega
-        # if self.tsq <= 0.: # unlikely
-        #     return 4, 0.
         status = calc_ell(beta)
         if status != 0:
             return status, self.tsq
-        # rho, sigma, delta = params
+
         self._xc -= (self.rho / omega) * Qg
         self.Q -= (self.sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
         self.kappa *= self.delta
+
         if self._no_defer_trick:
             self.Q *= self.kappa
             self.kappa = 1.
@@ -140,7 +146,10 @@ class ell:
         return self.__calc_ll_core(beta[0], beta[1])
 
     def __calc_ll_core(self, b0: float, b1: float) -> int:
-        """[summary]
+        """Calculate new ellipsoid under Parallel Cut
+
+                g' (x − xc​) + β0 ​≤ 0
+                g' (x − xc​) + β1 ​≥ 0
 
         Arguments:
             b0 (float): [description]
@@ -164,31 +173,35 @@ class ell:
             return 3  # no effect
 
         # parallel cut
-        b0sq = b0**2
-        t0 = self.tsq - b0sq
+        t0 = self.tsq - b0 * b0
         t1 = self.tsq - b1sq
         bav = (b0 + b1) / 2
-        xi = math.sqrt(4 * t0 * t1 + (n * (b1sq - b0sq))**2)
-        self.sigma = (n + (self.tsq - b0b1 - xi / 2) / (2 * bav**2)) / (n + 1)
+        xi = math.sqrt(t0 * t1 + (n * bav * (b1 - b0))**2)
+        self.sigma = (n + (self.tsq - b0b1 - xi) / (2 * bav**2)) / (n + 1)
         self.rho = self.sigma * bav
-        self.delta = self.c1 * (t0 + t1 + xi / n) / (2 * self.tsq)
+        self.delta = self.c1 * ((t0 + t1)/2 + xi / n) / self.tsq
         return 0
 
     def __calc_ll_cc(self, b1: float, b1sq: float):
-        """parallel central cut
+        """Calculate new ellipsoid under Parallel Cut, one of them is central
+
+                g' (x − xc​) ​≤ 0
+                g' (x − xc​) + β1 ​≥ 0
 
         Arguments:
             b1 (float): [description]
             b1sq (float): [description]
         """
         n = self._n
-        xi = math.sqrt(4 * self.tsq * (self.tsq - b1sq) + (n * b1sq)**2)
-        self.sigma = (n + (2 * self.tsq - xi) / b1sq) / (n + 1)
+        xi = math.sqrt(self.tsq * (self.tsq - b1sq) + (n * b1sq / 2)**2)
+        self.sigma = (n + 2 * (self.tsq - xi) / b1sq) / (n + 1)
         self.rho = self.sigma * b1 / 2
-        self.delta = self.c1 * (self.tsq - (b1sq - xi / n) / 2) / self.tsq
+        self.delta = self.c1 * (self.tsq - b1sq / 2 + xi / n) / self.tsq
 
     def __calc_dc(self, beta: float) -> int:
-        """Deep cut
+        """Calculate new ellipsoid under Deep Cut
+
+                g' (x − xc​) + β ​≤ 0
 
         Arguments:
             beta (float): [description]
@@ -212,8 +225,8 @@ class ell:
         self.delta = self.c1 * (self.tsq - beta**2) / self.tsq
         return 0
 
-    def __calc_cc(self, tau):
-        """Central cut
+    def __calc_cc(self, tau: float):
+        """Calculate new ellipsoid under Central Cut
 
         Arguments:
             tau (float): [description]

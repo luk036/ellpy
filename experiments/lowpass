@@ -186,8 +186,7 @@ if __name__ == "__main__":
     options = Options()
     # options.max_it = 50000
     # options.tol = 1e-11
-    r, ell_info = cutting_plane_dc(P, E, Spsq, options)
-    Spsq_new = ell_info.value
+    r, Spsq_new, ell_info = cutting_plane_dc(P, E, Spsq, options)
     print(r)
     assert ell_info.feasible
     plot_lowpass_result(r, Spsq_new)

@@ -129,8 +129,7 @@ class Problem:
             The optimal value for the problem, or a string indicating
             why the problem could not be solved.
         """
-        xb, ell_info = cutting_plane_dc(self.oracle, self.S, t, self.options)
-        fb = ell_info.value
+        xb, fb, ell_info = cutting_plane_dc(self.oracle, self.S, t, self.options)
         num_iters = ell_info.num_iters
         status = ell_info.status
 

@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     E = ell(10., x0)
     P = my_oracle
-    xb, ell_info = cutting_plane_dc(P, E, float('-inf'))
+    xb, _, ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert ell_info.feasible
     print(xb)
     # assert niter == 115

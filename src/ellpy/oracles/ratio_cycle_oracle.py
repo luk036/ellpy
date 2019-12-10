@@ -10,15 +10,14 @@ Arr = Union[np.ndarray]
 Cut = Tuple[Arr, float]
 
 
-class optscaling_oracle:
-    """Oracle for Optimal Matrix Scaling
+class ratio_cycle_oracle:
+    """Oracle for minimum ratio cycle problem.
 
-        This example is taken from[Orlin and Rothblum, 1985]
+        This example solves the following convex problem:
 
-            min     π/ψ
-            s.t.    ψ ≤ u[i] * |aij| * u[j]^{−1} ≤ π,
-                    ∀ aij != 0,
-                    π, ψ, u, positive
+            min     t
+            s.t.    u[j] - u[i] ≤ mij - sij * x,
+                    x ≤ t
     """
     class ratio:
         def __init__(self, G):
@@ -29,20 +28,20 @@ class optscaling_oracle:
             """
             self.G = G
 
-        def eval(self, e, x: Arr) -> float:
+        def eval(self, e, x: float) -> float:
             """[summary]
 
             Arguments:
                 e ([type]): [description]
-                x (Arr): (π, ψ) in log scale
+                x (float): unknown
 
             Returns:
                 float: function evaluation
             """
             u, v = e
             cost = self.G[u][v]['cost']
-            assert u != v
-            return x[0] - cost if u < v else cost - x[1]
+            time = self.G[u][v]['time']
+            return cost - time * x
 
         def grad(self, e, x: Arr) -> Arr:
             """[summary]
@@ -55,22 +54,22 @@ class optscaling_oracle:
                 [type]: [description]
             """
             u, v = e
-            assert u != v
-            return np.array([1., 0.] if u < v else [0., -1.])
+            time = self.G[u][v]['time']
+            return -time
 
     def __init__(self, G, u):
-        """Construct a new optscaling oracle object
+        """Construct a new ratio cycle oracle object
 
         Arguments:
             G ([type]): [description]
         """
         self.network = network_oracle(G, u, self.ratio(G))
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: float, t: float) -> Tuple[Cut, float]:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
-            x (Arr): (π, ψ) in log scale
+            x (float): unknown
             t (float): the best-so-far optimal value
 
         Returns:
@@ -79,14 +78,12 @@ class optscaling_oracle:
         See also:
             cutting_plane_dc
         """
-        s = x[0] - x[1]
-        fj = s - t
-        g = np.array([1., -1.])
+        fj = x - t
         if fj >= 0.:
-            return (g, fj), t
+            return (1. fj), t
 
         cut = self.network(x)
         if cut:
             return cut, t
 
-        return (g, 0.), s
+        return (1., 0), x

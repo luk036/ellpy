@@ -9,7 +9,7 @@ D = Union[dict, list]
 
 
 class negCycleFinder:
-    __slots__ = ('G', 'pred')
+    __slots__ = ('G', 'pred', 'cycle')
 
     def __init__(self, G):
         """[summary]
@@ -22,6 +22,7 @@ class negCycleFinder:
         """
         self.G = G
         self.pred: dict = {}
+        self.cycle: list = []
 
         # self.get_weight = get_weight
         # self.dist = list(0 for _ in self.G)
@@ -37,13 +38,15 @@ class negCycleFinder:
             Optional[list]: [description]
         """
         self.pred = {}
+        self.cycle = []
         while self.__relax(dist, get_weight):
             v = self.__find_cycle()
             if v is not None:
                 # Will zero cycle be found???
                 assert self.__is_negative(v, dist, get_weight)
-                return self.__cycle_list(v)
-        return None
+                self.cycle = self.__cycle_list(v)
+                break
+        return self.cycle
 
     # private:
 
@@ -114,7 +117,7 @@ class negCycleFinder:
             [type]: [description]
         """
         v = handle
-        cycle = list()
+        cycle = []
         while True:
             u = self.pred[v]
             cycle += [(u, v)]

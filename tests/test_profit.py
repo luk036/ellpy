@@ -23,12 +23,11 @@ def benchmark_profit(duration=0.000001):
     v1, v2 = 10., 35.
     a = np.array([alpha, beta])
     v = np.array([v1, v2])
-    y0 = np.array([0., 0.])  # initial x0
     r = np.array([100., 100.])  # initial ellipsoid (sphere)
 
-    E = ell(r, y0)
+    E = ell(r, np.array([0., 0.]))
     P = profit_oracle(params, a, v)
-    _, ell_info = cutting_plane_dc(P, E, 0.)
+    _, _, ell_info = cutting_plane_dc(P, E, 0.)
     assert ell_info.feasible
     assert ell_info.num_iters == 37
 
@@ -36,15 +35,15 @@ def benchmark_profit(duration=0.000001):
     e2 = 0.007
     e3 = e4 = e5 = 1.
 
-    E = ell(r, y0)
+    E = ell(r, np.array([0., 0.]))
     P = profit_rb_oracle(params, a, v, (e1, e2, e3, e4, e5))
-    _, ell_info = cutting_plane_dc(P, E, 0.)
+    _, _, ell_info = cutting_plane_dc(P, E, 0.)
     assert ell_info.feasible
     assert ell_info.num_iters == 42
 
-    E = ell(r, y0)
+    E = ell(r, np.array([0., 0.]))
     P = profit_q_oracle(params, a, v)
-    _, ell_info = cutting_plane_q(P, E, 0.)
+    _, _, ell_info = cutting_plane_q(P, E, 0.)
     assert ell_info.feasible
     assert ell_info.num_iters == 28
     time.sleep(duration)

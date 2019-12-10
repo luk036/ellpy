@@ -3,13 +3,13 @@ from typing import Any, Callable, Tuple
 
 
 class Options:
-    max_it: int = 2000
-    tol: float = 1e-8
+    max_it: int = 2000  # maximum number of iterations
+    tol: float = 1e-8   # error tolerance
 
 
 class CInfo:
     def __init__(self, feasible: bool, num_iters: int, status: int):
-        """initialize
+        """Construct a new CInfo object
 
         Arguments:
             feasible (bool): [description]
@@ -19,7 +19,6 @@ class CInfo:
         self.feasible: bool = feasible
         self.num_iters: int = num_iters
         self.status: int = status
-        self.value: float = 0.
 
 
 def cutting_plane_feas(Omega: Callable[[Any], Any],
@@ -68,8 +67,8 @@ def cutting_plane_feas(Omega: Callable[[Any], Any],
     return CInfo(feasible, niter + 1, status)
 
 
-def cutting_plane_dc(Omega: Callable[[Any, float], Any], S,
-                     t: float, options=Options()) -> Tuple[Any, CInfo]:
+def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S,
+                     t, options=Options()) -> Tuple[Any, Any, CInfo]:
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
@@ -82,6 +81,7 @@ def cutting_plane_dc(Omega: Callable[[Any, float], Any], S,
 
     Returns:
         x_best (Any): solution vector
+        t: final best-so-far value
         ret {CInfo}
     """
     x_best = S.xc
@@ -100,11 +100,11 @@ def cutting_plane_dc(Omega: Callable[[Any, float], Any], S,
             break
 
     ret = CInfo(t != t_orig, niter + 1, status)
-    ret.value = t
-    return x_best, ret
+    # ret.value = t
+    return x_best, t, ret
 
 
-def cutting_plane_q(Omega, S, t: float, options=Options()):
+def cutting_plane_q(Omega, S, t, options=Options()):
     """Cutting-plane method for solving convex discrete optimization problem
 
     Arguments:
@@ -126,19 +126,13 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
     status = 1  # new
     for niter in range(options.max_it):
         cut, x0, t1, loop = Omega(S.xc, t, 0 if status != 3 else 1)
-        g, h = cut
-        # if status != 3:
-        #     if loop == 1:  # discrete sol'n
-        #         h += g.dot(x0 - S.xc)
-        # else:  # can't cut in the previous iteration
         if status == 3:
             if loop == 0:  # no more alternative cut
                 break
         if t != t1:  # best t obtained
             t = t1
             x_best = x0.copy()
-
-        status, tsq = S.update((g, h))
+        status, tsq = S.update(cut)
         if status == 1:
             break
         if tsq < options.tol:
@@ -146,8 +140,8 @@ def cutting_plane_q(Omega, S, t: float, options=Options()):
             break
 
     ret = CInfo(t != t_orig, niter + 1, status)
-    ret.value = t
-    return x_best, ret
+    # ret.value = t
+    return x_best, t, ret
 
 
 def bsearch(Omega: Callable[[Any], bool], I: Tuple,
@@ -167,21 +161,22 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
     # assume monotone
     # feasible = False
     lower, upper = I
+    T = type(upper)  # T could be `int` or `Fraction`
     u_orig = upper
     for niter in range(options.max_it):
-        t = lower + (upper - lower) / 2
+        tau = (upper - lower) / 2
+        if tau < options.tol:
+            break
+        t = T(lower + tau)
         if Omega(t):  # feasible sol'n obtained
             # feasible = True
             upper = t
         else:
             lower = t
-        tau = (upper - lower) / 2
-        if tau < options.tol:
-            break
 
-    ret = CInfo(upper != u_orig, niter + 1, 0)
-    ret.value = upper
-    return ret
+    ret = CInfo(upper != u_orig, niter, 0)
+    # ret.value = upper
+    return upper, ret
 
 
 class bsearch_adaptor:
@@ -222,5 +217,4 @@ class bsearch_adaptor:
         ell_info = cutting_plane_feas(self.P, S, self.options)
         if ell_info.feasible:
             self.S.xc = S.xc
-            return True
-        return False
+        return ell_info.feasible

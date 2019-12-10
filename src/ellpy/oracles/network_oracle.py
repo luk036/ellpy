@@ -56,7 +56,7 @@ class network_oracle:
             return self.h.eval(e, x)
 
         C = self.S.find_neg_cycle(self.u, get_weight)
-        if C is not None:
+        if C != []:
             f = -sum(self.h.eval(e, x) for e in C)
             g = -sum(self.h.grad(e, x) for e in C)
             return g, f
