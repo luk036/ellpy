@@ -3,8 +3,7 @@ from pytest import approx
 
 import numpy as np
 
-from ellpy.cutting_plane import cutting_plane_dc, \
-    bsearch, bsearch_adaptor
+from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
 from ellpy.oracles.corr_oracle import (
     corr_bspline,

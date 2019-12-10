@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pycsd.csd import to_csdfixed, to_decimal, to_csd
+from pycsd.csd import to_csd, to_csdfixed, to_decimal
 
 
 def test_csd1():
