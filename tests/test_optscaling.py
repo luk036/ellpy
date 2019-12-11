@@ -99,6 +99,11 @@ cmax = max(c for _, _, c in G.edges.data('cost'))
 cmin = min(c for _, _, c in G.edges.data('cost'))
 
 
+def get_cost(e):
+    u, v = e
+    return G[u][v]['cost']
+
+
 def test_optscaling():
     """[summary]
 
@@ -112,7 +117,7 @@ def test_optscaling():
     t = cmax - cmin
     E = ell(1.5 * t, x0)
     dist = list(0 for _ in G)
-    P = optscaling_oracle(G, dist)
+    P = optscaling_oracle(G, dist, get_cost)
     _, _, ell_info = cutting_plane_dc(P, E, float('inf'))
     # fmt = '{:f} {} {} {}'
     # print(np.exp(xb))

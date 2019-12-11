@@ -10,14 +10,17 @@ Cut = Tuple[Arr, float]
 
 
 class lmi_oracle:
-    """Oracle for Linear Matrix Inequality constraint
+    """Oracle for Linear Matrix Inequality constraint.
 
-        find  x
-        s.t.​  (B − F*x) ⪰ 0
+        This oracle solves the following feasibility problem:
+
+            find  x
+            s.t.  (B − F * x) ⪰ 0
 
     """
+
     def __init__(self, F, B):
-        """[summary]
+        """Construct a new lmi oracle object
 
         Arguments:
             F (List[Arr]): [description]
@@ -42,8 +45,9 @@ class lmi_oracle:
                                        for k in range(n))
 
         self.Q.factor(getA)
-        if not self.Q.is_spd():
-            ep = self.Q.witness()
-            g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
-            return g, ep
-        return None
+        if self.Q.is_spd():
+            return None
+
+        ep = self.Q.witness()
+        g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
+        return g, ep

@@ -14,27 +14,27 @@ class chol_ext:
        - Option allow semidefinite
        - A matrix $A in R^{m x m}$ is positive definite iff v' A v > 0
            for all v in R^n.
-       - O(p^2 n) per iteration, independent of N
+       - O(p^2) per iteration, independent of N
 
         Member variables:
-            p (integer): the rows where the process starts and stops
+            p (int, int): the rows where the process starts and stops
             v (Arr): witness
-            n (integer): dimension
+            n (int): dimension
     """
     __slots__ = ('p', 'v', 'n', 'T', 'allow_semidefinite')
 
     def __init__(self, N: int):
-        """initialization
+        """Construct a new chol ext object
 
         Arguments:
-            N (integer): dimension
+            N (int): dimension
         """
         self.allow_semidefinite = False
         self.p = (0, 0)
 
-        self.v = np.zeros(N)
-        self.n = N
-        self.T = np.zeros((N, N))
+        self.v: Arr = np.zeros(N)
+        self.n: int = N
+        self.T: Arr = np.zeros((N, N))
 
     def factorize(self, A: Arr):
         """Perform Cholesky Factorization
@@ -77,7 +77,7 @@ class chol_ext:
         Returns:
             bool: True if $A$ is a spd
         """
-        return self.p == (0, 0)
+        return self.p[1] == 0
 
     def witness(self):
         """witness that certifies $A$ is not symmetric positive definite (spd)
@@ -115,13 +115,12 @@ class chol_ext:
         v = self.v[s:n]
         return v @ A[s:n, s:n] @ v
 
-    def sqrt(self):
+    def sqrt(self) -> Arr:
         if not self.is_spd():
             raise AssertionError()
-        n = self.n
-        M = np.zeros((n, n))
-        for i in range(n):
+        M = np.zeros((self.n, self.n))
+        for i in range(self.n):
             M[i, i] = math.sqrt(self.T[i, i])
-            for j in range(i + 1, n):
+            for j in range(i + 1, self.n):
                 M[i, j] = self.T[i, j] * M[i, i]
         return M

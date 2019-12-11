@@ -10,10 +10,13 @@ Cut = Tuple[Arr, float]
 
 
 class lmi_old_oracle:
-    """Oracle for Linear Matrix Inequality constraint
-            F * x <= B
-        Or
-            (B − F * x) must be a semidefinte matrix
+    """Oracle for Linear Matrix Inequality constraint.
+
+        This oracle solves the following feasibility problem:
+
+            find  x
+            s.t.  (B − F * x) ⪰ 0
+
     """
     def __init__(self, F, B):
         """[summary]
@@ -24,7 +27,7 @@ class lmi_old_oracle:
         """
         self.F = F
         self.F0 = B
-        self.A = np.zeros(B.shape)
+        # self.A = np.zeros(B.shape)
         self.Q = chol_ext(len(B))
 
     def __call__(self, x: Arr) -> Optional[Cut]:
@@ -37,9 +40,9 @@ class lmi_old_oracle:
             Optional[Cut]: [description]
         """
         n = len(x)
-        self.A = self.F0.copy()
-        self.A -= sum(self.F[k] * x[k] for k in range(n))
-        self.Q.factorize(self.A)
+        A = self.F0.copy()
+        A -= sum(self.F[k] * x[k] for k in range(n))
+        self.Q.factorize(A)
         if not self.Q.is_spd():
             ep = self.Q.witness()
             g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])

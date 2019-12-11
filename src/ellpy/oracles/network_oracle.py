@@ -22,10 +22,10 @@ class network_oracle:
             u: list or dictionary
             h: function evaluation and gradient
         """
-        self.G = G
-        self.u = u
-        self.h = h
-        self.S = negCycleFinder(G)
+        self._G = G
+        self._u = u
+        self._h = h
+        self._S = negCycleFinder(G)
 
     def update(self, t: float):
         """[summary]
@@ -33,7 +33,7 @@ class network_oracle:
         Arguments:
             t (float): the best-so-far optimal value
         """
-        self.h.update(t)
+        self._h.update(t)
 
     def __call__(self, x) -> Optional[Cut]:
         """Make object callable for cutting_plane_feas()
@@ -53,11 +53,11 @@ class network_oracle:
             Returns:
                 float: [description]
             """
-            return self.h.eval(e, x)
+            return self._h.eval(e, x)
 
-        C = self.S.find_neg_cycle(self.u, get_weight)
+        C = self._S.find_neg_cycle(self._u, get_weight)
         if C != []:
-            f = -sum(self.h.eval(e, x) for e in C)
-            g = -sum(self.h.grad(e, x) for e in C)
+            f = -sum(self._h.eval(e, x) for e in C)
+            g = -sum(self._h.grad(e, x) for e in C)
             return g, f
         return None
