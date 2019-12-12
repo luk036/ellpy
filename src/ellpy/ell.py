@@ -260,7 +260,7 @@ class ell1d:
         return E
 
     @property
-    def xc(self) -> float:
+    def xc(self):
         """[summary]
 
         Returns:
@@ -269,7 +269,7 @@ class ell1d:
         return self._xc
 
     @xc.setter
-    def xc(self, x: float):
+    def xc(self, x):
         """[summary]
 
         Arguments:
@@ -290,11 +290,12 @@ class ell1d:
             tau: "volumn" of ellipsoid
         """
         g, beta = cut
+        # TODO handle g == 0
         tau = abs(self._r * g)
         tsq = tau**2
         if beta == 0:
             self._r /= 2
-            self._xc += -self._r if g > 0. else self._r
+            self._xc += -self._r if g > 0 else self._r
             return 0, tsq
         if beta > tau:
             return 1, tsq  # no sol'n
@@ -303,7 +304,7 @@ class ell1d:
 
         bound = self._xc - beta / g
         upper = bound if g > 0 else self._xc + self._r
-        lower = self._xc - self._r if g > 0. else bound
+        lower = self._xc - self._r if g > 0 else bound
         self._r = (upper - lower) / 2
         self._xc = lower + self._r
         return 0, tsq

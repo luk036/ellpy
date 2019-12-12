@@ -1,49 +1,52 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union
+from typing import Any, Tuple, Union
 
 import numpy as np
 
 from .network_oracle import network_oracle
 
-# np.ndarray = np.ndarray
 Arr = Union[np.ndarray]
-Cut = Tuple[Arr, float]
+Cut = Tuple[Arr, Any]
 
 
-class ratio_cycle_oracle:
+class cycle_ratio_oracle:
     """Oracle for minimum ratio cycle problem.
 
         This example solves the following convex problem:
 
-            min     t
+            max     t
             s.t.    u[j] - u[i] ≤ mij - sij * x,
-                    x ≤ t
+                    t ≤ x
+
+        where sij is not necessarily positive.
+        The problem could be unbounded???
+
     """
     class ratio:
         def __init__(self, G):
             """[summary]
 
             Arguments:
-                G ([type]): [description]
+                G: [description]
             """
             self.G = G
 
-        def eval(self, e, x: float) -> float:
+        def eval(self, e, x):
             """[summary]
 
             Arguments:
                 e ([type]): [description]
-                x (float): unknown
+                x: unknown
 
             Returns:
-                float: function evaluation
+                Any: function evaluation
             """
             u, v = e
             cost = self.G[u][v]['cost']
             time = self.G[u][v]['time']
             return cost - time * x
 
-        def grad(self, e, x: Arr) -> Arr:
+        def grad(self, e, x):
             """[summary]
 
             Arguments:
@@ -65,25 +68,26 @@ class ratio_cycle_oracle:
         """
         self.network = network_oracle(G, u, self.ratio(G))
 
-    def __call__(self, x: float, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x, t) -> Tuple[Cut, Any]:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
-            x (float): unknown
-            t (float): the best-so-far optimal value
+            x (Any): unknown
+            t (Any): the best-so-far optimal value
 
         Returns:
-            Tuple[Cut, float]
+            Tuple[Cut, Any]
 
         See also:
             cutting_plane_dc
         """
-        fj = x - t
-        if fj >= 0.:
-            return (1. fj), t
+        T = type(t)
+        fj = T(t - x)
+        if fj >= T(0):
+            return (-1, fj), t
 
         cut = self.network(x)
         if cut:
             return cut, t
 
-        return (1., 0), x
+        return (-1, T(0)), x

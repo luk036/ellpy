@@ -27,7 +27,7 @@ class network_oracle:
         self._h = h
         self._S = negCycleFinder(G)
 
-    def update(self, t: float):
+    def update(self, t):
         """[summary]
 
         Arguments:
@@ -44,14 +44,14 @@ class network_oracle:
         Returns:
             Optional[Cut]: [description]
         """
-        def get_weight(e) -> float:
+        def get_weight(e):
             """[summary]
 
             Arguments:
                 e ([type]): [description]
 
             Returns:
-                float: [description]
+                Any: [description]
             """
             return self._h.eval(e, x)
 

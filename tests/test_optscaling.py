@@ -123,4 +123,4 @@ def test_optscaling():
     # print(np.exp(xb))
     # print(fmt.format(np.exp(fb), niter, feasible, status))
     assert ell_info.feasible
-    return ell_info.num_iters
+    # return ell_info.num_iters

@@ -3,6 +3,12 @@ from __future__ import print_function
 
 from fractions import Fraction
 
+import networkx as nx
+
+from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.ell import ell1d
+from ellpy.oracles.cycle_ratio_oracle import cycle_ratio_oracle
+
 
 def set_default(G: nx.Graph, weight, value):
     """[summary]
@@ -55,11 +61,14 @@ def test_cycle_ratio():
     set_default(G, 'cost', 1)
     G[1][2]['cost'] = 5
     dist = list(Fraction(0, 1) for _ in G)
-    r, c = min_cycle_ratio(G, dist)
-    print(r)
-    print(c)
-    assert c
-    assert r == Fraction(9, 5)
+
+    E = ell1d([Fraction(-100, 1), Fraction(100, 1)])
+    assert E._xc == Fraction(0, 1)
+    assert E._r == Fraction(100, 1)
+    P = cycle_ratio_oracle(G, dist)
+    _, r, ell_info = cutting_plane_dc(P, E, Fraction(-1000000, 1))
+    assert ell_info.feasible
+    # assert r == Fraction(9, 5)
 
 
 def test_cycle_ratio_timing():
@@ -73,8 +82,11 @@ def test_cycle_ratio_timing():
     G['a1']['a3']['cost'] = 4
     # make sure no parallel edges in above!!!
     dist = {v: Fraction(0, 1) for v in G}
-    r, c = min_cycle_ratio(G, dist)
-    print(r)
-    print(c)
-    assert c
-    assert r == Fraction(1, 1)
+
+    E = ell1d([Fraction(-100, 1), Fraction(100, 1)])
+    assert E._xc == Fraction(0, 1)
+    assert E._r == Fraction(100, 1)
+    P = cycle_ratio_oracle(G, dist)
+    _, r, ell_info = cutting_plane_dc(P, E, Fraction(-1000000, 1))
+    assert ell_info.feasible
+    # assert r == Fraction(1, 1)
