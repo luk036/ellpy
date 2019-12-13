@@ -92,7 +92,7 @@ def run_firfilter(no_trick, duration=0.000001):
     """
     h0 = np.zeros(n)  # initial x0
     E = ell(10., h0)
-    E._no_defer_trick = no_trick
+    E.no_defer_trick = no_trick
     P = my_oracle()
     prob1 = Problem(E, P)
     prob1.solve(100.)

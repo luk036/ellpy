@@ -81,13 +81,12 @@ class cycle_ratio_oracle:
         See also:
             cutting_plane_dc
         """
-        T = type(t)
-        fj = T(t - x)
-        if fj >= T(0):
+        fj = t - x
+        if fj >= 0:
             return (-1, fj), t
 
         cut = self.network(x)
         if cut:
             return cut, t
 
-        return (-1, T(0)), x
+        return (-1, 0.), x

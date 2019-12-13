@@ -15,8 +15,8 @@ class ell:
     Returns:
         [type] -- [description]
     """
-    __slots__ = ('_n', 'c1', 'kappa', 'rho', 'sigma', 'delta', 'tsq',
-                 '_xc', 'Q', 'use_parallel_cut', '_no_defer_trick')
+    __slots__ = ('_n', '_c1', '_kappa', '_rho', '_sigma', '_delta', '_tsq',
+                 '_xc', '_Q', 'use_parallel_cut', 'no_defer_trick')
 
     def __init__(self, val: Union[Arr, float], x: Arr):
         """Construct a new ell object
@@ -26,17 +26,17 @@ class ell:
             x (Arr): [description]
         """
         self.use_parallel_cut = True
-        self._no_defer_trick = False
+        self.no_defer_trick = False
 
         self._n = n = len(x)
-        self.c1 = float(n * n) / (n * n - 1)
+        self._c1 = float(n * n) / (n * n - 1)
         self._xc = x
         if np.isscalar(val):
-            self.Q = np.eye(n)
-            self.kappa = val
+            self._Q = np.eye(n)
+            self._kappa = val
         else:
-            self.Q = np.diag(val)
-            self.kappa = 1.
+            self._Q = np.diag(val)
+            self._kappa = 1.
 
     def copy(self):
         """[summary]
@@ -44,11 +44,11 @@ class ell:
         Returns:
             ell: [description]
         """
-        E = ell(self.kappa, self.xc)
-        E.Q = self.Q.copy()
-        E.c1 = self.c1
+        E = ell(self._kappa, self.xc)
+        E._Q = self._Q.copy()
+        # E._c1 = self._c1
         E.use_parallel_cut = self.use_parallel_cut
-        E._no_defer_trick = self._no_defer_trick
+        E.no_defer_trick = self.no_defer_trick
         return E
 
     @property
@@ -114,21 +114,21 @@ class ell:
             tau: "volumn" of ellipsoid
         """
         g, beta = cut
-        Qg = self.Q.dot(g)  # n^2 multiplications
+        Qg = self._Q.dot(g)  # n^2 multiplications
         omega = g.dot(Qg)  # n^2 multiplications
-        self.tsq = self.kappa * omega
+        self._tsq = self._kappa * omega
         status = calc_ell(beta)
         if status != 0:
-            return status, self.tsq
+            return status, self._tsq
 
-        self._xc -= (self.rho / omega) * Qg
-        self.Q -= (self.sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
-        self.kappa *= self.delta
+        self._xc -= (self._rho / omega) * Qg
+        self._Q -= (self._sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
+        self._kappa *= self._delta
 
-        if self._no_defer_trick:
-            self.Q *= self.kappa
-            self.kappa = 1.
-        return status, self.tsq
+        if self.no_defer_trick:
+            self._Q *= self._kappa
+            self._kappa = 1.
+        return status, self._tsq
 
     def __calc_ll(self, beta) -> int:
         """parallel or deep cut
@@ -159,7 +159,7 @@ class ell:
             int: [description]
         """
         b1sq = b1**2
-        if b1sq > self.tsq or not self.use_parallel_cut:
+        if b1sq > self._tsq or not self.use_parallel_cut:
             return self.__calc_dc(b0)
         if b1 < b0:  # unlikely
             return 1  # no sol'n
@@ -169,17 +169,17 @@ class ell:
 
         n = self._n
         b0b1 = b0 * b1
-        if n * b0b1 < -self.tsq:  # unlikely
+        if n * b0b1 < -self._tsq:  # unlikely
             return 3  # no effect
 
         # parallel cut
-        t0 = self.tsq - b0 * b0
-        t1 = self.tsq - b1sq
+        t0 = self._tsq - b0 * b0
+        t1 = self._tsq - b1sq
         bav = (b0 + b1) / 2
         xi = math.sqrt(t0 * t1 + (n * bav * (b1 - b0))**2)
-        self.sigma = (n + (self.tsq - b0b1 - xi) / (2 * bav**2)) / (n + 1)
-        self.rho = self.sigma * bav
-        self.delta = self.c1 * ((t0 + t1)/2 + xi / n) / self.tsq
+        self._sigma = (n + (self._tsq - b0b1 - xi) / (2 * bav**2)) / (n + 1)
+        self._rho = self._sigma * bav
+        self._delta = self._c1 * ((t0 + t1) / 2 + xi / n) / self._tsq
         return 0
 
     def __calc_ll_cc(self, b1: float, b1sq: float):
@@ -193,10 +193,10 @@ class ell:
             b1sq (float): [description]
         """
         n = self._n
-        xi = math.sqrt(self.tsq * (self.tsq - b1sq) + (n * b1sq / 2)**2)
-        self.sigma = (n + 2 * (self.tsq - xi) / b1sq) / (n + 1)
-        self.rho = self.sigma * b1 / 2
-        self.delta = self.c1 * (self.tsq - b1sq / 2 + xi / n) / self.tsq
+        xi = math.sqrt(self._tsq * (self._tsq - b1sq) + (n * b1sq / 2)**2)
+        self._sigma = (n + 2 * (self._tsq - xi) / b1sq) / (n + 1)
+        self._rho = self._sigma * b1 / 2
+        self._delta = self._c1 * (self._tsq - b1sq / 2 + xi / n) / self._tsq
 
     def __calc_dc(self, beta: float) -> int:
         """Calculate new ellipsoid under Deep Cut
@@ -209,7 +209,7 @@ class ell:
         Returns:
             int: [description]
         """
-        tau = math.sqrt(self.tsq)
+        tau = math.sqrt(self._tsq)
         if beta > tau:
             return 1  # no sol'n
         if beta == 0.:
@@ -220,9 +220,9 @@ class ell:
         if gamma < 0.:
             return 3  # no effect, unlikely
 
-        self.rho = gamma / (n + 1)
-        self.sigma = 2 * self.rho / (tau + beta)
-        self.delta = self.c1 * (self.tsq - beta**2) / self.tsq
+        self._rho = gamma / (n + 1)
+        self._sigma = 2 * self._rho / (tau + beta)
+        self._delta = self._c1 * (self._tsq - beta**2) / self._tsq
         return 0
 
     def __calc_cc(self, tau: float):
@@ -232,9 +232,9 @@ class ell:
             tau (float): [description]
         """
         np1 = self._n + 1
-        self.sigma = 2. / np1
-        self.rho = tau / np1
-        self.delta = self.c1
+        self._sigma = 2. / np1
+        self._rho = tau / np1
+        self._delta = self._c1
 
 
 class ell1d:

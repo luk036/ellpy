@@ -4,8 +4,8 @@ from __future__ import print_function
 from fractions import Fraction
 
 import networkx as nx
-
-from ellpy.cutting_plane import cutting_plane_dc
+from pytest import approx
+from ellpy.cutting_plane import cutting_plane_dc, Options
 from ellpy.ell import ell1d
 from ellpy.oracles.cycle_ratio_oracle import cycle_ratio_oracle
 
@@ -62,13 +62,16 @@ def test_cycle_ratio():
     G[1][2]['cost'] = 5
     dist = list(Fraction(0, 1) for _ in G)
 
-    E = ell1d([Fraction(-100, 1), Fraction(100, 1)])
-    assert E._xc == Fraction(0, 1)
-    assert E._r == Fraction(100, 1)
+    E = ell1d([-100, 100])
+    assert E._xc == 0
+    assert E._r == 100
+    opts = Options()
+    opts.tol = 1e-12
     P = cycle_ratio_oracle(G, dist)
-    _, r, ell_info = cutting_plane_dc(P, E, Fraction(-1000000, 1))
+    _, r, ell_info = cutting_plane_dc(P, E,  float('-inf'), opts)
+    print(ell_info.num_iters)
     assert ell_info.feasible
-    # assert r == Fraction(9, 5)
+    assert r == approx(9/5)
 
 
 def test_cycle_ratio_timing():
@@ -83,10 +86,13 @@ def test_cycle_ratio_timing():
     # make sure no parallel edges in above!!!
     dist = {v: Fraction(0, 1) for v in G}
 
-    E = ell1d([Fraction(-100, 1), Fraction(100, 1)])
-    assert E._xc == Fraction(0, 1)
-    assert E._r == Fraction(100, 1)
+    E = ell1d([-100, 100])
+    assert E._xc == 0
+    assert E._r == 100
+    opts = Options()
+    opts.tol = 1e-12
     P = cycle_ratio_oracle(G, dist)
-    _, r, ell_info = cutting_plane_dc(P, E, Fraction(-1000000, 1))
+    _, r, ell_info = cutting_plane_dc(P, E, float('-inf'), opts)
+    print(ell_info.num_iters)
     assert ell_info.feasible
-    # assert r == Fraction(1, 1)
+    assert r == approx(1)

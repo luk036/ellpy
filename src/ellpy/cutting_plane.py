@@ -4,7 +4,7 @@ from typing import Any, Callable, Tuple
 
 class Options:
     max_it: int = 2000  # maximum number of iterations
-    tol: float = 1e-8   # error tolerance
+    tol: float = 1e-8  # error tolerance
 
 
 class CInfo:
@@ -21,8 +21,8 @@ class CInfo:
         self.status: int = status
 
 
-def cutting_plane_feas(Omega: Callable[[Any], Any],
-                       S, options=Options()) -> CInfo:
+def cutting_plane_feas(Omega: Callable[[Any], Any], S,
+                       options=Options()) -> CInfo:
     """Find a point in a convex set (defined through a cutting-plane oracle).
 
     Description:
@@ -57,8 +57,9 @@ def cutting_plane_feas(Omega: Callable[[Any], Any],
         if cut is None:  # feasible sol'n obtained
             feasible = True
             break
-        status, tsq = S.update(cut)  # update S
-        if status != 0:
+        cutstatus, tsq = S.update(cut)  # update S
+        if cutstatus != 0:
+            status = cutstatus
             break
         if tsq < options.tol:
             status = 2
@@ -67,8 +68,8 @@ def cutting_plane_feas(Omega: Callable[[Any], Any],
     return CInfo(feasible, niter + 1, status)
 
 
-def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S,
-                     t, options=Options()) -> Tuple[Any, Any, CInfo]:
+def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S, t,
+                     options=Options()) -> Tuple[Any, Any, CInfo]:
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
@@ -86,14 +87,16 @@ def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S,
     """
     x_best = S.xc
     t_orig = t
+    status = 0
 
     for niter in range(options.max_it):
         cut, t1 = Omega(S.xc, t)
         if t != t1:  # best t obtained
             t = t1
             x_best = S.xc
-        status, tsq = S.update(cut)
-        if status != 0:
+        cutstatus, tsq = S.update(cut)
+        if cutstatus != 0:
+            status = cutstatus
             break
         if tsq < options.tol:
             status = 2
@@ -124,6 +127,7 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     x_best = S.xc  # real copy
     t_orig = t
     status = 1  # new
+
     for niter in range(options.max_it):
         cut, x0, t1, loop = Omega(S.xc, t, 0 if status != 3 else 1)
         if status == 3:
@@ -163,13 +167,13 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
     lower, upper = I
     T = type(upper)  # T could be `int` or `Fraction`
     u_orig = upper
+
     for niter in range(options.max_it):
         tau = (upper - lower) / 2
         if tau < options.tol:
             break
         t = T(lower + tau)
         if Omega(t):  # feasible sol'n obtained
-            # feasible = True
             upper = t
         else:
             lower = t

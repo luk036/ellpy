@@ -3,5 +3,5 @@
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
     "python.formatting.provider": "yapf",
-    "python.pythonPath": "/media/lubuntu/USBDISK/miniconda3/bin/python"
+    "python.pythonPath": "/media/ubuntu/casper-rw/miniconda3/bin/python"
 }

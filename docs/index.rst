@@ -4,6 +4,17 @@ ellpy
 
 This is the documentation of **ellpy**.
 
+Contents
+========
+
+.. toctree::
+   :maxdepth: 2
+
+   License <license>
+   Authors <authors>
+   Changelog <changelog>
+   Module Reference <api/modules>
+
 .. note::
 
     This is the main page of your project's `Sphinx`_ documentation.
@@ -21,18 +32,6 @@ This is the documentation of **ellpy**.
     The pretty useful extension `autodoc`_ is activated by default and lets
     you include documentation from docstrings. Docstrings can be written in
     `Google style`_ (recommended!), `NumPy style`_ and `classical style`_.
-
-
-Contents
-========
-
-.. toctree::
-   :maxdepth: 2
-
-   License <license>
-   Authors <authors>
-   Changelog <changelog>
-   Module Reference <api/modules>
 
 
 Indices and tables
