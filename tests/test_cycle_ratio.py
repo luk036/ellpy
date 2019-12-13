@@ -3,9 +3,11 @@ from __future__ import print_function
 
 from fractions import Fraction
 
-import networkx as nx
 from pytest import approx
-from ellpy.cutting_plane import cutting_plane_dc, Options
+
+import networkx as nx
+
+from ellpy.cutting_plane import Options, cutting_plane_dc
 from ellpy.ell import ell1d
 from ellpy.oracles.cycle_ratio_oracle import cycle_ratio_oracle
 
