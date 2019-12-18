@@ -14,14 +14,14 @@ class chol_ext:
        - Option allow semidefinite
        - A matrix $A in R^{m x m}$ is positive definite iff v' A v > 0
            for all v in R^n.
-       - O(p^2) per iteration, independent of N
+       - O(p^3) per iteration, independent of N
 
         Member variables:
             p (int, int): the rows where the process starts and stops
             v (Arr): witness
             n (int): dimension
     """
-    __slots__ = ('p', 'v', 'n', 'T', 'allow_semidefinite')
+    __slots__ = ('p', 'v', '_n', '_T', 'allow_semidefinite')
 
     def __init__(self, N: int):
         """Construct a new chol ext object
@@ -31,10 +31,10 @@ class chol_ext:
         """
         self.allow_semidefinite = False
         self.p = (0, 0)
-
         self.v: Arr = np.zeros(N)
-        self.n: int = N
-        self.T: Arr = np.zeros((N, N))
+
+        self._n: int = N
+        self._T: Arr = np.zeros((N, N))
 
     def factorize(self, A: Arr):
         """Perform Cholesky Factorization
@@ -55,18 +55,19 @@ class chol_ext:
         Arguments:
             getA (callable): function to access symmetric matrix
         """
-        T = self.T
+        T = self._T
         start = 0  # range start
         self.p = (0, 0)
-        for i in range(self.n):
-            for j in range(start, i + 1):
-                d = getA(i, j) - np.dot(T[start:j, i], T[j, start:j])
+        for i in range(self._n):
+            d = getA(i, start)
+            for j in range(start, i):
                 T[i, j] = d
-                if i != j:
-                    T[j, i] = d / T[j, j]
-            if T[i, i] > 0.:
+                T[j, i] = d / T[j, j]
+                d = getA(i, j+1) - np.dot(T[start:j+1, i], T[j+1, start:j+1])
+            T[i, i] = d
+            if d > 0.:
                 continue
-            if T[i, i] < 0. or not self.allow_semidefinite:
+            if d < 0. or not self.allow_semidefinite:
                 self.p = start, i + 1
                 break
             start = i + 1  # T[i, i] == 0, restart at i+1
@@ -98,8 +99,8 @@ class chol_ext:
         m = n - 1
         self.v[m] = 1.
         for i in range(m, start, -1):
-            self.v[i - 1] = -(self.T[i - 1, i:n] @ self.v[i:n])
-        return -self.T[m, m]
+            self.v[i - 1] = -(self._T[i - 1, i:n] @ self.v[i:n])
+        return -self._T[m, m]
 
     def sym_quad(self, A: Arr):
         """[summary]
@@ -118,9 +119,9 @@ class chol_ext:
     def sqrt(self) -> Arr:
         if not self.is_spd():
             raise AssertionError()
-        M = np.zeros((self.n, self.n))
-        for i in range(self.n):
-            M[i, i] = math.sqrt(self.T[i, i])
-            for j in range(i + 1, self.n):
-                M[i, j] = self.T[i, j] * M[i, i]
+        M = np.zeros((self._n, self._n))
+        for i in range(self._n):
+            M[i, i] = math.sqrt(self._T[i, i])
+            for j in range(i + 1, self._n):
+                M[i, j] = self._T[i, j] * M[i, i]
         return M
