@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
+from enum import Enum
 from typing import Any, Callable, Tuple
+
+
+class CUTStatus(Enum):
+    success = 0
+    nosoln = 1
+    smallenough = 2
+    noeffect = 3
 
 
 class Options:
@@ -18,7 +26,7 @@ class CInfo:
         """
         self.feasible: bool = feasible
         self.num_iters: int = num_iters
-        self.status: int = status
+        self.status: CUTStatus = status
 
 
 def cutting_plane_feas(Omega: Callable[[Any], Any], S,
@@ -51,20 +59,19 @@ def cutting_plane_feas(Omega: Callable[[Any], Any], S,
         niter: number of iterations performed
     """
     feasible = False
-    status = 0
+    status = CUTStatus.success
     for niter in range(options.max_it):
         cut = Omega(S.xc)  # query the oracle at S.xc
         if cut is None:  # feasible sol'n obtained
             feasible = True
             break
         cutstatus, tsq = S.update(cut)  # update S
-        if cutstatus != 0:
+        if cutstatus != CUTStatus.success:
             status = cutstatus
             break
         if tsq < options.tol:
-            status = 2
+            status = CUTStatus.smallenough
             break
-
     return CInfo(feasible, niter + 1, status)
 
 
@@ -87,23 +94,21 @@ def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S, t,
     """
     x_best = S.xc
     t_orig = t
-    status = 0
+    status = CUTStatus.success
 
     for niter in range(options.max_it):
         cut, t1 = Omega(S.xc, t)
-        if t != t1:  # best t obtained
+        if t != t1:  # better t obtained
             t = t1
             x_best = S.xc
         cutstatus, tsq = S.update(cut)
-        if cutstatus != 0:
+        if cutstatus != CUTStatus.success:
             status = cutstatus
             break
         if tsq < options.tol:
-            status = 2
+            status = CUTStatus.smallenough
             break
-
     ret = CInfo(t != t_orig, niter + 1, status)
-    # ret.value = t
     return x_best, t, ret
 
 
@@ -126,25 +131,25 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     # x_last = S.xc
     x_best = S.xc  # real copy
     t_orig = t
-    status = 1  # new
+    status = CUTStatus.nosoln
 
     for niter in range(options.max_it):
-        cut, x0, t1, loop = Omega(S.xc, t, 0 if status != 3 else 1)
-        if status == 3:
+        retry = 1 if status == CUTStatus.noeffect else 0
+        cut, x0, t1, loop = Omega(S.xc, t, retry)
+        if status == CUTStatus.noeffect:
             if loop == 0:  # no more alternative cut
                 break
-        if t != t1:  # best t obtained
+        if t != t1:  # better t obtained
             t = t1
             x_best = x0.copy()
         status, tsq = S.update(cut)
-        if status == 1:
+        if status == CUTStatus.nosoln:
             break
         if tsq < options.tol:
-            status = 2
+            status = CUTStatus.smallenough
             break
 
     ret = CInfo(t != t_orig, niter + 1, status)
-    # ret.value = t
     return x_best, t, ret
 
 
@@ -167,10 +172,12 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
     lower, upper = I
     T = type(upper)  # T could be `int` or `Fraction`
     u_orig = upper
+    status = CUTStatus.success
 
     for niter in range(options.max_it):
         tau = (upper - lower) / 2
         if tau < options.tol:
+            status = CUTStatus.smallenough
             break
         t = T(lower + tau)
         if Omega(t):  # feasible sol'n obtained
@@ -178,8 +185,7 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
         else:
             lower = t
 
-    ret = CInfo(upper != u_orig, niter, 0)
-    # ret.value = upper
+    ret = CInfo(upper != u_orig, niter, status)
     return upper, ret
 
 

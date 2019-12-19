@@ -4,6 +4,8 @@ from typing import Tuple, Union
 
 import numpy as np
 
+from .cutting_plane import CUTStatus
+
 Arr = Union[np.ndarray]
 
 
@@ -96,7 +98,7 @@ class ell:
         Returns:
             Tuple[int, float]: [description]
         """
-        return self.update_core(self.__calc_ll, cut)
+        return self.update_core(self._calc_ll, cut)
 
     def update_core(self, calc_ell, cut):
         """Update ellipsoid core function using the cut(s)
@@ -118,7 +120,7 @@ class ell:
         omega = g.dot(Qg)  # n^2 multiplications
         self._tsq = self._kappa * omega
         status = calc_ell(beta)
-        if status != 0:
+        if status != CUTStatus.success:
             return status, self._tsq
 
         self._xc -= (self._rho / omega) * Qg
@@ -130,7 +132,7 @@ class ell:
             self._kappa = 1.
         return status, self._tsq
 
-    def __calc_ll(self, beta) -> int:
+    def _calc_ll(self, beta) -> int:
         """parallel or deep cut
 
         Arguments:
@@ -140,12 +142,12 @@ class ell:
             int: [description]
         """
         if np.isscalar(beta):
-            return self.__calc_dc(beta)
+            return self._calc_dc(beta)
         if len(beta) < 2:  # unlikely
-            return self.__calc_dc(beta[0])
-        return self.__calc_ll_core(beta[0], beta[1])
+            return self._calc_dc(beta[0])
+        return self._calc_ll_core(beta[0], beta[1])
 
-    def __calc_ll_core(self, b0: float, b1: float) -> int:
+    def _calc_ll_core(self, b0: float, b1: float) -> int:
         """Calculate new ellipsoid under Parallel Cut
 
                 g' (x − xc​) + β0 ​≤ 0
@@ -160,17 +162,17 @@ class ell:
         """
         b1sq = b1**2
         if b1sq > self._tsq or not self.use_parallel_cut:
-            return self.__calc_dc(b0)
+            return self._calc_dc(b0)
         if b1 < b0:  # unlikely
-            return 1  # no sol'n
+            return CUTStatus.nosoln  # no sol'n
         if b0 == 0:
-            self.__calc_ll_cc(b1, b1sq)
-            return 0
+            self._calc_ll_cc(b1, b1sq)
+            return CUTStatus.success
 
         n = self._n
         b0b1 = b0 * b1
         if n * b0b1 < -self._tsq:  # unlikely
-            return 3  # no effect
+            return CUTStatus.noeffect  # no effect
 
         # parallel cut
         t0 = self._tsq - b0 * b0
@@ -180,9 +182,9 @@ class ell:
         self._sigma = (n + (self._tsq - b0b1 - xi) / (2 * bav**2)) / (n + 1)
         self._rho = self._sigma * bav
         self._delta = self._c1 * ((t0 + t1) / 2 + xi / n) / self._tsq
-        return 0
+        return CUTStatus.success
 
-    def __calc_ll_cc(self, b1: float, b1sq: float):
+    def _calc_ll_cc(self, b1: float, b1sq: float):
         """Calculate new ellipsoid under Parallel Cut, one of them is central
 
                 g' (x − xc​) ​≤ 0
@@ -198,7 +200,7 @@ class ell:
         self._rho = self._sigma * b1 / 2
         self._delta = self._c1 * (self._tsq - b1sq / 2 + xi / n) / self._tsq
 
-    def __calc_dc(self, beta: float) -> int:
+    def _calc_dc(self, beta: float) -> int:
         """Calculate new ellipsoid under Deep Cut
 
                 g' (x − xc​) + β ​≤ 0
@@ -211,21 +213,21 @@ class ell:
         """
         tau = math.sqrt(self._tsq)
         if beta > tau:
-            return 1  # no sol'n
+            return CUTStatus.nosoln  # no sol'n
         if beta == 0.:
-            self.__calc_cc(tau)
-            return 0
+            self._calc_cc(tau)
+            return CUTStatus.success
         n = self._n
         gamma = tau + n * beta
         if gamma < 0.:
-            return 3  # no effect, unlikely
+            return CUTStatus.noeffect  # no effect, unlikely
 
         self._rho = gamma / (n + 1)
         self._sigma = 2 * self._rho / (tau + beta)
         self._delta = self._c1 * (self._tsq - beta**2) / self._tsq
-        return 0
+        return CUTStatus.success
 
-    def __calc_cc(self, tau: float):
+    def _calc_cc(self, tau: float):
         """Calculate new ellipsoid under Central Cut
 
         Arguments:
@@ -296,15 +298,15 @@ class ell1d:
         if beta == 0:
             self._r /= 2
             self._xc += -self._r if g > 0 else self._r
-            return 0, tsq
+            return CUTStatus.success, tsq
         if beta > tau:
-            return 1, tsq  # no sol'n
+            return CUTStatus.nosoln, tsq  # no sol'n
         if beta < -tau:  # unlikely
-            return 3, tsq  # no effect
+            return CUTStatus.noeffect, tsq  # no effect
 
         bound = self._xc - beta / g
         upper = bound if g > 0 else self._xc + self._r
         lower = self._xc - self._r if g > 0 else bound
         self._r = (upper - lower) / 2
         self._xc = lower + self._r
-        return 0, tsq
+        return CUTStatus.success, tsq

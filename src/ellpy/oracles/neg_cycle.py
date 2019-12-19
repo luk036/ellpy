@@ -39,18 +39,18 @@ class negCycleFinder:
         """
         self.pred = {}
         self.cycle = []
-        while self.__relax(dist, get_weight):
-            v = self.__find_cycle()
+        while self._relax(dist, get_weight):
+            v = self._find_cycle()
             if v is not None:
                 # Will zero cycle be found???
-                assert self.__is_negative(v, dist, get_weight)
-                self.cycle = self.__cycle_list(v)
+                assert self._is_negative(v, dist, get_weight)
+                self.cycle = self._cycle_list(v)
                 break
         return self.cycle
 
     # private:
 
-    def __find_cycle(self):
+    def _find_cycle(self):
         """Find a cycle on policy graph
 
         Arguments:
@@ -82,7 +82,7 @@ class negCycleFinder:
                     break
         return None
 
-    def __relax(self, dist, get_weight):
+    def _relax(self, dist, get_weight):
         """Perform a updating of dist and pred
 
         Arguments:
@@ -107,7 +107,7 @@ class negCycleFinder:
                 self.pred[v] = u
         return changed
 
-    def __cycle_list(self, handle):
+    def _cycle_list(self, handle):
         """[summary]
 
         Arguments:
@@ -126,7 +126,7 @@ class negCycleFinder:
                 break
         return cycle
 
-    def __is_negative(self, handle, dist, get_weight):
+    def _is_negative(self, handle, dist, get_weight):
         """[summary]
 
         Arguments:

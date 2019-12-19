@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import numpy as np
 
-from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.cutting_plane import CUTStatus, cutting_plane_dc
 from ellpy.ell import ell
 
 
@@ -74,7 +74,7 @@ def test_case_infeasible1():
     P = my_oracle
     _, _, ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert not ell_info.feasible
-    assert ell_info.status == 1  # no sol'n
+    assert ell_info.status == CUTStatus.nosoln  # no sol'n
 
 
 def test_case_infeasible2():

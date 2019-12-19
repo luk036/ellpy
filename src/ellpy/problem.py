@@ -1,4 +1,4 @@
-from .cutting_plane import Options, cutting_plane_dc
+from .cutting_plane import CUTStatus, Options, cutting_plane_dc
 
 
 class Problem:
@@ -134,15 +134,14 @@ class Problem:
         status = ell_info.status
 
         if ell_info.feasible:
-            if status == 2:
+            if status == CUTStatus.smallenough:
                 self._status = 'optimal'
             else:
                 self._status = 'feasible'
             self._optim_value = fb
             self._optim_var = xb
         else:
-            if status == 3:  # ???
-                self._status = 'infeasible'
+            self._status = 'infeasible'
 
         solver_stats = SolverStats('deep-cut')
         solver_stats.num_iters = num_iters
