@@ -66,12 +66,22 @@ def test_case_feasible():
     # print(xb)
 
 
-def test_case_infeasible():
+def test_case_infeasible1():
     """[summary]
     """
-    x0 = np.array([100., 100.])  # initial x0
-    E = ell(10., x0)
+    x0 = np.array([100., 100.])  # wrong initial guess,
+    E = ell(10., x0)  # or ellipsoid is too small
     P = my_oracle
     _, _, ell_info = cutting_plane_dc(P, E, float('-inf'))
     assert not ell_info.feasible
     assert ell_info.status == 1  # no sol'n
+
+
+def test_case_infeasible2():
+    """[summary]
+    """
+    x0 = np.array([0., 0.])  # initial x0
+    E = ell(10., x0)
+    P = my_oracle
+    _, _, ell_info = cutting_plane_dc(P, E, 100)  # wrong initial best-so-far
+    assert not ell_info.feasible

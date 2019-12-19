@@ -6,17 +6,6 @@ import numpy as np
 from ellpy.oracles.chol_ext import chol_ext
 
 
-def print_case(l1):
-    """[summary]
-
-    Arguments:
-          l1 ([type]): [description]
-    """
-    m1 = np.array(l1)
-    Q = chol_ext(len(m1))
-    Q.factorize(m1)
-
-
 def test_chol1():
     """[summary]
     """
@@ -108,6 +97,30 @@ def test_chol7():
     Q.factorize(m3)
     assert not Q.is_spd()
     ep = Q.witness()
-    #     assert len(v) == 3
-    #     assert Q.v[0] == 0.
     assert ep == 20.
+
+
+def test_chol8():
+    """[summary]
+    """
+    """[summary]
+    """
+    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 20.]]
+    m3 = np.array(l3)
+    Q = chol_ext(len(m3))
+    Q.allow_semidefinite = False
+    Q.factorize(m3)
+    assert not Q.is_spd()
+
+
+def test_chol9():
+    """[summary]
+    """
+    """[summary]
+    """
+    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 20.]]
+    m3 = np.array(l3)
+    Q = chol_ext(len(m3))
+    Q.allow_semidefinite = True
+    Q.factorize(m3)
+    assert Q.is_spd()

@@ -59,18 +59,20 @@ class chol_ext:
         start = 0  # range start
         self.p = (0, 0)
         for i in range(self._n):
-            d = getA(i, start)
-            for j in range(start, i):
+            j = start
+            d = getA(i, j)
+            while j != i:
                 T[i, j] = d
                 T[j, i] = d / T[j, j]
-                d = getA(i, j+1) - np.dot(T[start:j+1, i], T[j+1, start:j+1])
+                j += 1
+                d = getA(i, j) - np.dot(T[start:j, i], T[j, start:j])
             T[i, i] = d
             if d > 0.:
                 continue
             if d < 0. or not self.allow_semidefinite:
                 self.p = start, i + 1
                 break
-            start = i + 1  # T[i, i] == 0, restart at i+1
+            start = i + 1  # T[i, i] == 0 (very unlikely), restart at i+1
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)
