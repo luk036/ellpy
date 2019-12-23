@@ -16,7 +16,7 @@ class Options:
 
 
 class CInfo:
-    def __init__(self, feasible: bool, num_iters: int, status: int):
+    def __init__(self, feasible: bool, num_iters: int, status: CUTStatus):
         """Construct a new CInfo object
 
         Arguments:
@@ -134,15 +134,15 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     status = CUTStatus.nosoln
 
     for niter in range(options.max_it):
-        retry = 1 if status == CUTStatus.noeffect else 0
-        cut, x0, t1, loop = Omega(S.xc, t, retry)
-        if status == CUTStatus.noeffect:
-            if loop == 0:  # no more alternative cut
-                break
+        retry = (status == CUTStatus.noeffect)
+        cut, x0, t1, more_alt = Omega(S.xc, t, retry)
         if t != t1:  # better t obtained
             t = t1
             x_best = x0.copy()
         status, tsq = S.update(cut)
+        if status == CUTStatus.noeffect:
+            if not more_alt:  # no more alternative cut
+                break
         if status == CUTStatus.nosoln:
             break
         if tsq < options.tol:
@@ -154,7 +154,7 @@ def cutting_plane_q(Omega, S, t, options=Options()):
 
 
 def bsearch(Omega: Callable[[Any], bool], I: Tuple,
-            options=Options()) -> CInfo:
+            options=Options()) -> Tuple[Any, CInfo]:
     """[summary]
 
     Arguments:

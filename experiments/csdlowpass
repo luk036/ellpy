@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import remez, freqz, group_delay
 from ellpy.cutting_plane import cutting_plane_dc, cutting_plane_q
 from ellpy.ell import ell
-# from ellpy.tests.csdlowpass_oracle import csdlowpass_oracle
 from ellpy.oracles.spectral_fact import spectral_fact
-# from problem import Problem
 from ellpy.oracles.lowpass_oracle import lowpass_oracle
 from ellpy.oracles.csdlowpass_oracle import csdlowpass_oracle
 from pycsd.csd import to_csdfixed

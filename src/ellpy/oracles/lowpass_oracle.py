@@ -16,6 +16,7 @@ class lowpass_oracle:
     Returns:
         [type]: [description]
     """
+    more_alt = True
 
     # for round robin counters
     i_Anr = 0
@@ -51,13 +52,7 @@ class lowpass_oracle:
         """
         # 1. nonnegative-real constraint
         n = len(x)
-
-        # case 1,
-        if x[0] < 0:
-            g = np.zeros(n)
-            g[0] = -1.
-            f = -x[0]
-            return (g, f), Spsq
+        self.more_alt = True
 
         # case 2,
         # 2. passband constraints
@@ -102,7 +97,7 @@ class lowpass_oracle:
                 imax = k
 
         # case 4,
-        # 1. nonnegative-real constraint
+        # 1. nonnegative-real constraint on other frequences
         N = self.Anr.shape[0]
         i_Anr = self.i_Anr
         for k in chain(range(i_Anr, N), range(i_Anr)):
@@ -112,6 +107,15 @@ class lowpass_oracle:
                 g = -self.Anr[k, :]
                 self.i_Anr = k + 1
                 return (g, f), Spsq
+
+        self.more_alt = False
+
+        # case 1 (unlikely)
+        if x[0] < 0:
+            g = np.zeros(n)
+            g[0] = -1.
+            f = -x[0]
+            return (g, f), Spsq
 
         # Begin objective function
         Spsq = fmax

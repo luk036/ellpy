@@ -18,6 +18,8 @@ class csdlowpass_oracle:
     Returns:
         [type]: [description]
     """
+    rcsd = None
+
     def __init__(self, nnz, lowpass):
         """[summary]
 
@@ -28,7 +30,7 @@ class csdlowpass_oracle:
         self.nnz = nnz
         self.lowpass = lowpass
 
-    def __call__(self, r: Arr, Spsq, retry: int):
+    def __call__(self, r: Arr, Spsq, retry: bool):
         """[summary]
 
         Arguments:
@@ -39,13 +41,17 @@ class csdlowpass_oracle:
         Returns:
             [type]: [description]
         """
-        cut, Spsq2 = self.lowpass(r, Spsq)
-        if Spsq == Spsq2:  # infeasible
-            return cut, r, Spsq2, 0
+        if not retry:  # retry due to no effect in the previous cut
+            self.lowpass.retry = False
+            cut, Spsq2 = self.lowpass(r, Spsq)
+            if Spsq == Spsq2:  # infeasible
+                return cut, r, Spsq2, True
+            h = spectral_fact(r)
+            hcsd = np.array([to_decimal(to_csdfixed(hi, self.nnz)) for hi in h])
+            self.rcsd = inverse_spectral_fact(hcsd)
 
-        h = spectral_fact(r)
-        hcsd = np.array([to_decimal(to_csdfixed(hi, self.nnz)) for hi in h])
-        rcsd = inverse_spectral_fact(hcsd)
-        (gc, hc), Spsq2 = self.lowpass(rcsd, Spsq)
-        hc += gc.dot(rcsd - r)
-        return (gc, hc), rcsd, Spsq2, 1
+        (gc, hc), Spsq2 = self.lowpass(self.rcsd, Spsq)
+        # no more alternative cuts?
+        hc += gc.dot(self.rcsd - r)
+        more_alt = self.lowpass.more_alt and not retry
+        return (gc, hc), self.rcsd, Spsq2, more_alt

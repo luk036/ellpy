@@ -132,7 +132,7 @@ class ell:
             self._kappa = 1.
         return status, self._tsq
 
-    def _calc_ll(self, beta) -> int:
+    def _calc_ll(self, beta) -> CUTStatus:
         """parallel or deep cut
 
         Arguments:
@@ -147,7 +147,7 @@ class ell:
             return self._calc_dc(beta[0])
         return self._calc_ll_core(beta[0], beta[1])
 
-    def _calc_ll_core(self, b0: float, b1: float) -> int:
+    def _calc_ll_core(self, b0: float, b1: float) -> CUTStatus:
         """Calculate new ellipsoid under Parallel Cut
 
                 g' (x − xc​) + β0 ​≤ 0
@@ -200,7 +200,7 @@ class ell:
         self._rho = self._sigma * b1 / 2
         self._delta = self._c1 * (self._tsq - b1sq / 2 + xi / n) / self._tsq
 
-    def _calc_dc(self, beta: float) -> int:
+    def _calc_dc(self, beta: float) -> CUTStatus:
         """Calculate new ellipsoid under Deep Cut
 
                 g' (x − xc​) + β ​≤ 0
@@ -211,7 +211,13 @@ class ell:
         Returns:
             int: [description]
         """
-        tau = math.sqrt(self._tsq)
+        try:
+            tau = math.sqrt(self._tsq)
+        except ValueError:
+            print("Warning: tsq is negative: {}".format(self._tsq))
+            self._tsq = 0.
+            tau = 0.
+
         if beta > tau:
             return CUTStatus.nosoln  # no sol'n
         if beta == 0.:

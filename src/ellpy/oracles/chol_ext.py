@@ -12,14 +12,8 @@ class chol_ext:
 
        - LDL^T square-root-free version
        - Option allow semidefinite
-       - A matrix $A in R^{m x m}$ is positive definite iff v' A v > 0
-           for all v in R^n.
+       - A matrix A in R^{m x m} is positive definite iff v' A v > 0 for all v in R^n.
        - O(p^3) per iteration, independent of N
-
-        Member variables:
-            p (int, int): the rows where the process starts and stops
-            v (Arr): witness
-            n (int): dimension
     """
     __slots__ = ('p', 'v', '_n', '_T', 'allow_semidefinite')
 

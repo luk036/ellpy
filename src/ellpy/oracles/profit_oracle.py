@@ -149,6 +149,8 @@ class profit_q_oracle:
     See also:
         profit_oracle
     """
+    yd = None
+
     def __init__(self, params, a, v):
         """[summary]
 
@@ -176,12 +178,14 @@ class profit_q_oracle:
         See also:
             cutting_plane_q
         """
-        x = np.round(np.exp(y))
-        if x[0] == 0:
-            x[0] = 1
-        if x[1] == 0:
-            x[1] = 1
-        yd = np.log(x)
-        (g, h), t = self.P(yd, t)
-        h += g.dot(yd - y)
-        return (g, h), yd, t, 1
+        if not retry:
+            x = np.round(np.exp(y))
+            if x[0] == 0:
+                x[0] = 1
+            if x[1] == 0:
+                x[1] = 1
+            self.yd = np.log(x)
+
+        (g, h), t = self.P(self.yd, t)
+        h += g.dot(self.yd - y)
+        return (g, h), self.yd, t, not retry

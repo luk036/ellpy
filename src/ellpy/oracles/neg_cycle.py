@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Negative cycle detection for weighed graphs.
+
 1. Support Lazy evalution
 """
 from typing import Callable, Optional, Union
