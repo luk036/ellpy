@@ -1,6 +1,7 @@
 ellpy
 =====
 
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/luk036/ellpy)
 [![Build Status](https://travis-ci.org/luk036/ellpy.svg?branch=master)](https://travis-ci.org/luk036/ellpy)
 [![Build status](https://ci.appveyor.com/api/projects/status/0v1cf05tcueny7d9?svg=true)](https://ci.appveyor.com/project/luk036/ellpy)
 [![Documentation Status](https://readthedocs.org/projects/ellpy/badge/?version=latest)](https://ellpy.readthedocs.io/en/latest/?badge=latest)
