@@ -1,5 +1,23 @@
 FROM gitpod/workspace-full
 
+USER root
+
+RUN pip3 install --upgrade pip \
+    && pip3 install \
+	decorator \
+	networkx \
+	numpy \
+	scipy \
+	pre-commit \
+	mypy \
+	codecov \
+	coverage \
+	hypothesis \
+	pytest \
+	pytest-cov \
+	pytest-benchmark \
+	matplotlib
+
 USER gitpod
 
 # Install custom tools, runtime, etc. using apt-get

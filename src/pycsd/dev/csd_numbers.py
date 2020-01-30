@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 """ Convert some CSD numbers to get a feel for the range. """
 
 import sys

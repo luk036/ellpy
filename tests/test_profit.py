@@ -28,7 +28,6 @@ def test_profit_rb():
     e1 = 0.003
     e2 = 0.007
     e3 = e4 = e5 = 1.
-
     E = ell(r, np.array([0., 0.]))
     P = profit_rb_oracle(params, a, v, (e1, e2, e3, e4, e5))
     _, _, ell_info = cutting_plane_dc(P, E, 0.)
