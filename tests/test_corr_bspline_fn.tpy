@@ -5,10 +5,10 @@ import numpy as np
 
 from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
-from ellpy.oracles.corr_oracle import corr_poly, create_2d_isotropic, create_2d_sites
+from ellpy.oracles.corr_oracle import create_2d_isotropic, create_2d_sites
+from ellpy.oracles.corr_bspline_oracle import corr_bspline
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
-from ellpy.oracles.qmi_oracle import qmi_oracle
 
 s = create_2d_sites(5, 4)
 Y = create_2d_isotropic(s, 3000)
@@ -37,44 +37,6 @@ def lsq_corr_core2(Y, n, P):
     return xb[:-1], ell_info.num_iters, ell_info.feasible
 
 
-def lsq_corr_poly2(Y, s, n):
-    """[summary]
-
-    Arguments:
-        Y ([type]): [description]
-        s ([type]): [description]
-        n ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    return corr_poly(Y, s, n, lsq_oracle, lsq_corr_core2)
-
-
-def lsq_corr_core(Y, n, Q):
-    x = np.zeros(n)  # cannot all zeros
-    x[0] = 1.
-    E = ell(256., x)
-    P = bsearch_adaptor(Q, E)
-    normY = np.linalg.norm(Y, 'fro')
-    _, bs_info = bsearch(P, [0., normY*normY])
-    return P.x_best, bs_info.num_iters, bs_info.feasible
-
-
-def lsq_corr_poly(Y, s, n):
-    """[summary]
-
-    Arguments:
-        Y ([type]): [description]
-        s ([type]): [description]
-        n ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    return corr_poly(Y, s, n, qmi_oracle, lsq_corr_core)
-
-
 def mle_corr_core(Y, n, P):
     """[summary]
 
@@ -98,7 +60,7 @@ def mle_corr_core(Y, n, P):
     return xb, ell_info.num_iters, ell_info.feasible
 
 
-def mle_corr_poly(Y, s, n):
+def mle_corr_bspline(Y, s, n):
     """[summary]
 
     Arguments:
@@ -110,7 +72,21 @@ def mle_corr_poly(Y, s, n):
         [type]: [description]
     """
     _ = np.linalg.cholesky(Y)  # test if Y is SPD.
-    return corr_poly(Y, s, n, mle_oracle, mle_corr_core)
+    return corr_bspline(Y, s, n, mle_oracle, mle_corr_core)
+
+
+def lsq_corr_bspline2(Y, s, n):
+    """[summary]
+
+    Arguments:
+        Y ([type]): [description]
+        s ([type]): [description]
+        n ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    return corr_bspline(Y, s, n, lsq_oracle, lsq_corr_core2)
 
 
 def test_data():
@@ -122,19 +98,13 @@ def test_data():
     # assert D1[2, 4] == approx(5.0)
 
 
-def test_lsq_corr_poly():
-    _, num_iters, feasible = lsq_corr_poly(Y, s, 4)
+def test_lsq_corr_bspline2():
+    _, num_iters, feasible = lsq_corr_bspline2(Y, s, 4)
     assert feasible
-    assert num_iters <= 36
+    assert num_iters <= 480
 
 
-def test_lsq_corr_poly2():
-    _, num_iters, feasible = lsq_corr_poly2(Y, s, 4)
+def test_mle_corr_bspline():
+    _, num_iters, feasible = mle_corr_bspline(Y, s, 4)
     assert feasible
-    assert num_iters <= 570
-
-
-def test_mle_corr_poly():
-    _, num_iters, feasible = mle_corr_poly(Y, s, 4)
-    assert feasible
-    assert num_iters <= 234
+    assert num_iters <= 178

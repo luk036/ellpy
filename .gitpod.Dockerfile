@@ -17,6 +17,7 @@ RUN pip3 install --upgrade pip \
 	pytest-cov \
 	pytest-benchmark \
 	jupyter \
+	jupyterlab \
 	matplotlib
 
 USER gitpod

@@ -4,7 +4,6 @@ from typing import Tuple, Union
 
 import numpy as np
 
-from .corr_oracle import mono_oracle
 from .lmi0_oracle import lmi0_oracle
 from .lmi_oracle import lmi_oracle
 
@@ -69,29 +68,3 @@ class mle_oracle:
             g[i] -= sum(SFsi[k, :].dot(SY[:, k]) for k in range(m))
 
         return (g, f), t
-
-
-class mono_decreasing_oracle:
-    def __init__(self, basis):
-        """[summary]
-
-        Arguments:
-            basis ([type]): [description]
-        """
-        self.basis = basis
-
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
-        """[summary]
-
-        Arguments:
-            x (Arr): [description]
-            t (float): the best-so-far optimal value
-
-        Returns:
-            Tuple[Cut, float]: [description]
-        """
-        # monotonic decreasing constraint
-        cut = mono_oracle(x)
-        if cut:
-            return cut, t
-        return self.basis(x, t)
