@@ -59,7 +59,7 @@ class chol_ext:
                 T[i, j] = d
                 T[j, i] = d / T[j, j]
                 j += 1
-                d = getA(i, j) - np.dot(T[start:j, i], T[j, start:j])
+                d = getA(i, j) - (T[start:j, i] @ T[j, start:j])
             T[i, i] = d
             if d > 0.:
                 continue

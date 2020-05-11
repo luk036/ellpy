@@ -116,8 +116,8 @@ class ell:
             tau: "volumn" of ellipsoid
         """
         g, beta = cut
-        Qg = self._Q.dot(g)  # n^2 multiplications
-        omega = g.dot(Qg)  # n^2 multiplications
+        Qg = self._Q @ g  # n^2 multiplications
+        omega = g @ Qg  # n^2 multiplications
         self._tsq = self._kappa * omega
         status = calc_ell(beta)
         if status != CUTStatus.success:

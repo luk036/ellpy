@@ -52,6 +52,6 @@ class csdlowpass_oracle:
 
         (gc, hc), Spsq2 = self.lowpass(self.rcsd, Spsq)
         # no more alternative cuts?
-        hc += gc.dot(self.rcsd - r)
+        hc += gc @ (self.rcsd - r)
         more_alt = self.lowpass.more_alt and not retry
         return (gc, hc), self.rcsd, Spsq2, more_alt

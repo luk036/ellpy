@@ -48,7 +48,7 @@ def create_2d_isotropic(s: Arr, N=3000) -> Arr:
     for i in range(n):
         for j in range(i, n):
             d = np.array(s[j]) - np.array(s[i])
-            Sig[i, j] = np.exp(-sdkern * d @ d)
+            Sig[i, j] = np.exp(-sdkern * (d @ d))
             Sig[j, i] = Sig[i, j]
 
     A = np.linalg.cholesky(Sig)
@@ -56,7 +56,7 @@ def create_2d_isotropic(s: Arr, N=3000) -> Arr:
 
     for _ in range(N):
         x = var * np.random.randn(n)
-        y = A.dot(x) + tau * np.random.randn(n)
+        y = A @ x + tau * np.random.randn(n)
         Y += np.outer(y, y)
 
     Y /= N

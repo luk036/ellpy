@@ -32,7 +32,7 @@ class rank1_oracle:
         x = np.array(x0)
         for loop in range(restart, 2):
             # 1. 1 <= trace(A*G) <= 2
-            v = self.c.dot(x)
+            v = self.c @ x
             if v > 2:
                 g = self.c
                 f = np.array([v - 2, v - 1])
@@ -64,7 +64,7 @@ class rank1_oracle:
             if p != 0:
                 v, f = witness(R, p)
                 # f = -v'*G(1:p,1:p)*v
-                # f = -np.dot(v, G[:p, :p].dot(v))
+                # f = -(v @ G[:p, :p] @ v)
                 g = np.zeros(n)
                 v2 = np.zeros(self.N)
                 v2[:p] = v
@@ -80,7 +80,7 @@ class rank1_oracle:
             # h = v * sqrt(d)
             G = np.outer(h, h)
             x = G[self.inds]
-            s = 1. / (self.c.dot(x))
+            s = 1. / (self.c @ x)
             x = s * x  # rescale to the closest point
             G = self.toMat(x0, self.N)
 

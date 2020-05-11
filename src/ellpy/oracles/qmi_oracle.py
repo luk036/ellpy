@@ -53,7 +53,7 @@ class qmi_oracle:
                 self.count = i + 1
                 self.Fx[i] = self.F0[:, i]
                 self.Fx[i] -= sum(self.F[k][:, i] * x[k] for k in range(nx))
-            a = -self.Fx[i].dot(self.Fx[j])
+            a = -(self.Fx[i] @ self.Fx[j])
             if i == j:
                 a += self.t
             return a
@@ -61,8 +61,8 @@ class qmi_oracle:
         def neg_grad_sym_quad(self, Q, x: Arr):
             s, n = Q.p
             v = Q.v[s:n]
-            Av = v.dot(self.Fx[s:n])
-            g = np.array([-2 * v.dot(Fk[s:n]).dot(Av) for Fk in self.F])
+            Av = v @ self.Fx[s:n]
+            g = np.array([-2 * ((v @ Fk[s:n]) @ Av) for Fk in self.F])
             return g
 
     def __init__(self, F, F0):

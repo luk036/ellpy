@@ -187,5 +187,5 @@ class profit_q_oracle:
             self.yd = np.log(x)
 
         (g, h), t = self.P(self.yd, t)
-        h += g.dot(self.yd - y)
+        h += g @ (self.yd - y)
         return (g, h), self.yd, t, not retry

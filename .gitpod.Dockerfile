@@ -2,6 +2,21 @@ FROM gitpod/workspace-full
 
 USER root
 
+# Install util tools.
+RUN apt-get update \
+ && apt-get install -y \
+  apt-utils \
+  sudo \
+  aria2 \
+  git \
+  less \
+  lcov \
+  neofetch \
+  asciinema \
+  tmux \
+  w3m \
+  wget
+
 RUN pip3 install --upgrade pip \
     && pip3 install \
 	decorator \

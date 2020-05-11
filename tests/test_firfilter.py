@@ -66,8 +66,8 @@ class my_oracle:
             a_I = A_I[i, :]
             H_r = Hdes_r[i]
             H_i = Hdes_i[i]
-            t_r = a_R.dot(h) - H_r
-            t_i = a_I.dot(h) - H_i
+            t_r = a_R @ h - H_r
+            t_i = a_I @ h - H_i
             fj = t_r**2 + t_i**2
             if fj >= t:
                 g = 2 * (t_r * a_R + t_i * a_I)

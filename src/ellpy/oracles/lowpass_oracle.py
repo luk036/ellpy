@@ -59,7 +59,7 @@ class lowpass_oracle:
         N, n = self.Ap.shape
         i_Ap = self.i_Ap
         for k in chain(range(i_Ap, N), range(i_Ap)):
-            v = self.Ap[k, :].dot(x)
+            v = self.Ap[k, :] @ x
             if v > self.Upsq:
                 g = self.Ap[k, :]
                 f = (v - self.Upsq, v - self.Lpsq)
@@ -79,7 +79,7 @@ class lowpass_oracle:
         imax = 0
         i_As = self.i_As
         for k in chain(range(i_As, N), range(i_As)):
-            v = self.As[k, :].dot(x)
+            v = self.As[k, :] @ x
             if v > Spsq:
                 g = self.As[k, :]
                 f = (v - Spsq, v)
@@ -101,7 +101,7 @@ class lowpass_oracle:
         N = self.Anr.shape[0]
         i_Anr = self.i_Anr
         for k in chain(range(i_Anr, N), range(i_Anr)):
-            v = self.Anr[k, :].dot(x)
+            v = self.Anr[k, :] @ x
             if v < 0:
                 f = -v
                 g = -self.Anr[k, :]

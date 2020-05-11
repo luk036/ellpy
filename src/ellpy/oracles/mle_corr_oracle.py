@@ -48,8 +48,8 @@ class mle_oracle:
 
         R = self.lmi0.Q.sqrt()
         invR = np.linalg.inv(R)
-        S = (invR).dot(invR.T)
-        SY = S.dot(self.Y)
+        S = invR @ invR.T
+        SY = S @ self.Y
         diag = np.diag(R)
         f1 = 2 * np.sum(np.log(diag)) + np.trace(SY)
 
@@ -62,9 +62,9 @@ class mle_oracle:
         m = len(self.Y)
         g = np.zeros(n)
         for i in range(n):
-            SFsi = S.dot(self.Sig[i])
-            # g[i] = sum(S[k].dot(self.Sig[k]) for k in range(m))
+            SFsi = S @ self.Sig[i]
+            # g[i] = sum(S[k] @ self.Sig[k] for k in range(m))
             g[i] = np.trace(SFsi)
-            g[i] -= sum(SFsi[k, :].dot(SY[:, k]) for k in range(m))
+            g[i] -= sum(SFsi[k, :] @ SY[:, k] for k in range(m))
 
         return (g, f), t

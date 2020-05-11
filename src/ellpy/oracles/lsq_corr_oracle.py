@@ -69,7 +69,7 @@ class lsq_oracle:
             # n = self.qmi.Q.p[-1] + 1
             s, n = self.qmi.Q.p
             v = self.qmi.Q.v[s:n]
-            g[-1] = -v.dot(v)
+            g[-1] = -(v @ v)
             return (g, fj), t
 
         g[-1] = 1

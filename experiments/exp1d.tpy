@@ -28,7 +28,7 @@ Ys = np.zeros((n, N))
 ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
-    y = A.dot(x) + ym + 0.5 * np.random.randn(n)
+    y = A @ x + ym + 0.5 * np.random.randn(n)
     Ys[:, k] = y
 
 Y = np.cov(Ys, bias=True)

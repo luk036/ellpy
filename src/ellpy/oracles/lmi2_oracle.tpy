@@ -40,7 +40,7 @@ class lmi2_oracle:
             f = self.Q.witness()
             # p = len(v)
             fj = f + self.Q.sym_quad(self.U)
-            #fj = np.dot(v, S[:p, :p].dot(v))
+            #fj = v @ S[:p, :p] @ v
             g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])
             return g, (f, fj)
 

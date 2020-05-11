@@ -31,7 +31,7 @@ Sig = np.ones((n, n))
 for i in range(n):
     for j in range(i, n):
         d = np.array(s[j]) - np.array(s[i])
-        Sig[i, j] = np.exp(-sdkern * np.dot(d, d))
+        Sig[i, j] = np.exp(-sdkern * (d @ d))
         Sig[j, i] = Sig[i, j]
 
 A = linalg.sqrtm(Sig)
@@ -39,7 +39,7 @@ Ys = np.zeros((n, N))
 # ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
-    y = A.dot(x) + tau*np.random.randn(n)
+    y = A @ x + tau*np.random.randn(n)
     Ys[:, k] = y
 
 Y = np.cov(Ys, bias=True)
@@ -58,7 +58,7 @@ plt.show()
 # pol = lsq_corr_poly(Y, s, 7)
 # spl = lsq_corr_bspline(Y, s, 7)
 # h = s[-1] - s[0]
-# d = np.sqrt(np.dot(h, h))
+# d = np.sqrt(h @ h)
 # xs = np.linspace(0, d, 100)
 # plt.plot(xs, np.polyval(pol, xs), 'g', label='Polynomial')
 # plt.plot(xs, spl(xs), 'r', label='BSpline')
