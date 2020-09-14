@@ -26,8 +26,6 @@ script:
   - tox
   - |
     if [[ "$COVERAGE" == "true" ]]; then
-      pre-commit install
-      pre-commit run --all-files
       python setup.py test --addopts --cov=src/
     fi
 after_success:
