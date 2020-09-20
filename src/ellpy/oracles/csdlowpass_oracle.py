@@ -44,8 +44,8 @@ class csdlowpass_oracle:
         if not retry:  # retry due to no effect in the previous cut
             self.lowpass.retry = False
             cut, Spsq2 = self.lowpass(r, Spsq)
-            if Spsq == Spsq2:  # infeasible
-                return cut, r, Spsq2, True
+            if Spsq2 is None:  # infeasible
+                return cut, r, None, True
             h = spectral_fact(r)
             hcsd = np.array([to_decimal(to_csdfixed(hi, self.nnz)) for hi in h])
             self.rcsd = inverse_spectral_fact(hcsd)

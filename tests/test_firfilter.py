@@ -71,7 +71,7 @@ class my_oracle:
             fj = t_r**2 + t_i**2
             if fj >= t:
                 g = 2 * (t_r * a_R + t_i * a_I)
-                return (g, fj - t), t
+                return (g, fj - t), None
             if fmax < fj:
                 fmax = fj
                 gmax = 2 * (t_r * a_R + t_i * a_I)

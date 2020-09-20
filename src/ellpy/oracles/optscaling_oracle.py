@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
@@ -67,7 +67,7 @@ class optscaling_oracle:
         """
         self._network = network_oracle(G, u, self.Ratio(G, get_cost))
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
@@ -84,10 +84,10 @@ class optscaling_oracle:
         fj = s - t
         g = np.array([1., -1.])
         if fj >= 0.:
-            return (g, fj), t
+            return (g, fj), None
 
         cut = self._network(x)
         if cut:
-            return cut, t
+            return cut, None
 
         return (g, 0.), s

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from .lmi_oracle import *
-from typing import Tuple
+from typing import Tuple, Optional
 
 Cut = Tuple[np.ndarray, float]
 
@@ -12,13 +12,13 @@ class sdp_oracle:
         self.c = c
         self.lmi = lmi_oracle(F, B)
 
-    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: np.ndarray, t: float) -> Tuple[Cut, Optional[float]]:
         f0 = self.c @ x
         fj = f0 - t
         if fj > 0:
-            return (self.c, fj), t
+            return (self.c, fj), None
 
         g, fj = self.lmi.chk_spd(x)
         if fj > 0:
-            return (g, fj), t
+            return (g, fj), None
         return (self.c, 0.), f0

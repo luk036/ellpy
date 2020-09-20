@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
@@ -40,7 +40,7 @@ class lsq_oracle:
         self.qmi = qmi_oracle(F, F0)
         self.lmi0 = lmi0_oracle(F)
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """[summary]
 
         Arguments:
@@ -58,7 +58,7 @@ class lsq_oracle:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.
-            return (g, fj), t
+            return (g, fj), None
 
         self.qmi.update(x[-1])
         cut = self.qmi(x[:-1])
@@ -70,11 +70,11 @@ class lsq_oracle:
             s, n = self.qmi.Q.p
             v = self.qmi.Q.v[s:n]
             g[-1] = -(v @ v)
-            return (g, fj), t
+            return (g, fj), None
 
         g[-1] = 1
         tc = x[-1]
         fj = tc - t
         if fj > 0:
-            return (g, fj), t
+            return (g, fj), None
         return (g, 0.), tc

@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import time
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
@@ -33,7 +33,7 @@ class my_oracle:
         self.lmi1 = oracle(F1, B1)
         self.lmi2 = oracle(F2, B2)
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """[summary]
 
         Arguments:
@@ -45,16 +45,16 @@ class my_oracle:
         """
         cut = self.lmi1(x)
         if cut:
-            return cut, t
+            return cut, None
 
         cut = self.lmi2(x)
         if cut:
-            return cut, t
+            return cut, None
 
         f0 = self.c @ x
         fj = f0 - t
         if fj > 0:
-            return (self.c, fj), t
+            return (self.c, fj), None
         return (self.c, 0.), f0
 
 

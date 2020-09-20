@@ -98,7 +98,7 @@ def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S, t,
 
     for niter in range(options.max_it):
         cut, t1 = Omega(S.xc, t)
-        if t != t1:  # better t obtained
+        if t1 is not None:  # better t obtained
             t = t1
             x_best = S.xc
         cutstatus, tsq = S.update(cut)
@@ -136,7 +136,7 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     for niter in range(options.max_it):
         retry = (status == CUTStatus.noeffect)
         cut, x0, t1, more_alt = Omega(S.xc, t, retry)
-        if t != t1:  # better t obtained
+        if t1 is not None:  # better t obtained
             t = t1
             x_best = x0.copy()
         status, tsq = S.update(cut)
@@ -153,7 +153,7 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     return x_best, t, ret
 
 
-def bsearch(Omega: Callable[[Any], bool], I: Tuple,
+def bsearch(Omega: Callable[[Any], bool], Interval: Tuple,
             options=Options()) -> Tuple[Any, CInfo]:
     """[summary]
 
@@ -169,7 +169,7 @@ def bsearch(Omega: Callable[[Any], bool], I: Tuple,
     """
     # assume monotone
     # feasible = False
-    lower, upper = I
+    lower, upper = Interval
     T = type(upper)  # T could be `int` or `Fraction`
     u_orig = upper
     status = CUTStatus.success

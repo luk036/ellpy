@@ -64,13 +64,13 @@ class lowpass_oracle:
                 g = self.Ap[k, :]
                 f = (v - self.Upsq, v - self.Lpsq)
                 self.i_Ap = k + 1
-                return (g, f), Spsq
+                return (g, f), None
 
             if v < self.Lpsq:
                 g = -self.Ap[k, :]
                 f = (-v + self.Lpsq, -v + self.Upsq)
                 self.i_Ap = k + 1
-                return (g, f), Spsq
+                return (g, f), None
 
         # case 3,
         # 3. stopband constraint
@@ -84,13 +84,13 @@ class lowpass_oracle:
                 g = self.As[k, :]
                 f = (v - Spsq, v)
                 self.i_As = k + 1
-                return (g, f), Spsq
+                return (g, f), None
 
             if v < 0:
                 g = -self.As[k, :]
                 f = (-v, -v + Spsq)
                 self.i_As = k + 1
-                return (g, f), Spsq
+                return (g, f), None
 
             if v > fmax:
                 fmax = v
@@ -106,7 +106,7 @@ class lowpass_oracle:
                 f = -v
                 g = -self.Anr[k, :]
                 self.i_Anr = k + 1
-                return (g, f), Spsq
+                return (g, f), None
 
         self.more_alt = False
 
@@ -115,7 +115,7 @@ class lowpass_oracle:
             g = np.zeros(n)
             g[0] = -1.
             f = -x[0]
-            return (g, f), Spsq
+            return (g, f), None
 
         # Begin objective function
         Spsq = fmax

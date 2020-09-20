@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # import cvxpy as cvx
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
@@ -28,7 +28,7 @@ class mle_oracle:
         self.lmi = lmi_oracle(Sig, 2 * Y)
         # self.lmi2 = lmi2_oracle(Sig, 2*Y)
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """[summary]
 
         Arguments:
@@ -40,11 +40,11 @@ class mle_oracle:
         """
         cut = self.lmi(x)
         if cut:
-            return cut, t
+            return cut, None
 
         cut = self.lmi0(x)
         if cut:
-            return cut, t
+            return cut, None
 
         R = self.lmi0.Q.sqrt()
         invR = np.linalg.inv(R)
@@ -52,11 +52,6 @@ class mle_oracle:
         SY = S @ self.Y
         diag = np.diag(R)
         f1 = 2 * np.sum(np.log(diag)) + np.trace(SY)
-
-        f = f1 - t
-        if f < 0.:
-            t = f1
-            f = 0.
 
         n = len(x)
         m = len(self.Y)
@@ -67,4 +62,8 @@ class mle_oracle:
             g[i] = np.trace(SFsi)
             g[i] -= sum(SFsi[k, :] @ SY[:, k] for k in range(m))
 
-        return (g, f), t
+        f = f1 - t
+        if f < 0.:
+            return (g, 0.), f1
+
+        return (g, f), None

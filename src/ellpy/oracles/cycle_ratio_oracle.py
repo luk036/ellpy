@@ -83,10 +83,10 @@ class cycle_ratio_oracle:
         """
         fj = t - x
         if fj >= 0:
-            return (-1, fj), t
+            return (-1, fj), None
 
         cut = self.network(x)
         if cut:
-            return cut, t
+            return cut, None
 
         return (-1, 0.), x

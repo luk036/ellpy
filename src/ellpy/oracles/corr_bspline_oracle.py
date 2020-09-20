@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 from scipy.interpolate import BSpline
@@ -44,7 +44,7 @@ class mono_decreasing_oracle2:
         """
         self.basis = basis
 
-    def __call__(self, x: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, x: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """[summary]
 
         Arguments:
@@ -62,7 +62,7 @@ class mono_decreasing_oracle2:
             g1, fj = cut
             g[:-1] = g1
             g[-1] = 0.
-            return (g, fj), t
+            return (g, fj), None
         return self.basis(x, t)
 
 

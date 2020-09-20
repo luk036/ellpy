@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
@@ -39,7 +39,7 @@ class profit_oracle:
         self.v = v
         self.a = a
 
-    def __call__(self, y: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, y: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
@@ -55,7 +55,7 @@ class profit_oracle:
         fj = y[0] - self.log_k  # constraint
         if fj > 0.:
             g = np.array([1., 0.])
-            return (g, fj), t
+            return (g, fj), None
 
         log_Cobb = self.log_pA + self.a @ y
         q = self.v * np.exp(y)
@@ -65,10 +65,11 @@ class profit_oracle:
 
         if fj < 0.:  # feasible
             te = np.exp(log_Cobb)
-            t = te - vx
-            fj = 0.
+            g = q / te - self.a
+            return (g, 0.), te - vx
+
         g = q / te - self.a
-        return (g, fj), t
+        return (g, fj), None
 
 
 class profit_rb_oracle:
@@ -107,7 +108,7 @@ class profit_rb_oracle:
         params_rb = p - e3, A, k - e4
         self.P = profit_oracle(params_rb, a, v + e5)
 
-    def __call__(self, y: Arr, t: float) -> Tuple[Cut, float]:
+    def __call__(self, y: Arr, t: float) -> Tuple[Cut, Optional[float]]:
         """Make object callable for cutting_plane_dc()
 
         Arguments:
