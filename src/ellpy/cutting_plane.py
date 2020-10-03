@@ -92,8 +92,8 @@ def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S, t,
         t: final best-so-far value
         ret {CInfo}
     """
-    x_best = S.xc
-    t_orig = t
+    t_orig = t  # const
+    x_best = None
     status = CUTStatus.success
 
     for niter in range(options.max_it):
@@ -129,8 +129,8 @@ def cutting_plane_q(Omega, S, t, options=Options()):
         niter ([type]): number of iterations performed
     """
     # x_last = S.xc
-    x_best = S.xc  # real copy
-    t_orig = t
+    t_orig = t  # const
+    x_best = None
     status = CUTStatus.nosoln
 
     for niter in range(options.max_it):
