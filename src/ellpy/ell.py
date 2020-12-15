@@ -33,12 +33,15 @@ class ell:
         self._n = n = len(x)
         self._c1 = float(n * n) / (n * n - 1)
         self._xc = x
+        self._kappa = 1.
         if np.isscalar(val):
             self._Q = np.eye(n)
-            self._kappa = val
+            if self.no_defer_trick:
+                self._Q *= val
+            else:
+                self._kappa = val
         else:
             self._Q = np.diag(val)
-            self._kappa = 1.
 
     def copy(self):
         """[summary]
@@ -125,11 +128,12 @@ class ell:
 
         self._xc -= (self._rho / omega) * Qg
         self._Q -= (self._sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
-        self._kappa *= self._delta
 
         if self.no_defer_trick:
-            self._Q *= self._kappa
-            self._kappa = 1.
+            self._Q *= self._delta
+        else:
+            self._kappa *= self._delta
+
         return status, self._tsq
 
     def _calc_ll(self, beta) -> CUTStatus:
@@ -239,22 +243,22 @@ class ell:
         Arguments:
             tau (float): [description]
         """
-        np1 = self._n + 1
-        self._sigma = 2. / np1
-        self._rho = tau / np1
+        nplus1 = self._n + 1
+        self._sigma = 2. / nplus1
+        self._rho = tau / nplus1
         self._delta = self._c1
 
 
 class ell1d:
     __slots__ = ('_r', '_xc')
 
-    def __init__(self, I):
+    def __init__(self, Interval):
         """[summary]
 
         Arguments:
             I ([type]): [description]
         """
-        l, u = I
+        l, u = Interval
         self._r = (u - l) / 2
         self._xc = l + self._r
 

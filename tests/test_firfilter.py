@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import time
 
+import numexpr as ne
 import numpy as np
 
 # import cvxpy as cvx
@@ -24,7 +25,7 @@ w = np.linspace(0, np.pi, m)
 # ********************************************************************
 # Fractional delay.
 D = 8.25  # Delay value.
-Hdes = np.exp(-1j * D * w)  # Desired frequency response.
+Hdes = ne.evaluate('exp(-1j * D * w)')  # Desired frequency response.
 
 # Gaussian filter with linear phase. (Uncomment lines below for this design.)
 # var = 0.05

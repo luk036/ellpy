@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
+# import time
 from __future__ import print_function
 import numpy as np
+import numexpr as ne
 # import cvxpy as cvx
 # from ellpy.cutting_plane import cutting_plane_dc
 from ellpy.ell import ell
@@ -23,8 +25,8 @@ w = np.linspace(0, np.pi, m)
 # ********************************************************************
 # Fractional delay.
 D = 8.25  # Delay value.
-Hdes_theta = D * w  # Desired frequency response.
-Hdes = np.exp(-1j * Hdes_theta)  # Desired frequency response.
+# Hdes_theta = D * w  # Desired frequency response.
+Hdes = ne.evaluate('exp(-1j * D * w)')  # Desired frequency response.
 
 # Gaussian filter with linear phase. (Uncomment lines below for this design.)
 # var = 0.05
@@ -35,7 +37,7 @@ Hdes = np.exp(-1j * Hdes_theta)  # Desired frequency response.
 # from a vector of filter coefficients:
 #     A[w,:] = [1 exp(-j*w) exp(-j*2*w) ... exp(-j*n*w)]
 A_theta = np.outer(w, np.arange(n))
-A = np.exp(-1j * A_theta)
+A = ne.evaluate('exp(-1j * A_theta)')
 
 # Presently CVXPY does not do complex-valued math, so the
 # problem must be formatted into a real-valued representation.
@@ -139,8 +141,8 @@ plt.show()
 H = np.exp(-1j * np.outer(w, np.arange(n))) @ hv
 plt.figure(figsize=(6, 6))
 # Magnitude
-plt.plot(w, 20 * np.log10(np.abs(H)), label='optimized')
-plt.plot(w, 20 * np.log10(np.abs(Hdes)), '--', label='desired')
+plt.plot(w, ne.evaluate('20 * log10(abs(H))'), label='optimized')
+plt.plot(w, ne.evaluate('20 * log10(abs(Hdes))'), '--', label='desired')
 plt.xlabel(r'$\omega$')
 plt.ylabel(r'$|H(\omega)|$ in dB')
 plt.title('FIR filter freq. response magnitude')

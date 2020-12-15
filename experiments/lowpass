@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # import time
 import numpy as np
+import numexpr as ne
 import matplotlib.pyplot as plt
 # import cvxpy as cvx
 from scipy.signal import remez, minimum_phase, freqz, group_delay
@@ -113,15 +114,17 @@ def plot_lowpass_result(r, Spsq_new):
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
     axs = (ax1, ax2, ax3, ax4)
-    for h, style, color in zip((h_min_hom, h_sp), ('-', '-'),
-                               ('r', 'k')):
+    for h, style, color in zip((h_min_hom, h_sp), ('-', '-'), ('r', 'k')):
         # if feasible:
         w, H = freqz(h)
         w, gd = group_delay((h, 1))
         w /= np.pi
         axs[0].plot(h, color=color, linestyle=style)
         axs[1].plot(w, np.abs(H), color=color, linestyle=style)
-        axs[2].plot(w, 20 * np.log10(np.abs(H)), color=color, linestyle=style)
+        axs[2].plot(w,
+                    ne.evaluate('20 * log10(abs(H))'),
+                    color=color,
+                    linestyle=style)
         axs[3].plot(w, gd, color=color, linestyle=style)
 
     for ax in axs:

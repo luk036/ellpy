@@ -1,3 +1,4 @@
+import numexpr as ne
 import numpy as np
 
 
@@ -33,9 +34,9 @@ def spectral_fact(r):
     # R = [ones(m, 1) 2*cos(kron(w', [1:n-1]))]*r
     Bn = np.outer(w, np.arange(1, n))
     An = 2 * np.cos(Bn)
-    R = np.hstack((np.ones((m, 1)), An)) @ r
+    R = np.hstack((np.ones((m, 1)), An)) @ r  # NOQA
 
-    alpha = 0.5 * np.log(np.abs(R))
+    alpha = ne.evaluate('0.5 * log(abs(R))')
 
     # find the Hilbert transform
     alphatmp = np.fft.fft(alpha)
