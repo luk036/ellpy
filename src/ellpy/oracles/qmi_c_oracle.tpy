@@ -44,9 +44,7 @@ class qmi_c_oracle:
                 a += self.t
             return a
 
-        self.Q.factor(getA)
-
-        if self.Q.is_spd():
+        if self.Q.factor(getA):
             return None
         v, f = self.Q.witness()
         p = len(v)

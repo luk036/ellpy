@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
-from typing import Union
+from typing import Callable, Union
 
 import numpy as np
 
@@ -12,7 +12,8 @@ class chol_ext:
 
        - LDL^T square-root-free version
        - Option allow semidefinite
-       - A matrix A in R^{m x m} is positive definite iff v' A v > 0 for all v in R^n.
+       - A matrix A in R^{m x m} is positive definite
+                            iff v' A v > 0 for all v in R^n.
        - O(p^3) per iteration, independent of N
     """
     __slots__ = ('p', 'v', '_n', '_T', 'allow_semidefinite')
@@ -30,7 +31,7 @@ class chol_ext:
         self._n: int = N
         self._T: Arr = np.zeros((N, N))
 
-    def factorize(self, A: Arr):
+    def factorize(self, A: Arr) -> bool:
         """Perform Cholesky Factorization
 
         Arguments:
@@ -41,9 +42,9 @@ class chol_ext:
          such that $v = R^{-1} e_p$ is a certificate vector
          to make $v'*A[:p,:p]*v < 0$
         """
-        self.factor(lambda i, j: A[i, j])
+        return self.factor(lambda i, j: A[i, j])
 
-    def factor(self, getA):
+    def factor(self, getA: Callable[[int, int], float]) -> bool:
         """Perform Cholesky Factorization (square-root free version)
 
         Arguments:
@@ -67,6 +68,7 @@ class chol_ext:
                 self.p = start, i + 1
                 break
             start = i + 1  # T[i, i] == 0 (very unlikely), restart at i+1
+        return self.is_spd()
 
     def is_spd(self):
         """Is $A$ symmetric positive definite (spd)

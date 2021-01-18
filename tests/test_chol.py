@@ -12,8 +12,7 @@ def test_chol1():
     l1 = [[25., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
     m1 = np.array(l1)
     Q1 = chol_ext(len(m1))
-    Q1.factorize(m1)
-    assert Q1.is_spd()
+    assert Q1.factorize(m1)
 
 
 def test_chol2():
@@ -23,8 +22,7 @@ def test_chol2():
           [42., 62., 134., -106.]]
     m2 = np.array(l2)
     Q = chol_ext(len(m2))
-    Q.factorize(m2)
-    assert not Q.is_spd()
+    assert not Q.factorize(m2)
     Q.witness()
     assert Q.p == (0, 2)
     # assert ep == 1.0
@@ -36,8 +34,7 @@ def test_chol3():
     l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
-    Q.factorize(m3)
-    assert not Q.is_spd()
+    assert not Q.factorize(m3)
     ep = Q.witness()
     assert Q.p == (0, 1)
     assert Q.v[0] == 1.0
@@ -51,8 +48,7 @@ def test_chol4():
     m1 = np.array(l1)
     Q1 = chol_ext(len(m1))
     Q1.allow_semidefinite = True
-    Q1.factorize(m1)
-    assert Q1.is_spd()
+    assert Q1.factorize(m1)
 
 
 def test_chol5():
@@ -63,8 +59,7 @@ def test_chol5():
     m2 = np.array(l2)
     Q = chol_ext(len(m2))
     Q.allow_semidefinite = True
-    Q.factorize(m2)
-    assert not Q.is_spd()
+    assert not Q.factorize(m2)
     Q.witness()
     assert Q.p == (0, 2)
     # assert ep == 1.0
@@ -77,8 +72,7 @@ def test_chol6():
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True
-    Q.factorize(m3)
-    assert Q.is_spd()
+    assert Q.factorize(m3)
 
 
 #     [v, ep] = Q.witness2()
@@ -94,8 +88,7 @@ def test_chol7():
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True
-    Q.factorize(m3)
-    assert not Q.is_spd()
+    assert not Q.factorize(m3)
     ep = Q.witness()
     assert ep == 20.
 
@@ -109,8 +102,7 @@ def test_chol8():
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = False
-    Q.factorize(m3)
-    assert not Q.is_spd()
+    assert not Q.factorize(m3)
 
 
 def test_chol9():
@@ -122,5 +114,4 @@ def test_chol9():
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True
-    Q.factorize(m3)
-    assert Q.is_spd()
+    assert Q.factorize(m3)

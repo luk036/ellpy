@@ -55,7 +55,7 @@ class qmi_oracle:
                 self.Fx[i] -= sum(self.F[k][:, i] * x[k] for k in range(nx))
             a = -(self.Fx[i] @ self.Fx[j])
             if i == j:
-                a += self.t
+                return self.t + a
             return a
 
         def neg_grad_sym_quad(self, Q, x: Arr):

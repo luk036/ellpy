@@ -41,8 +41,7 @@ class imi_oracle:
             self.A[j, i] = self.A[i, j]  # for later use
             return self.A[i, j]
 
-        self.Q.factor(getA)
-        if self.Q.is_spd():
+        if self.Q.factor(getA):
             return None
         v, f = self.Q.witness()
         p = len(v)

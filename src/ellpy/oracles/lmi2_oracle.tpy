@@ -35,8 +35,7 @@ class lmi2_oracle:
             self.A[i, j] -= sum(self.F[k][i, j] * x[k] for k in range(n))
             return self.A[i, j]
 
-        self.Q.factor(getA)
-        if not self.Q.is_spd():
+        if not self.Q.factor(getA):
             f = self.Q.witness()
             # p = len(v)
             fj = f + self.Q.sym_quad(self.U)
@@ -44,8 +43,7 @@ class lmi2_oracle:
             g = np.array([self.Q.sym_quad(self.F[i]) for i in range(n)])
             return g, (f, fj)
 
-        self.Q.factor(getS)
-        if not self.Q.is_spd():
+        if not self.Q.factor(getS):
             f = self.Q.witness()
             # p = len(v)
             fj = f + self.Q.sym_quad(self.U)

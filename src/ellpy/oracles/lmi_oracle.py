@@ -44,8 +44,7 @@ class lmi_oracle:
             return self.F0[i, j] - sum(self.F[k][i, j] * x[k]
                                        for k in range(n))
 
-        self.Q.factor(getA)
-        if self.Q.is_spd():
+        if self.Q.factor(getA):
             return None
 
         ep = self.Q.witness()

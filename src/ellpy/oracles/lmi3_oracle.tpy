@@ -29,8 +29,7 @@ class lmi3_oracle:
                                 for k in range(n))
             return self.A[i, j]
 
-        self.Q.factor(getA)
-        if self.Q.is_spd():
+        if self.Q.factor(getA):
             return None
         f = self.Q.witness()
         # p = len(v)
