@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 
 import numpy as np
 
-from .halton_n import halton_n
+from .low_discr_seq import halton
 
 Arr = Union[np.ndarray]
 Cut = Tuple[Arr, float]
@@ -20,9 +20,9 @@ def create_2d_sites(nx=10, ny=8) -> Arr:
         Arr: location of sites
     """
     n = nx * ny
-    s_end = [10., 8.]
-    s = np.array([(s_end[0] * x, s_end[1] * y)
-                  for x, y in halton_n(n, 2, [2, 3])])
+    s_end = np.array([10., 8.])
+    hgen = halton([2, 3])
+    s = s_end * np.array([hgen() for _ in range(n)])
     return s
 
 

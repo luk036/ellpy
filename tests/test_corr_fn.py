@@ -117,7 +117,7 @@ def test_data():
     """[summary]
     """
     # assert Y[2,3] == approx(1.9365965488224368)
-    assert s[6, 0] == approx(3.75)
+    assert s[6, 0] == approx(8.75)
     # D1 = construct_distance_matrix(s)
     # assert D1[2, 4] == approx(5.0)
 
@@ -137,4 +137,4 @@ def test_lsq_corr_poly2():
 def test_mle_corr_poly():
     _, num_iters, feasible = mle_corr_poly(Y, s, 4)
     assert feasible
-    assert num_iters <= 234
+    assert num_iters <= 244
