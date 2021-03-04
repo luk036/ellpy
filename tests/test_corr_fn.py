@@ -131,10 +131,10 @@ def test_lsq_corr_poly():
 def test_lsq_corr_poly2():
     _, num_iters, feasible = lsq_corr_poly2(Y, s, 4)
     assert feasible
-    assert num_iters <= 578
+    assert num_iters <= 582
 
 
 def test_mle_corr_poly():
     _, num_iters, feasible = mle_corr_poly(Y, s, 4)
     assert feasible
-    assert num_iters <= 249
+    assert num_iters <= 255
