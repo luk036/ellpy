@@ -1,46 +1,79 @@
 FROM gitpod/workspace-full
 
 USER root
-
 # Install util tools.
+
 RUN apt-get update \
  && apt-get install -y \
   apt-utils \
   aria2 \
-  git \
-  less \
-  lcov \
-  neofetch \
-  neovim \
+# utilities (not ripgrep, gh) \
   asciinema \
-  tmux \
+  bat \
+  byobu \
+  curl \
+  elinks \
+  fd-find \
+  fish \
+  mdp \
+  ncdu \
+  neofetch \
+  patat \
+  pkg-config \
+  ranger \
   w3m \
-  wget
+# just for fun (not cmatrix) \
+  cowsay \
+  figlet \
+  fortune \
+  toilet \
+  tty-clock
 
-RUN pip3 install --upgrade pip \
-    && pip3 install \
-	decorator \
-	networkx \
-	numpy \
-	numexpr \
-	scipy \
-	pre-commit \
-	mypy \
-	codecov \
-	coverage \
-	hypothesis \
-	pytest \
-	pytest-cov \
-	pytest-benchmark \
-	jupyter \
-	jupyterlab \
-	matplotlib
+RUN mkdir -p /workspace/data \
+    && chown -R gitpod:gitpod /workspace/data
 
-USER gitpod
+RUN mkdir /home/gitpod/.conda
+# Install conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate base" >> ~/.bashrc
 
-# Install custom tools, runtime, etc. using apt-get
-# For example, the command below would install "bastet" - a command line tetris clone:
-#
-# RUN sudo apt-get -q update && #     sudo apt-get install -yq bastet && #     sudo rm -rf /var/lib/apt/lists/*
-#
-# More information: https://www.gitpod.io/docs/42_config_docker/
+RUN /opt/conda/bin/conda config --set always_yes yes --set changeps1 no \
+    && /opt/conda/bin/conda update -q conda \
+    && /opt/conda/bin/conda info -a
+
+RUN /opt/conda/bin/conda install -y -c conda-forge \
+    pandoc-crossref \
+    pandoc
+
+RUN /opt/conda/bin/pip install \
+    codecov \
+    coverage \
+    coveralls \
+    cvxpy \
+    jupyter \
+    jupyterlab \
+    matplotlib \
+    networkx \
+    numexpr \
+    numpy \
+    scipy \
+    flake8 \
+    mypy \
+    pre-commit \
+    pyqt5 \
+    pytest-benchmark \
+    pytest-cov \
+    pytest \
+    yapf \
+    lolcat
+
+RUN chown -R gitpod:gitpod /opt/conda \
+    && chmod -R 777 /opt/conda \
+    && chown -R gitpod:gitpod /home/gitpod/.conda \
+    && chmod -R 777 /home/gitpod/.conda
+
+RUN apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
