@@ -23,11 +23,11 @@ before_script:
   - git config --global user.name "Wai-Shing Luk"
 script:
   - python setup.py develop
-  - tox
   - git clone https://github.com/luk036/pylds
   - cd pylds; pip install .; cd ..
   - git clone https://github.com/luk036/netoptim
   - cd netoptim; pip install .; cd ..
+  - tox
   - |
     if [[ "$COVERAGE" == "true" ]]; then
       python setup.py test --addopts --cov=src/
