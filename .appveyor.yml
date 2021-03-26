@@ -35,6 +35,10 @@ install:
 
   # install required packages
   - "pip install --cache-dir=%CACHE_DIR% -r requirements.txt"
+  - "git clone https://github.com/luk036/netoptim"
+  - "cd netoptim & pip install . & cd .."
+  - "git clone https://github.com/luk036/pylds"
+  - "cd pylds & pip install . & cd .."
 
   # Install the build and runtime dependencies of the project.
   # - "%CMD_IN_ENV% pip install --timeout=60 -r requirements.txt"

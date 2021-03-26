@@ -27,7 +27,7 @@ script:
   - cd pylds; pip install .; cd ..
   - git clone https://github.com/luk036/netoptim
   - cd netoptim; pip install .; cd ..
-  - tox
+    # - tox
   - |
     if [[ "$COVERAGE" == "true" ]]; then
       python setup.py test --addopts --cov=src/
