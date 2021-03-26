@@ -22,6 +22,8 @@ RUN apt-get update \
   pkg-config \
   ranger \
   w3m \
+  dialog \
+  whiptail \
 # just for fun (not cmatrix) \
   cowsay \
   figlet \

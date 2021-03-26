@@ -2,8 +2,7 @@
 from typing import List, Tuple, Union
 
 import numpy as np
-
-from .low_discr_seq import halton
+from pylds.low_discr_seq import halton
 
 Arr = Union[np.ndarray]
 Cut = Tuple[Arr, float]

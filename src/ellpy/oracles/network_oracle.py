@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Any, Optional, Tuple
 
-from .neg_cycle import negCycleFinder
+from netoptim.neg_cycle import negCycleFinder
 
 Cut = Tuple[Any, float]
 
@@ -55,9 +55,8 @@ class network_oracle:
             """
             return self._h.eval(e, x)
 
-        C = self._S.find_neg_cycle(self._u, get_weight)
-        if C != []:
-            f = -sum(self._h.eval(e, x) for e in C)
-            g = -sum(self._h.grad(e, x) for e in C)
+        for Ci in self._S.find_neg_cycle(self._u, get_weight):
+            f = -sum(self._h.eval(e, x) for e in Ci)
+            g = -sum(self._h.grad(e, x) for e in Ci)
             return g, f
         return None
