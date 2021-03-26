@@ -18,7 +18,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         git clone https://github.com/luk036/netoptim
-        cd netoptiom; pip install .; cd ..
+        cd netoptim; pip install .; cd ..
         git clone https://github.com/luk036/pylds
         cd pylds; pip install .; cd ..
 
