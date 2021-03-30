@@ -8,10 +8,12 @@ Arr = Union[np.ndarray]
 
 
 class chol_ext:
-    """Cholesky factorization for LMI
+    """LDLT factorization (mainly for LMI oracles)
 
        - LDL^T square-root-free version
        - Option allow semidefinite
+       - Cholesky–Banachiewicz style, row-based
+       - Lazy evaluation
        - A matrix A in R^{m x m} is positive definite
                             iff v' A v > 0 for all v in R^n.
        - O(p^3) per iteration, independent of N
@@ -29,7 +31,7 @@ class chol_ext:
         self.v: Arr = np.zeros(N)
 
         self._n: int = N
-        self._T: Arr = np.zeros((N, N))
+        self._T: Arr = np.zeros((N, N))  # pre-allocate storage
 
     def factorize(self, A: Arr) -> bool:
         """Perform Cholesky Factorization
@@ -49,6 +51,8 @@ class chol_ext:
 
         Arguments:
             getA (callable): function to access symmetric matrix
+
+         Construct $A(i, j)$ on demand, lazy evalution
         """
         T = self._T
         start = 0  # range start
@@ -57,8 +61,8 @@ class chol_ext:
             j = start
             d = getA(i, j)
             while j != i:
-                T[i, j] = d
-                T[j, i] = d / T[j, j]
+                T[i, j] = d  # keep it for later use
+                T[j, i] = d / T[j, j]  # the L[i, j]
                 j += 1
                 d = getA(i, j) - (T[start:j, i] @ T[j, start:j])
             T[i, i] = d
