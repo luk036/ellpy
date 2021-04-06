@@ -120,14 +120,14 @@ class ell:
         """
         g, beta = cut
         Qg = self._Q @ g  # n^2 multiplications
-        omega = g @ Qg  # n^2 multiplications
+        omega = g @ Qg  # n multiplications
         self._tsq = self._kappa * omega
         status = calc_ell(beta)
         if status != CUTStatus.success:
             return status, self._tsq
 
-        self._xc -= (self._rho / omega) * Qg
-        self._Q -= (self._sigma / omega) * np.outer(Qg, Qg)  # n*(n+1)/2
+        self._xc -= (self._rho / omega) * Qg  # n
+        self._Q -= (self._sigma / omega) * np.outer(Qg, Qg)  # n*(n-1)/2
 
         if self.no_defer_trick:
             self._Q *= self._delta

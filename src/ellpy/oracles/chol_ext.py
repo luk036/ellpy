@@ -54,18 +54,17 @@ class chol_ext:
 
          Construct $A(i, j)$ on demand, lazy evalution
         """
-        T = self._T
         start = 0  # range start
         self.p = (0, 0)
         for i in range(self._n):
             j = start
             d = getA(i, j)
             while j != i:
-                T[i, j] = d  # keep it for later use
-                T[j, i] = d / T[j, j]  # the L[i, j]
+                self._T[j, i] = d  # keep it for later use
+                self._T[i, j] = d / self._T[j, j]  # the L[i, j]
                 j += 1
-                d = getA(i, j) - (T[start:j, i] @ T[j, start:j])
-            T[i, i] = d
+                d = getA(i, j) - (self._T[i, start:j] @ self._T[start:j, j])
+            self._T[i, i] = d
             if d > 0.:
                 continue
             if d < 0. or not self.allow_semidefinite:
@@ -101,7 +100,7 @@ class chol_ext:
         m = n - 1
         self.v[m] = 1.
         for i in range(m, start, -1):
-            self.v[i - 1] = -(self._T[i - 1, i:n] @ self.v[i:n])
+            self.v[i - 1] = -(self._T[i:n, i - 1] @ self.v[i:n])
         return -self._T[m, m]
 
     def sym_quad(self, A: Arr):
@@ -119,11 +118,19 @@ class chol_ext:
         return v @ A[s:n, s:n] @ v
 
     def sqrt(self) -> Arr:
+        """Return upper triangular matrix R where A = R' * R
+
+        Raises:
+            AssertionError: [description]
+
+        Returns:
+            Arr: [description]
+        """
         if not self.is_spd():
             raise AssertionError()
         M = np.zeros((self._n, self._n))
         for i in range(self._n):
             M[i, i] = math.sqrt(self._T[i, i])
             for j in range(i + 1, self._n):
-                M[i, j] = self._T[i, j] * M[i, i]
+                M[i, j] = self._T[j, i] * M[i, i]
         return M
