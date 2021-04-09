@@ -5,7 +5,8 @@ import numpy as np
 
 from ellpy.cutting_plane import bsearch, bsearch_adaptor, cutting_plane_dc
 from ellpy.ell import ell
-from ellpy.oracles.corr_oracle import corr_poly, create_2d_isotropic, create_2d_sites
+from ellpy.oracles.corr_oracle import corr_poly, create_2d_isotropic
+from ellpy.oracles.corr_oracle import create_2d_sites
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
 from ellpy.oracles.qmi_oracle import qmi_oracle
@@ -57,7 +58,7 @@ def lsq_corr_core(Y, n, Q):
     E = ell(256., x)
     P = bsearch_adaptor(Q, E)
     normY = np.linalg.norm(Y, 'fro')
-    _, bs_info = bsearch(P, [0., normY*normY])
+    _, bs_info = bsearch(P, [0., normY * normY])
     return P.x_best, bs_info.num_iters, bs_info.feasible
 
 
@@ -131,7 +132,7 @@ def test_lsq_corr_poly():
 def test_lsq_corr_poly2():
     _, num_iters, feasible = lsq_corr_poly2(Y, s, 4)
     assert feasible
-    assert num_iters <= 585
+    assert num_iters <= 586
 
 
 def test_mle_corr_poly():
