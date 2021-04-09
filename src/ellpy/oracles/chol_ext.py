@@ -57,13 +57,13 @@ class chol_ext:
         start = 0  # range start
         self.p = (0, 0)
         for i in range(self._n):
-            j = start
-            d = getA(i, j)
-            while j != i:
+            # j = start
+            d = getA(i, start)
+            for j in range(start, i):
                 self._T[j, i] = d  # keep it for later use
                 self._T[i, j] = d / self._T[j, j]  # the L[i, j]
-                j += 1
-                d = getA(i, j) - (self._T[i, start:j] @ self._T[start:j, j])
+                s = j + 1
+                d = getA(i, s) - (self._T[i, start:s] @ self._T[start:s, s])
             self._T[i, i] = d
             if d > 0.:
                 continue

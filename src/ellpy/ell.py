@@ -17,8 +17,8 @@ class ell:
     Returns:
         [type] -- [description]
     """
-    __slots__ = ('_n', '_c1', '_kappa', '_rho', '_sigma', '_delta', '_tsq',
-                 '_xc', '_Q', 'use_parallel_cut', 'no_defer_trick')
+    # __slots__ = ('_n', '_c1', '_kappa', '_rho', '_sigma', '_delta', '_tsq',
+    #              '_xc', '_Q', 'use_parallel_cut', 'no_defer_trick')
 
     def __init__(self, val: Union[Arr, float], x: Arr):
         """Construct a new ell object
@@ -31,7 +31,16 @@ class ell:
         self.no_defer_trick = False
 
         self._n = n = len(x)
-        self._c1 = float(n * n) / (n * n - 1)
+        self._nSq = float(n * n)
+        self._nPlus1 = float(n + 1)
+        self._nMinus1 = float(n - 1)
+        self._halfN = float(n) / 2.
+        self._halfNplus1 = self._nPlus1 / 2.
+        self._halfNminus1 = self._nMinus1 / 2.
+        self._c1 = self._nSq / (self._nSq - 1)
+        self._c2 = 2. / self._nPlus1
+        self._c3 = float(n) / self._nPlus1
+
         self._xc = x
         self._kappa = 1.
         if np.isscalar(val):
@@ -164,31 +173,36 @@ class ell:
         Returns:
             int: [description]
         """
-        b1sq = b1**2
-        if b1sq > self._tsq or not self.use_parallel_cut:
+        b1sqn = b1 * (b1 / self._tsq)
+        t1n = 1 - b1sqn
+        if t1n < 0 or not self.use_parallel_cut:
             return self._calc_dc(b0)
-        if b1 < b0:  # unlikely
+        bdiff = b1 - b0
+        if bdiff < 0:
             return CUTStatus.nosoln  # no sol'n
         if b0 == 0:
-            self._calc_ll_cc(b1, b1sq)
+            self._calc_ll_cc(b1, b1sqn)
             return CUTStatus.success
 
-        n = self._n
-        b0b1 = b0 * b1
-        if n * b0b1 < -self._tsq:  # unlikely
+        b0b1n = b0 * (b1 / self._tsq)
+        if self._n * b0b1n < -1:  # unlikely
             return CUTStatus.noeffect  # no effect
 
         # parallel cut
-        t0 = self._tsq - b0 * b0
-        t1 = self._tsq - b1sq
-        bav = (b0 + b1) / 2
-        xi = math.sqrt(t0 * t1 + (n * bav * (b1 - b0))**2)
-        self._sigma = (n + (self._tsq - b0b1 - xi) / (2 * bav**2)) / (n + 1)
+        t0n = 1. - b0 * (b0 / self._tsq)
+        # t1 = self._tsq - b1sq
+        bsum = b0 + b1
+        bsumn = bsum / self._tsq
+        bav = bsum / 2.
+        tempn = self._halfN * bsumn * bdiff
+        xi = math.sqrt(t0n * t1n + tempn * tempn)
+        self._sigma = self._c3 + (1. - b0b1n - xi) / (bsumn * bav *
+                                                      self._nPlus1)
         self._rho = self._sigma * bav
-        self._delta = self._c1 * ((t0 + t1) / 2 + xi / n) / self._tsq
+        self._delta = self._c1 * ((t0n + t1n) / 2 + xi / self._n)
         return CUTStatus.success
 
-    def _calc_ll_cc(self, b1: float, b1sq: float):
+    def _calc_ll_cc(self, b1: float, b1sqn: float):
         """Calculate new ellipsoid under Parallel Cut, one of them is central
 
                 g' (x − xc​) ​≤ 0
@@ -199,10 +213,10 @@ class ell:
             b1sq (float): [description]
         """
         n = self._n
-        xi = math.sqrt(self._tsq * (self._tsq - b1sq) + (n * b1sq / 2)**2)
-        self._sigma = (n + 2 * (self._tsq - xi) / b1sq) / (n + 1)
-        self._rho = self._sigma * b1 / 2
-        self._delta = self._c1 * (self._tsq - b1sq / 2 + xi / n) / self._tsq
+        xi = math.sqrt(1 - b1sqn + (self._halfN * b1sqn)**2)
+        self._sigma = self._c3 + self._c2 * (1. - xi) / b1sqn
+        self._rho = self._sigma * b1 / 2.
+        self._delta = self._c1 * (1. - b1sqn / 2. + xi / n)
 
     def _calc_dc(self, beta: float) -> CUTStatus:
         """Calculate new ellipsoid under Deep Cut
@@ -222,7 +236,8 @@ class ell:
             self._tsq = 0.
             tau = 0.
 
-        if beta > tau:
+        bdiff = tau - beta
+        if bdiff < 0.:
             return CUTStatus.nosoln  # no sol'n
         if beta == 0.:
             self._calc_cc(tau)
@@ -232,9 +247,10 @@ class ell:
         if gamma < 0.:
             return CUTStatus.noeffect  # no effect, unlikely
 
-        self._rho = gamma / (n + 1)
-        self._sigma = 2 * self._rho / (tau + beta)
-        self._delta = self._c1 * (self._tsq - beta**2) / self._tsq
+        self._mu = (bdiff / gamma) * self._halfNminus1
+        self._rho = gamma / self._nPlus1
+        self._sigma = 2. * self._rho / (tau + beta)
+        self._delta = self._c1 * (1. - beta * (beta / self._tsq))
         return CUTStatus.success
 
     def _calc_cc(self, tau: float):
@@ -243,9 +259,9 @@ class ell:
         Arguments:
             tau (float): [description]
         """
-        nplus1 = self._n + 1
-        self._sigma = 2. / nplus1
-        self._rho = tau / nplus1
+        self._mu = self._halfNminus1
+        self._sigma = self._c2
+        self._rho = tau / self._nPlus1
         self._delta = self._c1
 
 
