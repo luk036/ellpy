@@ -21,6 +21,14 @@ Features
 -   Include oracles for Matrix Inequalities and Network problems.
 -   Suport Parallel-Cuts.
 
+Installation
+------------
+
+-   The core ellipsoid method depends only on the `numpy` module.
+-   The network related oracles depends further on `networkx` and
+    `luk036/netoptim`.
+-   Some unit tests depends further on `numexpr` and `luk036/pylds`.
+
 See also
 --------
 
