@@ -1,0 +1,11 @@
+name: ellpy
+channels:
+  - conda-forge
+dependencies:
+  - pytest
+  - pytest-benchmark
+  - pytest-cov
+  - networkx
+  - numpy
+  - numexpr
+  - decorator
