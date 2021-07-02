@@ -32,4 +32,8 @@ jobs:
         run: |
             conda install pytest
             python setup.py develop
+            git clone https://github.com/luk036/pylds
+            cd pylds; python setup.py develop; cd ..
+            git clone https://github.com/luk036/netoptim
+            cd netoptim; python setup.py develop; cd ..
             pytest
