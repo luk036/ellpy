@@ -7,9 +7,9 @@ tasks:
   - command: >
       pip3 install -r ./requirements.txt &&
       python3 setup.py develop
-image:
-  file: .gitpod.Dockerfile
+# image:
+#   file: .gitpod.Dockerfile
 
 vscode:
   extensions:
-    - njpwerner.autodocstring@0.4.0:anSzIFYcUMlw2TxiINxxdQ==
+    - njpwerner.autodocstring
