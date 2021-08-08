@@ -1,0 +1,6 @@
+[submodule "external/netoptim"]
+	path = external/netoptim
+	url = https://github.com/luk036/netoptim
+[submodule "external/pylds"]
+	path = external/pylds
+	url = https://github.com/luk036/pylds
