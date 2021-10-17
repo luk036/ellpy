@@ -23,39 +23,43 @@ def to_csd(num, places=0, debug=False):
     """ Convert the argument to CSD Format. """
 
     if debug:
-        print("Converting %f " % (num), )
+        print(
+            "Converting %f " % (num),
+        )
 
     # figure out binary range, special case for 0
-    if num == 0.:
-        return '0'
+    if num == 0:
+        return "0"
 
     absnum = fabs(num)
-    n = 0 if absnum < 1. else ceil(log(absnum * 1.5, 2))
-    csd_str = '0' if absnum < 1. else ''
+    n = 0 if absnum < 1.0 else ceil(log(absnum * 1.5, 2))
+    csd_str = "0" if absnum < 1.0 else ""
 
     if debug:
         print("to %d.%d format" % (n, places))
 
-    limit = pow(2., n) / 3.
-    while (n > -places):
+    # limit = pow(2., n) / 3.
+    pow2n = pow(2.0, n - 1)
+    while n > -places:
         if debug:
-            print("  ", num, limit)
+            print("  ", num, 2 * pow2n / 3)
 
         # decimal point?
         if n == 0:  # unlikely
-            csd_str += '.'
+            csd_str += "."
 
         n -= 1
         # convert the number
-        if num > limit:
-            csd_str += '+'
-            num -= 1.5 * limit
-        elif num < -limit:
-            csd_str += '-'
-            num += 1.5 * limit
+        d = 1.5 * num
+        if d > pow2n:
+            csd_str += "+"
+            num -= pow2n
+        elif d < -pow2n:
+            csd_str += "-"
+            num += pow2n
         else:
-            csd_str += '0'
-        limit /= 2.
+            csd_str += "0"
+        pow2n /= 2
 
         if debug:
             print(csd_str)
@@ -69,23 +73,23 @@ def to_decimal(csd_str, debug=False):
     if debug:
         print("Converting: ", csd_str)
 
-    num = 0.
+    num = 0.0
     loc = 0
     for i, c in enumerate(csd_str):
-        num *= 2.
-        if c == '+':
-            num += 1.
-        elif c == '-':
-            num -= 1.
-        elif c == '0':
+        num *= 2.0
+        if c == "+":
+            num += 1.0
+        elif c == "-":
+            num -= 1.0
+        elif c == "0":
             pass
-        elif c == '.':  # unlikely
-            num /= 2.
+        elif c == ".":  # unlikely
+            num /= 2.0
             loc = i + 1
         else:
             raise ValueError
     if loc != 0:
-        num /= pow(2., len(csd_str) - loc)
+        num /= pow(2.0, len(csd_str) - loc)
     return num
 
 
@@ -127,36 +131,40 @@ def to_csdfixed(num, nnz=4, debug=False):
     """ Convert the argument to CSD Format. """
 
     if debug:
-        print("Converting %f " % (num), )
+        print(
+            "Converting %f " % (num),
+        )
 
     # figure out binary range, special case for 0
-    if num == 0.:
-        return '0'
+    if num == 0.0:
+        return "0"
     absnum = fabs(num)
-    n = 0 if absnum < 1. else ceil(log(absnum * 1.5, 2))
-    csd_str = '0' if absnum < 1. else ''
-    limit = pow(2., n) / 3.
-    while (n > 0 or nnz > 0):
+    n = 0 if absnum < 1.0 else ceil(log(absnum * 1.5, 2))
+    csd_str = "0" if absnum < 1.0 else ""
+    # limit = pow(2., n) / 3.
+    pow2n = pow(2.0, n - 1)
+    while n > 0 or nnz > 0:
         if debug:
-            print("  ", num, limit)
+            print("  ", num, 2 * pow2n / 3)
 
         # decimal point?
         if n == 0:
-            csd_str += '.'
+            csd_str += "."
 
         n -= 1
         # convert the number
-        if num > limit:
-            csd_str += '+'
-            num -= 1.5 * limit
+        d = 1.5 * num
+        if d > pow2n:
+            csd_str += "+"
+            num -= pow2n
             nnz -= 1
-        elif num < -limit:
-            csd_str += '-'
-            num += 1.5 * limit
+        elif d < -pow2n:
+            csd_str += "-"
+            num += pow2n
             nnz -= 1
         else:
-            csd_str += '0'
-        limit /= 2.
+            csd_str += "0"
+        pow2n /= 2.0
 
         if nnz == 0:
             num = 0

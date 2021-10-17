@@ -1,5 +1,4 @@
-ellpy
-=====
+# ellpy
 
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/luk036/ellpy)
 ![Python application](https://github.com/luk036/ellpy/workflows/Python%20application/badge.svg)
@@ -14,29 +13,28 @@ ellpy
 
 ellipsoid method python code
 
-Features
---------
+## Features
 
 -   At most one square-root per iteration.
 -   Include oracles for Matrix Inequalities and Network problems.
 -   Suport Parallel-Cuts.
 
-Installation
-------------
+## Installation
 
 -   The core ellipsoid method depends only on the `numpy` module.
 -   The network related oracles depends further on `networkx` and
     `luk036/netoptim`.
 -   Some unit tests depends further on `numexpr` and `luk036/pylds`.
 
-See also
---------
+## See also
 
 -   [ellcpp](https://github.com/luk036/ellcpp)
 -   [Presentation Slides](https://luk036.github.io/cvx)
 
-Note
-----
 
-This project has been set up using PyScaffold 3.2.1. For details and usage
-information on PyScaffold see <https://pyscaffold.org/>.
+<!-- pyscaffold-notes -->
+
+## Note
+
+This project has been set up using PyScaffold 4.0.2. For details and usage
+information on PyScaffold see https://pyscaffold.org/.
