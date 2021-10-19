@@ -19,19 +19,34 @@ from __future__ import print_function
 from math import ceil, fabs, log
 
 
-def to_csd(num, places=0, debug=False):
-    """ Convert the argument to CSD Format. """
+def to_csd(dec_val, places=0, debug=False):
+    """
+    Convert the argument `dec_val` to a string in CSD Format.
+    Parameters
+    ----------
+    dec_val : scalar (integer or real)
+              decimal value to be converted to CSD format
+    places: integer
+        number of fractional places. Default is places = 0 (integer number)
+    Returns
+    -------
+    string
+        containing the CSD value
+    Original author: Harnesser
+    https://sourceforge.net/projects/pycsd/
+    License: GPL2
+    """
 
     if debug:
         print(
-            "Converting %f " % (num),
+            "Converting %f " % (dec_val),
         )
 
     # figure out binary range, special case for 0
-    if num == 0:
+    if dec_val == 0:
         return "0"
 
-    absnum = fabs(num)
+    absnum = fabs(dec_val)
     n = 0 if absnum < 1.0 else ceil(log(absnum * 1.5, 2))
     csd_str = "0" if absnum < 1.0 else ""
 
@@ -42,7 +57,7 @@ def to_csd(num, places=0, debug=False):
     pow2n = pow(2.0, n - 1)
     while n > -places:
         if debug:
-            print("  ", num, 2 * pow2n / 3)
+            print("  ", dec_val, 2 * pow2n / 3)
 
         # decimal point?
         if n == 0:  # unlikely
@@ -50,13 +65,13 @@ def to_csd(num, places=0, debug=False):
 
         n -= 1
         # convert the number
-        d = 1.5 * num
+        d = 1.5 * dec_val
         if d > pow2n:
             csd_str += "+"
-            num -= pow2n
+            dec_val -= pow2n
         elif d < -pow2n:
             csd_str += "-"
-            num += pow2n
+            dec_val += pow2n
         else:
             csd_str += "0"
         pow2n /= 2
@@ -73,24 +88,24 @@ def to_decimal(csd_str, debug=False):
     if debug:
         print("Converting: ", csd_str)
 
-    num = 0.0
+    dec_val = 0.0
     loc = 0
     for i, c in enumerate(csd_str):
-        num *= 2.0
+        dec_val *= 2.0
         if c == "+":
-            num += 1.0
+            dec_val += 1.0
         elif c == "-":
-            num -= 1.0
+            dec_val -= 1.0
         elif c == "0":
             pass
         elif c == ".":  # unlikely
-            num /= 2.0
+            dec_val /= 2.0
             loc = i + 1
         else:
             raise ValueError
     if loc != 0:
-        num /= pow(2.0, len(csd_str) - loc)
-    return num
+        dec_val /= pow(2.0, len(csd_str) - loc)
+    return dec_val
 
 
 # def to_decimal_old(csd_str, debug=False):
@@ -110,42 +125,42 @@ def to_decimal(csd_str, debug=False):
 
 #     msb_power = len(m) - 1
 
-#     num = 0.0
+#     dec_val = 0.0
 #     for ii, c in enumerate(csd_str):
 
 #         power_of_two = 2.0**(msb_power - ii)
 
 #         if c == '+':
-#             num += power_of_two
+#             dec_val += power_of_two
 #         elif c == '-':
-#             num -= power_of_two
+#             dec_val -= power_of_two
 
 #         if debug:
-#             print('  "%s" (%d.%d); 2**%d = %d; Num=%f' %
-#                   (c, len(m), len(n), msb_power - ii, power_of_two, num))
+#             print('  "%s" (%d.%d); 2**%d = %d; dec_val=%f' %
+#                   (c, len(m), len(n), msb_power - ii, power_of_two, dec_val))
 
-#     return num
+#     return dec_val
 
 
-def to_csdfixed(num, nnz=4, debug=False):
+def to_csdfixed(dec_val, nnz=4, debug=False):
     """ Convert the argument to CSD Format. """
 
     if debug:
         print(
-            "Converting %f " % (num),
+            "Converting %f " % (dec_val),
         )
 
     # figure out binary range, special case for 0
-    if num == 0.0:
+    if dec_val == 0.0:
         return "0"
-    absnum = fabs(num)
+    absnum = fabs(dec_val)
     n = 0 if absnum < 1.0 else ceil(log(absnum * 1.5, 2))
     csd_str = "0" if absnum < 1.0 else ""
     # limit = pow(2., n) / 3.
     pow2n = pow(2.0, n - 1)
-    while n > 0 or nnz > 0:
+    while n > 0 or (nnz > 0 and fabs(dec_val) > 1e-100):
         if debug:
-            print("  ", num, 2 * pow2n / 3)
+            print("  ", dec_val, 2 * pow2n / 3)
 
         # decimal point?
         if n == 0:
@@ -153,21 +168,21 @@ def to_csdfixed(num, nnz=4, debug=False):
 
         n -= 1
         # convert the number
-        d = 1.5 * num
+        d = 1.5 * dec_val
         if d > pow2n:
             csd_str += "+"
-            num -= pow2n
+            dec_val -= pow2n
             nnz -= 1
         elif d < -pow2n:
             csd_str += "-"
-            num += pow2n
+            dec_val += pow2n
             nnz -= 1
         else:
             csd_str += "0"
         pow2n /= 2.0
 
         if nnz == 0:
-            num = 0
+            dec_val = 0
 
         if debug:
             print(csd_str)
