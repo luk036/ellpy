@@ -17,6 +17,7 @@ class ell:
     Returns:
         [type] -- [description]
     """
+
     # __slots__ = ('_n', '_c1', '_kappa', '_rho', '_sigma', '_delta', '_tsq',
     #              '_xc', '_Q', 'use_parallel_cut', 'no_defer_trick')
 
@@ -34,15 +35,15 @@ class ell:
         self._nSq = float(n * n)
         self._nPlus1 = float(n + 1)
         self._nMinus1 = float(n - 1)
-        self._halfN = float(n) / 2.
-        self._halfNplus1 = self._nPlus1 / 2.
-        self._halfNminus1 = self._nMinus1 / 2.
+        self._halfN = float(n) / 2.0
+        self._halfNplus1 = self._nPlus1 / 2.0
+        self._halfNminus1 = self._nMinus1 / 2.0
         self._c1 = self._nSq / (self._nSq - 1)
-        self._c2 = 2. / self._nPlus1
+        self._c2 = 2.0 / self._nPlus1
         self._c3 = float(n) / self._nPlus1
 
         self._xc = x
-        self._kappa = 1.
+        self._kappa = 1.0
         if np.isscalar(val):
             self._Q = np.eye(n)
             if self.no_defer_trick:
@@ -189,15 +190,14 @@ class ell:
             return CUTStatus.noeffect  # no effect
 
         # parallel cut
-        t0n = 1. - b0 * (b0 / self._tsq)
+        t0n = 1.0 - b0 * (b0 / self._tsq)
         # t1 = self._tsq - b1sq
         bsum = b0 + b1
         bsumn = bsum / self._tsq
-        bav = bsum / 2.
+        bav = bsum / 2.0
         tempn = self._halfN * bsumn * bdiff
         xi = math.sqrt(t0n * t1n + tempn * tempn)
-        self._sigma = self._c3 + (1. - b0b1n - xi) / (bsumn * bav *
-                                                      self._nPlus1)
+        self._sigma = self._c3 + (1.0 + b0b1n - xi) / (bsumn * bav * self._nPlus1)
         self._rho = self._sigma * bav
         self._delta = self._c1 * ((t0n + t1n) / 2 + xi / self._n)
         return CUTStatus.success
@@ -213,10 +213,10 @@ class ell:
             b1sq (float): [description]
         """
         n = self._n
-        xi = math.sqrt(1 - b1sqn + (self._halfN * b1sqn)**2)
-        self._sigma = self._c3 + self._c2 * (1. - xi) / b1sqn
-        self._rho = self._sigma * b1 / 2.
-        self._delta = self._c1 * (1. - b1sqn / 2. + xi / n)
+        xi = math.sqrt(1 - b1sqn + (self._halfN * b1sqn) ** 2)
+        self._sigma = self._c3 + self._c2 * (1.0 - xi) / b1sqn
+        self._rho = self._sigma * b1 / 2.0
+        self._delta = self._c1 * (1.0 - b1sqn / 2.0 + xi / n)
 
     def _calc_dc(self, beta: float) -> CUTStatus:
         """Calculate new ellipsoid under Deep Cut
@@ -233,24 +233,24 @@ class ell:
             tau = math.sqrt(self._tsq)
         except ValueError:
             print("Warning: tsq is negative: {}".format(self._tsq))
-            self._tsq = 0.
-            tau = 0.
+            self._tsq = 0.0
+            tau = 0.0
 
         bdiff = tau - beta
-        if bdiff < 0.:
+        if bdiff < 0.0:
             return CUTStatus.nosoln  # no sol'n
-        if beta == 0.:
+        if beta == 0.0:
             self._calc_cc(tau)
             return CUTStatus.success
         n = self._n
         gamma = tau + n * beta
-        if gamma < 0.:
+        if gamma < 0.0:
             return CUTStatus.noeffect  # no effect, unlikely
 
         self._mu = (bdiff / gamma) * self._halfNminus1
         self._rho = gamma / self._nPlus1
-        self._sigma = 2. * self._rho / (tau + beta)
-        self._delta = self._c1 * (1. - beta * (beta / self._tsq))
+        self._sigma = 2.0 * self._rho / (tau + beta)
+        self._delta = self._c1 * (1.0 - beta * (beta / self._tsq))
         return CUTStatus.success
 
     def _calc_cc(self, tau: float):
@@ -266,7 +266,7 @@ class ell:
 
 
 class ell1d:
-    __slots__ = ('_r', '_xc')
+    __slots__ = ("_r", "_xc")
 
     def __init__(self, Interval):
         """[summary]
