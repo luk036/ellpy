@@ -12,7 +12,7 @@ Arr = Union[np.ndarray]
 class ell:
     """Ellipsoid Search Space
 
-            ell = {x | (x − xc)' Q^−1 (x − xc) ​≤ κ}
+            ell = {x | (x − xc)' Q^−1 (x − xc) ≤ κ}
 
     Returns:
         [type] -- [description]
@@ -164,8 +164,8 @@ class ell:
     def _calc_ll_core(self, b0: float, b1: float) -> CUTStatus:
         """Calculate new ellipsoid under Parallel Cut
 
-                g' (x − xc​) + β0 ​≤ 0
-                g' (x − xc​) + β1 ​≥ 0
+                g' (x − xc) + β0 ≤ 0
+                g' (x − xc) + β1 ≥ 0
 
         Arguments:
             b0 (float): [description]
