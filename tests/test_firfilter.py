@@ -25,7 +25,7 @@ w = np.linspace(0, np.pi, m)
 # ********************************************************************
 # Fractional delay.
 D = 8.25  # Delay value.
-Hdes = ne.evaluate('exp(-1j * D * w)')  # Desired frequency response.
+Hdes = ne.evaluate("exp(-1j * D * w)")  # Desired frequency response.
 
 # Gaussian filter with linear phase. (Uncomment lines below for this design.)
 # var = 0.05
@@ -61,7 +61,7 @@ class my_oracle:
         Returns:
             [type]: [description]
         """
-        fmax = float('-Inf')
+        fmax = float("-Inf")
         for i in range(m):
             a_R = A_R[i, :]
             a_I = A_I[i, :]
@@ -76,7 +76,7 @@ class my_oracle:
             if fmax < fj:
                 fmax = fj
                 gmax = 2 * (t_r * a_R + t_i * a_I)
-        return (gmax, 0.), fmax
+        return (gmax, 0.0), fmax
 
 
 def run_firfilter(no_trick, duration=0.000001):
@@ -92,18 +92,18 @@ def run_firfilter(no_trick, duration=0.000001):
         Exception: [description]
     """
     h0 = np.zeros(n)  # initial x0
-    E = ell(10., h0)
+    E = ell(10.0, h0)
     E.no_defer_trick = no_trick
     P = my_oracle()
     prob1 = Problem(E, P)
-    prob1.solve(100.)
+    prob1.solve(100.0)
     time.sleep(duration)
 
-    print('Problem status:', prob1.status)
-    if prob1.status != 'optimal':
-        raise Exception('ELL Error')
+    print("Problem status:", prob1.status)
+    if prob1.status != "optimal":
+        raise Exception("ELL Error")
     print("optimal value", prob1.optim_value)
-    assert prob1.status == 'optimal'
+    assert prob1.status == "optimal"
     return prob1._solver_stats.num_iters
 
 

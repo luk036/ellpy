@@ -12,10 +12,11 @@ Cut = Tuple[Arr, float]
 class lmi0_oracle:
     """Oracle for Linear Matrix Inequality constraint
 
-        find  x
-        s.t.​  F * x ⪰ 0
+    find  x
+    s.t.​  F * x ⪰ 0
 
     """
+
     def __init__(self, F):
         """[summary]
 
@@ -34,6 +35,7 @@ class lmi0_oracle:
         Returns:
             Optional[Cut]: [description]
         """
+
         def getA(i, j):
             n = len(x)
             return sum(self.F[k][i, j] * x[k] for k in range(n))

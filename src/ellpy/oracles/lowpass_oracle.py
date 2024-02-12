@@ -16,6 +16,7 @@ class lowpass_oracle:
     Returns:
         [type]: [description]
     """
+
     more_alt = True
 
     # for round robin counters
@@ -113,13 +114,13 @@ class lowpass_oracle:
         # case 1 (unlikely)
         if x[0] < 0:
             g = np.zeros(n)
-            g[0] = -1.
+            g[0] = -1.0
             f = -x[0]
             return (g, f), None
 
         # Begin objective function
         Spsq = fmax
-        f = (0., fmax)
+        f = (0.0, fmax)
         # f = 0.
         g = self.As[imax, :]
         return (g, f), Spsq

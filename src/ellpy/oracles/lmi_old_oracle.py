@@ -12,12 +12,13 @@ Cut = Tuple[Arr, float]
 class lmi_old_oracle:
     """Oracle for Linear Matrix Inequality constraint.
 
-        This oracle solves the following feasibility problem:
+    This oracle solves the following feasibility problem:
 
-            find  x
-            s.t.  (B − F * x) ⪰ 0
+        find  x
+        s.t.  (B − F * x) ⪰ 0
 
     """
+
     def __init__(self, F, B):
         """[summary]
 

@@ -12,16 +12,17 @@ Cut = Tuple[Arr, Any]
 class cycle_ratio_oracle:
     """Oracle for minimum ratio cycle problem.
 
-        This example solves the following convex problem:
+    This example solves the following convex problem:
 
-            max     t
-            s.t.    u[j] - u[i] ≤ mij - sij * x,
-                    t ≤ x
+        max     t
+        s.t.    u[j] - u[i] ≤ mij - sij * x,
+                t ≤ x
 
-        where sij is not necessarily positive.
-        The problem could be unbounded???
+    where sij is not necessarily positive.
+    The problem could be unbounded???
 
     """
+
     class ratio:
         def __init__(self, G):
             """[summary]
@@ -42,8 +43,8 @@ class cycle_ratio_oracle:
                 Any: function evaluation
             """
             u, v = e
-            cost = self.G[u][v]['cost']
-            time = self.G[u][v]['time']
+            cost = self.G[u][v]["cost"]
+            time = self.G[u][v]["time"]
             return cost - time * x
 
         def grad(self, e, x):
@@ -57,7 +58,7 @@ class cycle_ratio_oracle:
                 [type]: [description]
             """
             u, v = e
-            time = self.G[u][v]['time']
+            time = self.G[u][v]["time"]
             return -time
 
     def __init__(self, G, u):
@@ -89,4 +90,4 @@ class cycle_ratio_oracle:
         if cut:
             return cut, None
 
-        return (-1, 0.), x
+        return (-1, 0.0), x

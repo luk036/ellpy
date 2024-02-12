@@ -25,6 +25,7 @@ class profit_oracle:
         v: output price
         k: a given constant that restricts the quantity of x1
     """
+
     def __init__(self, params: Tuple[float, float, float], a: Arr, v: Arr):
         """[summary]
 
@@ -53,8 +54,8 @@ class profit_oracle:
             cutting_plane_dc
         """
         fj = y[0] - self.log_k  # constraint
-        if fj > 0.:
-            g = np.array([1., 0.])
+        if fj > 0.0:
+            g = np.array([1.0, 0.0])
             return (g, fj), None
 
         log_Cobb = self.log_pA + self.a @ y
@@ -63,10 +64,10 @@ class profit_oracle:
         te = t + vx
         fj = np.log(te) - log_Cobb
 
-        if fj < 0.:  # feasible
+        if fj < 0.0:  # feasible
             te = np.exp(log_Cobb)
             g = q / te - self.a
-            return (g, 0.), te - vx
+            return (g, 0.0), te - vx
 
         g = q / te - self.a
         return (g, fj), None
@@ -91,8 +92,14 @@ class profit_rb_oracle:
     See also:
         profit_oracle
     """
-    def __init__(self, params: Tuple[float, float, float], a: Arr,
-                 v: Arr, vparams: Tuple[float, float, float, float, float]):
+
+    def __init__(
+        self,
+        params: Tuple[float, float, float],
+        a: Arr,
+        v: Arr,
+        vparams: Tuple[float, float, float, float, float],
+    ):
         """[summary]
 
         Arguments:
@@ -123,7 +130,7 @@ class profit_rb_oracle:
         """
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += -self.e[i] if y[i] > 0. else self.e[i]
+            a_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
         self.P.a = a_rb
         return self.P(y, t)
 
@@ -150,6 +157,7 @@ class profit_q_oracle:
     See also:
         profit_oracle
     """
+
     yd = None
 
     def __init__(self, params, a, v):

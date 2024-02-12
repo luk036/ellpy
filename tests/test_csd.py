@@ -3,8 +3,7 @@ from pycsd.csd import to_csd, to_csdfixed, to_decimal
 
 
 def test_csd1():
-    """[summary]
-    """
+    """[summary]"""
     csdstr = "+00-00+"
     csdnumber = to_decimal(csdstr)
     csdnew = to_csd(csdnumber)
@@ -12,8 +11,7 @@ def test_csd1():
 
 
 def test_csd2():
-    """[summary]
-    """
+    """[summary]"""
     csdstr = "+00-.000+"
     csdnumber = to_decimal(csdstr)
     csdnew = to_csd(csdnumber, places=4)
@@ -21,8 +19,7 @@ def test_csd2():
 
 
 def test_csd3():
-    """[summary]
-    """
+    """[summary]"""
     csdstr = "+00-.000+"
     csdnumber = to_decimal(csdstr)
     csdnew = to_csdfixed(csdnumber, nnz=3)
@@ -30,8 +27,7 @@ def test_csd3():
 
 
 def test_csd4():
-    """[summary]
-    """
+    """[summary]"""
     n = 545
     csdstr = to_csd(n)
     n2 = to_decimal(csdstr)

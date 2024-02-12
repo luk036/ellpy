@@ -54,8 +54,7 @@ class Problem:
 
     @property
     def solver_stats(self):
-        """Returns an object containing additional information returned by the solver.
-        """
+        """Returns an object containing additional information returned by the solver."""
         return self._solver_stats
 
     def solve(self, *args, **kwargs):
@@ -99,11 +98,13 @@ class Problem:
     #     """
     #     cls.REGISTERED_SOLVE_METHODS[name] = func
 
-    def _solve(self, t
-               # solver=None,
-               # warm_start=False,
-               # verbose=False, **kwargs
-               ):
+    def _solve(
+        self,
+        t
+        # solver=None,
+        # warm_start=False,
+        # verbose=False, **kwargs
+    ):
         """Solves a DCP compliant optimization problem.
 
         Saves the values of primal and dual variables in the variable
@@ -135,15 +136,15 @@ class Problem:
 
         if ell_info.feasible:
             if status == CUTStatus.smallenough:
-                self._status = 'optimal'
+                self._status = "optimal"
             else:
-                self._status = 'feasible'
+                self._status = "feasible"
             self._optim_value = fb
             self._optim_var = xb
         else:
-            self._status = 'infeasible'
+            self._status = "infeasible"
 
-        solver_stats = SolverStats('deep-cut')
+        solver_stats = SolverStats("deep-cut")
         solver_stats.num_iters = num_iters
         self._solver_stats = solver_stats
 
@@ -180,6 +181,7 @@ class SolverStats:
         The number of iterations the solver had to go through
         to find a solution.
     """
+
     def __init__(self, solver_name):
         """[summary]
 

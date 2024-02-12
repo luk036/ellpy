@@ -83,7 +83,7 @@ def to_csd(dec_val, places=0, debug=False):
 
 
 def to_decimal(csd_str, debug=False):
-    """ Convert the CSD string to a decimal """
+    """Convert the CSD string to a decimal"""
 
     if debug:
         print("Converting: ", csd_str)
@@ -143,7 +143,7 @@ def to_decimal(csd_str, debug=False):
 
 
 def to_csdfixed(dec_val, nnz=4, debug=False):
-    """ Convert the argument to CSD Format. """
+    """Convert the argument to CSD Format."""
 
     if debug:
         print(

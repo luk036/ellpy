@@ -8,11 +8,11 @@ import unittest
 import pycsd.csd as csd
 
 good_values_dict = {
-    16.5: '+0000.+',
-    -16.5: '-0000.-',
-    -2.5: '-0.-',
-    0.5: '0.+',
-    -0.5: '0.-'
+    16.5: "+0000.+",
+    -16.5: "-0000.-",
+    -2.5: "-0.-",
+    0.5: "0.+",
+    -0.5: "0.-",
 }
 
 
@@ -21,7 +21,7 @@ class tests__decimals(unittest.TestCase):
         pass
 
     def test__01_to_decimal(self):
-        """ Check the conversion from CSD with a binary point to decimal. """
+        """Check the conversion from CSD with a binary point to decimal."""
 
         for key in good_values_dict.keys():
             csd_str = good_values_dict[key]
@@ -29,30 +29,30 @@ class tests__decimals(unittest.TestCase):
             self.assertEqual(value, key)
 
     def test__01a_to_decimal(self):
-        self.assertEqual(csd.to_decimal('0.+00-'), 0.5 - (2.0**-4))
-        self.assertEqual(csd.to_decimal('0.0+0-'), 0.25 - (2.0**-4))
-        self.assertEqual(csd.to_decimal('0.+0-0'), 0.5 - (2.0**-3))
+        self.assertEqual(csd.to_decimal("0.+00-"), 0.5 - (2.0**-4))
+        self.assertEqual(csd.to_decimal("0.0+0-"), 0.25 - (2.0**-4))
+        self.assertEqual(csd.to_decimal("0.+0-0"), 0.5 - (2.0**-3))
 
     def test__02_to_csd_1_place(self):
-        """ Check that decimals are converted to CSD properly. """
+        """Check that decimals are converted to CSD properly."""
 
         for key in good_values_dict.keys():
             csd_str = csd.to_csd(key, places=1)
             self.assertEqual(csd_str, good_values_dict[key])
 
     def test__03_to_csd_4_places(self):
-        """ To four places """
-        self.assertEqual(csd.to_csd(0.0625, 4), '0.000+')
-        self.assertEqual(csd.to_csd(-0.0625, 4), '0.000-')
-        self.assertEqual(csd.to_csd(0.25, 4), '0.0+00')
-        self.assertEqual(csd.to_csd(-0.25, 4), '0.0-00')
+        """To four places"""
+        self.assertEqual(csd.to_csd(0.0625, 4), "0.000+")
+        self.assertEqual(csd.to_csd(-0.0625, 4), "0.000-")
+        self.assertEqual(csd.to_csd(0.25, 4), "0.0+00")
+        self.assertEqual(csd.to_csd(-0.25, 4), "0.0-00")
 
     def test__04_to_csd_x_places(self):
-        """ To four places """
-        self.assertEqual(csd.to_csd(0.0625, 4), '0.000+')
-        self.assertEqual(csd.to_csd(-0.0625, 4), '0.000-')
-        self.assertEqual(csd.to_csd(0.25, 4), '0.0+00')
-        self.assertEqual(csd.to_csd(-0.25, 4), '0.0-00')
+        """To four places"""
+        self.assertEqual(csd.to_csd(0.0625, 4), "0.000+")
+        self.assertEqual(csd.to_csd(-0.0625, 4), "0.000-")
+        self.assertEqual(csd.to_csd(0.25, 4), "0.0+00")
+        self.assertEqual(csd.to_csd(-0.25, 4), "0.0-00")
 
 
 def suite():
@@ -61,5 +61,5 @@ def suite():
     return suite
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

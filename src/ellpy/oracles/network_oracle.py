@@ -9,11 +9,12 @@ Cut = Tuple[Any, float]
 class network_oracle:
     """Oracle for Parametric Network Problem:
 
-        find    x, u
-        s.t.    u[j] − u[i] ≤ h(e, x)
-                ∀ e(i, j) ∈ E
+    find    x, u
+    s.t.    u[j] − u[i] ≤ h(e, x)
+            ∀ e(i, j) ∈ E
 
     """
+
     def __init__(self, G, u, h):
         """[summary]
 
@@ -44,6 +45,7 @@ class network_oracle:
         Returns:
             Optional[Cut]: [description]
         """
+
         def get_weight(e):
             """[summary]
 

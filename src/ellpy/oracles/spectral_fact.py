@@ -4,17 +4,17 @@ import numpy as np
 
 def spectral_fact(r):
     """Spectral factorization using Kolmogorov 1939 approach.
-      (code follows pp. 232-233, Signal Analysis, by A. Papoulis)
+    (code follows pp. 232-233, Signal Analysis, by A. Papoulis)
 
-      Computes the minimum-phase impulse response which satisfies
-      given auto-correlation.
+    Computes the minimum-phase impulse response which satisfies
+    given auto-correlation.
 
-      Input:
-        r: top-half of the auto-correlation coefficients
-           starts from 0th element to end of the auto-corelation
-           should be passed in as a column vector
-      Output
-        h: impulse response that gives the desired auto-correlation
+    Input:
+      r: top-half of the auto-correlation coefficients
+         starts from 0th element to end of the auto-corelation
+         should be passed in as a column vector
+    Output
+      h: impulse response that gives the desired auto-correlation
     """
 
     # length of the impulse response sequence
@@ -36,7 +36,7 @@ def spectral_fact(r):
     An = 2 * np.cos(Bn)
     R = np.hstack((np.ones((m, 1)), An)) @ r  # NOQA
 
-    alpha = ne.evaluate('0.5 * log(abs(R))')
+    alpha = ne.evaluate("0.5 * log(abs(R))")
 
     # find the Hilbert transform
     alphatmp = np.fft.fft(alpha)
@@ -71,7 +71,7 @@ def inverse_spectral_fact(h):
     n = len(h)
     r = np.zeros(n)
     for t in range(n):
-        r[t] = h[t:] @ h[:n - t]
+        r[t] = h[t:] @ h[: n - t]
     return r
 
 

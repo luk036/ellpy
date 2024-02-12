@@ -25,8 +25,8 @@ def mono_oracle(x):
     for i in range(n - 1):
         fj = x[i + 1] - x[i]
         if fj > 0:
-            g[i] = -1.
-            g[i + 1] = 1.
+            g[i] = -1.0
+            g[i + 1] = 1.0
             return g, fj
 
 
@@ -36,6 +36,7 @@ class mono_decreasing_oracle2:
     Returns:
         [type]: [description]
     """
+
     def __init__(self, basis):
         """[summary]
 
@@ -61,7 +62,7 @@ class mono_decreasing_oracle2:
         if cut:
             g1, fj = cut
             g[:-1] = g1
-            g[-1] = 0.
+            g[-1] = 0.0
             return (g, fj), None
         return self.basis(x, t)
 

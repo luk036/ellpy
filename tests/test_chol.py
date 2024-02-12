@@ -7,19 +7,21 @@ from ellpy.oracles.chol_ext import chol_ext
 
 
 def test_chol1():
-    """[summary]
-    """
-    l1 = [[25., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
+    """[summary]"""
+    l1 = [[25.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 11.0]]
     m1 = np.array(l1)
     Q1 = chol_ext(len(m1))
     assert Q1.factorize(m1)
 
 
 def test_chol2():
-    """[summary]
-    """
-    l2 = [[18., 22., 54., 42.], [22., -70., 86., 62.], [54., 86., -174., 134.],
-          [42., 62., 134., -106.]]
+    """[summary]"""
+    l2 = [
+        [18.0, 22.0, 54.0, 42.0],
+        [22.0, -70.0, 86.0, 62.0],
+        [54.0, 86.0, -174.0, 134.0],
+        [42.0, 62.0, 134.0, -106.0],
+    ]
     m2 = np.array(l2)
     Q = chol_ext(len(m2))
     assert not Q.factorize(m2)
@@ -29,9 +31,8 @@ def test_chol2():
 
 
 def test_chol3():
-    """[summary]
-    """
-    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
+    """[summary]"""
+    l3 = [[0.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 11.0]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     assert not Q.factorize(m3)
@@ -42,9 +43,8 @@ def test_chol3():
 
 
 def test_chol4():
-    """[summary]
-    """
-    l1 = [[25., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
+    """[summary]"""
+    l1 = [[25.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 11.0]]
     m1 = np.array(l1)
     Q1 = chol_ext(len(m1))
     Q1.allow_semidefinite = True
@@ -52,10 +52,13 @@ def test_chol4():
 
 
 def test_chol5():
-    """[summary]
-    """
-    l2 = [[18., 22., 54., 42.], [22., -70., 86., 62.], [54., 86., -174., 134.],
-          [42., 62., 134., -106.]]
+    """[summary]"""
+    l2 = [
+        [18.0, 22.0, 54.0, 42.0],
+        [22.0, -70.0, 86.0, 62.0],
+        [54.0, 86.0, -174.0, 134.0],
+        [42.0, 62.0, 134.0, -106.0],
+    ]
     m2 = np.array(l2)
     Q = chol_ext(len(m2))
     Q.allow_semidefinite = True
@@ -66,9 +69,8 @@ def test_chol5():
 
 
 def test_chol6():
-    """[summary]
-    """
-    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 11.]]
+    """[summary]"""
+    l3 = [[0.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 11.0]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True
@@ -82,23 +84,21 @@ def test_chol6():
 
 
 def test_chol7():
-    """[summary]
-    """
-    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., -20.]]
+    """[summary]"""
+    l3 = [[0.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, -20.0]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True
     assert not Q.factorize(m3)
     ep = Q.witness()
-    assert ep == 20.
+    assert ep == 20.0
 
 
 def test_chol8():
+    """[summary]"""
     """[summary]
     """
-    """[summary]
-    """
-    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 20.]]
+    l3 = [[0.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 20.0]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = False
@@ -106,11 +106,10 @@ def test_chol8():
 
 
 def test_chol9():
+    """[summary]"""
     """[summary]
     """
-    """[summary]
-    """
-    l3 = [[0., 15., -5.], [15., 18., 0.], [-5., 0., 20.]]
+    l3 = [[0.0, 15.0, -5.0], [15.0, 18.0, 0.0], [-5.0, 0.0, 20.0]]
     m3 = np.array(l3)
     Q = chol_ext(len(m3))
     Q.allow_semidefinite = True

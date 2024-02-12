@@ -10,15 +10,16 @@ Arr = Union[np.ndarray]
 class chol_ext:
     """LDLT factorization (mainly for LMI oracles)
 
-       - LDL^T square-root-free version
-       - Option allow semidefinite
-       - Cholesky–Banachiewicz style, row-based
-       - Lazy evaluation
-       - A matrix A in R^{m x m} is positive definite
-                            iff v' A v > 0 for all v in R^n.
-       - O(p^3) per iteration, independent of N
+    - LDL^T square-root-free version
+    - Option allow semidefinite
+    - Cholesky–Banachiewicz style, row-based
+    - Lazy evaluation
+    - A matrix A in R^{m x m} is positive definite
+                         iff v' A v > 0 for all v in R^n.
+    - O(p^3) per iteration, independent of N
     """
-    __slots__ = ('p', 'v', '_n', '_T', 'allow_semidefinite')
+
+    __slots__ = ("p", "v", "_n", "_T", "allow_semidefinite")
 
     def __init__(self, N: int):
         """Construct a new chol ext object
@@ -65,9 +66,9 @@ class chol_ext:
                 s = j + 1
                 d = getA(i, s) - (self._T[i, start:s] @ self._T[start:s, s])
             self._T[i, i] = d
-            if d > 0.:
+            if d > 0.0:
                 continue
-            if d < 0. or not self.allow_semidefinite:
+            if d < 0.0 or not self.allow_semidefinite:
                 self.p = start, i + 1
                 break
             start = i + 1  # T[i, i] == 0 (very unlikely), restart at i+1
@@ -98,7 +99,7 @@ class chol_ext:
             raise AssertionError()
         start, n = self.p
         m = n - 1
-        self.v[m] = 1.
+        self.v[m] = 1.0
         for i in range(m, start, -1):
             self.v[i - 1] = -(self._T[i:n, i - 1] @ self.v[i:n])
         return -self._T[m, m]

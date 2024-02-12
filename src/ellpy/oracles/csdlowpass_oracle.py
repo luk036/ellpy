@@ -18,6 +18,7 @@ class csdlowpass_oracle:
     Returns:
         [type]: [description]
     """
+
     rcsd = None
 
     def __init__(self, nnz, lowpass):

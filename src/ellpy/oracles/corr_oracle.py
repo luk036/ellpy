@@ -19,7 +19,7 @@ def create_2d_sites(nx=10, ny=8) -> Arr:
         Arr: location of sites
     """
     n = nx * ny
-    s_end = np.array([10., 8.])
+    s_end = np.array([10.0, 8.0])
     hgen = halton([2, 3])
     s = s_end * np.array([hgen() for _ in range(n)])
     return s
@@ -39,7 +39,7 @@ def create_2d_isotropic(s: Arr, N=3000) -> Arr:
     """
     n = s.shape[0]
     sdkern = 0.12  # width of kernel
-    var = 2.  # standard derivation
+    var = 2.0  # standard derivation
     tau = 0.00001  # standard derivation of white noise
     np.random.seed(5)
 

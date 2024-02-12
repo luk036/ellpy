@@ -30,6 +30,7 @@ class lsq_oracle:
     Returns:
         [type]: [description]
     """
+
     def __init__(self, F: List[Arr], F0: Arr):
         """[summary]
 
@@ -57,7 +58,7 @@ class lsq_oracle:
         if cut:
             g1, fj = cut
             g[:-1] = g1
-            g[-1] = 0.
+            g[-1] = 0.0
             return (g, fj), None
 
         self.qmi.update(x[-1])
@@ -77,4 +78,4 @@ class lsq_oracle:
         fj = tc - t
         if fj > 0:
             return (g, fj), None
-        return (g, 0.), tc
+        return (g, 0.0), tc

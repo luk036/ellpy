@@ -32,7 +32,7 @@ def create_test_case1():
         [type]: [description]
     """
     G = nx.cycle_graph(5, create_using=nx.DiGraph())
-    G[1][2]['weight'] = -5
+    G[1][2]["weight"] = -5
     G.add_edges_from([(5, n) for n in G])
     return G
 
@@ -44,24 +44,26 @@ def create_test_case_timing():
         [type]: [description]
     """
     G = nx.DiGraph()
-    nodelist = ['a1', 'a2', 'a3']
+    nodelist = ["a1", "a2", "a3"]
     G.add_nodes_from(nodelist)
-    G.add_edges_from([
-        ('a1', 'a2', {'weight': 7}),
-        ('a2', 'a1', {'weight': 0}),
-        ('a2', 'a3', {'weight': 3}),
-        ('a3', 'a2', {'weight': 1}),
-        ('a3', 'a1', {'weight': 2}),
-        ('a1', 'a3', {'weight': 5})
-    ])
+    G.add_edges_from(
+        [
+            ("a1", "a2", {"weight": 7}),
+            ("a2", "a1", {"weight": 0}),
+            ("a2", "a3", {"weight": 3}),
+            ("a3", "a2", {"weight": 1}),
+            ("a3", "a1", {"weight": 2}),
+            ("a1", "a3", {"weight": 5}),
+        ]
+    )
     return G
 
 
 def test_cycle_ratio():
     G = create_test_case1()
-    set_default(G, 'time', 1)
-    set_default(G, 'cost', 1)
-    G[1][2]['cost'] = 5
+    set_default(G, "time", 1)
+    set_default(G, "cost", 1)
+    G[1][2]["cost"] = 5
     dist = list(Fraction(0, 1) for _ in G)
 
     E = ell1d([-100, 100])
@@ -70,21 +72,21 @@ def test_cycle_ratio():
     opts = Options()
     opts.tol = 1e-12
     P = cycle_ratio_oracle(G, dist)
-    _, r, ell_info = cutting_plane_dc(P, E,  float('-inf'), opts)
+    _, r, ell_info = cutting_plane_dc(P, E, float("-inf"), opts)
     print(ell_info.num_iters)
     assert ell_info.feasible
-    assert r == approx(9/5)
+    assert r == approx(9 / 5)
 
 
 def test_cycle_ratio_timing():
     G = create_test_case_timing()
-    set_default(G, 'time',  1)
-    G['a1']['a2']['cost'] = 7
-    G['a2']['a1']['cost'] = -1
-    G['a2']['a3']['cost'] = 3
-    G['a3']['a2']['cost'] = 0
-    G['a3']['a1']['cost'] = 2
-    G['a1']['a3']['cost'] = 4
+    set_default(G, "time", 1)
+    G["a1"]["a2"]["cost"] = 7
+    G["a2"]["a1"]["cost"] = -1
+    G["a2"]["a3"]["cost"] = 3
+    G["a3"]["a2"]["cost"] = 0
+    G["a3"]["a1"]["cost"] = 2
+    G["a1"]["a3"]["cost"] = 4
     # make sure no parallel edges in above!!!
     dist = {v: Fraction(0, 1) for v in G}
 
@@ -94,7 +96,7 @@ def test_cycle_ratio_timing():
     opts = Options()
     opts.tol = 1e-12
     P = cycle_ratio_oracle(G, dist)
-    _, r, ell_info = cutting_plane_dc(P, E, float('-inf'), opts)
+    _, r, ell_info = cutting_plane_dc(P, E, float("-inf"), opts)
     print(ell_info.num_iters)
     assert ell_info.feasible
     assert r == approx(1)

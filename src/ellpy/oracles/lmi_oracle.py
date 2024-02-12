@@ -12,10 +12,10 @@ Cut = Tuple[Arr, float]
 class lmi_oracle:
     """Oracle for Linear Matrix Inequality constraint.
 
-        This oracle solves the following feasibility problem:
+    This oracle solves the following feasibility problem:
 
-            find  x
-            s.t.  (B − F * x) ⪰ 0
+        find  x
+        s.t.  (B − F * x) ⪰ 0
 
     """
 
@@ -39,10 +39,10 @@ class lmi_oracle:
         Returns:
             Optional[Cut]: [description]
         """
+
         def getA(i, j):
             n = len(x)
-            return self.F0[i, j] - sum(self.F[k][i, j] * x[k]
-                                       for k in range(n))
+            return self.F0[i, j] - sum(self.F[k][i, j] * x[k] for k in range(n))
 
         if self.Q.factor(getA):
             return None

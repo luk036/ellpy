@@ -63,7 +63,7 @@ class mle_oracle:
             g[i] -= sum(SFsi[k, :] @ SY[:, k] for k in range(m))
 
         f = f1 - t
-        if f < 0.:
-            return (g, 0.), f1
+        if f < 0.0:
+            return (g, 0.0), f1
 
         return (g, f), None

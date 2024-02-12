@@ -13,13 +13,14 @@ Cut = Tuple[Arr, float]
 class optscaling_oracle:
     """Oracle for Optimal Matrix Scaling
 
-        This example is taken from[Orlin and Rothblum, 1985]
+    This example is taken from[Orlin and Rothblum, 1985]
 
-            min     π/ψ
-            s.t.    ψ ≤ u[i] * |aij| * u[j]^{−1} ≤ π,
-                    ∀ aij != 0,
-                    π, ψ, u, positive
+        min     π/ψ
+        s.t.    ψ ≤ u[i] * |aij| * u[j]^{−1} ≤ π,
+                ∀ aij != 0,
+                π, ψ, u, positive
     """
+
     class Ratio:
         def __init__(self, G, get_cost):
             """[summary]
@@ -57,7 +58,7 @@ class optscaling_oracle:
             """
             u, v = e
             assert u != v
-            return np.array([1., 0.] if u < v else [0., -1.])
+            return np.array([1.0, 0.0] if u < v else [0.0, -1.0])
 
     def __init__(self, G, u, get_cost):
         """Construct a new optscaling oracle object
@@ -82,12 +83,12 @@ class optscaling_oracle:
         """
         s = x[0] - x[1]
         fj = s - t
-        g = np.array([1., -1.])
-        if fj >= 0.:
+        g = np.array([1.0, -1.0])
+        if fj >= 0.0:
             return (g, fj), None
 
         cut = self._network(x)
         if cut:
             return cut, None
 
-        return (g, 0.), s
+        return (g, 0.0), s

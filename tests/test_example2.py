@@ -21,19 +21,18 @@ def my_oracle2(z):
     # constraint 1: x + y <= 3
     fj = x + y - 3
     if fj > 0:
-        return np.array([1., 1.]), fj
+        return np.array([1.0, 1.0]), fj
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
     if fj > 0:
-        return np.array([-1., 1.]), fj
+        return np.array([-1.0, 1.0]), fj
 
 
 def test_case_feasible():
-    """[summary]
-    """
-    x0 = np.array([0., 0.])  # initial guess
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([0.0, 0.0])  # initial guess
+    E = ell(10.0, x0)
     P = my_oracle2
     ell_info = cutting_plane_feas(P, E)
     assert ell_info.feasible
@@ -42,10 +41,9 @@ def test_case_feasible():
 
 
 def test_case_infeasible():
-    """[summary]
-    """
-    x0 = np.array([100., 100.])  # wrong initial guess
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([100.0, 100.0])  # wrong initial guess
+    E = ell(10.0, x0)
     P = my_oracle2
     ell_info = cutting_plane_feas(P, E)
     assert ell_info.status == CUTStatus.nosoln  # no sol'n

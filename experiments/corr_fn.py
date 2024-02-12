@@ -10,7 +10,7 @@ from ellpy.oracles.corr_oracle import (
     corr_bspline,
     corr_poly,
     create_2d_isotropic,
-    create_2d_sites
+    create_2d_sites,
 )
 from ellpy.oracles.lsq_corr_oracle import lsq_oracle
 from ellpy.oracles.mle_corr_oracle import mle_oracle
@@ -29,15 +29,15 @@ def lsq_corr_core2(Y: Arr, n: int, P: Callable):
     Returns:
         [type]: [description]
     """
-    normY = np.linalg.norm(Y, 'fro')
+    normY = np.linalg.norm(Y, "fro")
     normY2 = 32 * normY * normY
     val = 256 * np.ones(n + 1)
     val[-1] = normY2 * normY2
     x = np.zeros(n + 1)  # cannot all zeros
-    x[0] = 1.
+    x[0] = 1.0
     x[-1] = normY2 / 2
     E = ell(val, x)
-    xb, _, ell_info = cutting_plane_dc(P, E, float('inf'))
+    xb, _, ell_info = cutting_plane_dc(P, E, float("inf"))
     return xb[:-1], ell_info.num_iters, ell_info.feasible
 
 
@@ -67,13 +67,13 @@ def mle_corr_core(Y: Arr, n: int, P: Callable):
         [type]: [description]
     """
     x = np.zeros(n)
-    x[0] = 1.
-    E = ell(50., x)
+    x[0] = 1.0
+    E = ell(50.0, x)
     # E.use_parallel_cut = False
     # options = Options()
     # options.max_it = 2000
     # options.tol = 1e-8
-    xb, _, ell_info = cutting_plane_dc(P, E, float('inf'))
+    xb, _, ell_info = cutting_plane_dc(P, E, float("inf"))
     # print(num_iters, feasible, status)
     return xb, ell_info.num_iters, ell_info.feasible
 
@@ -124,10 +124,11 @@ def lsq_corr_bspline2(Y, s, m):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+
     # import matplotlib.pylab as lab
     s = create_2d_sites(10, 8)
     Y = create_2d_isotropic(s, 1000)
-    print('start ell...')
+    print("start ell...")
     spl, num_iters, _ = lsq_corr_bspline2(Y, s, 5)
     pol, num_iters, _ = lsq_corr_poly2(Y, s, 5)
     # pol, num_iters, _ = mle_corr_poly(Y, s, 4)
@@ -141,9 +142,9 @@ if __name__ == "__main__":
     # h = s[-1] - s[0]
     d = np.sqrt(10**2 + 8**2)
     xs = np.linspace(0, d, 100)
-    plt.plot(xs, spl(xs), 'g', label='BSpline')
+    plt.plot(xs, spl(xs), "g", label="BSpline")
     # plt.plot(xs, splcvx(xs), 'b', label='BSpline CVX')
-    plt.plot(xs, np.polyval(pol, xs), 'r', label='Polynomial')
+    plt.plot(xs, np.polyval(pol, xs), "r", label="Polynomial")
     # plt.plot(xs, np.polyval(polcvx, xs), 'r', label='Polynomial CVX')
-    plt.legend(loc='best')
+    plt.legend(loc="best")
     plt.show()

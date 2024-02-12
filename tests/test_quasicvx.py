@@ -26,7 +26,7 @@ def my_quasicvx_oracle(z, t: float):
     # constraint 1: exp(x) <= y, or sqrtx**2 <= ly
     fj = sqrtx * sqrtx - ly
     if fj > 0:
-        return (np.array([2*sqrtx, -1.]), fj), None
+        return (np.array([2 * sqrtx, -1.0]), fj), None
 
     # constraint 3: x > 0
     # if x <= 0.:
@@ -36,42 +36,39 @@ def my_quasicvx_oracle(z, t: float):
     tmp2 = math.exp(ly)
     tmp3 = t * tmp2
     fj = -sqrtx + tmp3
-    if fj < 0.:  # feasible
+    if fj < 0.0:  # feasible
         t = sqrtx / tmp2
-        return (np.array([-1., sqrtx]), 0), t
+        return (np.array([-1.0, sqrtx]), 0), t
 
-    return (np.array([-1., tmp3]), fj), None
+    return (np.array([-1.0, tmp3]), fj), None
 
 
 def test_case_feasible():
-    """[summary]
-    """
-    x0 = np.array([0., 0.])  # initial x0
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([0.0, 0.0])  # initial x0
+    E = ell(10.0, x0)
     P = my_quasicvx_oracle
-    xb, fb, ell_info = cutting_plane_dc(P, E, 0.)
+    xb, fb, ell_info = cutting_plane_dc(P, E, 0.0)
     assert ell_info.feasible
     assert fb == approx(0.4288673396685956)
-    assert xb[0]*xb[0] == approx(0.5046900657538383)
+    assert xb[0] * xb[0] == approx(0.5046900657538383)
     assert math.exp(xb[1]) == approx(1.6564805414665902)
 
 
 def test_case_infeasible1():
-    """[summary]
-    """
-    x0 = np.array([100., 100.])  # wrong initial guess,
-    E = ell(10., x0)  # or ellipsoid is too small
+    """[summary]"""
+    x0 = np.array([100.0, 100.0])  # wrong initial guess,
+    E = ell(10.0, x0)  # or ellipsoid is too small
     P = my_quasicvx_oracle
-    _, _, ell_info = cutting_plane_dc(P, E, 0.)
+    _, _, ell_info = cutting_plane_dc(P, E, 0.0)
     assert not ell_info.feasible
     assert ell_info.status == CUTStatus.nosoln  # no sol'n
 
 
 def test_case_infeasible2():
-    """[summary]
-    """
-    x0 = np.array([0., 0.])  # initial x0
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([0.0, 0.0])  # initial x0
+    E = ell(10.0, x0)
     P = my_quasicvx_oracle
     _, _, ell_info = cutting_plane_dc(P, E, 100)  # wrong initial best-so-far
     assert not ell_info.feasible

@@ -25,15 +25,15 @@ def lsq_corr_core2(Y, n, P):
     Returns:
         [type]: [description]
     """
-    normY = np.linalg.norm(Y, 'fro')
+    normY = np.linalg.norm(Y, "fro")
     normY2 = 32 * normY * normY
     val = 256 * np.ones(n + 1)
     val[-1] = normY2 * normY2
     x = np.zeros(n + 1)  # cannot all zeros
-    x[0] = 1.
+    x[0] = 1.0
     x[-1] = normY2 / 2
     E = ell(val, x)
-    xb, _, ell_info = cutting_plane_dc(P, E, float('inf'))
+    xb, _, ell_info = cutting_plane_dc(P, E, float("inf"))
     return xb[:-1], ell_info.num_iters, ell_info.feasible
 
 
@@ -53,11 +53,11 @@ def lsq_corr_poly2(Y, s, n):
 
 def lsq_corr_core(Y, n, Q):
     x = np.zeros(n)  # cannot all zeros
-    x[0] = 1.
-    E = ell(256., x)
+    x[0] = 1.0
+    E = ell(256.0, x)
     P = bsearch_adaptor(Q, E)
-    normY = np.linalg.norm(Y, 'fro')
-    _, bs_info = bsearch(P, [0., normY * normY])
+    normY = np.linalg.norm(Y, "fro")
+    _, bs_info = bsearch(P, [0.0, normY * normY])
     return P.x_best, bs_info.num_iters, bs_info.feasible
 
 
@@ -87,13 +87,13 @@ def mle_corr_core(Y, n, P):
         [type]: [description]
     """
     x = np.zeros(n)
-    x[0] = 1.
-    E = ell(50., x)
+    x[0] = 1.0
+    E = ell(50.0, x)
     # E.use_parallel_cut = False
     # options = Options()
     # options.max_it = 2000
     # options.tol = 1e-8
-    xb, _, ell_info = cutting_plane_dc(P, E, float('inf'))
+    xb, _, ell_info = cutting_plane_dc(P, E, float("inf"))
     # print(num_iters, feasible, status)
     return xb, ell_info.num_iters, ell_info.feasible
 
@@ -114,8 +114,7 @@ def mle_corr_poly(Y, s, n):
 
 
 def test_data():
-    """[summary]
-    """
+    """[summary]"""
     # assert Y[2,3] == approx(1.9365965488224368)
     assert s[6, 0] == approx(8.75)
     # D1 = construct_distance_matrix(s)

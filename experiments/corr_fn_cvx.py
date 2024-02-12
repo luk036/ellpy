@@ -8,7 +8,7 @@ from scipy.interpolate import BSpline
 from ellpy.oracles.corr_oracle import (
     construct_distance_matrix,
     create_2d_isotropic,
-    create_2d_sites
+    create_2d_sites,
 )
 
 Arr = Union[np.ndarray]
@@ -41,11 +41,11 @@ def lsq_corr_poly(Y: Arr, s: Arr, n: int):
         D = np.multiply(D, D1)
         Sig += D * a[n - 2 - i]
     constraints = [Sig >> 0]
-    prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, 'fro')), constraints)
+    prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, "fro")), constraints)
     prob.solve(solver=cvx.CVXOPT)
     # prob.solve()
     if prob.status != cvx.OPTIMAL:
-        raise Exception('CVXPY Error')
+        raise Exception("CVXPY Error")
     return np.poly1d(np.array(a.value).flatten())
 
 
@@ -90,18 +90,19 @@ def lsq_corr_bspline(Y: Arr, s: Arr, n: int):
     constraints = [Sig >> 0]
     for i in range(n - 1):
         constraints += [c[i] >= c[i + 1]]
-    constraints += [c[-1] >= 0.]
+    constraints += [c[-1] >= 0.0]
 
-    prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, 'fro')), constraints)
+    prob = cvx.Problem(cvx.Minimize(cvx.norm(Sig - Y, "fro")), constraints)
     prob.solve(solver=cvx.CVXOPT)
     # prob.solve()
     if prob.status != cvx.OPTIMAL:
-        raise Exception('CVXPY Error')
+        raise Exception("CVXPY Error")
     return BSpline(t, np.array(c.value).flatten(), k)
 
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+
     # import matplotlib.pylab as lab
     s = create_2d_sites(10, 8)
     Y = create_2d_isotropic(s, 1000)
@@ -111,7 +112,7 @@ if __name__ == "__main__":
     # # pol, num_iters, _ = mle_corr_poly(Y, s, 4)
     # print(pol)
     # print(num_iters)
-    print('start cvx...')
+    print("start cvx...")
     splcvx = lsq_corr_bspline(Y, s, 5)
     polcvx = lsq_corr_poly(Y, s, 5)
 
@@ -119,8 +120,8 @@ if __name__ == "__main__":
     d = np.sqrt(10**2 + 8**2)
     xs = np.linspace(0, d, 100)
     # plt.plot(xs, spl(xs), 'g', label='BSpline')
-    plt.plot(xs, splcvx(xs), 'b', label='BSpline CVX')
+    plt.plot(xs, splcvx(xs), "b", label="BSpline CVX")
     # plt.plot(xs, np.polyval(pol, xs), 'r', label='Polynomial')
-    plt.plot(xs, np.polyval(polcvx, xs), 'r', label='Polynomial CVX')
-    plt.legend(loc='best')
+    plt.plot(xs, np.polyval(polcvx, xs), "r", label="Polynomial CVX")
+    plt.legend(loc="best")
     plt.show()

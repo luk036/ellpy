@@ -21,12 +21,12 @@ def my_oracle2(z):
     # constraint 1: x + y <= 3
     fj = x + y - 3
     if fj > 0:
-        return np.array([1., 1.]), fj
+        return np.array([1.0, 1.0]), fj
 
     # constraint 2: x - y >= 1
     fj = -x + y + 1
     if fj > 0:
-        return np.array([-1., 1.]), fj
+        return np.array([-1.0, 1.0]), fj
 
 
 def my_oracle(z, t: float):
@@ -47,18 +47,17 @@ def my_oracle(z, t: float):
     f0 = x + y
     fj = t - f0
     if fj < 0:
-        fj = 0.
+        fj = 0.0
         t = f0
-    return (-1. * np.array([1., 1.]), fj), t
+    return (-1.0 * np.array([1.0, 1.0]), fj), t
 
 
 def test_case_feasible():
-    """[summary]
-    """
-    x0 = np.array([0., 0.])  # initial x0
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([0.0, 0.0])  # initial x0
+    E = ell(10.0, x0)
     P = my_oracle
-    _, _, ell_info = cutting_plane_dc(P, E, float('-inf'))
+    _, _, ell_info = cutting_plane_dc(P, E, float("-inf"))
     assert ell_info.feasible
 
     # fmt = '{:f} {} {} {}'
@@ -67,21 +66,19 @@ def test_case_feasible():
 
 
 def test_case_infeasible1():
-    """[summary]
-    """
-    x0 = np.array([100., 100.])  # wrong initial guess,
-    E = ell(10., x0)  # or ellipsoid is too small
+    """[summary]"""
+    x0 = np.array([100.0, 100.0])  # wrong initial guess,
+    E = ell(10.0, x0)  # or ellipsoid is too small
     P = my_oracle
-    _, _, ell_info = cutting_plane_dc(P, E, float('-inf'))
+    _, _, ell_info = cutting_plane_dc(P, E, float("-inf"))
     assert not ell_info.feasible
     assert ell_info.status == CUTStatus.nosoln  # no sol'n
 
 
 def test_case_infeasible2():
-    """[summary]
-    """
-    x0 = np.array([0., 0.])  # initial x0
-    E = ell(10., x0)
+    """[summary]"""
+    x0 = np.array([0.0, 0.0])  # initial x0
+    E = ell(10.0, x0)
     P = my_oracle
     _, _, ell_info = cutting_plane_dc(P, E, 100)  # wrong initial best-so-far
     assert not ell_info.feasible

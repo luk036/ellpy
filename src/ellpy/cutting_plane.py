@@ -29,8 +29,7 @@ class CInfo:
         self.status: CUTStatus = status
 
 
-def cutting_plane_feas(Omega: Callable[[Any], Any], S,
-                       options=Options()) -> CInfo:
+def cutting_plane_feas(Omega: Callable[[Any], Any], S, options=Options()) -> CInfo:
     """Find a point in a convex set (defined through a cutting-plane oracle).
 
     Description:
@@ -75,8 +74,9 @@ def cutting_plane_feas(Omega: Callable[[Any], Any], S,
     return CInfo(feasible, niter + 1, status)
 
 
-def cutting_plane_dc(Omega: Callable[[Any, Any], Any], S, t,
-                     options=Options()) -> Tuple[Any, Any, CInfo]:
+def cutting_plane_dc(
+    Omega: Callable[[Any, Any], Any], S, t, options=Options()
+) -> Tuple[Any, Any, CInfo]:
     """Cutting-plane method for solving convex optimization problem
 
     Arguments:
@@ -134,7 +134,7 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     status = CUTStatus.nosoln
 
     for niter in range(options.max_it):
-        retry = (status == CUTStatus.noeffect)
+        retry = status == CUTStatus.noeffect
         cut, x0, t1, more_alt = Omega(S.xc, t, retry)
         if t1 is not None:  # better t obtained
             t = t1
@@ -153,8 +153,9 @@ def cutting_plane_q(Omega, S, t, options=Options()):
     return x_best, t, ret
 
 
-def bsearch(Omega: Callable[[Any], bool], Interval: Tuple,
-            options=Options()) -> Tuple[Any, CInfo]:
+def bsearch(
+    Omega: Callable[[Any], bool], Interval: Tuple, options=Options()
+) -> Tuple[Any, CInfo]:
     """[summary]
 
     Arguments:
